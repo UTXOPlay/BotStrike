@@ -1,5 +1,5 @@
 // Presentation disclosure only. Authoritative simulation and signed tape stay complete.
-function intersectsBox(a,b,box){
+export function intersectsBox(a,b,box){
  let lo=0,hi=1;
  for(let i=0;i<3;i++){
   const d=b[i]-a[i];
@@ -24,11 +24,12 @@ export function canSee(state,viewer,target,map){
   return !map.obstacles.some(box=>intersectsBox(eye,point,box))&&!state.utilities.some(u=>u.kind===2&&u.fuse===0&&crossesSmoke(eye,point,u));
  });
 }
-export function publicState(state,slot,spec){
+export function publicState(state,slot,spec,spectate=null){
  if(!state)return null;
  const self=state.players[slot];
  if(!self)return null;
- const viewer=self.alive?self:state.players.find(p=>p.team===self.team&&p.alive)||self;
+ const chosen=state.players[spectate];
+ const viewer=self.alive?self:chosen?.alive&&chosen.team===self.team?chosen:state.players.find(p=>p.team===self.team&&p.alive)||self;
  const result={...state,config:{map:state.config.map,mode:state.config.mode}};
  delete result.random;
  result.players=state.players.map(p=>{

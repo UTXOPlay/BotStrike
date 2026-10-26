@@ -40,7 +40,19 @@ Twelve weapons: ARC-9, NEEDLE, ION-5, RAIL-LANCE, SCATTER, HELIX-3, AURORA, KRAK
 
 Twelve equipment systems: composite plating, photon flash, carbon veil, shard cluster, blackout capsule, echo beacon, nanite injector, armor patch, cryo cell, redline chip, repair swarm and capacitor pack. Buy within credit/carry limits during demolition preparation. Use the field loadout to equip owned weapons or deploy equipment during combat. Deathmatch supplies the full arsenal each respawn. See `botstrike/spec.json` for exact values.
 
-Desktop: WASD, mouse aim, click fire, R reload, Q skill, E use, B armory/loadout, 1–0 / minus / equals or mouse wheel weapons, Z/X/C throwables, G selected equipment, Shift walk, Ctrl crouch, Space jump, right-click sniper scope, Tab scoreboard. Touch: left thumb movement, right-side aiming, drag the FIRE button while holding it to aim and shoot. Menus and controls remain inside the game scene.
+Desktop: WASD, mouse aim, click fire, R reload, Q skill, E use, B armory/loadout, 1–0 / minus / equals or mouse wheel weapons, Z/X/C throwables, G selected equipment, Shift walk, F crouch, Space jump, right-click sniper scope, Tab scoreboard. Touch: left thumb movement, right-side aiming, drag the fire icon while holding it to aim and shoot. Menus and controls remain inside the game scene.
+
+## Combat feedback and preferences
+
+Version 1.2.0 adds bounded positional gunfire, running footsteps, reload and ability cues; distinct headshot/kill confirmation; directional damage, death source, active-effect timers, dynamic accuracy reticle, and relay progress/results. Running is audible; walking and crouching are quiet. Audio sends eight-sector bearings and coarse volume with wall attenuation, never hidden enemy coordinates. Event IDs prevent duplicate playback across snapshots and reconnects.
+
+Controls can be rebound, including mouse buttons. The default crouch is F; Ctrl/Alt/Meta are excluded to avoid browser shortcuts. Settings persist volume, ADS sensitivity, Y inversion, brightness, reticle color/size and optional vibration. ADS sensitivity scales with the scoped field of view. Armory and scoreboard trap keyboard focus and close with Escape. A held scoreboard key remains a hold action; opening via its icon allows Tab navigation.
+
+Choose a new chassis in the match menu; native rules apply it during buy time or on reboot. Dead players can switch among living teammates with the spectator icon or left/right arrows. Spectator visibility and audio follow the selected teammate.
+
+Career records start with this release: authenticated-account K/D, wins/losses and the latest 50 completed, verified matches. Only frames actually controlled by a human contribute; AI cover is excluded. Leaving or having no human input in the final 30 seconds gives no win/loss. Existing matches are not backfilled because their human/AI attribution is incomplete. Aggregates and recent history persist separately from recordings, which still expire after 30 days. Guest history depends on keeping the same guest session. Download signed match exports replay evidence for the exact native verifier; it is not a playable video.
+
+This release changes presentation and host metadata only. Deathmatch targets, weapon/hero values, the native engine, exact verifier and signed application profile remain unchanged.
 
 ## Source and verification
 

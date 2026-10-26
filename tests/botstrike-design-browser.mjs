@@ -1,0 +1,36 @@
+import assert from 'node:assert/strict';
+import {mkdirSync} from 'node:fs';
+const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
+const base=process.env.STORE_URL||'http://127.0.0.1:19885',out=process.env.CONTROL_ARTIFACTS||'/tmp/botstrike-design-controls';mkdirSync(out,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage(),errors=[],sent=[];page.setDefaultTimeout(45000);
+page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error')console.log('console',e.text())});page.on('websocket',ws=>ws.on('framesent',e=>{try{const v=JSON.parse(e.payload);if(v.type==='input')sent.push(v.input)}catch{}}));
+await page.addInitScript(()=>{const Original=WebSocket;window.WebSocket=class extends Original{constructor(...args){super(...args);window.testSocket=this;this.addEventListener('message',e=>{if(window.freezeGame&&!e.synthetic){e.stopImmediatePropagation();return;}try{const value=JSON.parse(e.data);if(value.room?.state)window.testRoom=value.room;}catch{}})}};});
+const state=async()=> (await(await context.request.get(base+'/games/botstrike/api/state')).json()).room;
+try{
+ await page.goto(base+'/games/botstrike/');await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Choose your chassis'));
+ await page.locator('.settings>summary').click();
+ for(const [id,value]of [['volume','.3'],['ads','.4'],['brightness','1.2']])await page.locator('#'+id).evaluate((el,value)=>{el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));},value);
+ await page.locator('#invert-y').check();await page.locator('.settings details>summary').click();await page.locator('[data-action=crouch]').click();await page.keyboard.press('KeyV');
+ assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);await page.reload();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Choose your chassis'));
+ assert.equal(await page.locator('#volume').inputValue(),'0.3');assert.equal(await page.locator('#invert-y').isChecked(),true);assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);
+ await page.locator('.career>summary').click();await page.locator('#career-refresh').click();await page.waitForFunction(()=>document.querySelector('#career-summary').textContent.includes('No recorded matches'));
+ await page.locator('#private').click();await page.locator('#room-hero').selectOption('4');await page.waitForFunction(()=>document.querySelector('#room-hero').value==='4');await page.locator('#start').click();await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');
+ await page.keyboard.down('KeyV');await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].crouch});await page.keyboard.up('KeyV');assert.equal((await state()).state.players[0].hero,4);
+ await page.keyboard.press('Digit4');await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].weapon===3});
+ await page.mouse.down({button:'right'});await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].scoped});
+ const before=(await state()).state.players[0].pitch;await page.locator('#arena').dispatchEvent('mousemove',{movementX:0,movementY:20,buttons:2});
+ await page.waitForFunction(async before=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].pitch>before+.001},before);await page.mouse.up({button:'right'});
+ console.log('Persisted settings, remapped native crouch, hero selection and inverted ADS passed');
+ await page.keyboard.press('KeyB');await page.locator('#buy-menu').waitFor();assert.equal(await page.locator('#buy-menu').getAttribute('role'),'dialog');await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>!!document.activeElement.closest('#buy-menu')),true);await page.keyboard.press('Escape');await page.locator('#buy-menu').waitFor({state:'hidden'});
+ await page.locator('#score-open').evaluate(el=>el.click());await page.keyboard.press('Tab');assert.equal(await page.locator('#scoreboard').isVisible(),true);assert.equal(await page.evaluate(()=>!!document.activeElement.closest('#scoreboard')),true);await page.keyboard.press('Escape');await page.locator('#scoreboard').waitFor({state:'hidden'});
+ await page.keyboard.press('Escape');await page.locator('#room-hero').selectOption('2');await page.waitForFunction(()=>document.querySelector('#hero-switch-hint').textContent.includes('Queued'));assert.equal((await state()).state.players[0].hero,4,'live hero cannot change immediately');await page.locator('#resume').click();
+ console.log('Dialog focus, Escape and queued hero change passed');
+ // UI-only event injection: native rules and the recorded input tape remain real.
+ await page.evaluate(()=>{window.freezeGame=true;const room=structuredClone(window.testRoom),s=room.state,tick=s.tick+1;s.tick=tick;s.players[room.slot].alive=false;room.feedback=[{id:'test-head',tick,kind:'headshot',actor:room.slot,target:5,value:30},{id:'test-hurt',tick,kind:'hit',actor:5,target:room.slot,value:30,bearing:Math.PI/2},{id:'test-kill',tick,kind:'kill',actor:5,target:room.slot,value:2}];const e=new MessageEvent('message',{data:JSON.stringify({type:'state',room})});e.synthetic=true;testSocket.dispatchEvent(e);});
+ await page.locator('#death').waitFor();assert.match(await page.locator('#killer').textContent(),/Eliminated by/);await page.waitForFunction(()=>document.querySelector('#hit-marker').classList.contains('headshot'));await page.screenshot({path:out+'/death-feedback.png'});
+ await page.evaluate(()=>{const room=structuredClone(window.testRoom),s=room.state;s.tick++;s.players[room.slot].alive=true;s.players[room.slot].life++;s.players[room.slot].scoped=false;s.players[room.slot].weapon=2;s.players[room.slot].recoil=2;s.players[room.slot].velocity=[300,0,0];room.feedback=[];const e=new MessageEvent('message',{data:JSON.stringify({type:'state',room})});e.synthetic=true;testSocket.dispatchEvent(e);});
+ await page.waitForFunction(()=>parseFloat(document.querySelector('#crosshair').style.getPropertyValue('--gap'))>4);await page.screenshot({path:out+'/spread-feedback.png'});await page.evaluate(()=>window.freezeGame=false);
+ assert.deepEqual(errors,[]);console.log('Headshot, damage direction, death source and dynamic spread passed');
+ await page.keyboard.press('Escape');await page.locator('#leave').click();await page.locator('#selection').waitFor();
+}finally{await browser.close()}
