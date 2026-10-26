@@ -29,13 +29,13 @@ export class ResolutionBudget {
       this.slow = this.fast = 0;
       return this.ratio;
     }
-    this.slow = ms > 24 ? this.slow + 1 : Math.max(0, this.slow - 2);
-    this.fast = ms < 18 ? this.fast + 1 : 0;
-    if (this.slow >= 90) {
+    this.slow = ms > 24 ? this.slow + ms : Math.max(0, this.slow - ms * 2);
+    this.fast = ms < 18 ? this.fast + ms : 0;
+    if (this.slow >= 350) {
       this.ratio = Math.max(0.75, this.ratio - 0.25);
       this.slow = this.fast = 0;
     }
-    if (this.fast >= 600) {
+    if (this.fast >= 8000) {
       this.ratio = Math.min(this.max, this.ratio + 0.25);
       this.fast = 0;
     }
@@ -44,7 +44,7 @@ export class ResolutionBudget {
 }
 export function startRenderLoop(
   draw,
-  { active = () => true, maxFps = 60, onResolution } = {},
+  { active = () => true, maxFps = 60, maxResolution = 2, onResolution } = {},
 ) {
   let handle = 0,
     last = 0,
@@ -55,7 +55,7 @@ export function startRenderLoop(
     frames = 0,
     cpu = 0;
   const budget = new ResolutionBudget(
-    Math.min(globalThis.devicePixelRatio || 1, 2),
+    Math.min(globalThis.devicePixelRatio || 1, maxResolution),
   );
   let ratio = budget.ratio;
   function tick(now) {
@@ -67,11 +67,12 @@ export function startRenderLoop(
     if (scheduled && now + 0.25 < scheduled) return;
     scheduled = scheduled ? scheduled + interval : now + interval;
     if (scheduled < now) scheduled = now + interval;
-    const delta = last ? Math.min(now - last, 50) : 1000 / 60;
+    const frameTime = last ? now - last : 1000 / 60;
+    const delta = Math.min(frameTime, 50);
     last = now;
     const next =
       playing || quality !== "auto"
-        ? budget.sample(delta, quality)
+        ? budget.sample(frameTime, quality)
         : budget.ratio;
     if (next !== ratio) {
       ratio = next;

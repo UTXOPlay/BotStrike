@@ -1,0 +1,11 @@
+# Input and rendering latency
+
+The client previously advanced predicted movement, then pulled it towards the last received server position on every render frame. That reused stale snapshots as continuous drag. The new predictor applies local controls immediately, keeps a bounded sequence-tagged history, replays unacknowledged controls on each authoritative snapshot and smooths only the resulting correction. Large corrections snap. Movement, collision and jump constants match the native engine; no browser position or hit result is trusted by the host.
+
+Controls are sent at a bounded 60 Hz with coalescing instead of polling only at 32 Hz. Very short fire presses are latched until sent. Local muzzle/audio feedback precedes the round trip; authoritative ammunition, damage and hits remain server-owned. Pausing and rotation still release held controls and pointer capture.
+
+Mobile rendering retains authored meshes and silhouettes. Opaque pigments are batched into vertex colors, emissive details use unlit batches, bump sampling and animated atmospheric noise are removed from the mobile path, and particle/muzzle lighting is simplified. Resolution starts at a bounded mobile budget and reacts to measured frame time after hundreds of milliseconds rather than waiting for 90 slow frames. HUD and touch controls retain full CSS resolution. First-person weapon geometry is cached on demand instead of rebuilding all 12 weapons when the hero changes; the invisible local third-person model is not rebuilt on every weapon switch.
+
+`tests/botstrike-performance.mjs` separately probes the WebSocket from Node while measuring browser animation frames. This distinguishes transport RTT from main-thread/GPU scheduling delays that inflate the in-page ping readout. The benchmark uses SwiftShader software rendering and is a before/after comparison, not a physical-handset frame-rate guarantee. A protocol probe also measures native ticks per second for the current room.
+
+Regression coverage includes 0/80/180 ms simulated round trips at 16 Hz snapshots, immediate movement and direction changes, authoritative settling, bounded stale input history, native-matched jump/landing, 72 native movement trajectories, mobile simultaneous touch controls, fullscreen/rotation, and the four required desktop viewports.
