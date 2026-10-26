@@ -1,0 +1,7 @@
+// Original synthesized BotStrike effects. No sampled game audio is required.
+export function createAudio(settings){
+ let context,bus;
+ function ready(){try{context??=new AudioContext();if(!bus){bus=context.createGain();bus.connect(context.destination)}bus.gain.value=settings().sound?(settings().volume??.6)*.3:0;if(context.state==='suspended')void context.resume();return context}catch{return null}}
+ function pulse(frequency,duration=.12,level=.2,type='triangle',delay=0){const c=ready();if(!c||!settings().sound)return;const start=c.currentTime+delay,osc=c.createOscillator(),envelope=c.createGain();osc.type=type;osc.frequency.setValueAtTime(frequency,start);osc.frequency.exponentialRampToValueAtTime(Math.max(25,frequency*.22),start+duration);envelope.gain.setValueAtTime(.001,start);envelope.gain.exponentialRampToValueAtTime(level,start+.004);envelope.gain.exponentialRampToValueAtTime(.001,start+duration);osc.connect(envelope).connect(bus);osc.start(start);osc.stop(start+duration+.01);osc.onended=()=>{osc.disconnect();envelope.disconnect()}}
+ return {ready,shot:(weapon=0)=>{pulse([410,870,250,1200,95,670,1500,170,1900,740,1120,65][weapon]||410,.08+(weapon===11?.2:0),.38,'sawtooth');pulse(75,.08,.22)},hit:()=>pulse(1450,.045,.18,'sine'),damage:()=>pulse(65,.2,.3),reload:()=>{pulse(620,.04,.12,'square');pulse(900,.035,.1,'square',.09)},step:()=>pulse(55,.028,.04),win:()=>[440,660,880].forEach((hz,i)=>pulse(hz,.28,.16,'sine',i*.13)),dispose:()=>context?.close()};
+}

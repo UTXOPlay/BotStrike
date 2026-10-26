@@ -1,0 +1,83 @@
+[
+  {
+    "hero": 0,
+    "calls": 25,
+    "triangles": 12854,
+    "geometries": 25,
+    "textures": 4
+  },
+  {
+    "hero": 1,
+    "calls": 26,
+    "triangles": 12478,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 2,
+    "calls": 26,
+    "triangles": 13138,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 3,
+    "calls": 26,
+    "triangles": 12946,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 4,
+    "calls": 26,
+    "triangles": 12542,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 5,
+    "calls": 26,
+    "triangles": 13222,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "lineup": {
+      "calls": 161,
+      "triangles": 180228
+    }
+  },
+  {
+    "map": 0,
+    "calls": 37,
+    "triangles": 109250,
+    "geometries": 29,
+    "textures": 24
+  },
+  {
+    "map": 1,
+    "calls": 37,
+    "triangles": 109426,
+    "geometries": 29,
+    "textures": 24
+  },
+  {
+    "map": 2,
+    "calls": 37,
+    "triangles": 97958,
+    "geometries": 30,
+    "textures": 26
+  },
+  {
+    "memory": {
+      "before": {
+        "geometries": 29,
+        "textures": 24
+      },
+      "after": {
+        "geometries": 29,
+        "textures": 24
+      }
+    }
+  }
+]

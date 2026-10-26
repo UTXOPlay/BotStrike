@@ -1,0 +1,227 @@
+[
+  {
+    "hero": 0,
+    "calls": 25,
+    "triangles": 12854,
+    "geometries": 25,
+    "textures": 4
+  },
+  {
+    "hero": 1,
+    "calls": 26,
+    "triangles": 12478,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 2,
+    "calls": 26,
+    "triangles": 13138,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 3,
+    "calls": 26,
+    "triangles": 12946,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 4,
+    "calls": 26,
+    "triangles": 12542,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "hero": 5,
+    "calls": 26,
+    "triangles": 13222,
+    "geometries": 26,
+    "textures": 4
+  },
+  {
+    "kind": "weapon",
+    "index": 0,
+    "calls": 7,
+    "triangles": 1124
+  },
+  {
+    "kind": "weapon",
+    "index": 1,
+    "calls": 7,
+    "triangles": 1124
+  },
+  {
+    "kind": "weapon",
+    "index": 2,
+    "calls": 7,
+    "triangles": 1124
+  },
+  {
+    "kind": "weapon",
+    "index": 3,
+    "calls": 8,
+    "triangles": 1268
+  },
+  {
+    "kind": "weapon",
+    "index": 4,
+    "calls": 7,
+    "triangles": 1236
+  },
+  {
+    "kind": "weapon",
+    "index": 5,
+    "calls": 8,
+    "triangles": 1880
+  },
+  {
+    "kind": "weapon",
+    "index": 6,
+    "calls": 8,
+    "triangles": 2240
+  },
+  {
+    "kind": "weapon",
+    "index": 7,
+    "calls": 8,
+    "triangles": 1740
+  },
+  {
+    "kind": "weapon",
+    "index": 8,
+    "calls": 8,
+    "triangles": 2240
+  },
+  {
+    "kind": "weapon",
+    "index": 9,
+    "calls": 8,
+    "triangles": 1440
+  },
+  {
+    "kind": "weapon",
+    "index": 10,
+    "calls": 8,
+    "triangles": 1760
+  },
+  {
+    "kind": "weapon",
+    "index": 11,
+    "calls": 8,
+    "triangles": 2688
+  },
+  {
+    "kind": "equipment",
+    "index": 0,
+    "calls": 4,
+    "triangles": 444
+  },
+  {
+    "kind": "equipment",
+    "index": 1,
+    "calls": 5,
+    "triangles": 1028
+  },
+  {
+    "kind": "equipment",
+    "index": 2,
+    "calls": 5,
+    "triangles": 1028
+  },
+  {
+    "kind": "equipment",
+    "index": 3,
+    "calls": 5,
+    "triangles": 1028
+  },
+  {
+    "kind": "equipment",
+    "index": 4,
+    "calls": 5,
+    "triangles": 1028
+  },
+  {
+    "kind": "equipment",
+    "index": 5,
+    "calls": 4,
+    "triangles": 900
+  },
+  {
+    "kind": "equipment",
+    "index": 6,
+    "calls": 5,
+    "triangles": 612
+  },
+  {
+    "kind": "equipment",
+    "index": 7,
+    "calls": 4,
+    "triangles": 408
+  },
+  {
+    "kind": "equipment",
+    "index": 8,
+    "calls": 4,
+    "triangles": 456
+  },
+  {
+    "kind": "equipment",
+    "index": 9,
+    "calls": 4,
+    "triangles": 456
+  },
+  {
+    "kind": "equipment",
+    "index": 10,
+    "calls": 4,
+    "triangles": 900
+  },
+  {
+    "kind": "equipment",
+    "index": 11,
+    "calls": 5,
+    "triangles": 536
+  },
+  {
+    "lineup": {
+      "calls": 161,
+      "triangles": 180228
+    }
+  },
+  {
+    "map": 0,
+    "calls": 37,
+    "triangles": 109250,
+    "geometries": 29,
+    "textures": 24
+  },
+  {
+    "map": 1,
+    "calls": 37,
+    "triangles": 109426,
+    "geometries": 29,
+    "textures": 24
+  },
+  {
+    "map": 2,
+    "calls": 37,
+    "triangles": 97958,
+    "geometries": 30,
+    "textures": 26
+  },
+  {
+    "memory": {
+      "before": {
+        "geometries": 29,
+        "textures": 24
+      },
+      "after": {
+        "geometries": 29,
+        "textures": 24
+      }
+    }
+  }
+]

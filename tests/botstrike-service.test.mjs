@@ -1,0 +1,6 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {safeInput,neutral,pack} from '../botstrike-service/server.mjs';
+test('network controls cannot set authority, purchases or hero attributes',()=>{const value=safeInput({...neutral(),takeover:true,buy:4,hero:5,health:999,bots:false});assert.equal(value.takeover,undefined);assert.equal(value.buy,undefined);assert.equal(value.hero,undefined);assert.equal(value.health,undefined);});
+test('reject malformed or unbounded network controls',()=>{for(const mutation of [{seq:-1},{x:NaN},{y:2},{yaw:4},{pitch:2},{fire:1},{item:12},{weapon:12}])assert.throws(()=>safeInput({...neutral(),...mutation}));});
+test('compact tapes preserve controls and keep bots implicit',()=>{assert.equal(pack(neutral()),null);assert.deepEqual(pack({...neutral(),seq:12,takeover:true,x:.5,yaw:1.23456789,fire:true,ability:true,weapon:2,buy:7,hero:3,item:2}),[12,.5,0,1.234568,0,289,2,7,3,2]);const worst=Array.from({length:10},()=>pack({...neutral(),seq:230400,takeover:true,x:-.123456,y:-.123456,yaw:-3.123456,pitch:-1.123456,weapon:11,buy:23,hero:5,item:11}));assert.ok(Buffer.byteLength(JSON.stringify({inputs:worst})+'\n')*230400<160_000_000);});

@@ -1,0 +1,18 @@
+{
+  "name": "myelin-botstrike",
+  "port": 8890,
+  "runtimePort": 8790,
+  "games": [
+    {
+      "id": "botstrike",
+      "webRoot": "dist/botstrike",
+      "runtimePath": "",
+      "rooms": false,
+      "socket": true
+    }
+  ],
+  "runtimeCommand": [
+    "node",
+    "botstrike-service/server.mjs"
+  ]
+}

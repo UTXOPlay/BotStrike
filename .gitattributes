@@ -1,0 +1,2 @@
+# Upstream GLSL embedded by esbuild retains shader whitespace.
+games/botstrike/web/app.js -whitespace linguist-generated=true

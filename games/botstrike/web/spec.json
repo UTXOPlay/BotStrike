@@ -1,0 +1,1038 @@
+{
+  "version": "botstrike-2050-arsenal-v2",
+  "tick_rate": 64,
+  "player_radius": 18,
+  "eye_height": 56,
+  "heroes": [
+    {
+      "id": "vector",
+      "name": "VECTOR",
+      "role": "Runner",
+      "ability": "Kinetic dash",
+      "health": 90,
+      "armor": 25,
+      "speed": 305,
+      "cooldown": 8,
+      "color": "#38e8ff",
+      "description": "Dash in your movement direction. Fast repositioning; no damage immunity."
+    },
+    {
+      "id": "patch",
+      "name": "PATCH",
+      "role": "Medic",
+      "ability": "Repair pulse",
+      "health": 110,
+      "armor": 35,
+      "speed": 245,
+      "cooldown": 18,
+      "color": "#7effa1",
+      "description": "Restore health to nearby allies. Healing cannot revive eliminated teammates."
+    },
+    {
+      "id": "bastion",
+      "name": "BASTION",
+      "role": "Sentinel",
+      "ability": "Aegis plating",
+      "health": 140,
+      "armor": 70,
+      "speed": 210,
+      "cooldown": 22,
+      "color": "#ffca6d",
+      "description": "Temporarily halve incoming damage. EMP disables the shield."
+    },
+    {
+      "id": "spectre",
+      "name": "SPECTRE",
+      "role": "Recon",
+      "ability": "Network scan",
+      "health": 95,
+      "armor": 30,
+      "speed": 280,
+      "cooldown": 20,
+      "color": "#c5a0ff",
+      "description": "Reveal nearby enemies on your team radar for four seconds."
+    },
+    {
+      "id": "glitch",
+      "name": "GLITCH",
+      "role": "Disruptor",
+      "ability": "EMP burst",
+      "health": 100,
+      "armor": 40,
+      "speed": 265,
+      "cooldown": 18,
+      "color": "#ff6cae",
+      "description": "Disable nearby enemy skills and remove their temporary shields."
+    },
+    {
+      "id": "forge",
+      "name": "FORGE",
+      "role": "Assault",
+      "ability": "Overclock",
+      "health": 120,
+      "armor": 45,
+      "speed": 235,
+      "cooldown": 24,
+      "color": "#ff7855",
+      "description": "Boost fire rate for five seconds; weapon spread increases."
+    }
+  ],
+  "weapons": [
+    {
+      "id": "arc",
+      "name": "ARC-9",
+      "category": "Sidearm",
+      "cost": 0,
+      "damage": 25,
+      "magazine": 12,
+      "reserve": 84,
+      "interval": 13,
+      "reload": 85,
+      "range": 480,
+      "spread": 1.8,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 0,
+      "pierce": 0.0,
+      "effect": "none",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "A compact ion sidearm with reliable single pulses."
+    },
+    {
+      "id": "needle",
+      "name": "NEEDLE",
+      "category": "SMG",
+      "cost": 1200,
+      "damage": 19,
+      "magazine": 30,
+      "reserve": 150,
+      "interval": 5,
+      "reload": 100,
+      "range": 320,
+      "spread": 2.4,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 0,
+      "pierce": 0.0,
+      "effect": "none",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "A rapid flechette accelerator for close-range chassis combat."
+    },
+    {
+      "id": "ion",
+      "name": "ION-5",
+      "category": "Rifle",
+      "cost": 2700,
+      "damage": 32,
+      "magazine": 30,
+      "reserve": 90,
+      "interval": 7,
+      "reload": 150,
+      "range": 850,
+      "spread": 1.4,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 0,
+      "pierce": 0.0,
+      "effect": "none",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "An induction carbine balancing reach, precision and sustained fire."
+    },
+    {
+      "id": "rail",
+      "name": "RAIL-LANCE",
+      "category": "Sniper",
+      "cost": 4750,
+      "damage": 92,
+      "magazine": 5,
+      "reserve": 25,
+      "interval": 68,
+      "reload": 200,
+      "range": 1800,
+      "spread": 0.18,
+      "pellets": 1,
+      "scoped": true,
+      "burst": 1,
+      "burst_interval": 0,
+      "pierce": 0.4,
+      "effect": "none",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "A scoped magnetic lance built for long-range armor penetration."
+    },
+    {
+      "id": "scatter",
+      "name": "SCATTER",
+      "category": "Shotgun",
+      "cost": 1800,
+      "damage": 16,
+      "magazine": 8,
+      "reserve": 40,
+      "interval": 52,
+      "reload": 165,
+      "range": 250,
+      "spread": 6.5,
+      "pellets": 8,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 0,
+      "pierce": 0.0,
+      "effect": "none",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "Eight conductive shards per shot; devastating at close range."
+    },
+    {
+      "id": "helix",
+      "name": "HELIX-3",
+      "category": "Burst carbine",
+      "cost": 2400,
+      "damage": 24,
+      "magazine": 30,
+      "reserve": 120,
+      "interval": 28,
+      "reload": 135,
+      "range": 1000,
+      "spread": 0.85,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 3,
+      "burst_interval": 4,
+      "pierce": 0.0,
+      "effect": "none",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "Three tightly spaced coil pulses per trigger cycle."
+    },
+    {
+      "id": "aurora",
+      "name": "AURORA",
+      "category": "Particle repeater",
+      "cost": 3200,
+      "damage": 13,
+      "magazine": 60,
+      "reserve": 180,
+      "interval": 4,
+      "reload": 175,
+      "range": 700,
+      "spread": 0.7,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 4,
+      "pierce": 0.35,
+      "effect": "none",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "A high-capacity particle stream that bypasses part of enemy armor."
+    },
+    {
+      "id": "kraken",
+      "name": "KRAKEN-90",
+      "category": "Heavy coilgun",
+      "cost": 3600,
+      "damage": 23,
+      "magazine": 90,
+      "reserve": 180,
+      "interval": 5,
+      "reload": 245,
+      "range": 800,
+      "spread": 3.2,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 4,
+      "pierce": 0.15,
+      "effect": "none",
+      "mobility": 0.82,
+      "splash": 0.0,
+      "description": "A belt-fed coilgun. Huge sustained capacity at the cost of mobility."
+    },
+    {
+      "id": "nullifier",
+      "name": "NULLIFIER",
+      "category": "EMP carbine",
+      "cost": 3000,
+      "damage": 20,
+      "magazine": 18,
+      "reserve": 90,
+      "interval": 12,
+      "reload": 135,
+      "range": 850,
+      "spread": 1.0,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 4,
+      "pierce": 0.0,
+      "effect": "emp",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "Hits briefly disable enemy skills and break active defensive effects."
+    },
+    {
+      "id": "echo",
+      "name": "ECHO-MK2",
+      "category": "Recon marksman",
+      "cost": 3400,
+      "damage": 42,
+      "magazine": 14,
+      "reserve": 70,
+      "interval": 23,
+      "reload": 145,
+      "range": 1450,
+      "spread": 0.35,
+      "pellets": 1,
+      "scoped": true,
+      "burst": 1,
+      "burst_interval": 4,
+      "pierce": 0.2,
+      "effect": "mark",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "A scoped precision rifle whose hits reveal the target on squad radar."
+    },
+    {
+      "id": "siphon",
+      "name": "SIPHON",
+      "category": "Nanite repeater",
+      "cost": 2900,
+      "damage": 18,
+      "magazine": 24,
+      "reserve": 120,
+      "interval": 8,
+      "reload": 125,
+      "range": 600,
+      "spread": 1.6,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 4,
+      "pierce": 0.0,
+      "effect": "siphon",
+      "mobility": 1.0,
+      "splash": 0.0,
+      "description": "Damage to hostile chassis recovers a small amount of your own health."
+    },
+    {
+      "id": "quasar",
+      "name": "QUASAR",
+      "category": "Plasma cannon",
+      "cost": 4200,
+      "damage": 58,
+      "magazine": 4,
+      "reserve": 20,
+      "interval": 76,
+      "reload": 210,
+      "range": 900,
+      "spread": 1.1,
+      "pellets": 1,
+      "scoped": false,
+      "burst": 1,
+      "burst_interval": 4,
+      "pierce": 0.2,
+      "effect": "none",
+      "mobility": 0.9,
+      "splash": 140.0,
+      "description": "A slow plasma impact weapon with cover-aware splash damage."
+    }
+  ],
+  "maps": [
+    {
+      "id": "neon-docks",
+      "name": "NEON DOCKS",
+      "description": "Rain-lit freight lanes beneath the Pacific data port.",
+      "extent": 1200,
+      "colors": [
+        "#081b30",
+        "#20dcff",
+        "#fc65b4"
+      ],
+      "obstacles": [
+        {
+          "min": [
+            -810.0,
+            0,
+            325.0
+          ],
+          "max": [
+            -490.0,
+            95,
+            475.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -570.0,
+            0,
+            -320.0
+          ],
+          "max": [
+            -430.0,
+            160,
+            120.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -30.0,
+            0,
+            340.0
+          ],
+          "max": [
+            370.0,
+            95,
+            460.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            510.0,
+            0,
+            -210.0
+          ],
+          "max": [
+            690.0,
+            170,
+            310.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -325.0,
+            0,
+            -565.0
+          ],
+          "max": [
+            125.0,
+            95,
+            -435.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -920.0,
+            0,
+            -820.0
+          ],
+          "max": [
+            -780.0,
+            95,
+            -480.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            470.0,
+            0,
+            -710.0
+          ],
+          "max": [
+            830.0,
+            95,
+            -590.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -35.0,
+            0,
+            -85.0
+          ],
+          "max": [
+            135.0,
+            70,
+            85.0
+          ],
+          "kind": "cover"
+        }
+      ],
+      "spawns": [
+        [
+          [
+            -1070,
+            0,
+            1050
+          ],
+          [
+            -1005,
+            0,
+            1050
+          ],
+          [
+            -940,
+            0,
+            1050
+          ],
+          [
+            -875,
+            0,
+            1050
+          ],
+          [
+            -810,
+            0,
+            1050
+          ]
+        ],
+        [
+          [
+            1070,
+            0,
+            -1050
+          ],
+          [
+            1005,
+            0,
+            -1050
+          ],
+          [
+            940,
+            0,
+            -1050
+          ],
+          [
+            875,
+            0,
+            -1050
+          ],
+          [
+            810,
+            0,
+            -1050
+          ]
+        ]
+      ],
+      "sites": [
+        [
+          -780,
+          0,
+          -680
+        ],
+        [
+          760,
+          0,
+          650
+        ]
+      ]
+    },
+    {
+      "id": "skyline",
+      "name": "SKYLINE ARRAY",
+      "description": "A rooftop relay district: long sightlines and split interior routes.",
+      "extent": 1400,
+      "colors": [
+        "#180f31",
+        "#b29cff",
+        "#ffb65f"
+      ],
+      "obstacles": [
+        {
+          "min": [
+            -790.0,
+            0,
+            125.0
+          ],
+          "max": [
+            -610.0,
+            210,
+            775.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            610.0,
+            0,
+            -775.0
+          ],
+          "max": [
+            790.0,
+            210,
+            -125.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -240.0,
+            0,
+            -90.0
+          ],
+          "max": [
+            240.0,
+            145,
+            90.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -390.0,
+            0,
+            -815.0
+          ],
+          "max": [
+            -210.0,
+            95,
+            -485.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            210.0,
+            0,
+            485.0
+          ],
+          "max": [
+            390.0,
+            95,
+            815.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -1075.0,
+            0,
+            -515.0
+          ],
+          "max": [
+            -825.0,
+            95,
+            -385.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            825.0,
+            0,
+            385.0
+          ],
+          "max": [
+            1075.0,
+            95,
+            515.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -250.0,
+            0,
+            -1105.0
+          ],
+          "max": [
+            250.0,
+            95,
+            -995.0
+          ],
+          "kind": "cover"
+        }
+      ],
+      "spawns": [
+        [
+          [
+            -1270,
+            0,
+            1250
+          ],
+          [
+            -1205,
+            0,
+            1250
+          ],
+          [
+            -1140,
+            0,
+            1250
+          ],
+          [
+            -1075,
+            0,
+            1250
+          ],
+          [
+            -1010,
+            0,
+            1250
+          ]
+        ],
+        [
+          [
+            1270,
+            0,
+            -1250
+          ],
+          [
+            1205,
+            0,
+            -1250
+          ],
+          [
+            1140,
+            0,
+            -1250
+          ],
+          [
+            1075,
+            0,
+            -1250
+          ],
+          [
+            1010,
+            0,
+            -1250
+          ]
+        ]
+      ],
+      "sites": [
+        [
+          -900,
+          0,
+          -900
+        ],
+        [
+          900,
+          0,
+          900
+        ]
+      ]
+    },
+    {
+      "id": "reactor",
+      "name": "REACTOR NINE",
+      "description": "An abandoned fusion plant with compact flanking corridors.",
+      "extent": 1000,
+      "colors": [
+        "#12201d",
+        "#87ffc2",
+        "#ff7648"
+      ],
+      "obstacles": [
+        {
+          "min": [
+            -150.0,
+            0,
+            -150.0
+          ],
+          "max": [
+            150.0,
+            240,
+            150.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -575.0,
+            0,
+            210.0
+          ],
+          "max": [
+            -425.0,
+            95,
+            590.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            425.0,
+            0,
+            -590.0
+          ],
+          "max": [
+            575.0,
+            95,
+            -210.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -590.0,
+            0,
+            -460.0
+          ],
+          "max": [
+            -210.0,
+            95,
+            -340.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            210.0,
+            0,
+            340.0
+          ],
+          "max": [
+            590.0,
+            95,
+            460.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -815.0,
+            0,
+            -110.0
+          ],
+          "max": [
+            -705.0,
+            95,
+            110.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            705.0,
+            0,
+            -110.0
+          ],
+          "max": [
+            815.0,
+            95,
+            110.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -110.0,
+            0,
+            645.0
+          ],
+          "max": [
+            110.0,
+            95,
+            755.0
+          ],
+          "kind": "cover"
+        },
+        {
+          "min": [
+            -110.0,
+            0,
+            -755.0
+          ],
+          "max": [
+            110.0,
+            95,
+            -645.0
+          ],
+          "kind": "cover"
+        }
+      ],
+      "spawns": [
+        [
+          [
+            -870,
+            0,
+            850
+          ],
+          [
+            -805,
+            0,
+            850
+          ],
+          [
+            -740,
+            0,
+            850
+          ],
+          [
+            -675,
+            0,
+            850
+          ],
+          [
+            -610,
+            0,
+            850
+          ]
+        ],
+        [
+          [
+            870,
+            0,
+            -850
+          ],
+          [
+            805,
+            0,
+            -850
+          ],
+          [
+            740,
+            0,
+            -850
+          ],
+          [
+            675,
+            0,
+            -850
+          ],
+          [
+            610,
+            0,
+            -850
+          ]
+        ]
+      ],
+      "sites": [
+        [
+          -620,
+          0,
+          -630
+        ],
+        [
+          620,
+          0,
+          630
+        ]
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "composite",
+      "name": "COMPOSITE PLATING",
+      "category": "Armor",
+      "cost": 650,
+      "capacity": 1,
+      "activation": "passive",
+      "color": "#c0cbd6",
+      "description": "Refill armor to 100 during buy time."
+    },
+    {
+      "id": "photon",
+      "name": "PHOTON FLASH",
+      "category": "Disruption",
+      "cost": 300,
+      "capacity": 2,
+      "activation": "throw",
+      "color": "#dffaff",
+      "description": "A line-of-sight photon overload. Looking away reduces blindness."
+    },
+    {
+      "id": "smoke",
+      "name": "CARBON VEIL",
+      "category": "Concealment",
+      "cost": 200,
+      "capacity": 1,
+      "activation": "throw",
+      "color": "#8ca3bf",
+      "description": "A 14-second carbon cloud that blocks bot sight lines."
+    },
+    {
+      "id": "fragment",
+      "name": "SHARD CLUSTER",
+      "category": "Explosive",
+      "cost": 300,
+      "capacity": 1,
+      "activation": "throw",
+      "color": "#ff9755",
+      "description": "A bouncing fragmentation charge; cover blocks its blast."
+    },
+    {
+      "id": "emp",
+      "name": "BLACKOUT CAPSULE",
+      "category": "Disruption",
+      "cost": 450,
+      "capacity": 1,
+      "activation": "throw",
+      "color": "#bd7cff",
+      "description": "An EMP blast disables hostile skills for five seconds."
+    },
+    {
+      "id": "beacon",
+      "name": "ECHO BEACON",
+      "category": "Recon",
+      "cost": 400,
+      "capacity": 1,
+      "activation": "throw",
+      "color": "#5ae8ff",
+      "description": "Deploy a beacon that reveals nearby enemies for eight seconds."
+    },
+    {
+      "id": "repair",
+      "name": "NANITE INJECTOR",
+      "category": "Repair",
+      "cost": 350,
+      "capacity": 2,
+      "activation": "self",
+      "color": "#7affac",
+      "description": "Restore 45 chassis health, up to your hero maximum."
+    },
+    {
+      "id": "patch",
+      "name": "ARMOR PATCH",
+      "category": "Repair",
+      "cost": 300,
+      "capacity": 2,
+      "activation": "self",
+      "color": "#a9c6ee",
+      "description": "Restore 40 armor, up to 100."
+    },
+    {
+      "id": "coolant",
+      "name": "CRYO CELL",
+      "category": "Cooling",
+      "cost": 250,
+      "capacity": 1,
+      "activation": "self",
+      "color": "#79dfff",
+      "description": "Reduce skill cooldown by four seconds and clear firing recovery."
+    },
+    {
+      "id": "overclock",
+      "name": "REDLINE CHIP",
+      "category": "Augment",
+      "cost": 500,
+      "capacity": 1,
+      "activation": "self",
+      "color": "#ff6c8b",
+      "description": "Four seconds of faster fire with increased spread. EMP cancels it."
+    },
+    {
+      "id": "field",
+      "name": "REPAIR SWARM",
+      "category": "Support",
+      "cost": 500,
+      "capacity": 1,
+      "activation": "throw",
+      "color": "#56ffb5",
+      "description": "Deploy an eight-second field restoring 8 health per second to allies."
+    },
+    {
+      "id": "supply",
+      "name": "CAPACITOR PACK",
+      "category": "Supply",
+      "cost": 300,
+      "capacity": 1,
+      "activation": "self",
+      "color": "#ffce6b",
+      "description": "Replenish half of the reserve capacity of each owned weapon."
+    }
+  ]
+}

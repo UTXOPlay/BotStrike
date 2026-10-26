@@ -1,0 +1,22 @@
+{
+  "ticks": 9211,
+  "score": [
+    50,
+    49
+  ],
+  "players": 10,
+  "privateJoin": true,
+  "publicMatchmaking": true,
+  "reconnect": true,
+  "balancedTeams": true,
+  "humanInput": true,
+  "respawns": true,
+  "signedReplay": true,
+  "tamperRejected": true,
+  "rules": "botstrike-2050-arsenal-v2",
+  "nativeTests": 17,
+  "binaries": {
+    "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+    "myelin-botstrike": "d1f0f676f935384d70bad0503c6aceb1a0e02495bc51179e9bedaca36c708f14"
+  }
+}
