@@ -1,0 +1,146 @@
+{
+  "version": "1.2.0",
+  "date": "2026-10-27",
+  "url": "https://store.utxoplay.io/play/botstrike",
+  "implementationCommits": [
+    "c2c7b3b",
+    "8345b15"
+  ],
+  "deployment": {
+    "image": "myelin-botstrike:1.2.0-design-r1",
+    "healthy": true,
+    "activeRoomsAtSwitch": 0,
+    "otherChangedContainers": [],
+    "compose": "/data/utxoplay/releases/20261027-botstrike-design-1.2.0-r1/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-design-1.2.0-r1/botstrike-data-before.tar.gz"
+  },
+  "nativeRulesChanged": false,
+  "nativeProfile": "15a835f40bb0890b672fb85c1b30d90db335534e0f3b931b1b6865e066f490ee",
+  "sha256": {
+    "games/botstrike/web/app.js": "ac854060e8633ef6caac8040ad0b855f647999a720f5a72d8141ccb46e12cc3a",
+    "release/botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+    "release/myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+  },
+  "publicBundleMatches": true,
+  "tests": {
+    "unitServicePassed": 31,
+    "hostPassed": 4,
+    "localNativeMatchAndTamperRejection": true,
+    "candidateNativeMatchAndTamperRejection": true,
+    "viewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "mobileLandscapeLayouts": [
+      [
+        844,
+        390
+      ],
+      [
+        740,
+        360
+      ],
+      [
+        640,
+        360
+      ]
+    ],
+    "productionStoreLauncher": [
+      "Store card \u2192 loader completion \u2192 playable desktop match passed",
+      "Mobile launcher failure/retry and gameplay passed"
+    ],
+    "finalProductionMobile": [
+      "Real iframe fullscreen and landscape gate passed",
+      "Mobile layout, simultaneous touch, rotation input release, armory, scoreboard and fullscreen re-entry passed"
+    ],
+    "finalProductionControls": [
+      "Persisted settings, remapped native crouch, hero selection and inverted ADS passed",
+      "Remapped mouse scoreboard opens on hold and closes on release",
+      "Dialog focus, Escape and queued hero change passed",
+      "Headshot, damage direction, death source and dynamic spread passed"
+    ]
+  },
+  "newProductionReplay": {
+    "room": "af5f09331fcf42a82b30c89c",
+    "nativeTicks": 8222,
+    "profile": "15a835f40bb0890b672fb85c1b30d90db335534e0f3b931b1b6865e066f490ee",
+    "careerCommitted": true,
+    "humanParticipants": 1,
+    "verifier": "network-v3",
+    "authority": "03583fe37b115460b89d8cbc4328c26d1752870232a96730a07adb5da74237674e",
+    "frames": 1,
+    "state_root": "a835c9a3d21eaf432f5a41b33826e1cc2f09e1793adc142d1c14a3177a837ea6",
+    "verified": true
+  },
+  "legacyAndCurrentVerifierCheck": [
+    {
+      "room": "b8e6dc061fb9e289be719ba2",
+      "verifier": "network-v3",
+      "authority": "034b8689368cff016502db4357370ef7d34081ee68f5953dc494ba98243891f334",
+      "frames": 1,
+      "state_root": "b1720134c89a981a5184016ff43a43dffe0df5f1767df493b17e238fea2f73e4",
+      "verified": true
+    },
+    {
+      "room": "44b8996dd155da08be843375",
+      "verifier": "arsenal-v2",
+      "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+      "frames": 1,
+      "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+      "verified": true
+    }
+  ],
+  "career": {
+    "status": 200,
+    "matches": 3,
+    "kills": 0,
+    "deaths": 0,
+    "recordedHumanTicks": 781,
+    "recent": [
+      {
+        "id": "af5f09331fcf42a82b30c89c",
+        "outcome": "left",
+        "seconds": 4
+      },
+      {
+        "id": "40b4210ef71b338d06e638d0",
+        "outcome": "left",
+        "seconds": 2
+      },
+      {
+        "id": "3cee25d259dc863e4a0c2c53",
+        "outcome": "left",
+        "seconds": 6
+      }
+    ]
+  },
+  "recordingRetentionDays": 30,
+  "limits": [
+    "Chromium software rendering and touch emulation; no physical-phone FPS claim.",
+    "Rare combat feedback UI uses synthetic events; native inputs and full signed matches verified separately.",
+    "No historical career backfill; AI-covered frames excluded.",
+    "Weapon/hero balance, economy, deathmatch target and native rules unchanged."
+  ]
+}

@@ -3,7 +3,7 @@ import {mkdirSync} from 'node:fs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const base=process.env.STORE_URL||'http://127.0.0.1:19885',out=process.env.CONTROL_ARTIFACTS||'/tmp/botstrike-design-controls';mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader']});
-const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage(),errors=[],sent=[];page.setDefaultTimeout(45000);
+const context=await browser.newContext({viewport:{width:1440,height:900},storageState:process.env.STORAGE_STATE||undefined}),page=await context.newPage(),errors=[],sent=[];page.setDefaultTimeout(45000);
 page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error')console.log('console',e.text())});page.on('websocket',ws=>ws.on('framesent',e=>{try{const v=JSON.parse(e.payload);if(v.type==='input')sent.push(v.input)}catch{}}));
 await page.addInitScript(()=>{const Original=WebSocket;window.WebSocket=class extends Original{constructor(...args){super(...args);window.testSocket=this;this.addEventListener('message',e=>{if(window.freezeGame&&!e.synthetic){e.stopImmediatePropagation();return;}try{const value=JSON.parse(e.data);if(value.room?.state)window.testRoom=value.room;}catch{}})}};});
 const state=async()=> (await(await context.request.get(base+'/games/botstrike/api/state')).json()).room;
@@ -14,7 +14,7 @@ try{
  await page.locator('#invert-y').check();await page.locator('.settings details>summary').click();await page.locator('[data-action=crouch]').click();await page.keyboard.press('KeyV');
  assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);await page.reload();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Choose your chassis'));
  assert.equal(await page.locator('#volume').inputValue(),'0.3');assert.equal(await page.locator('#invert-y').isChecked(),true);assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);
- await page.locator('.career>summary').click();await page.locator('#career-refresh').click();await page.waitForFunction(()=>document.querySelector('#career-summary').textContent.includes('No recorded matches'));
+ await page.locator('.career>summary').click();await page.locator('#career-refresh').click();await page.waitForFunction(()=>/^(No recorded matches|[0-9]+ matches)/.test(document.querySelector('#career-summary').textContent));
  await page.locator('#private').click();await page.locator('#room-hero').selectOption('4');await page.waitForFunction(()=>document.querySelector('#room-hero').value==='4');await page.locator('#start').click();await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');
  await page.keyboard.down('KeyV');await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].crouch});await page.keyboard.up('KeyV');assert.equal((await state()).state.players[0].hero,4);
  await page.keyboard.press('Digit4');await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].weapon===3});
