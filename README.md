@@ -53,6 +53,7 @@ Desktop: WASD, mouse aim, click fire, R reload, Q skill, E use, B armory/loadout
 ```sh
 cargo test --release --locked --manifest-path botstrike/Cargo.toml
 npm run test:botstrike-native
+node tests/botstrike-long-replay.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-browser.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \

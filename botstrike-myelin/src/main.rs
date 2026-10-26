@@ -3,7 +3,7 @@ mod session;
 use serde_json::{json, Value};
 use std::{fs, path::Path};
 fn read(path: &str) -> session::AnyResult<Value> {
-    if fs::metadata(path)?.len() > 200_000_000 {
+    if fs::metadata(path)?.len() > 400_000_000 {
         return Err("Input file too large".into());
     }
     Ok(serde_json::from_slice(&fs::read(path)?)?)

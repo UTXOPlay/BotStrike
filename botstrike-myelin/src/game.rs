@@ -1,4 +1,4 @@
-//! Re-execute the pinned original native engine before admitting a Myelin match frame.
+//! Re-execute the exact BotStrike native engine before admitting a Myelin match frame.
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::{

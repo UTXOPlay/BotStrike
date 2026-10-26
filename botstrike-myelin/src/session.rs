@@ -137,7 +137,7 @@ fn profile() -> ApplicationProfile {
         },
         resources: ApplicationResourceEnvelope {
             max_frame_inputs: 1,
-            max_frame_input_bytes: 8_000_000,
+            max_frame_input_bytes: 176_000_000,
             max_frame_cycles: 1,
             max_logical_time_span: 1,
             max_inspect_query_bytes: 1024,

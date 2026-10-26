@@ -1,8 +1,8 @@
 {
-  "ticks": 9211,
+  "ticks": 9012,
   "score": [
     50,
-    49
+    47
   ],
   "players": 10,
   "privateJoin": true,
@@ -17,6 +17,23 @@
   "nativeTests": 17,
   "binaries": {
     "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
-    "myelin-botstrike": "d1f0f676f935384d70bad0503c6aceb1a0e02495bc51179e9bedaca36c708f14"
-  }
+    "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+  },
+  "tenHumanReplay": {
+    "tenHumanSeats": true,
+    "ticks": 23040,
+    "tapeBytes": 14012628,
+    "exportBytes": 28174838,
+    "profile": "5c08047108c56301a34039cccd9bfc7aaeaa1f634f8e6501fc0b43c5014b3404",
+    "verified": true
+  },
+  "browserViewports": [
+    "1920x1080",
+    "2560x1080",
+    "2560x1440",
+    "3840x2160",
+    "390x844",
+    "844x390"
+  ],
+  "movementTrajectories": 72
 }
