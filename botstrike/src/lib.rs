@@ -88,6 +88,8 @@ impl Config {
 #[serde(default, deny_unknown_fields)]
 pub struct Input {
     pub seq: u32,
+    // Server-bounded render tick, recorded verbatim for deterministic replay.
+    pub view_tick: Option<u32>,
     // Set by the authenticated room service, never copied from a browser packet.
     pub takeover: bool,
     pub x: f64,
@@ -165,6 +167,9 @@ pub struct Player {
     pub jump_held: bool,
     pub item_held: u8,
     pub attackers: [u32; 10],
+    pub life: u32,
+    pub ai_target: Option<usize>,
+    pub ai_since: u32,
     pub ai_goal: usize,
     pub ai_path: Vec<[f64; 3]>,
 }
@@ -194,6 +199,9 @@ pub struct Event {
     pub target: Option<usize>,
     pub value: i32,
 }
+pub const MAX_REWIND: u32 = 13; // 203 ms at 64 Hz.
+#[derive(Clone)]
+struct HitPose { position: [f64; 3], crouch: bool, alive: bool, life: u32 }
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Game {
     pub config: Config,
@@ -209,6 +217,8 @@ pub struct Game {
     pub utilities: Vec<Utility>,
     pub events: Vec<Event>,
     pub random: u32,
+    #[serde(skip)]
+    history: std::collections::VecDeque<(u32, Vec<HitPose>)>,
 }
 fn dist(a: [f64; 3], b: [f64; 3]) -> f64 {
     ((a[0] - b[0]).powi(2) + (a[2] - b[2]).powi(2)).sqrt()
@@ -287,6 +297,7 @@ impl Game {
     pub fn new(config: Config, rules: &Rules) -> Result<Self, String> {
         config.validate()?;
         let mut g = Self {
+            history: std::collections::VecDeque::new(),
             random: config.seed,
             config,
             tick: 0,
@@ -352,6 +363,9 @@ impl Game {
                 jump_held: false,
                 item_held: 0,
                 attackers: [0; 10],
+                life: 0,
+                ai_target: None,
+                ai_since: 0,
                 ai_goal: slot,
                 ai_path: vec![],
             });
@@ -386,6 +400,9 @@ impl Game {
         } else {
             p.armor.max(h.armor)
         };
+        p.life += 1;
+        p.ai_target = None;
+        p.ai_since = self.tick;
         p.alive = true;
         p.crouch = false;
         p.scoped = false;
@@ -637,7 +654,10 @@ impl Game {
         };
         self.event("skill", Some(slot), None, hero as i32);
     }
-    fn fire(&mut self, slot: usize, rules: &Rules) {
+    fn fire(&mut self, slot: usize, rules: &Rules, view_tick: Option<u32>) {
+        let poses = view_tick.filter(|&tick| tick <= self.tick && self.tick - tick <= MAX_REWIND)
+            .and_then(|tick| self.history.iter().find(|(t, _)| *t == tick))
+            .map(|(_, poses)| poses.clone());
         let p = &mut self.players[slot];
         let w = &rules.weapons[p.weapon];
         if p.fire_wait > 0 || p.reload > 0 || p.ammo[p.weapon] == 0 {
@@ -697,21 +717,26 @@ impl Game {
                 if !p.alive || p.team == team {
                     continue;
                 }
-                let height = if p.crouch { 47. } else { 70. };
+                let past = poses.as_ref().map(|poses| &poses[p.slot]);
+                // Never hit a different life after a respawn or rewind through death.
+                if past.is_some_and(|pose| !pose.alive || pose.life != p.life) { continue; }
+                let position = past.map_or(p.position, |pose| pose.position);
+                let crouch = past.map_or(p.crouch, |pose| pose.crouch);
+                let height = if crouch { 47. } else { 70. };
                 if let Some(t) = ray_box(
                     origin,
                     dir,
-                    [p.position[0] - 18., p.position[1], p.position[2] - 18.],
+                    [position[0] - 18., position[1], position[2] - 18.],
                     [
-                        p.position[0] + 18.,
-                        p.position[1] + height,
-                        p.position[2] + 18.,
+                        position[0] + 18.,
+                        position[1] + height,
+                        position[2] + 18.,
                     ],
                 ) {
                     if t < nearest {
                         nearest = t;
                         hit = Some(p.slot);
-                        head = origin[1] + dir[1] * t > p.position[1] + height - 16.;
+                        head = origin[1] + dir[1] * t > position[1] + height - 16.;
                     }
                 }
             }
@@ -966,6 +991,10 @@ impl Game {
         if inputs.iter().any(|i| !i.validate()) {
             return Err("Invalid controls".into());
         }
+        self.history.push_back((self.tick, self.players.iter().map(|p| HitPose {
+            position: p.position, crouch: p.crouch, alive: p.alive, life: p.life,
+        }).collect()));
+        while self.history.len() > MAX_REWIND as usize + 1 { self.history.pop_front(); }
         self.events.clear();
         self.tick += 1;
         if self.tick > MAX_TICKS {
@@ -1095,7 +1124,7 @@ impl Game {
                 self.skill(slot, rules, input)
             }
             if input.fire || self.players[slot].burst_remaining > 0 {
-                self.fire(slot, rules)
+                self.fire(slot, rules, input.view_tick)
             }
         }
         if self.phase == "buy" {
@@ -1256,7 +1285,8 @@ impl Game {
             } else if p.armor < 100 && p.credits >= 650 {
                 Some(WEAPONS)
             } else {
-                None
+                [6, 4, 2].into_iter().find(|&item| p.items[item] == 0 && p.credits >= rules.items[item].cost)
+                    .map(|item| WEAPONS + item)
             };
             return input;
         }
@@ -1278,7 +1308,7 @@ impl Game {
             let end = eye(q);
             let length =
                 ((end[0] - o[0]).powi(2) + (end[1] - o[1]).powi(2) + (end[2] - o[2]).powi(2))
-                    .sqrt();
+                    .sqrt().max(0.001);
             let dir = [
                 (end[0] - o[0]) / length,
                 (end[1] - o[1]) / length,
@@ -1301,9 +1331,15 @@ impl Game {
                 let error = [0.10, 0.035, 0.009][self.config.difficulty as usize];
                 input.yaw = (-(end[0] - o[0])).atan2(-(end[2] - o[2]))
                     + ((self.tick / 8 + slot as u32 * 37) as f64 * 0.7).sin() * error;
+                let turn = [3., 5., 7.][self.config.difficulty as usize] / HZ as f64;
+                let difference = (input.yaw - p.yaw).sin().atan2((input.yaw - p.yaw).cos());
+                input.yaw = p.yaw + difference.clamp(-turn, turn);
                 input.yaw = input.yaw.sin().atan2(input.yaw.cos());
-                input.pitch = ((end[1] - o[1]) / length).asin();
-                input.fire = self.tick % 64 > ([24, 12, 4][self.config.difficulty as usize])
+                let target_pitch = ((end[1] - o[1]) / length).clamp(-1., 1.).asin();
+                input.pitch = p.pitch + (target_pitch - p.pitch).clamp(-turn, turn);
+                input.fire = p.ai_target == Some(other)
+                    && self.tick.saturating_sub(p.ai_since) >= [20, 14, 9][self.config.difficulty as usize]
+                    && (self.tick + slot as u32 * 11) % 64 > [24, 12, 4][self.config.difficulty as usize]
                     && length < 2400.;
                 input.scope = rules.weapons[p.weapon].scoped;
                 input.ability = match p.hero {
@@ -1388,6 +1424,11 @@ impl Game {
         if input.interact {
             input.fire = false;
             input.jump = false;
+        }
+        let acquired = if enemy_visible { target } else { None };
+        if self.players[slot].ai_target != acquired {
+            self.players[slot].ai_target = acquired;
+            self.players[slot].ai_since = self.tick;
         }
         input
     }
@@ -1615,10 +1656,10 @@ mod tests {
         g.players[0].scoped = true;
         g.players[0].yaw = 0.;
         let hp = g.players[5].health;
-        g.fire(0, &r);
+        g.fire(0, &r, None);
         assert!(g.players[5].health < hp);
         let ammo = g.players[0].ammo[3];
-        g.fire(0, &r);
+        g.fire(0, &r, None);
         assert_eq!(g.players[0].ammo[3], ammo);
         let mut i = neutral();
         i[0].reload = true;
@@ -1631,7 +1672,7 @@ mod tests {
         g.players[5].position = [g.players[0].position[0], 0., o.min[2] - 100.];
         g.players[0].fire_wait = 0;
         let hp = g.players[5].health;
-        g.fire(0, &r);
+        g.fire(0, &r, None);
         assert_eq!(g.players[5].health, hp);
     }
     #[test]
@@ -1842,7 +1883,7 @@ mod tests {
             g.players[0].pitch = -0.08;
             g.players[0].health = 40;
             g.players[5].overclock = HZ * 4;
-            g.fire(0, &r);
+            g.fire(0, &r, None);
             assert!(g.players[5].health < r.heroes[g.players[5].hero].health);
             if weapon == 8 {
                 assert_eq!(g.players[5].disabled, HZ);
@@ -1859,7 +1900,7 @@ mod tests {
             g.players[5].protection = HZ;
             g.players[0].health = 40;
             g.players[0].fire_wait = 0;
-            g.fire(0, &r);
+            g.fire(0, &r, None);
             assert_eq!(g.players[5].disabled, 0);
             assert_eq!(g.players[5].revealed, 0);
             assert_eq!(g.players[0].health, 40);
@@ -1946,4 +1987,31 @@ mod tests {
             }
         }
     }
+    #[test]
+    fn bounded_rewind_hits_the_rendered_pose_but_never_a_new_life_or_through_cover() {
+        let (mut rules, mut game) = setup("deathmatch");
+        rules.maps[0].obstacles.clear(); rules.weapons[0].spread = 0.;
+        combat(&mut game); game.tick = 100;
+        for p in &mut game.players { if p.slot != 0 && p.slot != 5 { p.alive = false; } }
+        game.players[0].weapon = 0; game.players[0].yaw = 0.; game.players[0].pitch = 0.;
+        let poses: Vec<HitPose> = game.players.iter().map(|p| HitPose { position:p.position,crouch:p.crouch,alive:p.alive,life:p.life }).collect();
+        game.history.push_back((94, poses));
+        game.players[5].position[0] += 100.;
+        let health = game.players[5].health;
+        let mut without = game.clone(); without.fire(0,&rules,None); assert_eq!(without.players[5].health,health);
+        let mut with = game.clone(); with.fire(0,&rules,Some(94)); assert!(with.players[5].health < health);
+        for requested in [0,86,101,u32::MAX] { let mut invalid = game.clone(); invalid.fire(0,&rules,Some(requested)); assert_eq!(invalid.players[5].health,health); }
+        let mut respawned = game.clone(); respawned.players[5].life += 1; respawned.fire(0,&rules,Some(94)); assert_eq!(respawned.players[5].health,health);
+        rules.maps[0].obstacles.push(Obstacle { min:[-1150.,0.,180.],max:[-1050.,100.,220.],kind:"wall".into() });
+        game.fire(0,&rules,Some(94)); assert_eq!(game.players[5].health,health);
+    }
+    #[test]
+    fn bots_wait_to_react_and_coincident_eyes_never_generate_nan() {
+        let (mut rules,mut game)=setup("deathmatch"); rules.maps[0].obstacles.clear(); combat(&mut game);
+        game.tick=20; let first=game.bot(0,&rules); assert!(!first.fire); assert!(first.validate());
+        for elapsed in 1..14 { game.tick=20+elapsed; assert!(!game.bot(0,&rules).fire); }
+        game.players[5].position=game.players[0].position;
+        for tick in 40..100 {game.tick=tick;assert!(game.bot(0,&rules).validate());}
+    }
+
 }

@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-27",
+  "version": "1.1.0",
+  "profile": "15a835f40bb0890b672fb85c1b30d90db335534e0f3b931b1b6865e066f490ee",
+  "nativeTests": 19,
+  "javascriptTests": 24,
+  "hostTests": 3,
+  "completeMatch": {
+    "data": "/tmp/botstrike-flow-vF4sNw",
+    "ticks": 9317,
+    "score": [
+      48,
+      50
+    ],
+    "players": 10,
+    "privateJoin": true,
+    "publicMatchmaking": true,
+    "reconnect": true,
+    "balancedTeams": true,
+    "humanInput": true,
+    "respawns": true,
+    "signedReplay": true,
+    "tamperRejected": true
+  },
+  "tenHumanReplay": {
+    "tenHumanSeats": true,
+    "ticks": 23040,
+    "tapeBytes": 15283728,
+    "exportBytes": 30717038,
+    "profile": "15a835f40bb0890b672fb85c1b30d90db335534e0f3b931b1b6865e066f490ee",
+    "verified": true
+  },
+  "legacyVerification": {
+    "verifier": "arsenal-v2",
+    "authority": "036270bf312fffd4c820390166f0744ac1f03990bb3c226eacbac33d02e911a029",
+    "frames": 1,
+    "state_root": "e7e944ea8191b00f45e6fd1caeb9586d4cd2994a3652bd2707d7f1301ff4ff07",
+    "verified": true
+  },
+  "contextRestore": {
+    "events": [
+      "lost",
+      "restored"
+    ],
+    "lost": false,
+    "drawCalls": 21,
+    "width": 633,
+    "height": 292
+  },
+  "viewports": [
+    "1920x1080",
+    "2560x1080",
+    "2560x1440",
+    "3840x2160",
+    "390x844",
+    "844x390"
+  ],
+  "browserChecks": [
+    "native movement",
+    "skill",
+    "touch aim and fire",
+    "portrait rotation gate",
+    "no page errors",
+    "bounded graphics resolution after context restoration"
+  ],
+  "retentionDays": 30,
+  "artifacts": [
+    {
+      "name": "network-v3",
+      "directory": ".",
+      "sha256": {
+        "botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+        "myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+      }
+    },
+    {
+      "name": "arsenal-v2",
+      "directory": "legacy/arsenal-v2",
+      "sha256": {
+        "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+        "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+      }
+    }
+  ],
+  "limitations": [
+    "Browser tests use Chromium emulation and software rendering, not a physical phone FPS measurement.",
+    "Bounded host replay does not attest honest clients or prevent aim automation."
+  ]
+}

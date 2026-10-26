@@ -8,7 +8,8 @@ COPY host ./host
 COPY game-host.json ./game-host.json
 COPY botstrike-service ./botstrike-service
 COPY botstrike/spec.json ./botstrike/spec.json
-COPY release/botstrike-engine release/myelin-botstrike ./release/
+COPY release ./release
+COPY tools/verify-export.mjs ./tools/verify-export.mjs
 RUN mkdir /app/data && chown node:node /app/data
 USER node
 ENV NODE_ENV=production BIND=0.0.0.0 WEB_PORT=8080 DATA_DIR=/app/data

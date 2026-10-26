@@ -6,11 +6,11 @@ import path from 'node:path';
 import {createGameHost} from './server.mjs';
 
 const token='test-runtime-token-'.repeat(3),origin='http://game.example';
-async function fixture(t){
+async function fixture(t,options={}){
  const dir=mkdtempSync(path.join(tmpdir(),'game-host-test-'));
  writeFileSync(path.join(dir,'index.html'),'<h1>Independent game</h1>');
  const calls=[];
- const service=createGameHost({config:{name:'fixture',games:[{id:'example',webRoot:dir,runtimePath:'/native'}]},origin,runtimeUrl:'http://native.invalid',runtimeToken:token,fetchImpl:async(url,options)=>{calls.push({url,options});return Response.json({account:options.headers['X-UTXOPlay-Account']});}});
+ const service=createGameHost({...options,config:{name:'fixture',games:[{id:'example',webRoot:dir,runtimePath:'/native'}]},origin,runtimeUrl:'http://native.invalid',runtimeToken:token,fetchImpl:async(url,options)=>{calls.push({url,options});return Response.json({account:options.headers['X-UTXOPlay-Account']});}});
  const server=service.app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
  const url='http://127.0.0.1:'+server.address().port;
  t.after(async()=>{service.close();await new Promise(r=>server.close(r));rmSync(dir,{recursive:true,force:true});});
@@ -37,4 +37,15 @@ test('trusted gateways bind the exact account; invalid credentials never fall ba
  assert.equal((await f.request('/games/example/api/state',undefined,jar,{'X-Runtime-Token':token,'X-UTXOPlay-Account':'invalid'})).status,401);
  assert.equal((await f.request('/games/example/api/unknown',undefined,jar)).status,404);
  const guest=await f.request('/games/example/api/guest',{},'',headers);assert.equal((await guest.json()).user.id,'c'.repeat(64));assert.equal(guest.headers.getSetCookie().length,0);
+});
+
+
+test('gateway accounts have separate quotas; arbitrary forwarding headers cannot select an identity',async t=>{
+ const f=await fixture(t,{requestLimit:3});
+ const headers=id=>({'X-Runtime-Token':token,'X-UTXOPlay-Account':id.repeat(64)});
+ for(let i=0;i<3;i++)assert.equal((await f.request('/api/me',undefined,'',headers('a'))).status,200);
+ assert.equal((await f.request('/api/me',undefined,'',headers('a'))).status,429);
+ assert.equal((await f.request('/api/me',undefined,'',headers('b'))).status,200);
+ for(let i=0;i<3;i++)assert.equal((await f.request('/api/me',undefined,'',{'X-Forwarded-For':'1.2.3.'+i,'X-UTXOPlay-Account':i.toString().repeat(64)})).status,200);
+ assert.equal((await f.request('/api/me',undefined,'',{'X-Forwarded-For':'8.8.8.8'})).status,429);
 });

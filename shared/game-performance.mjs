@@ -29,8 +29,10 @@ export class ResolutionBudget {
       this.slow = this.fast = 0;
       return this.ratio;
     }
-    this.slow = ms > 24 ? this.slow + ms : Math.max(0, this.slow - ms * 2);
-    this.fast = ms < 18 ? this.fast + ms : 0;
+    // Require sustained load; one GC/shader stall cannot consume the whole budget.
+    const measured = Math.min(ms, 50);
+    this.slow = ms > 24 ? this.slow + measured : Math.max(0, this.slow - measured * 2);
+    this.fast = ms < 20 ? this.fast + measured : Math.max(0, this.fast - measured * 4);
     if (this.slow >= 350) {
       this.ratio = Math.max(0.75, this.ratio - 0.25);
       this.slow = this.fast = 0;

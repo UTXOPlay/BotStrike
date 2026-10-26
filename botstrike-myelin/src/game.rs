@@ -40,7 +40,7 @@ impl Game {
             return Err("Expected a complete match".into());
         }
         let tape = action["tape"].as_str().ok_or("Missing input tape")?;
-        if tape.is_empty() || tape.len() > 160_000_000 || tape.lines().count() > 230401 {
+        if tape.is_empty() || tape.len() > 180_000_000 || tape.lines().count() > 230401 {
             return Err("Invalid tape length".into());
         }
         let room = action["room"].as_str().ok_or("Missing room")?;

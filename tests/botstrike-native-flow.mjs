@@ -19,7 +19,7 @@ try{
  for(const account of accounts){const socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(account)});await new Promise((resolve,reject)=>{socket.on('open',resolve);socket.on('error',reject)});ws.push(socket)}
  await request(accounts[0],{type:'start'});
  await new Promise(r=>setTimeout(r,50));let state=(await request(accounts[0])).room.state;assert.equal(state.players.length,10);
- ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:100,x:1,fire:true}}));await new Promise(r=>setTimeout(r,50));state=(await request(accounts[0])).room.state;assert.equal(state.players[0].last_seq,100,'native accepts authenticated human input');
+ ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:100,x:1,fire:true,viewTick:Math.max(0,state.tick-6)}}));await new Promise(r=>setTimeout(r,50));state=(await request(accounts[0])).room.state;assert.equal(state.players[0].last_seq,100,'native accepts authenticated human input');
  ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:101,ability:true}}));
  ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:102}}));await new Promise(r=>setTimeout(r,80));state=(await request(accounts[0])).room.state;assert.ok(state.players[0].skill_wait>0,'a short press between ticks is retained');
  await new Promise(r=>setTimeout(r,450));state=(await request(accounts[0])).room.state;assert.equal(state.players[0].last_seq,102,'network input silence must not hand a connected player to AI');
@@ -32,6 +32,7 @@ try{
  const actionPath=path.join(data,'rooms',id,'match.json'),action=JSON.parse(readFileSync(actionPath));action.result.score[0]+=1;const tampered=path.join(data,'tampered.json');writeFileSync(tampered,JSON.stringify(action));assert.throws(()=>execFileSync('release/myelin-botstrike',['record',path.join(data,'tamper-session'),tampered],{env:{...process.env,BOTSTRIKE_ASSETS:path.resolve('release')},timeout:180000,stdio:'pipe'}),'tampered result must be rejected');
  const publicA=(await request(accounts[0],{type:'queue',mode:'deathmatch',map:2,hero:0,difficulty:1})).room;
  const publicB=(await request(accounts[1],{type:'queue',mode:'deathmatch',map:2,hero:5,difficulty:1})).room;
+ assert.equal(publicA.status,'waiting','public queue allows time for humans');assert.ok(publicA.queueDeadline>Date.now());
  assert.equal(publicA.id,publicB.id,'public matchmaking joins the existing compatible room');
  assert.equal(publicB.slot,5);
  const reconnect=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(accounts[1])});ws.push(reconnect);

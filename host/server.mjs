@@ -1,9 +1,11 @@
 import express from 'express';
+import {Readable} from 'node:stream';
+import {pipeline} from 'node:stream/promises';
 import {createHmac,randomBytes,timingSafeEqual} from 'node:crypto';
 import {optimizedStatic} from './static.mjs';
 import {gameSockets} from './socket-proxy.mjs';
 
-export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSecret=runtimeToken,fetchImpl=fetch,install=()=>({close(){}})}) {
+export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSecret=runtimeToken,fetchImpl=fetch,requestLimit=3000,install=()=>({close(){}})}) {
  if(!runtimeToken||runtimeToken.length<32||!sessionSecret||sessionSecret.length<32)throw Error('Set stable server-only secrets of at least 32 characters');
  if(!['http:','https:'].includes(new URL(runtimeUrl).protocol))throw Error('Invalid runtime URL');
  const app=express();app.disable('x-powered-by');
@@ -36,7 +38,7 @@ export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSec
  const needUser=(req,res,next)=>{req.account=account(req);if(!req.account)return res.status(401).json({error:'Open the game to start a session.'});next();};
  app.use((req,res,next)=>{
   res.set({'X-Content-Type-Options':'nosniff','Referrer-Policy':'same-origin','Content-Security-Policy':"default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'none'; form-action 'none'"});
-  if(quotas.size>20000||limited('request:'+req.ip,3000,60000))return res.status(429).json({error:'Please slow down.'});
+  if(quotas.size>20000||limited('request:'+(account(req)?.id||req.ip),requestLimit,60000))return res.status(429).json({error:'Please slow down.'});
   if(!['GET','HEAD','OPTIONS'].includes(req.method)&&!account(req)?.service&&req.headers.origin!==origin)return res.status(403).json({error:'Game origin rejected'});
   if(req.path.includes('/api/'))res.set('Cache-Control','no-store');
   next();
@@ -44,7 +46,7 @@ export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSec
  app.use(express.json({limit:'64kb'}));
  app.get('/api/me',(req,res)=>res.json({user:account(req)}));
  app.post('/api/guest',(req,res)=>{const user=guest(req,res);res.status(user?200:429).json(user?{user}:{error:'Session unavailable'});});
- app.get('/health',(_req,res)=>res.json({ok:true,service:config.name}));
+ app.get('/health',async(_req,res)=>{try{const result=await fetchImpl(runtimeUrl+'/api/health',{headers:{'X-Runtime-Token':runtimeToken,'X-UTXOPlay-Account':'0'.repeat(64)},signal:AbortSignal.timeout(3000)});if(!result.ok)throw Error('Runtime unavailable');res.json({ok:true,service:config.name});}catch{if(res.headersSent){res.destroy();return;}res.status(503).json({ok:false,service:config.name});}});
  app.get('/',(_req,res)=>res.redirect(302,'/games/'+config.games[0].id+'/'));
  for(const game of config.games){
   const base='/games/'+game.id;
@@ -63,8 +65,10 @@ export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSec
    try{
     const result=await fetchImpl(runtimeUrl+game.runtimePath+'/api'+endpoint,{method:req.method,headers:{'Content-Type':'application/json','X-Runtime-Token':runtimeToken,'X-UTXOPlay-Account':req.account.id},body:req.method==='POST'?JSON.stringify(req.body||{}):undefined,signal:AbortSignal.timeout(20000)});
     if(endpoint==='/export')res.set('Content-Disposition',`attachment; filename="${game.id}-session.json"`);
-    res.status(result.status).type('json').send(await result.text());
-   }catch{res.status(503).json({error:'The game runtime is unavailable. Your saved progress is safe.'});}
+    res.status(result.status).type('json');
+    if(endpoint==='/export'&&result.body)await pipeline(Readable.fromWeb(result.body),res);
+    else res.send(await result.text());
+   }catch{if(res.headersSent){res.destroy();return;}res.status(503).json({error:'The game runtime is unavailable. Your saved progress is safe.'});}
   });
   app.use(base,(req,res,next)=>{if(req.path==='/'||req.path==='/index.html')guest(req,res);next();},optimizedStatic(game.webRoot));
  }

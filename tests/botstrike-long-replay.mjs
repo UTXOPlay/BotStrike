@@ -8,7 +8,7 @@ import {execFileSync} from 'node:child_process';
 const dir=mkdtempSync(path.join(tmpdir(),'botstrike-ten-human-')),tapeFile=path.join(dir,'tape.jsonl');
 const config={map:0,mode:'deathmatch',heroes:[0,1,2,3,4,5,0,1,2,3],bots:Array(10).fill(false),difficulty:1,seed:2050};
 const fd=openSync(tapeFile,'w');writeSync(fd,JSON.stringify({config})+'\n');
-for(let tick=1;tick<=23040;tick++)writeSync(fd,JSON.stringify({inputs:Array.from({length:10},(_,slot)=>[tick,.123456,-.123456,slot<5?.123456:3.141593,-.123456,256,11,23,slot%6,0])})+'\n');closeSync(fd);
+for(let tick=1;tick<=23040;tick++)writeSync(fd,JSON.stringify({inputs:Array.from({length:10},(_,slot)=>[tick,.123456,-.123456,slot<5?.123456:3.141593,-.123456,256,11,23,slot%6,0,Math.max(0,tick-6)])})+'\n');closeSync(fd);
 const bytes=statSync(tapeFile).size;assert.ok(bytes>8_000_000,'fixture must exceed old profile capacity');
 const env={...process.env,BOTSTRIKE_ASSETS:path.resolve('release')},result=JSON.parse(execFileSync('release/botstrike-engine',['replay',tapeFile],{timeout:180000,maxBuffer:2e6}));assert.equal(result.completed,true);
 const action={type:'match',room:'a'.repeat(24),players:Array.from({length:10},(_,i)=>(i+1).toString(16).repeat(64)),tape:readFileSync(tapeFile,'utf8'),result};const actionFile=path.join(dir,'match.json');writeFileSync(actionFile,JSON.stringify(action));
