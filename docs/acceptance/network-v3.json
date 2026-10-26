@@ -4,7 +4,7 @@
   "profile": "15a835f40bb0890b672fb85c1b30d90db335534e0f3b931b1b6865e066f490ee",
   "nativeTests": 19,
   "javascriptTests": 24,
-  "hostTests": 3,
+  "hostTests": 4,
   "completeMatch": {
     "data": "/tmp/botstrike-flow-vF4sNw",
     "ticks": 9317,
@@ -85,5 +85,82 @@
   "limitations": [
     "Browser tests use Chromium emulation and software rendering, not a physical phone FPS measurement.",
     "Bounded host replay does not attest honest clients or prevent aim automation."
-  ]
+  ],
+  "serverContainerFlow": {
+    "data": "/tmp/botstrike-flow-Hi6MB0",
+    "ticks": 9283,
+    "score": [
+      50,
+      47
+    ],
+    "players": 10,
+    "privateJoin": true,
+    "publicMatchmaking": true,
+    "reconnect": true,
+    "balancedTeams": true,
+    "humanInput": true,
+    "respawns": true,
+    "signedReplay": true,
+    "tamperRejected": true
+  },
+  "production": {
+    "image": "myelin-botstrike:1.1.0-network-v3-r1",
+    "sourceCommit": "0824e8e",
+    "health": "healthy",
+    "retentionDays": 30,
+    "compose": "/data/utxoplay/releases/20261027-botstrike-network-v3-r1/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-network-v3-r1/botstrike-data-before.tar.gz",
+    "publicAppSha256": "2f38aef5a030b014e76de30cc48cda326914a44a5f8a2ec78ca0d6789cf6b40c",
+    "storeLauncher": {
+      "desktop": true,
+      "mobile": true,
+      "moduleFailureRetry": true,
+      "viewports": [
+        "1920x1080",
+        "2560x1080",
+        "2560x1440",
+        "3840x2160",
+        "390x844",
+        "844x390"
+      ]
+    },
+    "signedReplays": [
+      {
+        "room": "1038bca40d6ad551711dd047",
+        "verifier": "network-v3",
+        "authority": "027fbca9019591b9614ba15fd6e3b36a2d708355e5019a1013554041a82935b9de",
+        "frames": 1,
+        "state_root": "19a21acc995c0262400f35d9bd7130df95a98316c7dda0ebac33e512f6a34e69",
+        "verified": true
+      },
+      {
+        "room": "44b8996dd155da08be843375",
+        "verifier": "arsenal-v2",
+        "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+        "frames": 1,
+        "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+        "verified": true
+      }
+    ],
+    "lastObservedSealMs": 605,
+    "recordingErrors": 0,
+    "failedRooms": 0,
+    "activeRoomsBeforeFinalReplacement": 0,
+    "drainingAfterRestart": false,
+    "mobileChecks": [
+      "actual store iframe fullscreen",
+      "844x390, 740x360, 640x360 icon layout",
+      "simultaneous movement + aim + fire acknowledged by native engine",
+      "neutral inputs after portrait gate",
+      "armory and scoreboard",
+      "fullscreen exit and re-entry",
+      "delayed snapshot ignored after leaving"
+    ],
+    "otherContainersUnchangedAtInitialSwitch": true,
+    "otherContainersRecreatedByThisRelease": [],
+    "concurrentContainerChangesObservedDuringFinalAcceptance": [
+      "myelin-block-party"
+    ],
+    "concurrentChangesNote": "The long-window container identity check observed a separate Block Party rollout. Both BotStrike Compose operations target only the botstrike service; the store and all remaining container IDs stayed unchanged."
+  }
 }
