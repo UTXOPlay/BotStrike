@@ -1,0 +1,90 @@
+{
+  "verifiedAt": "2026-10-26T13:54:29.393690+00:00",
+  "gameImage": "myelin-botstrike:2161113",
+  "storeImage": "utxoplay:0.34.0-c5de2ce",
+  "beforeImage": "myelin-botstrike:9f31867",
+  "benchmarkBefore": {
+    "environment": "Chromium SwiftShader, 844x390, DPR 2; comparative software-rendering benchmark, not handset FPS",
+    "frameMs": {
+      "median": 566.7000000000007,
+      "p95": 800
+    },
+    "networkRttMs": {
+      "median": 41.38398000000598,
+      "p95": 50.85812799999985
+    },
+    "nativeTicksPerSecond": null,
+    "dataset": {
+      "game": "botstrike",
+      "mobile": "true",
+      "immersiveBlocked": "false",
+      "touch": "true",
+      "playing": "true",
+      "drawCalls": "186",
+      "renderFps": "2",
+      "renderMs": "4.15",
+      "renderScale": "2.00"
+    },
+    "backing": [
+      1266,
+      585
+    ],
+    "status": "Connected \u00b7 1297 ms",
+    "probeNote": "The baseline probe mixed a previous room with the new room; its native tick-rate value is discarded. Browser frame and independent RTT samples remain valid."
+  },
+  "benchmarkAfter": {
+    "environment": "Chromium SwiftShader, 844x390, DPR 2; comparative software-rendering benchmark, not handset FPS",
+    "frameMs": {
+      "median": 83.30000000000109,
+      "p95": 100.10000000000036
+    },
+    "networkRttMs": {
+      "median": 38.79580900000019,
+      "p95": 42.13683800000035
+    },
+    "nativeTicksPerSecond": 63.98946641518476,
+    "dataset": {
+      "game": "botstrike",
+      "mobile": "true",
+      "immersiveBlocked": "false",
+      "touch": "true",
+      "playing": "true",
+      "drawCalls": "83",
+      "renderTriangles": "174404",
+      "renderFps": "12",
+      "renderMs": "1.78",
+      "renderScale": "0.75"
+    },
+    "backing": [
+      633,
+      292
+    ],
+    "status": "Connected \u00b7 260 ms"
+  },
+  "medianFrameTimeReduction": 0.8530086465502011,
+  "comparisonLimits": "Software-rendering comparison of separate live solo matches at the same viewport, DPR and initial camera; AI positions differ. These are not physical-phone FPS measurements.",
+  "productionMobileRegressionPassed": true,
+  "candidateDesktopViewports": [
+    "1920x1080",
+    "2560x1080",
+    "2560x1440",
+    "3840x2160"
+  ],
+  "predictionRoundTripCasesMs": [
+    0,
+    80,
+    180
+  ],
+  "nativeMatchedMovementTrajectories": 72,
+  "nativeMatchedJumpFrames": 180,
+  "jsTests": 17,
+  "hostTests": 2,
+  "publicAssetHashes": {
+    "index.html": "7fc1f37dab8a75d0dcc203cae5ceaeeba2386c661b9f4f08013db9ef08775ddd",
+    "app.js": "d02777e57c95f028167a501d9b3a4dce89f85b189e857040622f54dc34d08a81"
+  },
+  "unchangedNativeBinaries": {
+    "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+    "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+  }
+}

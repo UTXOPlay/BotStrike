@@ -29,3 +29,11 @@ For a browser-only change, retain the exact native engine/adapter pair and the g
 Image `myelin-botstrike:9f31867` enforces landscape and requires fullscreen entry on capable mobile browsers. Controls use local Lucide SVG icons, split thumb zones and an armory-based equipment picker. Production store-iframe acceptance covers fullscreen, rotation, three landscape sizes, control separation, icon rendering and simultaneous touch inputs acknowledged by the native service. See `acceptance/mobile-fullscreen.json` and `mobile-controls.md` for evidence and platform limits. The exact native pair and store image are unchanged.
 
 Current game Compose: `/data/utxoplay/releases/20261026-botstrike-mobile-9f31867/game.compose.json`. Rollback Compose: `/data/utxoplay/releases/20261026-botstrike-launch-12cc6cb/game.compose.json`. Both retain the same private environment and game data volume.
+
+## Responsiveness — 2026-10-26
+
+Image `myelin-botstrike:2161113` replaces continuous stale-snapshot attraction with acknowledged-input prediction, coalesces input reporting at up to 60 Hz, adds immediate local firing feedback, batches mobile materials, adapts resolution using elapsed frame time and avoids repeated weapon/resize rebuilds. Browser presentation changes leave the exact native engine and adapter unchanged.
+
+Production touch/fullscreen/rotation acceptance passed. In the same SwiftShader software-rendering setup, median frame time changed from approximately 567 ms to 83 ms, with independent transport RTT approximately 39 ms and native updates approximately 64 Hz. Separate live matches have different AI positions, and these measurements do not represent physical-phone FPS. Detailed evidence is in `acceptance/responsiveness.json`; implementation and regression rationale are in `responsiveness.md`.
+
+Current game Compose: `/data/utxoplay/releases/20261026-botstrike-performance-2161113/game.compose.json`. Rollback: `/data/utxoplay/releases/20261026-botstrike-mobile-9f31867/game.compose.json`. Store and other game services were not recreated.
