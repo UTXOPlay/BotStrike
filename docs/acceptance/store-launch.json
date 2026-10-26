@@ -1,0 +1,37 @@
+{
+  "verifiedAt": "2026-10-26T12:56:04.522563+00:00",
+  "url": "https://store.utxoplay.io/play/botstrike",
+  "gameImage": "myelin-botstrike:12cc6cb",
+  "storeImage": "utxoplay:0.34.0-c5de2ce",
+  "originalFailureReproduced": "Game initialized but store remained at 0% because no startup report was sent.",
+  "productionChecks": {
+    "desktopStoreCardToPlayableMatch": true,
+    "mobileModuleFailureShowsRetry": true,
+    "mobileNewAttemptBecomesPlayable": true,
+    "overlayRemovedAndIframeInteractive": true,
+    "resizeViewports": [
+      "1920x1080",
+      "2560x1080",
+      "2560x1440",
+      "3840x2160",
+      "390x844",
+      "844x390"
+    ],
+    "uncaughtBrowserErrors": 0,
+    "containerHealthy": true
+  },
+  "localChecks": {
+    "serviceMovementStartupTests": 8,
+    "hostTests": 2
+  },
+  "publicAssetsMatchSource": {
+    "index.html": "fa857f409dfcc1832dce5e74dd74cb9b6f0d5c41546a05a5121d0f1e2bdf2ae7",
+    "app.js": "5b822d85a9193192cea3b362fabab1b898096ae82e083da5c0648278766756c8",
+    "startup.js": "ba71102724bf332d1cb01ad7cf4a69639ee5bbc1ef2541b101c1cfffeda9a40f"
+  },
+  "unchangedNativeBinaries": {
+    "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+    "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+  },
+  "testNote": "Production desktop passed in the combined run. Repeated fresh guest creation reached the daily limit before mobile navigation; mobile then passed using a disposable guest session created through the normal API. Final checks used production assets without LOCAL_WEB."
+}
