@@ -49,3 +49,10 @@ test('gateway accounts have separate quotas; arbitrary forwarding headers cannot
  for(let i=0;i<3;i++)assert.equal((await f.request('/api/me',undefined,'',{'X-Forwarded-For':'1.2.3.'+i,'X-UTXOPlay-Account':i.toString().repeat(64)})).status,200);
  assert.equal((await f.request('/api/me',undefined,'',{'X-Forwarded-For':'8.8.8.8'})).status,429);
 });
+
+test('signed exports retain their exact body and download headers through the streaming proxy',async t=>{
+ const f=await fixture(t),headers={'X-Runtime-Token':token,'X-UTXOPlay-Account':'e'.repeat(64)};
+ const response=await f.request('/games/example/api/export',undefined,'',headers);
+ assert.equal(response.status,200);assert.match(response.headers.get('content-disposition'),/example-session.json/);
+ assert.equal(await response.text(),JSON.stringify({account:'e'.repeat(64)}));
+});
