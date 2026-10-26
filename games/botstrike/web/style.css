@@ -30,3 +30,72 @@ html[data-touch=true] .skill-status{display:none}
 @media(max-width:750px){#buy-items img{height:80px}#buy-items button{padding:9px}#buy-items b{font-size:10px}#buy-items small{font-size:10px}.dialog{padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}}
 @media(max-width:750px) and (min-height:501px){#utility-choice{bottom:310px}#buy-open{left:auto;right:14px;top:253px;transform:none;font-size:8px;padding:6px 10px}#objective-hud{top:305px}}
 #buy-items button:disabled{opacity:.68}
+
+/* Fullscreen landscape is the mobile entry contract, including inside the store iframe. */
+#game-content{width:100%;height:100%}
+#immersive-gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:max(20px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));overflow:auto;background:radial-gradient(ellipse at 50% 30%,#153747,#07111d 75%);text-align:center}
+.immersive-card{max-width:380px;margin:auto}.immersive-card svg{display:block;margin:0 auto 20px;color:var(--cyan)}.immersive-card .eyebrow{display:block}.immersive-card h1{font-size:30px;line-height:1.1;letter-spacing:-1px;margin:16px 0}.immersive-card p{color:#a8bfcc;font-size:14px;line-height:1.6}.immersive-card button{margin:10px 0 18px;min-height:48px;width:100%}.immersive-card small{display:block;color:#7794a6;font-size:11px;line-height:1.6}
+html[data-immersive-blocked=true] #game-content{visibility:hidden}
+.equipment-picker{margin:16px 0;max-width:320px}
+.equipment-picker #utility-choice{position:static;width:100%;height:44px;margin-top:6px;font-size:12px;padding:8px;pointer-events:auto}
+@media(max-height:430px){.immersive-card{max-width:480px}.immersive-card svg{width:64px;height:44px;margin-bottom:8px}.immersive-card h1{margin:10px 0;font-size:26px}.immersive-card p{margin:8px 0}.immersive-card button{margin:6px 0 10px}.immersive-card small{font-size:10px}}
+@media(orientation:landscape){
+ html[data-mobile=true]{--edge-left:max(14px,env(safe-area-inset-left));--edge-right:max(14px,env(safe-area-inset-right));--edge-top:max(10px,env(safe-area-inset-top));--edge-bottom:max(14px,env(safe-area-inset-bottom))}
+ html[data-mobile=true][data-playing=true] .brand{display:none}
+ html[data-mobile=true] .menu-toggle{top:var(--edge-top);right:var(--edge-right);width:44px;height:44px;min-height:44px;padding:0;font-size:18px}
+ html[data-mobile=true] .menu-toggle span{display:none}
+ html[data-mobile=true] .match-score{top:var(--edge-top);left:50%;gap:10px;padding:4px 10px;border-radius:5px}
+ html[data-mobile=true] .match-score>strong{font-size:22px}
+ html[data-mobile=true] .match-score>div{min-width:104px}
+ html[data-mobile=true] .match-score b{font-size:17px}
+ html[data-mobile=true] .match-score span,html[data-mobile=true] .match-score small{font-size:7px}
+ html[data-mobile=true] #radar{left:var(--edge-left);top:var(--edge-top);width:76px;height:76px}
+ html[data-mobile=true] #score-open{top:var(--edge-top);right:calc(var(--edge-right) + 52px);left:auto;width:44px;height:44px;min-height:44px;padding:0;font-size:20px}
+ html[data-mobile=true] #buy-open{top:var(--edge-top);left:calc(var(--edge-left) + 84px);right:auto;transform:none;min-height:44px;height:44px;padding:6px 8px;font-size:9px}
+ html[data-mobile=true] .desktop-key{display:none}
+ html[data-mobile=true] #kill-feed{top:calc(var(--edge-top) + 104px);right:var(--edge-right);max-width:140px;font-size:7px;opacity:.75;pointer-events:none}
+ html[data-mobile=true] #kill-feed>div:nth-last-child(n+3){display:none}
+ html[data-mobile=true] #objective-hud{top:calc(var(--edge-top) + 62px);left:50%;width:38%;max-width:300px;font-size:9px;pointer-events:none}
+ html[data-mobile=true][data-touch=true] .vitals{top:calc(var(--edge-top) + 52px);left:calc(var(--edge-left) + 84px);bottom:auto;max-width:155px;padding:4px 7px;border-width:2px}
+ html[data-mobile=true] .vitals small{font-size:7px}
+ html[data-mobile=true][data-touch=true] .vitals b{font-size:18px}
+ html[data-mobile=true] .vitals span{font-size:7px}
+ html[data-mobile=true][data-touch=true] .loadout{top:calc(var(--edge-top) + 52px);right:var(--edge-right);bottom:auto;max-width:112px;padding:4px 7px}
+ html[data-mobile=true][data-touch=true] .loadout b{font-size:22px}
+ html[data-mobile=true] .loadout small{font-size:8px}
+ html[data-mobile=true] #reload-state{font-size:8px}
+ html[data-mobile=true] #move-pad{left:var(--edge-left);bottom:var(--edge-bottom);width:108px;height:108px}
+ html[data-mobile=true] #move-knob{width:42px;height:42px}
+ html[data-mobile=true] #touch button{min-width:44px;min-height:44px;font-size:9px;padding:4px;border-radius:8px}
+ html[data-mobile=true] #touch-jump{left:var(--edge-left);bottom:calc(var(--edge-bottom) + 118px);width:48px;height:44px}
+ html[data-mobile=true] #touch-crouch{left:calc(var(--edge-left) + 58px);bottom:calc(var(--edge-bottom) + 118px);width:48px;height:44px}
+ html[data-mobile=true] #touch-fire{right:var(--edge-right);bottom:var(--edge-bottom);width:80px;height:80px;border-radius:50%;font-size:13px!important}
+ html[data-mobile=true] #touch-fire small{font-size:6px}
+ html[data-mobile=true] #touch-skill{right:calc(var(--edge-right) + 90px);bottom:var(--edge-bottom);width:54px;height:54px;border-radius:50%}
+ html[data-mobile=true] #touch-reload{right:var(--edge-right);bottom:calc(var(--edge-bottom) + 90px);width:46px;height:46px;font-size:22px!important}
+ html[data-mobile=true] #touch-scope{right:calc(var(--edge-right) + 56px);bottom:calc(var(--edge-bottom) + 90px);width:46px;height:46px;font-size:22px!important}
+ html[data-mobile=true] #touch-utility{right:calc(var(--edge-right) + 112px);bottom:calc(var(--edge-bottom) + 90px);width:50px;height:46px}
+ html[data-mobile=true] #touch-weapon{right:calc(var(--edge-right) + 154px);bottom:var(--edge-bottom);width:50px;height:44px}
+ html[data-mobile=true] #touch-interact{left:calc(var(--edge-left) + 118px);bottom:var(--edge-bottom);transform:none;width:54px;height:44px;min-width:44px}
+ html[data-mobile=true] #look-pad{left:36%;right:0;top:0;bottom:0;z-index:0}
+ html[data-mobile=true] #touch button,html[data-mobile=true] #move-pad{z-index:1}
+ html[data-mobile=true] .dialog{padding:var(--edge-top) var(--edge-right) var(--edge-bottom) var(--edge-left)}
+ html[data-mobile=true] #panel{padding:68px max(24px,env(safe-area-inset-right)) 24px max(24px,env(safe-area-inset-left))}
+}
+@media(orientation:landscape){html[data-mobile=true] #look-pad{top:112px}html[data-mobile=true] #kill-feed{display:none}html[data-mobile=true] .vitals div{gap:6px}html[data-mobile=true] .vitals progress{margin:0}html[data-mobile=true] #objective-hud{width:26%;max-width:210px}}
+@media(orientation:landscape){html[data-mobile=true] #touch #touch-fire,html[data-mobile=true] #touch #touch-skill{border-radius:50%}}
+
+/* Lucide 0.468.0, ISC / MIT. License: ./_shared/licenses/lucide.txt */
+.control-symbols{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.control-icon{display:block;width:24px;height:24px;margin:auto;pointer-events:none;flex:none}
+#touch button,#menu-toggle,#score-open,#buy-open,#buy-close,#score-close{display:grid;place-items:center;position:absolute}
+#menu-toggle{position:fixed}
+#buy-close,#score-close{position:relative;width:44px;height:44px;padding:10px}
+#touch-fire .control-icon{width:34px;height:34px}
+#touch-skill .control-icon{width:26px;height:26px}
+.control-badge{position:absolute;right:2px;bottom:1px;min-width:16px;padding:1px 3px;border-radius:6px;background:#0b1d29;color:#d9f8ff;font:10px/1.2 monospace;pointer-events:none}
+#touch-skill.cooling .control-icon{opacity:.35}
+#buy-open .control-badge{font-size:8px;left:0;right:0;bottom:1px;background:none;text-align:center;padding:0}
+#buy-open{width:48px;height:48px;padding:6px 8px 13px}
+#immersive-enter{width:64px;height:56px;padding:12px;margin-left:auto;margin-right:auto;display:block}
+@media(orientation:landscape){html[data-mobile=true] #buy-open{width:48px;min-width:44px;padding:3px 8px 11px}html[data-mobile=true] #touch button{padding:6px}html[data-mobile=true] #touch #touch-fire .control-icon{width:34px;height:34px}}

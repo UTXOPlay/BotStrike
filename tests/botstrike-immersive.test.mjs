@@ -1,0 +1,13 @@
+import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
+const source=readFileSync(new URL('../games/botstrike/web/immersive.js',import.meta.url),'utf8');
+function setup({mobile=true,portrait=true,supported=true,deny=false}={}){
+ const events={},nodes={},calls=[];const on=(name,fn)=>(events[name]??=[]).push(fn),fire=name=>events[name]?.forEach(fn=>fn());
+ const touch={matches:mobile,addEventListener:on},orientation={matches:portrait,addEventListener:on};
+ const root={dataset:{},requestFullscreen:supported?async()=>{calls.push('fullscreen');if(deny)throw Error('denied');doc.fullscreenElement=root;fire('fullscreenchange')}:undefined};
+ const doc={documentElement:root,fullscreenEnabled:supported,fullscreenElement:null,addEventListener:on,getElementById:id=>nodes[id]??=( {hidden:false,setAttribute(){},focus(){},addEventListener:on})};
+ const c={document:doc,navigator:{},screen:{orientation:{lock:async value=>{calls.push(value);throw Error('unsupported')},unlock(){}}},matchMedia:q=>q.includes('coarse')?touch:orientation,addEventListener:on,dispatchEvent:e=>calls.push(e.detail.blocked?'blocked':'unblocked'),CustomEvent:class{constructor(name,options){Object.assign(this,options)} }};c.window=c;vm.runInNewContext(source,c);
+ return{api:c.BotStrikeImmersive,nodes,calls,root,rotate(value){orientation.matches=value;fire('resize')},exit(){doc.fullscreenElement=null;fire('fullscreenchange')}};
+}
+test('mobile requires landscape and real fullscreen; exiting fullscreen blocks controls again',async()=>{const h=setup();assert.ok(h.api.blocked);await h.api.enter();assert.deepEqual(h.calls.slice(-2),['fullscreen','landscape']);assert.ok(h.api.blocked,'portrait stays blocked when orientation lock is unsupported');h.rotate(false);assert.equal(h.api.blocked,false);assert.equal(h.nodes['game-content'].inert,false);h.exit();assert.ok(h.api.blocked);assert.ok(h.nodes['game-content'].inert)});
+test('fullscreen rejection stays actionable and never silently releases the gate',async()=>{const h=setup({portrait:false,deny:true});await h.api.enter();assert.ok(h.api.blocked);assert.match(h.nodes['immersive-hint'].textContent,/not allowed/);assert.equal(h.nodes['immersive-enter'].disabled,false)});
+test('unsupported fullscreen still enforces landscape; desktop remains unrestricted',()=>{const h=setup({supported:false});assert.ok(h.api.blocked);h.rotate(false);assert.equal(h.api.blocked,false);const desktop=setup({mobile:false});assert.equal(desktop.api.blocked,false);assert.equal(desktop.nodes['immersive-gate'].hidden,true)});
