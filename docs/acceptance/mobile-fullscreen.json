@@ -1,0 +1,45 @@
+{
+  "verifiedAt": "2026-10-26T13:15:10.970267+00:00",
+  "url": "https://store.utxoplay.io/play/botstrike",
+  "gameImage": "myelin-botstrike:9f31867",
+  "storeImage": "utxoplay:0.34.0-c5de2ce",
+  "productionChecks": {
+    "realIframeFullscreen": true,
+    "portraitGate": true,
+    "landscapeSizes": [
+      "844x390",
+      "740x360",
+      "640x360"
+    ],
+    "controlsAndHudDoNotOverlap": true,
+    "touchTargetsAtLeast44px": true,
+    "visibleControlIconsRendered": true,
+    "noTextLabelsOnGameplayButtons": true,
+    "simultaneousMoveFireAimAcknowledgedByNative": true,
+    "rotationReleasesHeldInputs": true,
+    "fullscreenExitPausesInputs": true,
+    "fullscreenReentry": true,
+    "armoryEquipmentPickerAndScoreboardAccessible": true,
+    "uncaughtBrowserErrors": 0,
+    "healthy": true
+  },
+  "candidateDesktopViewports": [
+    "1920x1080",
+    "2560x1080",
+    "2560x1440",
+    "3840x2160"
+  ],
+  "localTests": 11,
+  "publicAssetHashes": {
+    "index.html": "fbddc0cacec529bfb5d14be1b943d4b0bdc1a1027f7f2307781f713888a5b477",
+    "app.js": "f47964c0c17d74bb4ad68fa5ddd20fe1f016516cadd7e378e3ae2c8049bddd9a",
+    "style.css": "20775de93f9ec4d2d776b77f46f07bf695f519ef6a99b0c2cffa34ac1a874e49",
+    "immersive.js": "9e4ee8f26b51a88791515851010a3cc9183a2ae531a3798a58ccb21977bb92c9"
+  },
+  "unchangedNativeBinaries": {
+    "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+    "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+  },
+  "validationEnvironment": "Chromium mobile emulation with actual browser Fullscreen API inside the production store iframe; not a physical handset. Orientation lock rejection/unsupported fallback also covered by unit tests.",
+  "fullscreenFallback": "Browsers without the Fullscreen API still require landscape; browser chrome cannot be hidden through an unavailable API."
+}
