@@ -1,0 +1,37 @@
+{
+  "url": "https://store.utxoplay.io/games/botstrike/",
+  "repository": "https://github.com/UTXOPlay/BotStrike",
+  "independentRepository": true,
+  "developer": "Arthur Zhang",
+  "publisher": "UTXOPlay Labs",
+  "gameImage": "myelin-botstrike:94678f2",
+  "storeImage": "utxoplay:0.34.0-c5de2ce",
+  "nativeProfile": "5c08047108c56301a34039cccd9bfc7aaeaa1f634f8e6501fc0b43c5014b3404",
+  "weapons": 12,
+  "equipment": 12,
+  "nativeRuleTests": 17,
+  "serviceAndMotionTests": 5,
+  "nativeBrowserTrajectories": 72,
+  "standaloneHostTests": 2,
+  "storeTests": 64,
+  "publicViewports": [
+    "1920x1080",
+    "2560x1080",
+    "2560x1440",
+    "3840x2160",
+    "390x844",
+    "844x390"
+  ],
+  "publicTouchAimAndFire": true,
+  "productionCompletedMatchVerified": true,
+  "tenHumanSixMinuteReplayVerified": true,
+  "oldRepositoryHTTPStatus": 404,
+  "oldGameRouteHTTPStatus": 404,
+  "oldContainersRemoved": [
+    "myelin-openstrike",
+    "utxoplay-openstrike"
+  ],
+  "legacySourceDataAndVerifierArchivedOffline": true,
+  "otherUnchangedContainers": 19,
+  "concurrentChanges": "A separate Block Party deployment changed its own service/staging containers during this rollout; this task did not target them."
+}
