@@ -1,0 +1,43 @@
+{
+  "version": "1.4.1",
+  "changes": [
+    "Report chassis and shader preparation separately from session connection, with progress from completed models.",
+    "Retry transient HTTP session failures in place with bounded backoff; do not retry authentication errors.",
+    "Replace socket handshakes that deliver no state within 10 seconds.",
+    "Allow a late live session to clear a startup session error without reloading the iframe."
+  ],
+  "validation": {
+    "clientAndServiceTests": 42,
+    "hostTests": 4,
+    "injectedOutagePreview": {
+      "initialHttp503": true,
+      "socketOutageSeconds": 47,
+      "httpAttempts": 2,
+      "socketAttempts": 5,
+      "recoveredWithoutReload": true
+    },
+    "publicRecovery": {
+      "passed": true,
+      "initialHttp503": true,
+      "socketOutageSeconds": 47,
+      "httpAttempts": 2,
+      "socketAttempts": 5,
+      "attempt": "botstrike:0",
+      "recoveredWithoutReload": true
+    },
+    "nativeArtifactsUnchanged": true
+  },
+  "deployment": {
+    "image": "myelin-botstrike:1.4.1-session",
+    "imageId": "sha256:6a025c3eb10d6866a6b5efbdf4c98861ccc18f54a6c72757c7e4228d82584ac3",
+    "healthy": true,
+    "activeRoomsAtSwitch": 0,
+    "otherChangedContainers": [],
+    "compose": "/data/utxoplay/releases/20261027-botstrike-session-1.4.1/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-session-1.4.1/botstrike-data-before.tar.gz",
+    "sha256": {
+      "games/botstrike/web/app.js": "3401735c49ff7f00adde02304bbe9510791c63a55804ae5dfe25c3bc0d561b9e",
+      "games/botstrike/web/startup.js": "461640afc2392d6fa104f7628018cb4a2d69e70cb6d991bf4e92d2f577d75db0"
+    }
+  }
+}
