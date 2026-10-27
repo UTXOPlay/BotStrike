@@ -1,0 +1,22 @@
+{
+  "asset": "Humanoid Robot Pack",
+  "author": "Sotudios",
+  "source": "https://sotudios.com/Assets/Humanoid-RobotPack/",
+  "download": "https://sotudios.com/Assets/Humanoid-RobotPack/downloads/humanoid-robot-pack-v1.0.0.zip",
+  "sha256": "4808a040170c25c2bc01e6dc3b3235f6de89571e21776f7d260687b198013911",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Humanoid Robot Pack by Sotudios",
+  "changes": [
+    "Reduced geometry and texture resolution",
+    "Added BotStrike skeleton and animations"
+  ],
+  "mapping": {
+    "vector": "aero",
+    "patch": "cap",
+    "bastion": "titan",
+    "spectre": "vision",
+    "glitch": "crimson",
+    "forge": "maul"
+  }
+}

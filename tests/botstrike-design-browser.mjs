@@ -10,12 +10,16 @@ const state=async()=> (await(await context.request.get(base+'/games/botstrike/ap
 try{
  await page.goto(base+'/games/botstrike/');await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Choose your chassis'));
  await page.locator('.settings>summary').click();
+ await page.locator('#keyboard-layout').selectOption('colemak');
  for(const [id,value]of [['volume','.3'],['ads','.4'],['brightness','1.2']])await page.locator('#'+id).evaluate((el,value)=>{el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));},value);
  await page.locator('#invert-y').check();await page.locator('.settings details>summary').click();await page.locator('[data-action=crouch]').click();await page.keyboard.press('KeyV');
- assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);await page.reload();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Choose your chassis'));
- assert.equal(await page.locator('#volume').inputValue(),'0.3');assert.equal(await page.locator('#invert-y').isChecked(),true);assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);
+ assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);
+ for(const [action,key] of [['forward','W'],['back','R'],['left','A'],['right','S'],['reload','P'],['use','F']])assert.ok((await page.locator('[data-action='+action+']').textContent()).endsWith(' · '+key));
+ await page.screenshot({path:out+'/colemak-bindings.png'});await page.reload();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Choose your chassis'));
+ assert.equal(await page.locator('#keyboard-layout').inputValue(),'colemak');assert.equal(await page.locator('#volume').inputValue(),'0.3');assert.equal(await page.locator('#invert-y').isChecked(),true);assert.match(await page.locator('[data-action=crouch]').textContent(),/V/);
  await page.locator('.career>summary').click();await page.locator('#career-refresh').click();await page.waitForFunction(()=>/^(No recorded matches|[0-9]+ matches)/.test(document.querySelector('#career-summary').textContent));
- await page.locator('#private').click();await page.locator('#room-hero').selectOption('4');await page.waitForFunction(()=>document.querySelector('#room-hero').value==='4');await page.locator('#start').click();await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');
+ await page.locator('#private').click();await page.waitForFunction(()=>!document.querySelector('#private').disabled);await page.locator('#room-hero').selectOption('4');await page.waitForFunction(()=>document.querySelector('#room-hero').value==='4');await page.locator('#start').click();await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');
+ await page.keyboard.down('KeyW');await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');await page.waitForTimeout(150);await page.keyboard.up('KeyW');assert.ok(sent.some(input=>input.y>0),'Colemak W keeps physical forward input');
  await page.keyboard.down('KeyV');await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].crouch});await page.keyboard.up('KeyV');assert.equal((await state()).state.players[0].hero,4);
  await page.keyboard.press('Digit4');await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].weapon===3});
  await page.mouse.down({button:'right'});await page.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].scoped});

@@ -1,4 +1,4 @@
-import {intersectsBox} from './visibility.mjs';
+import {intersectsBox,canSee} from './visibility.mjs';
 const globalKinds=new Set(['round','planted','defused','detonation','elimination','time','match_end','kill']);
 const personalKinds=new Set(['hit','headshot','buy','respawn','pickup']);
 const audibleKinds=new Set(['shot','step','land','reload','skill','item','utility','plasma']);
@@ -27,6 +27,11 @@ export function feedbackFor(events,state,slot,spec,spectate=null){
  const listener=self.alive?self:chosen?.alive&&chosen.team===self.team?chosen:state.players.find(p=>p.team===self.team&&p.alive)||self;
  const map=spec.maps[state.config.map],out=[];
  for(const e of events){
+  // Motion is disclosed only for a visible subject at event time. Audible
+  // cues for hidden opponents still have no actor or precise coordinates.
+  const action=e.kind==='item'&&e.value>=6?'use_item':({shot:'fire',reload:'reload',skill:'skill',item:'utility',utility:'utility',plasma:'utility',hit:'hit',headshot:'hit',land:'land'})[e.kind];
+  const subject=state.players[['hit','headshot'].includes(e.kind)?e.target:e.actor];
+  if(action&&subject&&canSee(state,listener,subject,map))out.push({id:e.id+':motion',tick:e.tick,kind:'motion',action,actor:subject.slot,life:subject.life,value:e.value});
   if(globalKinds.has(e.kind)){out.push(e);continue;}
   if(personalKinds.has(e.kind)){
    if(e.actor!==slot&&e.target!==slot)continue;

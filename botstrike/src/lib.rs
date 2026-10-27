@@ -1,3 +1,4 @@
+mod ai;
 use serde::{Deserialize, Serialize};
 pub const HZ: u32 = 64;
 pub const WEAPONS: usize = 12;
@@ -172,6 +173,9 @@ pub struct Player {
     pub ai_since: u32,
     pub ai_goal: usize,
     pub ai_path: Vec<[f64; 3]>,
+    pub ai_last_seen: Option<[f64; 3]>,
+    pub ai_seen_tick: u32,
+    pub ai_destination: Option<[f64; 3]>,
 }
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Utility {
@@ -368,6 +372,9 @@ impl Game {
                 ai_since: 0,
                 ai_goal: slot,
                 ai_path: vec![],
+                ai_last_seen: None,
+                ai_seen_tick: 0,
+                ai_destination: None,
             });
         }
         g.start_round(rules);
@@ -403,6 +410,9 @@ impl Game {
         p.life += 1;
         p.ai_target = None;
         p.ai_since = self.tick;
+        p.ai_last_seen = None;
+        p.ai_destination = None;
+        p.ai_path.clear();
         p.alive = true;
         p.crouch = false;
         p.scoped = false;
@@ -1266,172 +1276,7 @@ impl Game {
             )
         }
     }
-    fn bot(&mut self, slot: usize, rules: &Rules) -> Input {
-        let p = &self.players[slot];
-        let mut input = Input {
-            seq: self.tick,
-            yaw: p.yaw,
-            pitch: 0.,
-            ..Input::default()
-        };
-        if !p.alive {
-            return input;
-        }
-        if self.phase == "buy" {
-            input.buy = if !p.owned[2] && p.credits >= rules.weapons[2].cost {
-                Some(2)
-            } else if !p.owned[1] && p.credits >= rules.weapons[1].cost {
-                Some(1)
-            } else if p.armor < 100 && p.credits >= 650 {
-                Some(WEAPONS)
-            } else {
-                [6, 4, 2].into_iter().find(|&item| p.items[item] == 0 && p.credits >= rules.items[item].cost)
-                    .map(|item| WEAPONS + item)
-            };
-            return input;
-        }
-        if self.config.mode == "deathmatch" {
-            input.weapon = Some([1, 2, 7, 3, 8, 5, 6, 9, 10, 11][slot]);
-        }
-        let map = &rules.maps[self.config.map];
-        let target = self
-            .players
-            .iter()
-            .filter(|q| q.team != p.team && q.alive)
-            .min_by(|a, b| dist(p.position, a.position).total_cmp(&dist(p.position, b.position)))
-            .map(|q| q.slot);
-        let mut goal = map.sites[slot % 2];
-        let mut enemy_visible = false;
-        if let Some(other) = target {
-            let q = &self.players[other];
-            let o = eye(p);
-            let end = eye(q);
-            let length =
-                ((end[0] - o[0]).powi(2) + (end[1] - o[1]).powi(2) + (end[2] - o[2]).powi(2))
-                    .sqrt().max(0.001);
-            let dir = [
-                (end[0] - o[0]) / length,
-                (end[1] - o[1]) / length,
-                (end[2] - o[2]) / length,
-            ];
-            let smoke = self
-                .utilities
-                .iter()
-                .any(|u| u.kind == 2 && u.fuse == 0 && segment_near(o, end, u.position, 175.));
-            enemy_visible = p.flash == 0
-                && !smoke
-                && !map
-                    .obstacles
-                    .iter()
-                    .any(|b| ray_box(o, dir, b.min, b.max).is_some_and(|d| d < length));
-            if self.config.mode == "deathmatch" || enemy_visible {
-                goal = q.position
-            }
-            if enemy_visible {
-                let error = [0.10, 0.035, 0.009][self.config.difficulty as usize];
-                input.yaw = (-(end[0] - o[0])).atan2(-(end[2] - o[2]))
-                    + ((self.tick / 8 + slot as u32 * 37) as f64 * 0.7).sin() * error;
-                let turn = [3., 5., 7.][self.config.difficulty as usize] / HZ as f64;
-                let difference = (input.yaw - p.yaw).sin().atan2((input.yaw - p.yaw).cos());
-                input.yaw = p.yaw + difference.clamp(-turn, turn);
-                input.yaw = input.yaw.sin().atan2(input.yaw.cos());
-                let target_pitch = ((end[1] - o[1]) / length).clamp(-1., 1.).asin();
-                input.pitch = p.pitch + (target_pitch - p.pitch).clamp(-turn, turn);
-                input.fire = p.ai_target == Some(other)
-                    && self.tick.saturating_sub(p.ai_since) >= [20, 14, 9][self.config.difficulty as usize]
-                    && (self.tick + slot as u32 * 11) % 64 > [24, 12, 4][self.config.difficulty as usize]
-                    && length < 2400.;
-                input.scope = rules.weapons[p.weapon].scoped;
-                input.ability = match p.hero {
-                    0 => p.health < 40,
-                    1 => {
-                        p.health < rules.heroes[p.hero].health - 20
-                            || self.players.iter().any(|q| {
-                                q.team == p.team
-                                    && q.alive
-                                    && q.health < 50
-                                    && dist(q.position, p.position) < 340.
-                            })
-                    }
-                    _ => length < if p.hero == 4 { 430. } else { 900. },
-                };
-                if length < 650. {
-                    input.x = if (self.tick / (HZ * 2) + slot as u32) % 2 == 0 {
-                        0.7
-                    } else {
-                        -0.7
-                    };
-                    input.y = if length < 250. { -0.4 } else { 0. };
-                }
-            }
-        }
-        if self.config.mode == "demolition" {
-            if self.objective.planted {
-                goal = self.objective.position;
-                if p.team != self.attacker && dist(p.position, goal) < 90. {
-                    input.interact = true;
-                    input.x = 0.;
-                    input.y = 0.;
-                }
-            } else if self.objective.carrier == Some(slot) {
-                goal = map.sites[slot % 2];
-                if dist(p.position, goal) < 115. {
-                    input.interact = true;
-                    input.x = 0.;
-                    input.y = 0.;
-                }
-            } else if self.objective.carrier.is_none() && p.team == self.attacker {
-                goal = self.objective.position;
-            }
-        }
-        input.reload = p.ammo[p.weapon] == 0 || (p.ammo[p.weapon] < 8 && !enemy_visible);
-        if !input.interact
-            && (!enemy_visible
-                || target.is_some_and(|q| dist(p.position, self.players[q].position) > 650.))
-        {
-            if self.players[slot].ai_path.is_empty() || self.tick % HZ == slot as u32 {
-                self.players[slot].ai_path = route(map, self.players[slot].position, goal);
-            }
-            while self.players[slot]
-                .ai_path
-                .first()
-                .is_some_and(|&q| dist(q, self.players[slot].position) < 45.)
-            {
-                self.players[slot].ai_path.remove(0);
-            }
-            let waypoint = self.players[slot].ai_path.first().copied().unwrap_or(goal);
-            let dx = waypoint[0] - self.players[slot].position[0];
-            let dz = waypoint[2] - self.players[slot].position[2];
-            let len = dx.hypot(dz).max(1.);
-            if !enemy_visible {
-                input.yaw = (-dx).atan2(-dz);
-                input.y = 1.
-            } else {
-                input.x = (dx * input.yaw.cos() - dz * input.yaw.sin()) / len;
-                input.y = (-dx * input.yaw.sin() - dz * input.yaw.cos()) / len;
-            }
-        }
-        let p = &self.players[slot];
-        if !input.interact && p.item_wait == 0 {
-            if p.health < rules.heroes[p.hero].health - 30 && p.items[6] > 0 {
-                input.item = 6;
-            } else if p.armor < 30 && p.items[7] > 0 {
-                input.item = 7;
-            } else if enemy_visible && self.tick % (HZ * 4) == slot as u32 && p.items[4] > 0 {
-                input.item = 4;
-            }
-        }
-        if input.interact {
-            input.fire = false;
-            input.jump = false;
-        }
-        let acquired = if enemy_visible { target } else { None };
-        if self.players[slot].ai_target != acquired {
-            self.players[slot].ai_target = acquired;
-            self.players[slot].ai_since = self.tick;
-        }
-        input
-    }
+
 }
 fn segment_near(a: [f64; 3], b: [f64; 3], point: [f64; 3], radius: f64) -> bool {
     let dx = b[0] - a[0];

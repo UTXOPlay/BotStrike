@@ -8,7 +8,7 @@ import {publicState} from '../botstrike-service/visibility.mjs';
 import {feedbackFor,frameEvents,collectFeedback} from '../botstrike-service/feedback.mjs';
 import {trackHumanFrame,CareerStore} from '../botstrike-service/career.mjs';
 import {pruneReplays} from '../botstrike-service/retention.mjs';
-import {loadPreferences,rebind,bindings,aimScale,spreadDegrees,FeedbackCursor} from '../games/botstrike/client/preferences.mjs';
+import {loadPreferences,keyName,rebind,bindings,aimScale,spreadDegrees,FeedbackCursor} from '../games/botstrike/client/preferences.mjs';
 const spec=JSON.parse(readFileSync(new URL('../botstrike/spec.json',import.meta.url)));
 const p=(slot,pos)=>({slot,team:slot<5?0:1,position:pos,velocity:[0,0,0],alive:true,hero:0,weapon:0,crouch:false,reload:0,yaw:0,flash:0});
 const state=()=>({tick:22,phase:'live',config:{map:0},players:Array.from({length:10},(_,i)=>p(i,[i<5?0:300,0,0])),events:[],utilities:[]});
@@ -25,8 +25,8 @@ test('sound discloses coarse direction and loudness, never hidden coordinates or
  const s=state(),rules={...spec,maps:[{obstacles:[{min:[100,0,-100],max:[200,100,100]}]}]},shot={kind:'shot',actor:5,value:2,id:'22:0',tick:22};
  const cues=feedbackFor([shot],s,0,rules);assert.equal(cues.length,1);assert.equal(cues[0].muffled,true);assert.equal(cues[0].level,.35);assert.equal(cues[0].bearing,Math.PI/2);assert.equal(cues[0].actor,undefined);assert.equal(cues[0].position,undefined);
  s.players[5].position=[2000,0,0];assert.deepEqual(feedbackFor([shot],s,0,rules),[]);
- const damage=feedbackFor([{kind:'hit',actor:5,target:0,value:16,id:'22:1',tick:22}],s,0,rules)[0];assert.equal(damage.bearing,Math.PI/2);assert.equal(damage.position,undefined);
- assert.deepEqual(feedbackFor([{kind:'hit',actor:5,target:1,value:16}],s,0,rules),[]);
+ const damage=feedbackFor([{kind:'hit',actor:5,target:0,value:16,id:'22:1',tick:22}],s,0,rules).find(e=>e.kind==='hit');assert.equal(damage.bearing,Math.PI/2);assert.equal(damage.position,undefined);
+ assert.ok(feedbackFor([{kind:'hit',actor:5,target:1,value:16}],s,0,rules).every(e=>e.kind==='motion'&&e.actor===1&&!('position' in e)));
 });
 test('footsteps respect walk/crouch and reload/landing only occur on transitions',()=>{
  const before=state(),after=structuredClone(before);after.players[0].velocity=[250,0,0];after.players[0].reload=80;assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='step'));assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='reload'));
@@ -54,4 +54,21 @@ test('spectator disclosure follows a living teammate and refuses an enemy viewpo
  const s=state(),rules={...spec,maps:[{obstacles:[{min:[100,0,-500],max:[200,100,500]}]}]};s.players[0].alive=false;s.players[2].position=[300,0,0];s.players[5].position=[300,0,-100];
  assert.equal(publicState(s,0,rules).players[5].position,null);assert.equal(publicState(s,0,rules,5).players[5].position,null);assert.deepEqual(publicState(s,0,rules,2).players[5].position,[300,0,-100]);
  s.players[2].alive=false;assert.equal(publicState(s,0,rules,2).players[5].position,null);
+});
+
+test('Colemak labels match physical inputs and custom keys survive layout changes',()=>{
+ const prefs=loadPreferences({keyboardLayout:'colemak',bindings:rebind(bindings,'reload','Semicolon')});
+ assert.equal(prefs.keyboardLayout,'colemak');assert.equal(prefs.bindings.reload,'Semicolon');
+ assert.deepEqual(['forward','left','back','right'].map(a=>keyName(prefs.bindings[a],prefs.keyboardLayout)),['W','A','R','S']);
+ assert.equal(keyName('KeyR','colemak'),'P');assert.equal(keyName('KeyE','colemak'),'F');assert.equal(keyName('KeyF','colemak'),'T');assert.equal(keyName('Semicolon','colemak'),'O');assert.equal(keyName('KeyP','colemak'),';');
+ assert.equal(loadPreferences({keyboardLayout:'invalid'}).keyboardLayout,'qwerty');assert.equal(keyName('Semicolon'),';');
+});
+
+test('visible motion is life-bound and corpses still respect walls and smoke',()=>{
+ const s=state(),rules={...spec,maps:[{obstacles:[]}]};s.players[5].life=3;
+ const shot={kind:'shot',actor:5,id:'22:0',tick:22,value:2};
+ const motion=feedbackFor([shot],s,0,rules).find(e=>e.kind==='motion');assert.equal(motion.action,'fire');assert.equal(motion.actor,5);assert.equal(motion.life,3);assert.equal(motion.position,undefined);
+ s.players[5].alive=false;assert.deepEqual(publicState(s,0,rules).players[5].position,[300,0,0]);
+ rules.maps[0].obstacles=[{min:[100,0,-100],max:[200,100,100]}];assert.equal(publicState(s,0,rules).players[5].position,null);assert.ok(feedbackFor([shot],s,0,rules).every(e=>e.kind!=='motion'));
+ s.players[0].ai_last_seen=[4,5,6];s.players[0].ai_destination=[7,8,9];assert.equal(publicState(s,0,rules).players[0].ai_last_seen,undefined);assert.equal(publicState(s,0,rules).players[0].ai_destination,undefined);
 });

@@ -1,0 +1,1428 @@
+{
+  "matches": [
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 888,
+      "kills": 98,
+      "map": 0,
+      "meanDistancePerSample": 182.76173536279663,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 2207,
+      "score": [
+        50,
+        48
+      ],
+      "seconds": 259.1875,
+      "shots": 2001,
+      "stationarySamples": 197,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 0,
+      "hitEvents": 1151,
+      "kills": 113,
+      "map": 0,
+      "meanDistancePerSample": 249.52137824240094,
+      "mode": "demolition",
+      "plants": 8,
+      "samples": 2403,
+      "score": [
+        3,
+        13
+      ],
+      "seconds": 606.96875,
+      "shots": 1740,
+      "stationarySamples": 276,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 640,
+      "kills": 96,
+      "map": 0,
+      "meanDistancePerSample": 230.24974954615837,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1320,
+      "score": [
+        50,
+        46
+      ],
+      "seconds": 170.484375,
+      "shots": 986,
+      "stationarySamples": 80,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 1,
+      "hitEvents": 1505,
+      "kills": 181,
+      "map": 0,
+      "meanDistancePerSample": 291.600570555112,
+      "mode": "demolition",
+      "plants": 4,
+      "samples": 2755,
+      "score": [
+        13,
+        12
+      ],
+      "seconds": 795.84375,
+      "shots": 1845,
+      "stationarySamples": 138,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 587,
+      "kills": 97,
+      "map": 0,
+      "meanDistancePerSample": 274.8577725650024,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1046,
+      "score": [
+        47,
+        50
+      ],
+      "seconds": 143.734375,
+      "shots": 685,
+      "stationarySamples": 22,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 2,
+      "hitEvents": 628,
+      "kills": 97,
+      "map": 0,
+      "meanDistancePerSample": 269.3626230736104,
+      "mode": "demolition",
+      "plants": 4,
+      "samples": 1514,
+      "score": [
+        0,
+        13
+      ],
+      "seconds": 446.9375,
+      "shots": 673,
+      "stationarySamples": 189,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 793,
+      "kills": 94,
+      "map": 1,
+      "meanDistancePerSample": 206.66198508178184,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 2041,
+      "score": [
+        50,
+        44
+      ],
+      "seconds": 241.21875,
+      "shots": 2303,
+      "stationarySamples": 104,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 1,
+      "difficulty": 0,
+      "hitEvents": 884,
+      "kills": 96,
+      "map": 1,
+      "meanDistancePerSample": 289.62524286974707,
+      "mode": "demolition",
+      "plants": 2,
+      "samples": 1956,
+      "score": [
+        0,
+        13
+      ],
+      "seconds": 496.96875,
+      "shots": 1378,
+      "stationarySamples": 115,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 706,
+      "kills": 97,
+      "map": 1,
+      "meanDistancePerSample": 259.8797437407926,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1401,
+      "score": [
+        50,
+        47
+      ],
+      "seconds": 178.4375,
+      "shots": 1172,
+      "stationarySamples": 26,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 936,
+      "kills": 116,
+      "map": 1,
+      "meanDistancePerSample": 306.8106346814085,
+      "mode": "demolition",
+      "plants": 5,
+      "samples": 2202,
+      "score": [
+        4,
+        13
+      ],
+      "seconds": 558.609375,
+      "shots": 1115,
+      "stationarySamples": 133,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 482,
+      "kills": 95,
+      "map": 1,
+      "meanDistancePerSample": 281.21514538431893,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1101,
+      "score": [
+        50,
+        45
+      ],
+      "seconds": 147.421875,
+      "shots": 576,
+      "stationarySamples": 33,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 1,
+      "difficulty": 2,
+      "hitEvents": 963,
+      "kills": 132,
+      "map": 1,
+      "meanDistancePerSample": 297.2165586251398,
+      "mode": "demolition",
+      "plants": 8,
+      "samples": 2733,
+      "score": [
+        13,
+        7
+      ],
+      "seconds": 694.921875,
+      "shots": 1017,
+      "stationarySamples": 222,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 879,
+      "kills": 96,
+      "map": 2,
+      "meanDistancePerSample": 177.7158521450257,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1810,
+      "score": [
+        46,
+        50
+      ],
+      "seconds": 220.0,
+      "shots": 2032,
+      "stationarySamples": 167,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 5,
+      "difficulty": 0,
+      "hitEvents": 1108,
+      "kills": 116,
+      "map": 2,
+      "meanDistancePerSample": 236.53152367784784,
+      "mode": "demolition",
+      "plants": 7,
+      "samples": 1965,
+      "score": [
+        2,
+        13
+      ],
+      "seconds": 600.234375,
+      "shots": 1690,
+      "stationarySamples": 254,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 632,
+      "kills": 98,
+      "map": 2,
+      "meanDistancePerSample": 223.78372426367338,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1136,
+      "score": [
+        50,
+        48
+      ],
+      "seconds": 152.90625,
+      "shots": 948,
+      "stationarySamples": 82,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 2,
+      "difficulty": 1,
+      "hitEvents": 1116,
+      "kills": 131,
+      "map": 2,
+      "meanDistancePerSample": 264.0840998759207,
+      "mode": "demolition",
+      "plants": 7,
+      "samples": 1933,
+      "score": [
+        13,
+        6
+      ],
+      "seconds": 581.6875,
+      "shots": 1280,
+      "stationarySamples": 227,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 543,
+      "kills": 95,
+      "map": 2,
+      "meanDistancePerSample": 245.49842099620946,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 817,
+      "score": [
+        50,
+        45
+      ],
+      "seconds": 118.90625,
+      "shots": 654,
+      "stationarySamples": 59,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 1,
+      "difficulty": 2,
+      "hitEvents": 569,
+      "kills": 88,
+      "map": 2,
+      "meanDistancePerSample": 253.70936747437742,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 1400,
+      "score": [
+        13,
+        0
+      ],
+      "seconds": 415.484375,
+      "shots": 587,
+      "stationarySamples": 193,
+      "seed": 7
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 749,
+      "kills": 95,
+      "map": 0,
+      "meanDistancePerSample": 195.9759919860752,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1919,
+      "score": [
+        50,
+        45
+      ],
+      "seconds": 229.21875,
+      "shots": 1752,
+      "stationarySamples": 136,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 0,
+      "hitEvents": 933,
+      "kills": 100,
+      "map": 0,
+      "meanDistancePerSample": 237.59917490895117,
+      "mode": "demolition",
+      "plants": 5,
+      "samples": 2142,
+      "score": [
+        1,
+        13
+      ],
+      "seconds": 540.03125,
+      "shots": 1485,
+      "stationarySamples": 346,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 652,
+      "kills": 95,
+      "map": 0,
+      "meanDistancePerSample": 241.07681463625832,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1234,
+      "score": [
+        50,
+        45
+      ],
+      "seconds": 161.625,
+      "shots": 1045,
+      "stationarySamples": 53,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 1,
+      "difficulty": 1,
+      "hitEvents": 715,
+      "kills": 93,
+      "map": 0,
+      "meanDistancePerSample": 272.737552781843,
+      "mode": "demolition",
+      "plants": 2,
+      "samples": 1536,
+      "score": [
+        0,
+        13
+      ],
+      "seconds": 412.265625,
+      "shots": 850,
+      "stationarySamples": 190,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 551,
+      "kills": 93,
+      "map": 0,
+      "meanDistancePerSample": 270.9026863959731,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 967,
+      "score": [
+        50,
+        43
+      ],
+      "seconds": 133.125,
+      "shots": 643,
+      "stationarySamples": 28,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 1092,
+      "kills": 145,
+      "map": 0,
+      "meanDistancePerSample": 299.0602231534065,
+      "mode": "demolition",
+      "plants": 2,
+      "samples": 2084,
+      "score": [
+        7,
+        13
+      ],
+      "seconds": 594.8125,
+      "shots": 1162,
+      "stationarySamples": 98,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 790,
+      "kills": 89,
+      "map": 1,
+      "meanDistancePerSample": 206.23305991212055,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 2050,
+      "score": [
+        50,
+        39
+      ],
+      "seconds": 240.0625,
+      "shots": 2099,
+      "stationarySamples": 103,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 2,
+      "difficulty": 0,
+      "hitEvents": 1239,
+      "kills": 128,
+      "map": 1,
+      "meanDistancePerSample": 271.61322052605084,
+      "mode": "demolition",
+      "plants": 9,
+      "samples": 3064,
+      "score": [
+        5,
+        13
+      ],
+      "seconds": 748.140625,
+      "shots": 2053,
+      "stationarySamples": 234,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 714,
+      "kills": 95,
+      "map": 1,
+      "meanDistancePerSample": 264.75105014815574,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1357,
+      "score": [
+        45,
+        50
+      ],
+      "seconds": 173.171875,
+      "shots": 1118,
+      "stationarySamples": 40,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 2,
+      "difficulty": 1,
+      "hitEvents": 1023,
+      "kills": 127,
+      "map": 1,
+      "meanDistancePerSample": 298.65313891399114,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 2667,
+      "score": [
+        6,
+        13
+      ],
+      "seconds": 708.78125,
+      "shots": 1226,
+      "stationarySamples": 152,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 534,
+      "kills": 96,
+      "map": 1,
+      "meanDistancePerSample": 291.64773618780526,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1073,
+      "score": [
+        50,
+        46
+      ],
+      "seconds": 145.265625,
+      "shots": 657,
+      "stationarySamples": 11,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 891,
+      "kills": 129,
+      "map": 1,
+      "meanDistancePerSample": 318.8192800654634,
+      "mode": "demolition",
+      "plants": 9,
+      "samples": 2629,
+      "score": [
+        9,
+        13
+      ],
+      "seconds": 689.21875,
+      "shots": 989,
+      "stationarySamples": 97,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 868,
+      "kills": 95,
+      "map": 2,
+      "meanDistancePerSample": 177.81732702327716,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1884,
+      "score": [
+        50,
+        45
+      ],
+      "seconds": 226.984375,
+      "shots": 2187,
+      "stationarySamples": 155,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 5,
+      "difficulty": 0,
+      "hitEvents": 1709,
+      "kills": 178,
+      "map": 2,
+      "meanDistancePerSample": 224.21432786561468,
+      "mode": "demolition",
+      "plants": 14,
+      "samples": 3213,
+      "score": [
+        13,
+        10
+      ],
+      "seconds": 932.21875,
+      "shots": 2768,
+      "stationarySamples": 492,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 629,
+      "kills": 92,
+      "map": 2,
+      "meanDistancePerSample": 219.85051717743355,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1058,
+      "score": [
+        50,
+        42
+      ],
+      "seconds": 141.625,
+      "shots": 991,
+      "stationarySamples": 105,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 6,
+      "difficulty": 1,
+      "hitEvents": 1447,
+      "kills": 184,
+      "map": 2,
+      "meanDistancePerSample": 254.81029835326473,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 2558,
+      "score": [
+        10,
+        13
+      ],
+      "seconds": 822.546875,
+      "shots": 1688,
+      "stationarySamples": 295,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 492,
+      "kills": 90,
+      "map": 2,
+      "meanDistancePerSample": 259.9450816369064,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 795,
+      "score": [
+        40,
+        50
+      ],
+      "seconds": 115.125,
+      "shots": 591,
+      "stationarySamples": 28,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 2,
+      "difficulty": 2,
+      "hitEvents": 939,
+      "kills": 134,
+      "map": 2,
+      "meanDistancePerSample": 266.182272883683,
+      "mode": "demolition",
+      "plants": 8,
+      "samples": 2019,
+      "score": [
+        7,
+        13
+      ],
+      "seconds": 626.03125,
+      "shots": 997,
+      "stationarySamples": 201,
+      "seed": 2050
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 755,
+      "kills": 88,
+      "map": 0,
+      "meanDistancePerSample": 184.75884816989287,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1841,
+      "score": [
+        50,
+        38
+      ],
+      "seconds": 218.78125,
+      "shots": 1862,
+      "stationarySamples": 126,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 7,
+      "difficulty": 0,
+      "hitEvents": 1335,
+      "kills": 125,
+      "map": 0,
+      "meanDistancePerSample": 207.17668752425226,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 3275,
+      "score": [
+        4,
+        13
+      ],
+      "seconds": 831.765625,
+      "shots": 2084,
+      "stationarySamples": 633,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 669,
+      "kills": 95,
+      "map": 0,
+      "meanDistancePerSample": 254.40746542182498,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1148,
+      "score": [
+        50,
+        45
+      ],
+      "seconds": 152.96875,
+      "shots": 1014,
+      "stationarySamples": 35,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 826,
+      "kills": 105,
+      "map": 0,
+      "meanDistancePerSample": 275.5396627132757,
+      "mode": "demolition",
+      "plants": 3,
+      "samples": 1811,
+      "score": [
+        2,
+        13
+      ],
+      "seconds": 473.640625,
+      "shots": 972,
+      "stationarySamples": 188,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 523,
+      "kills": 96,
+      "map": 0,
+      "meanDistancePerSample": 277.5872131132858,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 984,
+      "score": [
+        50,
+        46
+      ],
+      "seconds": 136.046875,
+      "shots": 664,
+      "stationarySamples": 16,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 2,
+      "hitEvents": 1185,
+      "kills": 167,
+      "map": 0,
+      "meanDistancePerSample": 293.4566153198507,
+      "mode": "demolition",
+      "plants": 4,
+      "samples": 2420,
+      "score": [
+        13,
+        10
+      ],
+      "seconds": 705.4375,
+      "shots": 1310,
+      "stationarySamples": 170,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 752,
+      "kills": 91,
+      "map": 1,
+      "meanDistancePerSample": 217.0489673548861,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1901,
+      "score": [
+        50,
+        41
+      ],
+      "seconds": 226.078125,
+      "shots": 1921,
+      "stationarySamples": 118,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 0,
+      "hitEvents": 1411,
+      "kills": 144,
+      "map": 1,
+      "meanDistancePerSample": 266.240005454722,
+      "mode": "demolition",
+      "plants": 11,
+      "samples": 3487,
+      "score": [
+        8,
+        13
+      ],
+      "seconds": 876.765625,
+      "shots": 2393,
+      "stationarySamples": 394,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 651,
+      "kills": 92,
+      "map": 1,
+      "meanDistancePerSample": 260.12434152210733,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1352,
+      "score": [
+        50,
+        42
+      ],
+      "seconds": 171.359375,
+      "shots": 1115,
+      "stationarySamples": 51,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 1194,
+      "kills": 154,
+      "map": 1,
+      "meanDistancePerSample": 292.9841400605291,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 3331,
+      "score": [
+        10,
+        13
+      ],
+      "seconds": 822.015625,
+      "shots": 1443,
+      "stationarySamples": 179,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 497,
+      "kills": 94,
+      "map": 1,
+      "meanDistancePerSample": 272.3685312192478,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1224,
+      "score": [
+        50,
+        44
+      ],
+      "seconds": 159.84375,
+      "shots": 634,
+      "stationarySamples": 40,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 5,
+      "difficulty": 2,
+      "hitEvents": 1065,
+      "kills": 148,
+      "map": 1,
+      "meanDistancePerSample": 292.64615032471175,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 2961,
+      "score": [
+        8,
+        13
+      ],
+      "seconds": 804.375,
+      "shots": 1135,
+      "stationarySamples": 284,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 799,
+      "kills": 88,
+      "map": 2,
+      "meanDistancePerSample": 179.76768651242264,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1713,
+      "score": [
+        50,
+        38
+      ],
+      "seconds": 206.296875,
+      "shots": 1917,
+      "stationarySamples": 132,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 0,
+      "hitEvents": 1687,
+      "kills": 166,
+      "map": 2,
+      "meanDistancePerSample": 248.68678863785198,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 2953,
+      "score": [
+        11,
+        13
+      ],
+      "seconds": 836.0,
+      "shots": 2762,
+      "stationarySamples": 242,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 689,
+      "kills": 97,
+      "map": 2,
+      "meanDistancePerSample": 215.92512126298524,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1141,
+      "score": [
+        50,
+        47
+      ],
+      "seconds": 152.34375,
+      "shots": 1075,
+      "stationarySamples": 62,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 8,
+      "difficulty": 1,
+      "hitEvents": 1317,
+      "kills": 152,
+      "map": 2,
+      "meanDistancePerSample": 236.7464733149726,
+      "mode": "demolition",
+      "plants": 12,
+      "samples": 2434,
+      "score": [
+        7,
+        13
+      ],
+      "seconds": 783.3125,
+      "shots": 1548,
+      "stationarySamples": 399,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 519,
+      "kills": 95,
+      "map": 2,
+      "meanDistancePerSample": 251.11579676940445,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 815,
+      "score": [
+        50,
+        45
+      ],
+      "seconds": 118.890625,
+      "shots": 660,
+      "stationarySamples": 33,
+      "seed": 98765
+    },
+    {
+      "completed": true,
+      "defuses": 1,
+      "difficulty": 2,
+      "hitEvents": 1214,
+      "kills": 168,
+      "map": 2,
+      "meanDistancePerSample": 276.3983028711805,
+      "mode": "demolition",
+      "plants": 9,
+      "samples": 2290,
+      "score": [
+        12,
+        13
+      ],
+      "seconds": 735.71875,
+      "shots": 1313,
+      "stationarySamples": 176,
+      "seed": 98765
+    }
+  ],
+  "baselineSeed2050": [
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 660,
+      "kills": 94,
+      "map": 0,
+      "meanDistancePerSample": 249.44583994521383,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1319,
+      "score": [
+        44,
+        50
+      ],
+      "seconds": 169.96875,
+      "shots": 2547,
+      "stationarySamples": 4
+    },
+    {
+      "completed": true,
+      "defuses": 5,
+      "difficulty": 0,
+      "hitEvents": 1016,
+      "kills": 114,
+      "map": 0,
+      "meanDistancePerSample": 227.8123768241527,
+      "mode": "demolition",
+      "plants": 12,
+      "samples": 2867,
+      "score": [
+        3,
+        13
+      ],
+      "seconds": 718.125,
+      "shots": 5238,
+      "stationarySamples": 494
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 580,
+      "kills": 88,
+      "map": 0,
+      "meanDistancePerSample": 311.57831018359514,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 801,
+      "score": [
+        38,
+        50
+      ],
+      "seconds": 114.546875,
+      "shots": 1490,
+      "stationarySamples": 2
+    },
+    {
+      "completed": true,
+      "defuses": 1,
+      "difficulty": 1,
+      "hitEvents": 1518,
+      "kills": 155,
+      "map": 0,
+      "meanDistancePerSample": 281.70569464733984,
+      "mode": "demolition",
+      "plants": 16,
+      "samples": 2565,
+      "score": [
+        9,
+        13
+      ],
+      "seconds": 759.234375,
+      "shots": 4558,
+      "stationarySamples": 425
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 617,
+      "kills": 96,
+      "map": 0,
+      "meanDistancePerSample": 332.46089461262204,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 756,
+      "score": [
+        46,
+        50
+      ],
+      "seconds": 113.109375,
+      "shots": 1352,
+      "stationarySamples": 0
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 2,
+      "hitEvents": 1537,
+      "kills": 149,
+      "map": 0,
+      "meanDistancePerSample": 316.2996801507321,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 2040,
+      "score": [
+        8,
+        13
+      ],
+      "seconds": 693.015625,
+      "shots": 4421,
+      "stationarySamples": 256
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 657,
+      "kills": 96,
+      "map": 1,
+      "meanDistancePerSample": 274.4171056571513,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1455,
+      "score": [
+        50,
+        46
+      ],
+      "seconds": 183.046875,
+      "shots": 2945,
+      "stationarySamples": 2
+    },
+    {
+      "completed": true,
+      "defuses": 5,
+      "difficulty": 0,
+      "hitEvents": 1360,
+      "kills": 138,
+      "map": 1,
+      "meanDistancePerSample": 259.17673865733536,
+      "mode": "demolition",
+      "plants": 12,
+      "samples": 3837,
+      "score": [
+        7,
+        13
+      ],
+      "seconds": 907.6875,
+      "shots": 8816,
+      "stationarySamples": 464
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 634,
+      "kills": 94,
+      "map": 1,
+      "meanDistancePerSample": 336.9253543045425,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 940,
+      "score": [
+        44,
+        50
+      ],
+      "seconds": 130.59375,
+      "shots": 1886,
+      "stationarySamples": 0
+    },
+    {
+      "completed": true,
+      "defuses": 7,
+      "difficulty": 1,
+      "hitEvents": 1207,
+      "kills": 120,
+      "map": 1,
+      "meanDistancePerSample": 285.502890936133,
+      "mode": "demolition",
+      "plants": 13,
+      "samples": 2430,
+      "score": [
+        3,
+        13
+      ],
+      "seconds": 704.125,
+      "shots": 4632,
+      "stationarySamples": 392
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 557,
+      "kills": 86,
+      "map": 1,
+      "meanDistancePerSample": 352.2917399070912,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 760,
+      "score": [
+        36,
+        50
+      ],
+      "seconds": 109.3125,
+      "shots": 1359,
+      "stationarySamples": 0
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 2,
+      "hitEvents": 1647,
+      "kills": 172,
+      "map": 1,
+      "meanDistancePerSample": 317.14362915417905,
+      "mode": "demolition",
+      "plants": 18,
+      "samples": 3079,
+      "score": [
+        12,
+        13
+      ],
+      "seconds": 895.5625,
+      "shots": 6378,
+      "stationarySamples": 406
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 0,
+      "hitEvents": 630,
+      "kills": 96,
+      "map": 2,
+      "meanDistancePerSample": 228.59637831224583,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 1245,
+      "score": [
+        50,
+        46
+      ],
+      "seconds": 162.28125,
+      "shots": 2061,
+      "stationarySamples": 12
+    },
+    {
+      "completed": true,
+      "defuses": 8,
+      "difficulty": 0,
+      "hitEvents": 909,
+      "kills": 99,
+      "map": 2,
+      "meanDistancePerSample": 212.71187595489204,
+      "mode": "demolition",
+      "plants": 10,
+      "samples": 2256,
+      "score": [
+        1,
+        13
+      ],
+      "seconds": 619.578125,
+      "shots": 3600,
+      "stationarySamples": 409
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 1,
+      "hitEvents": 568,
+      "kills": 96,
+      "map": 2,
+      "meanDistancePerSample": 285.4151898768477,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 819,
+      "score": [
+        46,
+        50
+      ],
+      "seconds": 119.515625,
+      "shots": 1264,
+      "stationarySamples": 5
+    },
+    {
+      "completed": true,
+      "defuses": 4,
+      "difficulty": 1,
+      "hitEvents": 1374,
+      "kills": 151,
+      "map": 2,
+      "meanDistancePerSample": 259.56233978927577,
+      "mode": "demolition",
+      "plants": 13,
+      "samples": 2494,
+      "score": [
+        13,
+        10
+      ],
+      "seconds": 755.671875,
+      "shots": 2972,
+      "stationarySamples": 440
+    },
+    {
+      "completed": true,
+      "defuses": 0,
+      "difficulty": 2,
+      "hitEvents": 555,
+      "kills": 87,
+      "map": 2,
+      "meanDistancePerSample": 287.5740581064604,
+      "mode": "deathmatch",
+      "plants": 0,
+      "samples": 578,
+      "score": [
+        37,
+        50
+      ],
+      "seconds": 91.25,
+      "shots": 1018,
+      "stationarySamples": 0
+    },
+    {
+      "completed": true,
+      "defuses": 3,
+      "difficulty": 2,
+      "hitEvents": 1528,
+      "kills": 174,
+      "map": 2,
+      "meanDistancePerSample": 265.5148950645835,
+      "mode": "demolition",
+      "plants": 16,
+      "samples": 2468,
+      "score": [
+        12,
+        13
+      ],
+      "seconds": 807.46875,
+      "shots": 3029,
+      "stationarySamples": 417
+    }
+  ]
+}

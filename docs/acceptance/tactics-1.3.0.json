@@ -1,0 +1,163 @@
+{
+  "version": "1.3.0",
+  "scope": [
+    "Six licensed PBR robot chassis with editable Blender sources and matching menu portraits",
+    "25 skeletal clips per chassis with layered locomotion and actions, three death falls, respawn and round-result transitions",
+    "Visible event-driven impact, recoil, pooled sparks, articulated first-person hands and magazine motion",
+    "Colemak labels and WARS movement, persistent custom bindings",
+    "Deterministic visibility-based AI, last-seen memory, reaction/aim limits, cover, objective roles, teammate fire avoidance and contextual skills/utilities"
+  ],
+  "nativeVersion": "botstrike-2050-tactics-v4",
+  "profile": "972f845952785eda8074239042f63fe5781d1071a14311f8afefc7442ddcc39b",
+  "verifiers": [
+    {
+      "name": "tactics-v4",
+      "directory": ".",
+      "sha256": {
+        "botstrike-engine": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+        "myelin-botstrike": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7"
+      }
+    },
+    {
+      "name": "network-v3",
+      "directory": "legacy/network-v3",
+      "sha256": {
+        "botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+        "myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+      }
+    },
+    {
+      "name": "arsenal-v2",
+      "directory": "legacy/arsenal-v2",
+      "sha256": {
+        "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+        "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+      }
+    }
+  ],
+  "validation": {
+    "rustTests": 25,
+    "browserServiceTests": 33,
+    "hostTests": 4,
+    "aiMatches": 54,
+    "aiCompleted": 54,
+    "nativeFlow": {
+      "data": "/tmp/botstrike-flow-AqiZlc",
+      "ticks": 9343,
+      "score": [
+        50,
+        30
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "viewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "mobile": "Simultaneous movement, drag aim and fire acknowledged by native engine; portrait input release; fullscreen re-entry",
+    "colemak": "WARS / P reload / F interact; persistent remapping and native movement verified",
+    "motion": "96 action samples; final death, respawn and round-transition checks across all six chassis",
+    "firstPerson": "Six chassis, 300 frames each; no accumulated shoulder or look offsets; desktop/mobile geometry and model failure gate",
+    "contextRestore": {
+      "events": [
+        "lost",
+        "restored"
+      ],
+      "lost": false,
+      "drawCalls": 62,
+      "width": 633,
+      "height": 292
+    },
+    "softwareRendering": {
+      "environment": "Chromium SwiftShader, 844x390, DPR 2; comparative software-rendering benchmark, not handset FPS",
+      "frameMs": {
+        "median": 50,
+        "p95": 83.40000000000055
+      },
+      "networkRttMs": {
+        "median": 1.2832809999999881,
+        "p95": 2.2025809999995545
+      },
+      "nativeTicksPerSecond": 63.97640029834114,
+      "dataset": {
+        "game": "botstrike",
+        "mobile": "true",
+        "immersiveBlocked": "false",
+        "touch": "true",
+        "playing": "true",
+        "viewModelTriangles": "4981",
+        "drawCalls": "55",
+        "renderTriangles": "208781",
+        "renderFps": "21",
+        "renderMs": "1.24",
+        "renderScale": "0.75"
+      },
+      "backing": [
+        633,
+        292
+      ],
+      "status": "Connected \u00b7 50 ms"
+    },
+    "containerNativeFlow": {
+      "data": "/app/data/botstrike-flow-nVIWrN",
+      "ticks": 11088,
+      "score": [
+        50,
+        40
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    }
+  },
+  "limitations": [
+    "Software-rendering timing is not a real handset FPS measurement.",
+    "Bot-only match simulations validate behavior and completion, not human balance.",
+    "Authored death animations are skeletal clips, not physics ragdolls."
+  ],
+  "deployment": {
+    "status": "live",
+    "image": "myelin-botstrike:1.3.0-tactics",
+    "healthy": true,
+    "activeRoomsAtSwitch": 0,
+    "otherChangedContainers": [],
+    "compose": "/data/utxoplay/releases/20261027-botstrike-tactics-1.3.0/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-tactics-1.3.0/botstrike-data-before.tar.gz"
+  }
+}

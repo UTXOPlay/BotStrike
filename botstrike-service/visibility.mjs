@@ -16,7 +16,7 @@ function crossesSmoke(a,b,u){
 }
 export function canSee(state,viewer,target,map){
  if(viewer.slot===target.slot||viewer.team===target.team||target.revealed>0)return true;
- if(!target.alive||viewer.flash>0)return false;
+ if(viewer.flash>0)return false;
  const eye=[viewer.position[0],viewer.position[1]+(viewer.crouch?37:56),viewer.position[2]];
  const height=target.crouch?47:70;
  return [[0,height-6,0],[0,height*.5,0],[-18,height*.5,0],[18,height*.5,0],[0,height*.5,18],[0,height*.5,-18]].some(offset=>{
@@ -33,12 +33,12 @@ export function publicState(state,slot,spec,spectate=null){
  const result={...state,config:{map:state.config.map,mode:state.config.mode}};
  delete result.random;
  result.players=state.players.map(p=>{
-  if(p.slot===slot){const own={...p};for(const key of ['ai_path','ai_goal','ai_target','ai_since','attackers','skill_held','jump_held','item_held'])delete own[key];return own;}
+  if(p.slot===slot){const own={...p};for(const key of Object.keys(own))if(key.startsWith('ai_')||['attackers','skill_held','jump_held','item_held'].includes(key))delete own[key];return own;}
   const visible=canSee(state,viewer,p,spec.maps[state.config.map]);
   const out={};
   for(const key of ['slot','team','hero','alive','kills','deaths','assists','damage','life'])out[key]=p[key];
   out.hidden=!visible;
-  if(visible)for(const key of ['position','velocity','yaw','pitch','crouch','scoped','weapon','health','armor','revealed'])out[key]=p[key];
+  if(visible)for(const key of ['position','velocity','yaw','pitch','crouch','scoped','weapon','health','armor','revealed','reload','effect','disabled'])out[key]=p[key];
   else {out.position=null;out.velocity=[0,0,0];out.yaw=out.pitch=0;out.weapon=0;out.crouch=out.scoped=false;}
   return out;
  });

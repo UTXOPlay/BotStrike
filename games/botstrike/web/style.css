@@ -108,3 +108,5 @@ html[data-immersive-blocked=true] #game-content{visibility:hidden}
 @media(orientation:landscape) and (max-height:600px){html[data-mobile=true] #combat-banner{top:80px;font-size:10px;max-width:42vw;padding:4px 8px}html[data-mobile=true] #buffs{left:max(14px,env(safe-area-inset-left));bottom:auto;top:116px;max-width:150px;font-size:9px}html[data-mobile=true] #kill-feed{display:block!important;top:140px;right:max(14px,env(safe-area-inset-right));max-width:150px;font-size:9px;pointer-events:none}html[data-mobile=true] #kill-feed>div:nth-child(n+3){display:none}html[data-mobile=true] #death{top:27%;min-width:200px;max-width:42vw;padding:8px 12px}html[data-mobile=true] #death span{font-size:16px;margin:3px}html[data-mobile=true] #death small{font-size:10px}html[data-mobile=true] #spectating{margin-top:2px}html[data-mobile=true] #objective-progress{top:66%}}
 
 #spectate-next{pointer-events:auto}html[data-mobile=true] #death{pointer-events:auto}
+
+footer{flex-wrap:wrap}footer>small{flex-basis:100%;font:inherit;line-height:1.6;letter-spacing:.02em}

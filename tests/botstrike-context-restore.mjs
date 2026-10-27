@@ -13,6 +13,6 @@ try{
  await page.waitForTimeout(2000);
  const result=await page.evaluate(()=>{const c=document.querySelector('#arena'),gl=c.getContext('webgl2'),pixels=new Uint8Array(4);gl.readPixels(c.width/2,c.height/2,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixels);return {events:restoreEvents,lost:gl.isContextLost(),drawCalls:Number(document.documentElement.dataset.drawCalls),width:c.width,height:c.height};});
  assert.equal(result.lost,false);assert.ok(result.drawCalls>0);assert.ok(result.width*result.height<=1280*720);assert.deepEqual(errors,[]);
- await page.screenshot({path:'/tmp/botstrike-hardening-browser/context-restored.png'});
+ await page.screenshot({path:process.env.CONTEXT_SCREENSHOT||'/tmp/botstrike-context-restored.png'});
  console.log(JSON.stringify(result));
 }finally{await page.evaluate(()=>fetch('/games/botstrike/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'leave'})})).catch(()=>{});await browser.close();}

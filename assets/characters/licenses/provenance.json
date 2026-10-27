@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "pack": "humanoid-robot-pack",
+  "version": "1.0.0",
+  "pipeline_version": "1.0.0",
+  "processed_with": [
+    "Blender",
+    "Sotudios character asset pipeline"
+  ],
+  "sources": [
+    {
+      "character": "aero",
+      "sha256": "a012abd3ceb840fa5d50ae0ac19c13870124d2e301e09509b1419d751b9dd34c"
+    },
+    {
+      "character": "cap",
+      "sha256": "533f414acbc0c30ba6d157fa6e1ea8f92c115e40265ed6947ac3aa08fda52157"
+    },
+    {
+      "character": "crimson",
+      "sha256": "b41269be6ba017904a7ecdcedd7e8cc43e18972fdc41ed10d2188573440a9141"
+    },
+    {
+      "character": "maul",
+      "sha256": "0f5bb808d4828f1a469fb19dfdc692445b6c5fb14f887163dfb3ffe39e4ea4fe"
+    },
+    {
+      "character": "spike",
+      "sha256": "769766ea5a930dd3d6201ee90f7d9d74a7dc17d45e2716299f04962972bfd8ff"
+    },
+    {
+      "character": "syfon",
+      "sha256": "8c6532d48c898e2eb2fd1da1c8d471a3863c9f1eee66c331d38e26a61851915c"
+    },
+    {
+      "character": "titan",
+      "sha256": "2e46a3918f20a0168cf7b6f22e35dc16a8489b24636bb8496b23f81cdb09e25a"
+    },
+    {
+      "character": "vision",
+      "sha256": "230eb3a8969b81f8b9d63b1619dcd244c285746d6e0c71664a458fb95639926c"
+    }
+  ],
+  "images": {
+    "hero_sha256": "33750877925c2e6a5ac571c8250d0f77396960d2403e2854e6d88e923e103e17",
+    "promo_sha256": "3dd0f45e0d55d5d4fdbc619ef7cf473f8644c785e468a04c1c9f67119a245427"
+  }
+}
