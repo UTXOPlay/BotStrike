@@ -274,8 +274,56 @@
         "First-person shader preparation before the live connection",
         "16 Hz periodic state delivery; immediate non-shot events, 60 Hz input and 64 Hz simulation retained"
       ],
-      "candidateResult": "Revised client passed public desktop launcher and all four wide resize cases; packaged revision passed touch optic/rotation checks and native signed replay flow."
-    }
+      "candidateResult": "Revised client passed public desktop launcher and all four wide resize cases; packaged revision passed touch optic/rotation checks and native signed replay flow.",
+      "publicDesktop": "Actual deployed r1 passed store card, loader completion, desktop play and all four wide viewport/backing checks.",
+      "fullRateInputProbe": {
+        "durationSeconds": 30,
+        "stateFrames": 504,
+        "inputsSent": 1680,
+        "serverPings": 5,
+        "receivedBytes": 2527403,
+        "errors": []
+      },
+      "publicMobile": "Actual deployed r1 passed real iframe fullscreen, three landscape layouts, native simultaneous movement/fire/aim acknowledgement, portrait release, landscape resume, armory/scoreboard, fullscreen re-entry and late-snapshot leave protection. Final diagnostic run had no socket-close event.",
+      "publicMobileLauncher": "Actual deployed r1 passed forced app.js download failure, retry through the store loader, portrait/landscape resize and playable match.",
+      "intermediateResults": "Earlier r1 public mobile attempts returned to the menu, including one socket close; a later re-entry failure had no lifecycle telemetry. Final instrumented control and launcher runs passed. Do not interpret this as proof that intermittent network failures cannot recur."
+    },
+    "productionReplayVerification": [
+      {
+        "room": "13eba5e3d5c8b9c2eef7b3ab",
+        "verifier": "readability-v5",
+        "authority": "023943b22c961f09aa77ad969b9204ca677b7901787d60991ab5b1547045827c11",
+        "frames": 1,
+        "state_root": "ad555a1ec85ed1c2edd062ace11c55c3a520faa4ea17d83a3a1f6cced7ba0627",
+        "verified": true
+      },
+      {
+        "room": "4c26ddb5c4f03215f7a627cd",
+        "verifier": "tactics-v4",
+        "authority": "0210799f1074043223710544fab20eff43e3701b2a581a58c21e4d84c7138d34e4",
+        "frames": 1,
+        "state_root": "caecbbe1c259d7ad2b46f782dc951c4b6ce7d4070a1ae9778661c240434bb0bb",
+        "verified": true
+      },
+      {
+        "room": "35865c02c395e66276dbab9b",
+        "verifier": "network-v3",
+        "authority": "03523d567a6e072412706cd363708c8e157d48c1acf4de5bbfff6b0fb6e337496c",
+        "frames": 1,
+        "state_root": "371169f0445eef85d56969ce922819b74fda0923efbb30531c27e9eff4618165",
+        "verified": true
+      },
+      {
+        "room": "44b8996dd155da08be843375",
+        "verifier": "arsenal-v2",
+        "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+        "frames": 1,
+        "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+        "verified": true
+      }
+    ],
+    "firstPersonAssetGate": "Packaged desktop/mobile first-person skin geometry and failed-model launch gate passed.",
+    "englishOnly": "No Han characters in shipped client source, game HTML, immersive gate or spec."
   },
   "limitations": [
     "Bot-only simulations validate completion and behavior, not human balance.",
@@ -283,14 +331,15 @@
     "Aim assist is bounded input correction; it does not fire automatically or bypass native hit validation."
   ],
   "deployment": {
-    "status": "live",
-    "image": "myelin-botstrike:1.4.0-readability",
+    "image": "myelin-botstrike:1.4.0-readability-r1",
     "healthy": true,
     "activeRoomsAtSwitch": 0,
     "otherChangedContainers": [],
-    "compose": "/data/utxoplay/releases/20261027-botstrike-readability-1.4.0/game.compose.json",
-    "backup": "/data/utxoplay/releases/20261027-botstrike-readability-1.4.0/botstrike-data-before.tar.gz",
-    "bundleSha256": "bc7323a940652fe5218174fc88f216ad0ab94ad6a6e28bb98239ee48b48c021e",
-    "imageId": "sha256:b2b09a4d6230314e58336b3b0711627426309ff557723235a416a961ca85abbd"
+    "compose": "/data/utxoplay/releases/20261027-botstrike-readability-1.4.0-r1/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-readability-1.4.0-r1/botstrike-data-before.tar.gz",
+    "status": "live",
+    "bundleSha256": "fa5f52400ceb7d70ab87d1d187de3829f61a6cce3c3532ba3d8a9b5f8df82b59",
+    "imageId": "sha256:8fe2bb8489bd094e453ea3d41cc92f4593f6429849a944f6da663eb6690ac3b8",
+    "stagingCleanup": "Both isolated readability staging containers removed after acceptance; rollback images and data backups retained."
   }
 }
