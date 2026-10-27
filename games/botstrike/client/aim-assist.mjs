@@ -1,7 +1,7 @@
 // Client input assistance only. Native simulation still owns every shot and hit.
 const angle=v=>Math.atan2(Math.sin(v),Math.cos(v));
-function blocked(a,b,box){let lo=0,hi=1;for(let axis=0;axis<3;axis++){const d=b[axis]-a[axis];if(Math.abs(d)<1e-8){if(a[axis]<box.min[axis]||a[axis]>box.max[axis])return false;}else{const x=(box.min[axis]-a[axis])/d,y=(box.max[axis]-a[axis])/d;lo=Math.max(lo,Math.min(x,y));hi=Math.min(hi,Math.max(x,y));if(lo>hi)return false;}}return hi>=0&&lo<=1;}
-function smoke(a,b,u){if(u.kind!==2||u.fuse!==0)return false;const dx=b[0]-a[0],dz=b[2]-a[2],t=Math.max(0,Math.min(1,((u.position[0]-a[0])*dx+(u.position[2]-a[2])*dz)/(dx*dx+dz*dz||1)));return Math.hypot(a[0]+dx*t-u.position[0],a[2]+dz*t-u.position[2])<175;}
+export function blocked(a,b,box){let lo=0,hi=1;for(let axis=0;axis<3;axis++){const d=b[axis]-a[axis];if(Math.abs(d)<1e-8){if(a[axis]<box.min[axis]||a[axis]>box.max[axis])return false;}else{const x=(box.min[axis]-a[axis])/d,y=(box.max[axis]-a[axis])/d;lo=Math.max(lo,Math.min(x,y));hi=Math.min(hi,Math.max(x,y));if(lo>hi)return false;}}return hi>=0&&lo<=1;}
+export function smoke(a,b,u){if(u.kind!==2||u.fuse!==0)return false;const dx=b[0]-a[0],dz=b[2]-a[2],t=Math.max(0,Math.min(1,((u.position[0]-a[0])*dx+(u.position[2]-a[2])*dz)/(dx*dx+dz*dz||1)));return Math.hypot(a[0]+dx*t-u.position[0],a[2]+dz*t-u.position[2])<175;}
 export function assistTarget(state,slot,yaw,pitch,map,{strength=1,scoped=false,position=null}={}){
  const me=state?.players[slot];if(!strength||!me?.alive||me.flash>0||state.phase!=='live')return null;
  const p=position||me.position,eye=[p[0],p[1]+(me.crouch?37:56),p[2]],cone=(scoped?2.8:strength>1?8:5)*Math.PI/180;let best=null;

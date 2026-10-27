@@ -11,7 +11,7 @@ const tmp=new THREE.Vector3(),identity=new THREE.Quaternion();
 
 // Models and textures are shared; every actor owns an independent cloned rig.
 export function createCharacters(art){
- const templates=[],weaponTemplates=new Map(),teamMaterials=[0x36dfff,0xff835f].map(color=>new THREE.MeshBasicMaterial({color,toneMapped:false})),badgeGeometry=new THREE.BoxGeometry(.09,.025,.035);
+ const templates=[],weaponTemplates=new Map(),teamMaterials=[0x69efff,0xffae67].map(color=>new THREE.MeshBasicMaterial({color,toneMapped:false})),badgeGeometry=new THREE.BoxGeometry(.09,.025,.035);
  const stamp=document.createElement('canvas');stamp.width=stamp.height=64;const ctx=stamp.getContext('2d'),gradient=ctx.createRadialGradient(32,32,5,32,32,32);gradient.addColorStop(0,'rgba(0,0,0,.5)');gradient.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);const shadowTexture=new THREE.CanvasTexture(stamp),shadowMaterial=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false}),shadowGeometry=new THREE.PlaneGeometry(43,36);
  async function preload(progress=()=>{}){
   const loader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
@@ -31,7 +31,7 @@ export function createCharacters(art){
  }
  function actor(slot,hero,weapon=2,{firstPerson=false}={}){
   const source=templates[hero];if(!source)throw Error('Chassis has not loaded');
-  const rig=new THREE.Group(),model=clone(source.model);rig.add(model);model.scale.setScalar(70/1.94);
+  const badges=[];const rig=new THREE.Group(),model=clone(source.model);rig.add(model);model.scale.setScalar(70/1.94);
   const bones={};model.traverse(o=>{if(o.isBone)bones[o.name]=o;for(const side of ['L','R'])for(const part of ['upper_arm','forearm','hand','thigh','shin','foot'])if(o.name===part+side)bones[part+'.'+side]=o;});
   if(firstPerson)model.traverse(o=>{if(!o.isSkinnedMesh)return;
    // Keep the original skeleton and weights, but render only arm triangles.
@@ -41,7 +41,7 @@ export function createCharacters(art){
    const groups=[];for(const group of g.groups.length?g.groups:[{start:0,count:indices.length,materialIndex:0}]){const begin=keep.length;for(let i=group.start;i<group.start+group.count;i+=3)if(arm(indices[i])&&arm(indices[i+1])&&arm(indices[i+2]))keep.push(indices[i],indices[i+1],indices[i+2]);groups.push({start:begin,count:keep.length-begin,materialIndex:group.materialIndex});}
    g.setIndex(keep);g.clearGroups();groups.forEach(x=>g.addGroup(x.start,x.count,x.materialIndex));o.geometry=g;o.receiveShadow=false;
   });
-  if(!firstPerson){for(const side of ['L','R']){const badge=new THREE.Mesh(badgeGeometry,teamMaterials[slot<5?0:1]);badge.position.set(0,.04,-.13);bones['upper_arm.'+side].add(badge);}const shadow=new THREE.Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.y=.15;rig.add(shadow);}
+  if(!firstPerson){for(const side of ['L','R']){const badge=new THREE.Mesh(badgeGeometry,teamMaterials[slot<5?0:1]);badge.position.set(0,.04,-.13);bones['upper_arm.'+side].add(badge);badges.push(badge);}const shadow=new THREE.Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.y=.15;rig.add(shadow);}
   // First-person support arm uses a dedicated shoulder stance. The world rig
   // remains unchanged; its shorter reach cannot wrap around every rifle.
   let gripRestore=null,lookRestore=null;
@@ -119,7 +119,7 @@ export function createCharacters(art){
   }
   function dispose(){prop?.traverse(o=>o.geometry?.dispose());mixer.stopAllAction();mixer.uncacheRoot(model);if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)o.geometry.dispose();});rig.removeFromParent();}
   let armTriangles=0;if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)armTriangles+=(o.geometry.index?.count||0)/3;});
-  return {rig,model,bones,mixer,hero,slot,armTriangles,get weapon(){return lastWeapon;},update,trigger,dispose};
+  return {rig,model,bones,mixer,hero,slot,armTriangles,setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
  }
  function dispose(){const geometries=new Set(),materials=new Set(),textures=new Set();for(const t of templates)t.model.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});for(const gun of weaponTemplates.values())gun.traverse(o=>{if(o.geometry)geometries.add(o.geometry)});badgeGeometry.dispose();teamMaterials.forEach(m=>m.dispose());shadowGeometry.dispose();shadowMaterial.dispose();shadowTexture.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}
  return {preload,actor,dispose};

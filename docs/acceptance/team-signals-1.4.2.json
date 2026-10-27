@@ -1,0 +1,70 @@
+{
+  "version": "1.4.2",
+  "changes": [
+    "Cyan shield-chevron allies and amber split-diamond enemies, relative to the viewing team.",
+    "Shared glyphs in the world, radar, score legend and scoreboard; shoulder lights follow the same relationship.",
+    "Depth-tested, body-line-of-sight markers; hidden, dead, smoke-obscured and flash-obscured targets suppressed.",
+    "Bounded 20\u201336 CSS-pixel markers with no pulse, particles or glow passes."
+  ],
+  "validation": {
+    "unitTests": 44,
+    "renderViewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "relationReversal": true,
+    "scopeScale": true,
+    "mobileNativeInput": true,
+    "mobileNoOverlap": [
+      [
+        844,
+        390
+      ],
+      [
+        740,
+        360
+      ],
+      [
+        640,
+        360
+      ]
+    ],
+    "publicPreviewHud": true,
+    "nativeArtifactsUnchanged": true,
+    "stage": {
+      "passed": true,
+      "imageId": "sha256:f5942c1004a02240b89434127dcb6823e5dab3b0860b28c7329b3904a9aca5f7",
+      "sha256": {
+        "dist/botstrike/app.js": "2baea1bb69e8c36d246e03ecc573da733b94ddf6cfde26118643f446f4d32187",
+        "dist/botstrike/index.html": "641eda4f7c31b08e0e1888f669cb5a0244c22c56fd68a1502d2340302a090372",
+        "dist/botstrike/style.css": "88dab6014cf63806278bbb8d8b13e9336424147241e2789e210287151e077406",
+        "release/botstrike-engine": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+        "release/myelin-botstrike": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30",
+        "release/verifiers.json": "4d1f958fd443df25aa67d236b3f252cf8bb1ab95c050d98aa2311446878fce2a"
+      },
+      "nativeArtifactsUnchanged": true
+    }
+  }
+}

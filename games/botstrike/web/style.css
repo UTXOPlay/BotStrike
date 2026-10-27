@@ -126,3 +126,11 @@ html[data-playing=true] .brand{display:none}
 /* A circular optical field, precise mil marks, and a quiet centre dot. */
 #scope{z-index:-1;display:grid;place-items:center;background:none;pointer-events:none;overflow:hidden}#scope[hidden]{display:none}#scope:before,#scope:after{display:none}.scope-lens{position:relative;width:90vmin;height:90vmin;border-radius:50%;box-shadow:0 0 0 150vmax #071018d9,inset 0 0 30px #172b3d44;border:1px solid #bedee75c}.scope-lens svg{width:100%;height:100%;fill:none;stroke:#10252d;stroke-width:.7;vector-effect:non-scaling-stroke}.scope-lens circle{stroke:#ccedf04d}.scope-lens .scope-dot{fill:#eb7e50;stroke:none}.scope-lens small{position:absolute;bottom:9%;left:0;width:100%;text-align:center;font:10px monospace;letter-spacing:.12em;color:#213641;text-shadow:0 1px 1px #fff8}html[data-scoped=true] #crosshair{display:none}
 @media(orientation:landscape) and (max-height:600px){html[data-mobile=true] .match-score,html[data-mobile=true] .vitals,html[data-mobile=true] .loadout,html[data-mobile=true] #death{background:none;border:0}html[data-mobile=true] #death{max-width:45vw;padding:4px 10px}html[data-mobile=true] #death-tip{font-size:9px;line-height:1.3}html[data-mobile=true] #gear-label{display:none}.scope-lens small{font-size:8px}.scope-lens{width:94vmin;height:94vmin}}
+
+/* IFF: compact shield / split-diamond legend, shared with world and radar. */
+.match-score .iff-key{min-width:24px;width:24px;display:flex;flex-direction:column;align-items:center;gap:2px;text-shadow:0 1px 3px #07151f}
+.iff-key svg{width:22px;height:22px;filter:drop-shadow(0 1px 2px #07151f)}
+.match-score .iff-key span{font:7px monospace;letter-spacing:.04em;color:inherit}
+@media(orientation:landscape) and (max-height:600px){html[data-mobile=true] .match-score{gap:9px}.iff-key svg{width:18px;height:18px}html[data-mobile=true] .match-score>.iff-key{min-width:22px;width:22px}}
+
+.score-row[data-relation=ally]{color:#69efff}.score-row[data-relation=enemy]{color:#ffae67}.score-row[data-relation] b{color:inherit}.score-row svg{width:18px;height:18px;vertical-align:middle;margin-right:6px}.score-row[data-relation]>span:not(:first-child){color:#e0eaf0}
