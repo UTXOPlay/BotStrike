@@ -65,6 +65,23 @@
         "release/verifiers.json": "4d1f958fd443df25aa67d236b3f252cf8bb1ab95c050d98aa2311446878fce2a"
       },
       "nativeArtifactsUnchanged": true
-    }
+    },
+    "publicHud": true,
+    "publicStartupNote": "First 90-second startup wait timed out; a separate check showed existing chassis loading with no page or HTTP errors. A second full public HUD run passed without changing deployed files.",
+    "productionHashesMatch": true
+  },
+  "deployment": {
+    "image": "myelin-botstrike:1.4.2-iff",
+    "healthy": true,
+    "activeRoomsAtSwitch": 0,
+    "otherChangedContainers": [
+      "utxoplay-store",
+      "myelin-neon-coil"
+    ],
+    "compose": "/data/utxoplay/releases/20261027-botstrike-iff-1.4.2/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-iff-1.4.2/botstrike-data-before.tar.gz",
+    "imageId": "sha256:f5942c1004a02240b89434127dcb6823e5dab3b0860b28c7329b3904a9aca5f7",
+    "stagingRemoved": true,
+    "scope": "Only the botstrike service was targeted. Store and neon-coil container changes were observed during the drain window from concurrent work."
   }
 }
