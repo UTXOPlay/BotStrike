@@ -45,16 +45,16 @@
   ],
   "validation": {
     "rustTests": 27,
-    "browserServiceTests": 37,
+    "browserServiceTests": 38,
     "hostTests": 4,
     "aiMatches": 18,
     "aiCompleted": 18,
     "nativeFlow": {
-      "data": "/tmp/botstrike-flow-Rhb6IW",
-      "ticks": 19328,
+      "data": "/tmp/botstrike-flow-NDLkca",
+      "ticks": 22561,
       "score": [
         50,
-        40
+        41
       ],
       "players": 10,
       "privateJoin": true,
@@ -67,11 +67,11 @@
       "tamperRejected": true
     },
     "containerNativeFlow": {
-      "data": "/app/data/botstrike-flow-wrNNlS",
-      "ticks": 21828,
+      "data": "/app/data/botstrike-flow-2VaMTb",
+      "ticks": 21387,
       "score": [
         50,
-        36
+        33
       ],
       "players": 10,
       "privateJoin": true,
@@ -239,7 +239,43 @@
       },
       "caution": "Live bot matches have varying visible geometry; software rendering and other host workloads prevent treating this as a controlled hardware FPS result."
     },
-    "finalBundleSha256": "bc7323a940652fe5218174fc88f216ad0ab94ad6a6e28bb98239ee48b48c021e"
+    "finalBundleSha256": "fa5f52400ceb7d70ab87d1d187de3829f61a6cce3c3532ba3d8a9b5f8df82b59",
+    "productionLegacyReplays": [
+      {
+        "room": "4c26ddb5c4f03215f7a627cd",
+        "verifier": "tactics-v4",
+        "authority": "0210799f1074043223710544fab20eff43e3701b2a581a58c21e4d84c7138d34e4",
+        "frames": 1,
+        "state_root": "caecbbe1c259d7ad2b46f782dc951c4b6ce7d4070a1ae9778661c240434bb0bb",
+        "verified": true
+      },
+      {
+        "room": "35865c02c395e66276dbab9b",
+        "verifier": "network-v3",
+        "authority": "03523d567a6e072412706cd363708c8e157d48c1acf4de5bbfff6b0fb6e337496c",
+        "frames": 1,
+        "state_root": "371169f0445eef85d56969ce922819b74fda0923efbb30531c27e9eff4618165",
+        "verified": true
+      },
+      {
+        "room": "44b8996dd155da08be843375",
+        "verifier": "arsenal-v2",
+        "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+        "frames": 1,
+        "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+        "verified": true
+      }
+    ],
+    "launchFollowup": {
+      "initialPublicResult": "Two desktop runs and one mobile run returned to menu after connection loss. A browser diagnostic recorded a 4019 ms main-thread stall.",
+      "mitigations": [
+        "0.75 initial render scale with gradual recovery",
+        "2560x1440 maximum desktop GPU backing; display-resolution HUD",
+        "First-person shader preparation before the live connection",
+        "16 Hz periodic state delivery; immediate non-shot events, 60 Hz input and 64 Hz simulation retained"
+      ],
+      "candidateResult": "Revised client passed public desktop launcher and all four wide resize cases; packaged revision passed touch optic/rotation checks and native signed replay flow."
+    }
   },
   "limitations": [
     "Bot-only simulations validate completion and behavior, not human balance.",
@@ -247,7 +283,14 @@
     "Aim assist is bounded input correction; it does not fire automatically or bypass native hit validation."
   ],
   "deployment": {
-    "status": "staging",
-    "image": "myelin-botstrike:1.4.0-readability"
+    "status": "live",
+    "image": "myelin-botstrike:1.4.0-readability",
+    "healthy": true,
+    "activeRoomsAtSwitch": 0,
+    "otherChangedContainers": [],
+    "compose": "/data/utxoplay/releases/20261027-botstrike-readability-1.4.0/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-readability-1.4.0/botstrike-data-before.tar.gz",
+    "bundleSha256": "bc7323a940652fe5218174fc88f216ad0ab94ad6a6e28bb98239ee48b48c021e",
+    "imageId": "sha256:b2b09a4d6230314e58336b3b0711627426309ff557723235a416a961ca85abbd"
   }
 }

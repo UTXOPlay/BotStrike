@@ -17,3 +17,6 @@ test('rail optic has greater magnification with proportionate aim sensitivity',(
 test('shipped interface and specification contain no Chinese text',()=>{
  const files=['games/botstrike/web/index.html','botstrike/spec.json',...fs.readdirSync('games/botstrike/client').filter(n=>n.endsWith('.mjs')).map(n=>'games/botstrike/client/'+n)];for(const file of files)assert.ok(!/\p{Script=Han}/u.test(fs.readFileSync(file,'utf8')),file);
 });
+
+import {ResolutionBudget} from '../shared/game-performance.mjs';
+test('first playable frame starts at a bounded render budget and can recover on fast hardware',()=>{const b=new ResolutionBudget(1.5,.75);assert.equal(b.ratio,.75);for(let i=0;i<9*60;i++)b.sample(1000/60);assert.ok(b.ratio>.75&&b.ratio<=1.5);const d=new ResolutionBudget(.5,.75);assert.equal(d.ratio,.5);});

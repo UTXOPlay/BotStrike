@@ -17,9 +17,9 @@ export function readQuality() {
   }
 }
 export class ResolutionBudget {
-  constructor(max = 2) {
+  constructor(max = 2, initial = max) {
     this.max = max;
-    this.ratio = max;
+    this.ratio = Math.min(max, Math.max(0.75, initial));
     this.slow = 0;
     this.fast = 0;
   }
@@ -46,7 +46,7 @@ export class ResolutionBudget {
 }
 export function startRenderLoop(
   draw,
-  { active = () => true, maxFps = 60, maxResolution = 2, onResolution } = {},
+  { active = () => true, maxFps = 60, maxResolution = 2, initialResolution = maxResolution, onResolution } = {},
 ) {
   let handle = 0,
     last = 0,
@@ -58,8 +58,10 @@ export function startRenderLoop(
     cpu = 0;
   const budget = new ResolutionBudget(
     Math.min(globalThis.devicePixelRatio || 1, maxResolution),
+    initialResolution,
   );
   let ratio = budget.ratio;
+  onResolution?.(ratio);
   function tick(now) {
     handle = 0;
     if (stopped || document.hidden) return;
