@@ -40,27 +40,29 @@ impl WireInput {
     fn unpack(self) -> Input {
         match self {
             Self::Object(input) => input,
-            Self::Packed((seq, x, y, yaw, pitch, bits, weapon, buy, hero, item, view_tick)) => Input {
-                seq,
-                view_tick,
-                x,
-                y,
-                yaw,
-                pitch,
-                fire: bits & 1 != 0,
-                reload: bits & 2 != 0,
-                walk: bits & 4 != 0,
-                crouch: bits & 8 != 0,
-                jump: bits & 16 != 0,
-                ability: bits & 32 != 0,
-                interact: bits & 64 != 0,
-                scope: bits & 128 != 0,
-                takeover: bits & 256 != 0,
-                weapon,
-                buy,
-                hero,
-                item,
-            },
+            Self::Packed((seq, x, y, yaw, pitch, bits, weapon, buy, hero, item, view_tick)) => {
+                Input {
+                    seq,
+                    view_tick,
+                    x,
+                    y,
+                    yaw,
+                    pitch,
+                    fire: bits & 1 != 0,
+                    reload: bits & 2 != 0,
+                    walk: bits & 4 != 0,
+                    crouch: bits & 8 != 0,
+                    jump: bits & 16 != 0,
+                    ability: bits & 32 != 0,
+                    interact: bits & 64 != 0,
+                    scope: bits & 128 != 0,
+                    takeover: bits & 256 != 0,
+                    weapon,
+                    buy,
+                    hero,
+                    item,
+                }
+            }
         }
     }
 }
@@ -119,7 +121,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     if game.tick == 0 {
         return Err("Empty match".into());
     }
-    let result = json!({"version":"botstrike-2050-tactics-v4","ticks":game.tick,"completed":game.phase=="finished","winner":game.winner,"score":game.score,"trace_hash":hash.finalize().to_hex().to_string(),"state_hash":blake3::hash(&serde_json::to_vec(&game)?).to_hex().to_string(),"players":game.players.iter().map(|p|json!({"slot":p.slot,"hero":p.hero,"kills":p.kills,"deaths":p.deaths,"assists":p.assists,"damage":p.damage,"shots":p.shots})).collect::<Vec<_>>()});
+    let result = json!({"version":"botstrike-2050-readability-v5","ticks":game.tick,"completed":game.phase=="finished","winner":game.winner,"score":game.score,"trace_hash":hash.finalize().to_hex().to_string(),"state_hash":blake3::hash(&serde_json::to_vec(&game)?).to_hex().to_string(),"players":game.players.iter().map(|p|json!({"slot":p.slot,"hero":p.hero,"kills":p.kills,"deaths":p.deaths,"assists":p.assists,"damage":p.damage,"shots":p.shots})).collect::<Vec<_>>()});
     if replay {
         writeln!(output, "{result}")?
     } else {

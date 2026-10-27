@@ -14,7 +14,10 @@ fn sight(game: &Game, p: &Player, q: &Player, map: &Map) -> bool {
         (b[1] - a[1]) / length,
         (b[2] - a[2]) / length,
     ];
-    length < 2600.
+    // A forward visual cone prevents instant awareness of enemies behind us.
+    let facing = -(b[0] - a[0]) * p.yaw.sin() - (b[2] - a[2]) * p.yaw.cos();
+    length < [1100., 1550., 2200.][game.config.difficulty as usize]
+        && facing / length > (70_f64.to_radians()).cos()
         && !map
             .obstacles
             .iter()
@@ -162,14 +165,16 @@ impl Game {
             let mut b = eye(q);
             // Track the torso for most engagements; head targeting is deliberate,
             // rather than perfect headshots from every bot on every difficulty.
-            if (self.tick / (HZ * 2) + slot as u32) % 5 > self.config.difficulty as u32 {
-                b[1] -= 15.;
+            if self.config.difficulty == 0
+                || (self.tick / (HZ * 2) + slot as u32) % 10 >= self.config.difficulty as u32
+            {
+                b[1] -= 20.;
             }
             let length = dist(a, b).max(0.001);
             let exact_yaw = (-(b[0] - a[0])).atan2(-(b[2] - a[2]));
-            let error = [0.095, 0.045, 0.025][self.config.difficulty as usize];
+            let error = [0.15, 0.08, 0.045][self.config.difficulty as usize];
             let desired = exact_yaw + ((self.tick as f64 / 12.) + slot as f64 * 2.3).sin() * error;
-            let turn = [3., 5., 7.][self.config.difficulty as usize] / HZ as f64;
+            let turn = [1.8, 3., 5.][self.config.difficulty as usize] / HZ as f64;
             let delta = (desired - p.yaw).sin().atan2((desired - p.yaw).cos());
             input.yaw = p.yaw + delta.clamp(-turn, turn);
             input.yaw = input.yaw.sin().atan2(input.yaw.cos());
@@ -193,8 +198,8 @@ impl Game {
                 && !friendly_line
                 && p.ai_target == target
                 && self.tick.saturating_sub(p.ai_since)
-                    >= [20, 14, 9][self.config.difficulty as usize]
-                && burst > [24, 14, 8][self.config.difficulty as usize]
+                    >= [48, 32, 20][self.config.difficulty as usize]
+                && burst > [42, 30, 18][self.config.difficulty as usize]
                 && length < weapon.range.min(2400.)
                 && (!weapon.scoped || p.scoped)
                 && (!reloading)
@@ -486,14 +491,39 @@ mod tests {
         (r, g)
     }
     #[test]
+    fn recruit_has_forward_perception_body_aim_and_reaction_time() {
+        let (r, mut g) = arena();
+        g.config.difficulty = 0;
+        g.players[5].position = [0., 0., 300.];
+        g.bot(0, &r);
+        assert_eq!(g.players[0].ai_target, None);
+        g.players[5].position = [0., 0., -300.];
+        g.players[0].ai_target = Some(5);
+        g.players[0].ai_since = g.tick;
+        let start = g.tick;
+        let mut first = None;
+        for elapsed in 0..128 {
+            g.tick = start + elapsed;
+            let input = g.bot(0, &r);
+            g.players[0].yaw = input.yaw;
+            g.players[0].pitch = input.pitch;
+            if input.fire {
+                first = Some(elapsed);
+                assert!(input.pitch < -0.04);
+                break;
+            }
+        }
+        assert!(first.is_some_and(|n| n >= 48));
+    }
+    #[test]
     fn visible_target_beats_nearer_occluded_target() {
         let (mut r, mut g) = arena();
-        g.players[5].position = [100., 0., 0.];
+        g.players[5].position = [100., 0., -100.];
         g.players[6].alive = true;
         g.players[6].position = [0., 0., -500.];
         r.maps[0].obstacles.push(Obstacle {
-            min: [40., 0., -40.],
-            max: [60., 100., 40.],
+            min: [40., 0., -70.],
+            max: [60., 100., -30.],
             kind: "wall".into(),
         });
         g.bot(0, &r);
@@ -531,6 +561,10 @@ mod tests {
         g.players[0].yaw = std::f64::consts::PI;
         assert!(!g.bot(0, &r).fire);
         g.players[0].yaw = 0.;
+        g.players[0].pitch = (-20_f64 / 300.).atan();
+        g.players[0].ai_target = Some(5);
+        g.players[0].ai_since = 0;
+        g.tick = 120;
         g.players[1].alive = true;
         g.players[1].position = [0., 0., -100.];
         assert!(!g.bot(0, &r).fire);

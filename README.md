@@ -52,14 +52,24 @@ Choose a new chassis in the match menu; native rules apply it during buy time or
 
 Career records start with this release: authenticated-account K/D, wins/losses and the latest 50 completed, verified matches. Only frames actually controlled by a human contribute; AI cover is excluded. Leaving or having no human input in the final 30 seconds gives no win/loss. Existing matches are not backfilled because their human/AI attribution is incomplete. Aggregates and recent history persist separately from recordings, which still expire after 30 days. Guest history depends on keeping the same guest session. Download signed match exports replay evidence for the exact native verifier; it is not a playable video.
 
-This release changes presentation and host metadata only. Deathmatch targets, weapon/hero values, the native engine, exact verifier and signed application profile remain unchanged.
+Version 1.2.0 changed presentation and host metadata only. Later native rule changes use their own exact application profiles; see the acceptance records for each release.
+
+## Readability and combat tuning (1.4.0)
+
+Recruit is the default: bots have a 140-degree field of view, a shorter detection range, a minimum 750 ms acquisition delay, shorter bursts and body-focused aim. Operator and Veteran retain progressively faster reactions and better accuracy. New cover on all three maps breaks long sightlines and supports crouch/standing peeks. Deathmatch respawns score multiple team-side candidates for enemy distance and cover; firing, equipment, abilities and interaction end spawn protection.
+
+Touch aim assist defaults to Standard; mouse defaults to Off. Off/Standard/Strong persist in settings. Assistance slows input near a visible target and applies a bounded body-aim correction while aiming, firing or using the movement pad. It cannot see through cover or smoke and never shoots automatically. RAIL uses a 20-degree optic and ECHO a 38-degree optic, with matching sensitivity scaling. Tap the scope icon to toggle on touch; rotation, menus and fullscreen loss release it.
+
+The HUD uses fewer filled panels, with icon controls retained. Death recaps show the attacker, weapon, hit count and health damage. Brighter environments use varied architectural materials, detailed service equipment, planted cover, site markings and distinct skyline landmarks. Static geometry stays batched and GPU resolution remains bounded.
+
+The native version is `botstrike-2050-readability-v5`. The current pair and all three older verifier pairs remain available; signed saves select their original exact profile. This is off-chain host replay, not CKB settlement. Bot-only simulations and browser software rendering do not replace human balance testing or real-device performance measurement.
 
 ## Source and verification
 
 - `botstrike/`: 64 Hz Rust authority, deterministic bot routing, combat, modes and replay CLI.
 - `botstrike-myelin/`: separately named Myelin application with exact embedded engine bytes and configuration/input schema binding.
 - `botstrike-service/`: authenticated room membership, live input, reconnect, bounded recording and replay sealing.
-- `games/botstrike/client/`: Three.js scene, six original articulated robots, procedural materials, client movement prediction and UI.
+- `games/botstrike/client/`: Three.js scene, six licensed and rigged robot chassis, procedural environments, client movement prediction and UI.
 - `games/botstrike/web/art/`: cover plus selection previews rendered from the actual gameplay meshes. See [visual provenance](docs/botstrike-art-direction.md).
 
 ```sh

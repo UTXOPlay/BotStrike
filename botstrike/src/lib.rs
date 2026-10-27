@@ -205,7 +205,12 @@ pub struct Event {
 }
 pub const MAX_REWIND: u32 = 13; // 203 ms at 64 Hz.
 #[derive(Clone)]
-struct HitPose { position: [f64; 3], crouch: bool, alive: bool, life: u32 }
+struct HitPose {
+    position: [f64; 3],
+    crouch: bool,
+    alive: bool,
+    life: u32,
+}
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Game {
     pub config: Config,
@@ -388,7 +393,53 @@ impl Game {
             value,
         });
     }
+    fn safe_respawn(&self, slot: usize, rules: &Rules) -> [f64; 3] {
+        let map = &rules.maps[self.config.map];
+        let player = &self.players[slot];
+        let mut best = map.spawns[player.team][slot % 5];
+        let mut best_score = f64::NEG_INFINITY;
+        for row in 0..3 {
+            for index in 0..5 {
+                let mut point = map.spawns[player.team][(index + slot + player.life as usize) % 5];
+                point[2] += if player.team == 0 { -160. } else { 160. } * row as f64;
+                constrain(&mut point, map);
+                let origin = [point[0], point[1] + 56., point[2]];
+                let mut score: f64 = 3000.;
+                for other in self.players.iter().filter(|p| p.alive && p.slot != slot) {
+                    let distance = dist(point, other.position);
+                    if other.team == player.team {
+                        if distance < 48. {
+                            score -= 500.;
+                        }
+                        continue;
+                    }
+                    let target = eye(other);
+                    let length = dist(origin, target).max(1.);
+                    let ray = [
+                        (target[0] - origin[0]) / length,
+                        (target[1] - origin[1]) / length,
+                        (target[2] - origin[2]) / length,
+                    ];
+                    let covered = map
+                        .obstacles
+                        .iter()
+                        .any(|o| ray_box(origin, ray, o.min, o.max).is_some_and(|t| t < length));
+                    score = score.min(distance - if covered { 0. } else { 700. });
+                }
+                if score > best_score {
+                    best = point;
+                    best_score = score;
+                }
+            }
+        }
+        best
+    }
     fn spawn(&mut self, slot: usize, rules: &Rules, reset_loadout: bool) {
+        let safe = if self.config.mode == "deathmatch" && self.players[slot].life > 0 {
+            Some(self.safe_respawn(slot, rules))
+        } else {
+            None
+        };
         let p = &mut self.players[slot];
         let h = &rules.heroes[p.hero];
         let map = &rules.maps[self.config.map];
@@ -397,7 +448,7 @@ impl Game {
         } else {
             1 - p.team
         };
-        p.position = map.spawns[side][slot % 5];
+        p.position = safe.unwrap_or(map.spawns[side][slot % 5]);
         p.yaw = if side == 0 { 0. } else { std::f64::consts::PI };
         p.pitch = 0.;
         p.velocity = [0.; 3];
@@ -665,7 +716,8 @@ impl Game {
         self.event("skill", Some(slot), None, hero as i32);
     }
     fn fire(&mut self, slot: usize, rules: &Rules, view_tick: Option<u32>) {
-        let poses = view_tick.filter(|&tick| tick <= self.tick && self.tick - tick <= MAX_REWIND)
+        let poses = view_tick
+            .filter(|&tick| tick <= self.tick && self.tick - tick <= MAX_REWIND)
             .and_then(|tick| self.history.iter().find(|(t, _)| *t == tick))
             .map(|(_, poses)| poses.clone());
         let p = &mut self.players[slot];
@@ -729,7 +781,9 @@ impl Game {
                 }
                 let past = poses.as_ref().map(|poses| &poses[p.slot]);
                 // Never hit a different life after a respawn or rewind through death.
-                if past.is_some_and(|pose| !pose.alive || pose.life != p.life) { continue; }
+                if past.is_some_and(|pose| !pose.alive || pose.life != p.life) {
+                    continue;
+                }
                 let position = past.map_or(p.position, |pose| pose.position);
                 let crouch = past.map_or(p.crouch, |pose| pose.crouch);
                 let height = if crouch { 47. } else { 70. };
@@ -737,11 +791,7 @@ impl Game {
                     origin,
                     dir,
                     [position[0] - 18., position[1], position[2] - 18.],
-                    [
-                        position[0] + 18.,
-                        position[1] + height,
-                        position[2] + 18.,
-                    ],
+                    [position[0] + 18., position[1] + height, position[2] + 18.],
                 ) {
                     if t < nearest {
                         nearest = t;
@@ -1001,10 +1051,21 @@ impl Game {
         if inputs.iter().any(|i| !i.validate()) {
             return Err("Invalid controls".into());
         }
-        self.history.push_back((self.tick, self.players.iter().map(|p| HitPose {
-            position: p.position, crouch: p.crouch, alive: p.alive, life: p.life,
-        }).collect()));
-        while self.history.len() > MAX_REWIND as usize + 1 { self.history.pop_front(); }
+        self.history.push_back((
+            self.tick,
+            self.players
+                .iter()
+                .map(|p| HitPose {
+                    position: p.position,
+                    crouch: p.crouch,
+                    alive: p.alive,
+                    life: p.life,
+                })
+                .collect(),
+        ));
+        while self.history.len() > MAX_REWIND as usize + 1 {
+            self.history.pop_front();
+        }
         self.events.clear();
         self.tick += 1;
         if self.tick > MAX_TICKS {
@@ -1115,6 +1176,10 @@ impl Game {
                 p.velocity[1] = 0.;
             }
             constrain(&mut p.position, &rules.maps[self.config.map]);
+            // Protection is for a safe restart, never for protected attacks.
+            if input.fire || input.ability || input.item > 0 || input.interact {
+                p.protection = 0;
+            }
             let cast = input.ability && !p.skill_held;
             p.skill_held = input.ability;
             if input.reload
@@ -1276,7 +1341,6 @@ impl Game {
             )
         }
     }
-
 }
 fn segment_near(a: [f64; 3], b: [f64; 3], point: [f64; 3], radius: f64) -> bool {
     let dx = b[0] - a[0];
@@ -1388,6 +1452,26 @@ mod tests {
         }
         g.players[0].position = [-1100., 0., 300.];
         g.players[5].position = [-1100., 0., 100.];
+    }
+    #[test]
+    fn respawn_avoids_a_camped_spawn_and_offense_ends_protection() {
+        let (r, mut g) = setup("deathmatch");
+        for p in &mut g.players {
+            p.alive = false;
+        }
+        let old = r.maps[0].spawns[0][0];
+        g.players[5].alive = true;
+        g.players[5].position = [old[0], 0., old[2] - 80.];
+        let safe = g.safe_respawn(0, &r);
+        assert!(dist(safe, g.players[5].position) > dist(old, g.players[5].position));
+        g.players[0].life = 1;
+        g.spawn(0, &r, true);
+        assert_eq!(g.players[0].position, safe);
+        assert!(g.players[0].protection > 0);
+        let mut input = neutral();
+        input[0].ability = true;
+        g.step(input, &r).unwrap();
+        assert_eq!(g.players[0].protection, 0);
     }
     #[test]
     fn configurations_and_inputs_are_bounded() {
@@ -1835,28 +1919,71 @@ mod tests {
     #[test]
     fn bounded_rewind_hits_the_rendered_pose_but_never_a_new_life_or_through_cover() {
         let (mut rules, mut game) = setup("deathmatch");
-        rules.maps[0].obstacles.clear(); rules.weapons[0].spread = 0.;
-        combat(&mut game); game.tick = 100;
-        for p in &mut game.players { if p.slot != 0 && p.slot != 5 { p.alive = false; } }
-        game.players[0].weapon = 0; game.players[0].yaw = 0.; game.players[0].pitch = 0.;
-        let poses: Vec<HitPose> = game.players.iter().map(|p| HitPose { position:p.position,crouch:p.crouch,alive:p.alive,life:p.life }).collect();
+        rules.maps[0].obstacles.clear();
+        rules.weapons[0].spread = 0.;
+        combat(&mut game);
+        game.tick = 100;
+        for p in &mut game.players {
+            if p.slot != 0 && p.slot != 5 {
+                p.alive = false;
+            }
+        }
+        game.players[0].weapon = 0;
+        game.players[0].yaw = 0.;
+        game.players[0].pitch = 0.;
+        let poses: Vec<HitPose> = game
+            .players
+            .iter()
+            .map(|p| HitPose {
+                position: p.position,
+                crouch: p.crouch,
+                alive: p.alive,
+                life: p.life,
+            })
+            .collect();
         game.history.push_back((94, poses));
         game.players[5].position[0] += 100.;
         let health = game.players[5].health;
-        let mut without = game.clone(); without.fire(0,&rules,None); assert_eq!(without.players[5].health,health);
-        let mut with = game.clone(); with.fire(0,&rules,Some(94)); assert!(with.players[5].health < health);
-        for requested in [0,86,101,u32::MAX] { let mut invalid = game.clone(); invalid.fire(0,&rules,Some(requested)); assert_eq!(invalid.players[5].health,health); }
-        let mut respawned = game.clone(); respawned.players[5].life += 1; respawned.fire(0,&rules,Some(94)); assert_eq!(respawned.players[5].health,health);
-        rules.maps[0].obstacles.push(Obstacle { min:[-1150.,0.,180.],max:[-1050.,100.,220.],kind:"wall".into() });
-        game.fire(0,&rules,Some(94)); assert_eq!(game.players[5].health,health);
+        let mut without = game.clone();
+        without.fire(0, &rules, None);
+        assert_eq!(without.players[5].health, health);
+        let mut with = game.clone();
+        with.fire(0, &rules, Some(94));
+        assert!(with.players[5].health < health);
+        for requested in [0, 86, 101, u32::MAX] {
+            let mut invalid = game.clone();
+            invalid.fire(0, &rules, Some(requested));
+            assert_eq!(invalid.players[5].health, health);
+        }
+        let mut respawned = game.clone();
+        respawned.players[5].life += 1;
+        respawned.fire(0, &rules, Some(94));
+        assert_eq!(respawned.players[5].health, health);
+        rules.maps[0].obstacles.push(Obstacle {
+            min: [-1150., 0., 180.],
+            max: [-1050., 100., 220.],
+            kind: "wall".into(),
+        });
+        game.fire(0, &rules, Some(94));
+        assert_eq!(game.players[5].health, health);
     }
     #[test]
     fn bots_wait_to_react_and_coincident_eyes_never_generate_nan() {
-        let (mut rules,mut game)=setup("deathmatch"); rules.maps[0].obstacles.clear(); combat(&mut game);
-        game.tick=20; let first=game.bot(0,&rules); assert!(!first.fire); assert!(first.validate());
-        for elapsed in 1..14 { game.tick=20+elapsed; assert!(!game.bot(0,&rules).fire); }
-        game.players[5].position=game.players[0].position;
-        for tick in 40..100 {game.tick=tick;assert!(game.bot(0,&rules).validate());}
+        let (mut rules, mut game) = setup("deathmatch");
+        rules.maps[0].obstacles.clear();
+        combat(&mut game);
+        game.tick = 20;
+        let first = game.bot(0, &rules);
+        assert!(!first.fire);
+        assert!(first.validate());
+        for elapsed in 1..14 {
+            game.tick = 20 + elapsed;
+            assert!(!game.bot(0, &rules).fire);
+        }
+        game.players[5].position = game.players[0].position;
+        for tick in 40..100 {
+            game.tick = tick;
+            assert!(game.bot(0, &rules).validate());
+        }
     }
-
 }

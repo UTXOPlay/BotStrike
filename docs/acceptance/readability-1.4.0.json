@@ -1,0 +1,253 @@
+{
+  "version": "1.4.0",
+  "nativeVersion": "botstrike-2050-readability-v5",
+  "profile": "159d503a8985334fecbf4089559db373d5ce646d4f348a63f72591cd3eda25a3",
+  "scope": [
+    "English-only interface",
+    "Recruit default with forward perception, body aim, slower reaction and shorter bursts",
+    "Six additional authoritative cover pieces per map, safer deathmatch respawn selection and active-action protection release",
+    "Visible-target aim assist, touch tap-toggle scopes, separate RAIL/ECHO optics and scaled sensitivity",
+    "Reduced HUD panels, richer brighter environments and death damage recaps"
+  ],
+  "verifiers": [
+    {
+      "name": "readability-v5",
+      "directory": ".",
+      "sha256": {
+        "botstrike-engine": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+        "myelin-botstrike": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30"
+      }
+    },
+    {
+      "name": "tactics-v4",
+      "directory": "legacy/tactics-v4",
+      "sha256": {
+        "botstrike-engine": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+        "myelin-botstrike": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7"
+      }
+    },
+    {
+      "name": "network-v3",
+      "directory": "legacy/network-v3",
+      "sha256": {
+        "botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+        "myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+      }
+    },
+    {
+      "name": "arsenal-v2",
+      "directory": "legacy/arsenal-v2",
+      "sha256": {
+        "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+        "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+      }
+    }
+  ],
+  "validation": {
+    "rustTests": 27,
+    "browserServiceTests": 37,
+    "hostTests": 4,
+    "aiMatches": 18,
+    "aiCompleted": 18,
+    "nativeFlow": {
+      "data": "/tmp/botstrike-flow-Rhb6IW",
+      "ticks": 19328,
+      "score": [
+        50,
+        40
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "containerNativeFlow": {
+      "data": "/app/data/botstrike-flow-wrNNlS",
+      "ticks": 21828,
+      "score": [
+        50,
+        36
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "legacyReplayVerification": [
+      {
+        "room": "4c26ddb5c4f03215f7a627cd",
+        "verifier": "tactics-v4",
+        "authority": "0210799f1074043223710544fab20eff43e3701b2a581a58c21e4d84c7138d34e4",
+        "frames": 1,
+        "state_root": "caecbbe1c259d7ad2b46f782dc951c4b6ce7d4070a1ae9778661c240434bb0bb",
+        "verified": true
+      },
+      {
+        "room": "35865c02c395e66276dbab9b",
+        "verifier": "network-v3",
+        "authority": "03523d567a6e072412706cd363708c8e157d48c1acf4de5bbfff6b0fb6e337496c",
+        "frames": 1,
+        "state_root": "371169f0445eef85d56969ce922819b74fda0923efbb30531c27e9eff4618165",
+        "verified": true
+      },
+      {
+        "room": "44b8996dd155da08be843375",
+        "verifier": "arsenal-v2",
+        "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+        "frames": 1,
+        "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+        "verified": true
+      }
+    ],
+    "mapRenderBudget": [
+      {
+        "map": 0,
+        "calls": 68,
+        "triangles": 127378,
+        "geometries": 49,
+        "textures": 31
+      },
+      {
+        "map": 1,
+        "calls": 64,
+        "triangles": 129842,
+        "geometries": 46,
+        "textures": 29
+      },
+      {
+        "map": 2,
+        "calls": 66,
+        "triangles": 115474,
+        "geometries": 48,
+        "textures": 31
+      },
+      {
+        "memory": {
+          "before": {
+            "geometries": 47,
+            "textures": 29
+          },
+          "after": {
+            "geometries": 47,
+            "textures": 29
+          }
+        }
+      }
+    ],
+    "touchOptics": "Recruit default, aim-assist persistence, real native acknowledgement of both tap-toggle optics, circular lens, rotation release; state-only snapshot freeze for stable visual assertions",
+    "controls": "Persisted Colemak/remapping, native crouch, inverted ADS, queued hero, keyboard dialog focus, feedback and dynamic reticle",
+    "viewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "nativeBrowserInputs": "Joining, desktop movement and skill, simultaneous mobile firing and drag aim acknowledged by the native authority; all six viewports passed",
+    "softwareRendering": {
+      "warmupFrames": 90,
+      "sampleFrames": 120,
+      "baseline": {
+        "environment": "Chromium SwiftShader, 844x390, DPR 2; comparative software-rendering benchmark, not handset FPS",
+        "frameMs": {
+          "median": 116.60000000000036,
+          "p95": 166.70000000000073
+        },
+        "networkRttMs": {
+          "median": 2.343306999999186,
+          "p95": 10.725703000000067
+        },
+        "nativeTicksPerSecond": 63.99253323109802,
+        "dataset": {
+          "game": "botstrike",
+          "mobile": "true",
+          "immersiveBlocked": "false",
+          "touch": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "70",
+          "renderTriangles": "282841",
+          "renderFps": "8",
+          "renderMs": "2.81",
+          "renderScale": "0.75"
+        },
+        "backing": [
+          633,
+          292
+        ],
+        "status": "Connected \u00b7 161 ms"
+      },
+      "candidate": {
+        "environment": "Chromium SwiftShader, 844x390, DPR 2; comparative software-rendering benchmark, not handset FPS",
+        "frameMs": {
+          "median": 100,
+          "p95": 116.70000000000073
+        },
+        "networkRttMs": {
+          "median": 1.4966889999996056,
+          "p95": 4.2918250000002445
+        },
+        "nativeTicksPerSecond": 63.996073269642835,
+        "dataset": {
+          "game": "botstrike",
+          "mobile": "true",
+          "immersiveBlocked": "false",
+          "touch": "true",
+          "playing": "true",
+          "viewModelTriangles": "2060",
+          "drawCalls": "36",
+          "renderTriangles": "140972",
+          "renderFps": "11",
+          "renderMs": "3.46",
+          "renderScale": "0.75",
+          "scoped": "false"
+        },
+        "backing": [
+          633,
+          292
+        ],
+        "status": "Connected \u00b7 96 ms"
+      },
+      "caution": "Live bot matches have varying visible geometry; software rendering and other host workloads prevent treating this as a controlled hardware FPS result."
+    },
+    "finalBundleSha256": "bc7323a940652fe5218174fc88f216ad0ab94ad6a6e28bb98239ee48b48c021e"
+  },
+  "limitations": [
+    "Bot-only simulations validate completion and behavior, not human balance.",
+    "Browser automation and software rendering are not real-phone performance measurements.",
+    "Aim assist is bounded input correction; it does not fire automatically or bypass native hit validation."
+  ],
+  "deployment": {
+    "status": "staging",
+    "image": "myelin-botstrike:1.4.0-readability"
+  }
+}

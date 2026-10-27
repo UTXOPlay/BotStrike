@@ -24,6 +24,7 @@ export function createCharacters(art){
    const clips=Object.fromEntries(model.animations.map(c=>[c.name.split('|').pop(),c]));
    for(const required of motionNames)if(!clips[required])throw Error(name+' is missing its '+required+' animation.');
    model.scene.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;o.frustumCulled=true;if(o.isSkinnedMesh)o.boundingSphere=new THREE.Sphere(new THREE.Vector3(0,1,0),2.5);}});
+   model.scene.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){m.fog=false;m.envMapIntensity=1.1;if(m.emissive?.getHex()===0){m.emissive.set('#30404a');m.emissiveIntensity=.12;}}});
    templates[offset+index]={model:model.scene,clips};progress(templates.filter(Boolean).length,6);
   }));
   for(let kind=0;kind<12;kind++){weaponTemplates.set(kind,art.weaponModel(kind));await new Promise(requestAnimationFrame);}
