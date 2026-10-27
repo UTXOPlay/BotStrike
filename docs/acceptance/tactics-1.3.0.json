@@ -87,7 +87,7 @@
     "mobile": "Simultaneous movement, drag aim and fire acknowledged by native engine; portrait input release; fullscreen re-entry",
     "colemak": "WARS / P reload / F interact; persistent remapping and native movement verified",
     "motion": "96 action samples; final death, respawn and round-transition checks across all six chassis",
-    "firstPerson": "Six chassis, 300 frames each; no accumulated shoulder or look offsets; desktop/mobile geometry and model failure gate",
+    "firstPerson": "Six chassis, 300 frames each; no accumulated shoulder or look offsets, strict CSP, desktop/mobile geometry and missing-model/texture gates",
     "contextRestore": {
       "events": [
         "lost",
@@ -144,6 +144,68 @@
       "respawns": true,
       "signedReplay": true,
       "tamperRejected": true
+    },
+    "productionLegacyReplay": [
+      {
+        "room": "35865c02c395e66276dbab9b",
+        "verifier": "network-v3",
+        "authority": "03523d567a6e072412706cd363708c8e157d48c1acf4de5bbfff6b0fb6e337496c",
+        "frames": 1,
+        "state_root": "371169f0445eef85d56969ce922819b74fda0923efbb30531c27e9eff4618165",
+        "verified": true
+      },
+      {
+        "room": "44b8996dd155da08be843375",
+        "verifier": "arsenal-v2",
+        "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+        "frames": 1,
+        "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+        "verified": true
+      }
+    ],
+    "productionReplays": [
+      {
+        "room": "ed85a684053bd2394b57a0c9",
+        "verifier": "tactics-v4",
+        "authority": "0231723c14be68f86d70f36da1f4c8ca91b476489893eb8f8e28e3986b604d385b",
+        "frames": 1,
+        "state_root": "7490a07f55f883457ed94584e0c5ae3eb316ef42f26cc2f79d70eb98e832cf13",
+        "verified": true
+      },
+      {
+        "room": "35865c02c395e66276dbab9b",
+        "verifier": "network-v3",
+        "authority": "03523d567a6e072412706cd363708c8e157d48c1acf4de5bbfff6b0fb6e337496c",
+        "frames": 1,
+        "state_root": "371169f0445eef85d56969ce922819b74fda0923efbb30531c27e9eff4618165",
+        "verified": true
+      },
+      {
+        "room": "44b8996dd155da08be843375",
+        "verifier": "arsenal-v2",
+        "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+        "frames": 1,
+        "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+        "verified": true
+      }
+    ],
+    "textureDelivery": "All six chassis loaded under strict store CSP; external content-addressed WebP files; model and texture failures block readiness; staging desktop/mobile screenshots verified",
+    "publicStoreLaunch": {
+      "passed": true,
+      "desktop": true,
+      "mobile": true,
+      "allSixViewports": true,
+      "missingBundleRetry": true,
+      "noCspTextureErrors": true,
+      "visualTexturesConfirmed": true
+    },
+    "publicMobile": {
+      "passed": true,
+      "simultaneousMovementAimFire": true,
+      "nativeInputAcknowledgement": true,
+      "portraitRelease": true,
+      "fullscreenReentry": true,
+      "iconButtonLayout": true
     }
   },
   "limitations": [
@@ -153,11 +215,13 @@
   ],
   "deployment": {
     "status": "live",
-    "image": "myelin-botstrike:1.3.0-tactics",
+    "image": "myelin-botstrike:1.3.0-tactics-r1",
     "healthy": true,
     "activeRoomsAtSwitch": 0,
     "otherChangedContainers": [],
-    "compose": "/data/utxoplay/releases/20261027-botstrike-tactics-1.3.0/game.compose.json",
-    "backup": "/data/utxoplay/releases/20261027-botstrike-tactics-1.3.0/botstrike-data-before.tar.gz"
+    "compose": "/data/utxoplay/releases/20261027-botstrike-tactics-1.3.0-r1/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261027-botstrike-tactics-1.3.0-r1/botstrike-data-before.tar.gz",
+    "bundleSha256": "3ce2c7a9eef6cb3d8cc8f7defcba22a48549c0bcf5cfe4e545a4c50243fec69a",
+    "textureHotfix": "Initial production visual check caught blocked blob texture URLs. The r1 image externalizes them without weakening the store CSP."
   }
 }
