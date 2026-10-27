@@ -12,5 +12,6 @@ try{
   await page.evaluate(()=>fetch('/games/botstrike/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'leave'})}));await context.close();
  }
  const context=await browser.newContext(),page=await context.newPage();await page.route('**/models/bastion.glb',route=>route.fulfill({status:503,body:'Unavailable'}));await page.goto(base+'/games/botstrike/');await page.waitForFunction(()=>window.BotStrikeStartup?.state.error);assert.equal(await page.evaluate(()=>window.BotStrikeStartup.state.ready),false);assert.match(await page.locator('#fatal').textContent(),/bastion|chassis/i);await context.close();
+ const broken=await browser.newContext(),texturePage=await broken.newPage();await texturePage.route('**/models/textures/vector-*.webp',route=>route.fulfill({status:503,body:'Unavailable'}));await texturePage.goto(base+'/games/botstrike/');await texturePage.waitForFunction(()=>window.BotStrikeStartup?.state.error);assert.equal(await texturePage.evaluate(()=>window.BotStrikeStartup.state.ready),false);assert.match(await texturePage.locator('#fatal').textContent(),/vector.*textures/i);await broken.close();
  console.log('Desktop/mobile first-person skin geometry and failed-model launch gate passed');
 }finally{await browser.close()}

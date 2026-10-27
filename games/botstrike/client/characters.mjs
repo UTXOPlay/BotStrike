@@ -19,6 +19,8 @@ export function createCharacters(art){
    const response=await fetch('./models/'+name+'.glb',{signal:AbortSignal.timeout(60000)});
    if(!response.ok)throw Error('Could not load '+name+' chassis. Please retry.');
    const model=await loader.parseAsync(await response.arrayBuffer(),'./models/');
+   let textured=false;model.scene.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])if(m.map&&m.normalMap&&m.roughnessMap)textured=true;});
+   if(!textured)throw Error('Could not load '+name+' chassis textures. Please retry.');
    const clips=Object.fromEntries(model.animations.map(c=>[c.name.split('|').pop(),c]));
    for(const required of motionNames)if(!clips[required])throw Error(name+' is missing its '+required+' animation.');
    model.scene.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;o.frustumCulled=true;if(o.isSkinnedMesh)o.boundingSphere=new THREE.Sphere(new THREE.Vector3(0,1,0),2.5);}});
