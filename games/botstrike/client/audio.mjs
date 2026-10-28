@@ -1,7 +1,9 @@
-// Small procedural cues; bounded voices and one master gain for all feedback.
+import {makeShotSample} from './shot-sound.mjs';
+
+// Bounded voices and one master gain for all feedback.
 export function createAudio(settings){
- let context,bus,voices=0,lastStep=0;
- function ready(){try{context??=new AudioContext();if(!bus){bus=context.createGain();bus.connect(context.destination)}bus.gain.value=settings().sound?(settings().volume??.6)*.3:0;if(context.state==='suspended')void context.resume();return context}catch{return null}}
+ let context,bus,voices=0,lastStep=0;const shotBuffers=new Map();
+ function ready(){try{context??=new AudioContext();if(!bus){bus=context.createGain();bus.connect(context.destination)}for(const weapon of [0,1])if(!shotBuffers.has(weapon)){const samples=makeShotSample(weapon,context.sampleRate),buffer=context.createBuffer(1,samples.length,context.sampleRate);buffer.copyToChannel(samples,0);shotBuffers.set(weapon,buffer)}bus.gain.value=settings().sound?(settings().volume??.6)*.3:0;if(context.state==='suspended')void context.resume();return context}catch{return null}}
  function pulse(frequency,duration=.12,level=.2,type='triangle',delay=0,spatial=null){
   if(globalThis.document?.hidden)return;const c=ready();if(!c||!settings().sound||voices>=32)return;voices++;
   const start=c.currentTime+delay,osc=c.createOscillator(),envelope=c.createGain(),pan=c.createStereoPanner();pan.pan.value=spatial?.pan||0;
@@ -9,7 +11,16 @@ export function createAudio(settings){
   envelope.gain.setValueAtTime(.001,start);envelope.gain.exponentialRampToValueAtTime(Math.max(.001,level*(spatial?.level??1)),start+.004);envelope.gain.exponentialRampToValueAtTime(.001,start+duration);
   osc.connect(envelope).connect(pan).connect(bus);osc.start(start);osc.stop(start+duration+.01);osc.onended=()=>{voices--;osc.disconnect();envelope.disconnect();pan.disconnect()};
  }
- const shot=(weapon=0,spatial)=>{pulse([410,870,250,1200,95,670,1500,170,1900,740,1120,65][weapon]||410,.08+(weapon===11?.2:0),.38,'sawtooth',0,spatial);pulse(75,.08,.22,'triangle',0,spatial)};
+ function sampledShot(weapon,spatial){
+  if(globalThis.document?.hidden||!settings().sound||voices>=32)return;
+  const c=ready();if(!c)return;
+  const buffer=shotBuffers.get(weapon);if(!buffer)return;
+  const source=c.createBufferSource(),filter=c.createBiquadFilter(),gain=c.createGain(),pan=c.createStereoPanner();voices++;
+  source.buffer=buffer;filter.type='lowpass';filter.frequency.value=spatial?.muffled?900:12000;gain.gain.value=spatial?.level??1;pan.pan.value=spatial?.pan??0;
+  source.connect(filter).connect(gain).connect(pan).connect(bus);
+  source.onended=()=>{voices--;source.disconnect();filter.disconnect();gain.disconnect();pan.disconnect()};source.start();
+ }
+ const shot=(weapon=0,spatial)=>{if(weapon===0||weapon===1){sampledShot(weapon,spatial);return}pulse([410,870,250,1200,95,670,1500,170,1900,740,1120,65][weapon]||410,.08+(weapon===11?.2:0),.38,'sawtooth',0,spatial);pulse(75,.08,.22,'triangle',0,spatial)};
  function cue(kind,spatial){
   if(kind==='step'||kind==='land'){const now=performance.now();if(now-lastStep<60)return;lastStep=now;pulse(55,.045,kind==='land'?.12:.06,'triangle',0,spatial);}
   else if(kind==='reload'){pulse(620,.04,.12,'square',0,spatial);pulse(900,.035,.1,'square',.09,spatial);}

@@ -1,9 +1,9 @@
 import {FeedbackCursor,spreadDegrees,scopeFov} from './preferences.mjs';
-export function createFeedback({audio,getPrefs,getRoom,getYaw,spec}){
+export function createFeedback({audio,getPrefs,getRoom,getYaw,getGamepad,spec}){
  const $=id=>document.getElementById(id);let cursor=new FeedbackCursor(),roomId=null,hitUntil=0,hitHead=false,hurtUntil=0,hurtLevel=0,bearing=null,bannerUntil=0,lastProgress=0,lastPlanted=false,lastBeep=-1,lastLife=null,lastVibration=0,received=new Map();
  const text=(id,v)=>{if($(id).textContent!==v)$(id).textContent=v;};
  function banner(message,ms=2600){text('combat-banner',message);bannerUntil=performance.now()+ms;}
- function vibrate(ms){const prefs=getPrefs(),now=performance.now();if(prefs.haptics&&prefs.motion&&navigator.vibrate&&now-lastVibration>100){lastVibration=now;navigator.vibrate(ms);}}
+ function vibrate(ms){const prefs=getPrefs(),now=performance.now();if(!prefs.haptics||!prefs.motion||now-lastVibration<=100)return;lastVibration=now;navigator.vibrate?.(ms);const actuator=getGamepad?.()?.vibrationActuator;if(actuator?.effects?.includes('dual-rumble'))void actuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:.35,weakMagnitude:.6}).catch(()=>{});}
  function accept(room){
   if(!room?.state)return;
   if(room.id!==roomId){roomId=room.id;cursor=new FeedbackCursor();lastLife=null;lastProgress=0;lastPlanted=false;lastBeep=-1;hitUntil=hurtUntil=bannerUntil=0;}

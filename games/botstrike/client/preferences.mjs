@@ -1,4 +1,4 @@
-export const defaults={keyboardLayout:'qwerty',aimAssist:0,sensitivity:1,ads:.65,fov:80,volume:.6,brightness:1,crosshair:1,crosshairColor:'#68e8ff',sound:true,motion:true,invertY:false,haptics:false,touch:false};
+export const defaults={keyboardLayout:'qwerty',aimAssist:0,gamepadAimAssist:1,sensitivity:1,gamepadSensitivity:1,ads:.65,fov:80,volume:.6,brightness:1,crosshair:1,crosshairColor:'#68e8ff',sound:true,motion:true,invertY:false,haptics:false,touch:false};
 export const bindings={forward:'KeyW',back:'KeyS',left:'KeyA',right:'KeyD',fire:'Mouse0',scope:'Mouse2',reload:'KeyR',skill:'KeyQ',use:'KeyE',walk:'ShiftLeft',crouch:'KeyF',jump:'Space',armory:'KeyB',scoreboard:'Tab',previous:'BracketLeft',next:'BracketRight',flash:'KeyZ',smoke:'KeyX',grenade:'KeyC',utility:'KeyG',...Object.fromEntries(['Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9','Digit0','Minus','Equal'].map((key,i)=>['weapon'+i,key]))};
 export const actionNames={forward:'Move forward',back:'Move backward',left:'Move left',right:'Move right',fire:'Fire',scope:'Aim down sights',reload:'Reload',skill:'Hero skill',use:'Plant / defuse',walk:'Walk quietly',crouch:'Crouch',jump:'Jump',armory:'Armory',scoreboard:'Scoreboard',previous:'Previous weapon',next:'Next weapon',flash:'Flash',smoke:'Smoke',grenade:'Fragment',utility:'Selected equipment'};
 // Character labels follow the selected OS layout; controls retain physical
@@ -15,7 +15,7 @@ export function loadPreferences(raw={},touch=false){
  raw=raw&&typeof raw==='object'?raw:{};
  const p={...defaults,touch,aimAssist:touch?1:0,bindings:{...bindings}};if(['qwerty','colemak'].includes(raw.keyboardLayout))p.keyboardLayout=raw.keyboardLayout;
  for(const k of ['sound','motion','invertY','haptics','touch'])if(typeof raw[k]==='boolean')p[k]=raw[k];
- for(const [k,min,max]of [['aimAssist',0,2],['sensitivity',.4,2.5],['ads',.2,1.5],['fov',65,95],['volume',0,1],['brightness',.7,1.5],['crosshair',.7,1.8]])if(Number.isFinite(raw[k]))p[k]=Math.max(min,Math.min(max,raw[k]));
+ for(const [k,min,max]of [['aimAssist',0,2],['gamepadAimAssist',0,2],['sensitivity',.4,2.5],['gamepadSensitivity',.4,2.5],['ads',.2,1.5],['fov',65,95],['volume',0,1],['brightness',.7,1.5],['crosshair',.7,1.8]])if(Number.isFinite(raw[k]))p[k]=Math.max(min,Math.min(max,raw[k]));
  if(/^#[a-fA-F0-9]{6}$/.test(raw.crosshairColor))p.crosshairColor=raw.crosshairColor;
  const candidate=raw.bindings;if(candidate&&Object.keys(bindings).every(a=>validBinding(candidate[a]))&&new Set(Object.values(candidate)).size===Object.keys(bindings).length)p.bindings={...candidate};
  return p;

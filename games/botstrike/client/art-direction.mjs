@@ -6,6 +6,15 @@ import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {mergeParts} from './geometry.mjs';
 
+export function placeSkyline(x,z,width,depth,extent,clearance=80){
+ const xLimit=extent+width/2+clearance,zLimit=extent+depth/2+clearance;
+ if(Math.abs(x)<xLimit&&Math.abs(z)<zLimit){
+  if(Math.abs(x)>Math.abs(z))x=Math.sign(x||1)*xLimit;
+  else z=Math.sign(z||1)*zLimit;
+ }
+ return[x,z];
+}
+
 export function createArt(renderer,{mobile=false}={}){
  const materials=[],textures=[],mobileBatches=new Map();
  let seed=2050;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
@@ -128,7 +137,7 @@ export function createArt(renderer,{mobile=false}={}){
  // be reached by players. Every route and sight line inside is native-authored.
  for(const side of [-1,1]){box(root,e*2,100,20,0,50,side*(e+10),m.hull);box(root,20,100,e*2,side*(e+10),50,0,m.hull);for(let p=-e;p<=e;p+=100){beam(root,[p,104,side*(e+10)],[p,136,side*(e+10)],2);beam(root,[side*(e+10),104,p],[side*(e+10),136,p],2)}beam(root,[-e,137,side*(e+10)],[e,137,side*(e+10)],2);beam(root,[side*(e+10),137,-e],[side*(e+10),137,e],2);box(root,e*2,2,2,0,101,side*(e-1),cyan);box(root,2,2,e*2,side*(e-1),101,0,cyan)}
  // Dense, individually articulated skyline instead of repeated unlit columns.
- for(let i=0;i<62;i++){const a=i*2.39996,r=e+330+(i%4)*360,x=Math.sin(a)*r,z=Math.cos(a)*r,w=110+random()*150,d=100+random()*130,h=260+random()*1300;
+ for(let i=0;i<62;i++){const a=i*2.39996,r=e+330+(i%4)*360,w=110+random()*150,d=100+random()*130,h=260+random()*1300,[x,z]=placeSkyline(Math.sin(a)*r,Math.cos(a)*r,w,d,e);
   box(root,w,h,d,x,h/2-90,z,architecture[(i+id)%architecture.length]);box(root,w*.7,50,d*.7,x,h-70,z,m.black);beam(root,[x,h-50,z],[x,h+60+random()*100,z],2,m.steel);sphere(root,3,x,h+65,z,i%3?amber:cyan);
   for(let y=25;y<h-110;y+=26){for(let j=-w/2+10;j<w/2-8;j+=18){if(random()>.35){mesh(root,new THREE.PlaneGeometry(7,9),random()>.77?amber:cyan,x+j,y,z-d/2-.4).rotation.y=Math.PI;mesh(root,new THREE.PlaneGeometry(7,9),random()>.77?amber:cyan,x+j,y,z+d/2+.4)}}}
   for(let j=-d/2+10;j<d/2-8;j+=21)box(root,.5,h*.6,2,x+w/2+.3,h*.4,z+j,i%3?m.steel:cyan);

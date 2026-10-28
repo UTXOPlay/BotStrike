@@ -42,6 +42,8 @@ Twelve equipment systems: composite plating, photon flash, carbon veil, shard cl
 
 Desktop: WASD, mouse aim, click fire, R reload, Q skill, E use, B armory/loadout, 1–0 / minus / equals or mouse wheel weapons, Z/X/C throwables, G selected equipment, Shift walk, F crouch, Space jump, right-click sniper scope, Tab scoreboard. Touch: left thumb movement, right-side aiming, drag the fire icon while holding it to aim and shoot. Menus and controls remain inside the game scene.
 
+Standard controller: left stick moves, right stick aims, RT fires, LT scopes, A jumps or confirms, B crouches or goes back, X reloads, Y uses the hero skill, R3 interacts, D-pad down uses selected equipment, D-pad up opens the armory, LB/RB cycle weapons or spectated teammates, View holds the scoreboard, and Menu opens the menu or resumes play. The D-pad and left stick navigate menus. Settings include separate controller look speed and aim assist; vibration works when the browser and device support it. Controller button remapping is not yet available.
+
 ## Combat feedback and preferences
 
 Version 1.2.0 adds bounded positional gunfire, running footsteps, reload and ability cues; distinct headshot/kill confirmation; directional damage, death source, active-effect timers, dynamic accuracy reticle, and relay progress/results. Running is audible; walking and crouching are quiet. Audio sends eight-sector bearings and coarse volume with wall attenuation, never hidden enemy coordinates. Event IDs prevent duplicate playback across snapshots and reconnects.
@@ -82,6 +84,7 @@ PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-art.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-armory.mjs
+CHROMIUM_PATH=/path/to/chrome node tests/botstrike-gamepad-browser.mjs
 ```
 
 Browser tests use an isolated host on port 19885 by default (`STORE_URL` overrides it). `PUBLIC_GUEST=1` enables a disposable store guest when testing through the public gateway. Native integration completes a real match, verifies its signed export and rejects a tampered result. Browser prediction is checked against actual Rust movement on every map and hero. Visual acceptance covers six required viewports. Emulator evidence is not a physical-device performance claim.
@@ -103,3 +106,5 @@ Current matches use `botstrike-2050-network-v3` with bounded historical hit pose
 Completed recordings expire after **30 days**. Live, waiting and sealing rooms are protected. The runtime checks retention at startup and hourly. Public matchmaking waits up to ten seconds for humans and only auto-joins a running match within its first minute. A suspended client receives AI cover after two seconds without input.
 
 The private authenticated `/api/metrics` endpoint reports room states, disk availability, replay failures and sealing duration. `/health` checks the native room service. Before replacing an already updated service, POST to its private `/api/admin/drain` endpoint, wait for no running/waiting/sealing rooms, and back up the data volume before switching images. Admin endpoints are not forwarded by the game host.
+
+Public queue metrics include requests, joins, abandons, late joins, human/bot seats at match start, current public occupancy and p50/p95 wait times for the latest 256 successfully placed players. These counters are process-local and reset on service restart; they do not include per-player identifiers.

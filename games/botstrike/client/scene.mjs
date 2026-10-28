@@ -6,6 +6,7 @@ import {scopeFov} from './preferences.mjs';
 import {FeedbackCursor} from './preferences.mjs';
 import {createTeamSignals} from './team-signals.mjs';
 import {mergeParts} from './geometry.mjs';
+import {shotTrailEnd} from './shot-trail.mjs';
 
 const metal=(color,emissive=0)=>new THREE.MeshStandardMaterial({color,roughness:.55,metalness:.55,emissive,emissiveIntensity:1.6});
 export function createWorld(canvas,spec){
@@ -30,7 +31,7 @@ export function createWorld(canvas,spec){
  const utilities=[];for(let i=0;i<40;i++){const material=mobile?new THREE.MeshBasicMaterial({color:'#b4c1d8',transparent:true,opacity:.93,depthWrite:false}):new THREE.MeshStandardMaterial({color:'#b4c1d8',transparent:true,opacity:.93,roughness:1,depthWrite:false});const mesh=new THREE.Mesh(new THREE.SphereGeometry(1,12,8),material);mesh.visible=false;scene.add(mesh);utilities.push(mesh)}
  const objective=new THREE.Group();box(objective,20,10,16,0,5,0,dark);box(objective,14,2,10,0,11,0,heroMaterials[4]);scene.add(objective);
  const trails=[];for(let n=0;n<32;n++){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1,4),new THREE.MeshBasicMaterial({color:'#baf6ff',transparent:true,opacity:.6}));mesh.visible=false;scene.add(mesh);trails.push({mesh,until:0})}let trailIndex=0,shotUntil=0,recoilAt=-Infinity,impactAt=-Infinity;
- function shoot(slot,player,now){const d=new THREE.Vector3(-Math.sin(player.yaw)*Math.cos(player.pitch),Math.sin(player.pitch),-Math.cos(player.yaw)*Math.cos(player.pitch));const t=trails[trailIndex++%trails.length];t.mesh.position.set(player.position[0],player.position[1]+50,player.position[2]).addScaledVector(d,130);t.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);t.mesh.scale.y=230;t.until=now+55;t.mesh.visible=true;if(slot===localSlot){shotUntil=now+40;recoilAt=now;firstPerson?.trigger('fire',now);}else bots[slot]?.trigger('fire',now);}
+ function shoot(slot,player,now){const d=new THREE.Vector3(-Math.sin(player.yaw)*Math.cos(player.pitch),Math.sin(player.pitch),-Math.cos(player.yaw)*Math.cos(player.pitch));const t=trails[trailIndex++%trails.length],origin=new THREE.Vector3(player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]),start=15,end=shotTrailEnd(origin.toArray(),d.toArray(),spec.maps[mapId]?.obstacles||[]);t.mesh.visible=end>start;if(t.mesh.visible){t.mesh.position.copy(origin).addScaledVector(d,(start+end)/2);t.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);t.mesh.scale.y=end-start;t.until=now+55;}if(slot===localSlot){shotUntil=now+40;recoilAt=now;firstPerson?.trigger('fire',now);}else bots[slot]?.trigger('fire',now);}
  let localSlot=0,roomId=null,motionCursor=new FeedbackCursor();
  function accept(room){if(!room?.state)return;const now=performance.now();if(room.id!==roomId){motionCursor=new FeedbackCursor();roomId=room.id;}
   for(const e of motionCursor.consume(room.feedback,room.state.tick)){
