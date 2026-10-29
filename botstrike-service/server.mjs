@@ -88,17 +88,19 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   if(r.backpressured){r.timer=setTimeout(()=>void step(),10);return;}
   pending=true;
   try {
+   const now=Date.now(),controlled=Array(10).fill(null);
    const inputs=r.members.map((id,slot)=>{
-    const connected=!id.startsWith('bot-')&&peers.get(id)?.size,recent=Date.now()-r.seen[slot]<400;
-    // Brief jitter holds neutral controls; a genuinely suspended tab yields to AI.
-    const input=connected&&Date.now()-r.seen[slot]<2000?(recent?{...r.inputs[slot],takeover:true}:{...neutral(),seq:r.inputs[slot].seq,yaw:r.inputs[slot].yaw,pitch:r.inputs[slot].pitch,takeover:true}):{};
+    const human=!id.startsWith('bot-'),connected=human&&peers.get(id)?.size,age=now-r.seen[slot],recent=age<400,active=connected&&age<2000;
+    // Keep an unconnected pilot's buy budget intact; combat still yields to AI.
+    const input=active?(recent?{...r.inputs[slot],takeover:true}:{...neutral(),seq:r.inputs[slot].seq,yaw:r.inputs[slot].yaw,pitch:r.inputs[slot].pitch,takeover:true}):human&&r.state?.phase==='buy'?{...neutral(),seq:r.inputs[slot].seq,yaw:r.inputs[slot].yaw,pitch:r.inputs[slot].pitch,takeover:true}:{};
+    if(active)controlled[slot]=id;
     if(connected&&recent)Object.assign(input,r.pulses[slot]);r.pulses[slot]={};
     if(input.view_tick!==undefined){const tick=r.state?.tick||0;input.view_tick=Math.max(tick-12,Math.min(tick,input.view_tick));}
     if(r.selected[slot]!==undefined)input.hero=r.selected[slot];
     if(r.buy[slot]!==null){input.buy=r.buy[slot];r.buy[slot]=null;}
     return input;
    });
-   r.controlled=inputs.map((input,slot)=>input.takeover&&!r.members[slot].startsWith('bot-')?r.members[slot]:null);
+   r.controlled=controlled;
    const line=JSON.stringify({inputs:inputs.map(pack)})+'\n';r.bytes+=Buffer.byteLength(line);
    if(r.bytes>180_000_000)throw Error('Match recording exceeded its safety limit');
    await recordWrite(r.fd,line);
