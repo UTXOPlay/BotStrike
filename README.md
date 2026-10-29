@@ -77,6 +77,7 @@ The native version is `botstrike-2050-readability-v5`. The current pair and all 
 ```sh
 cargo test --release --locked --manifest-path botstrike/Cargo.toml
 npm run test:botstrike-native
+npm run test:botstrike-sealing-failure
 npm run test:botstrike-online-load
 node tests/botstrike-long-replay.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
@@ -88,7 +89,7 @@ PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
 CHROMIUM_PATH=/path/to/chrome node tests/botstrike-gamepad-browser.mjs
 ```
 
-Browser tests use an isolated host on port 19885 by default (`STORE_URL` overrides it). `PUBLIC_GUEST=1` enables a disposable store guest when testing through the public gateway. Native integration completes a real match, verifies its signed export and rejects a tampered result. The opt-in online load run starts four native rooms and 40 local clients, then measures host Node CPU/RSS, snapshot gaps, event-loop delay and socket health while exercising reconnect, drain and capacity. Its CPU/RSS figures exclude native child processes; local network and browser emulator results are not physical-device performance claims. Browser prediction is checked against actual Rust movement on every map and hero. Visual acceptance covers six required viewports.
+Browser tests use an isolated host on port 19885 by default (`STORE_URL` overrides it). `PUBLIC_GUEST=1` enables a disposable store guest when testing through the public gateway. Native integration completes a real match, verifies its signed export and rejects a tampered result. The opt-in sealing-failure run completes a native match with an unavailable verifier and requires a failed room, no verified result and no export. The opt-in online load run starts four native rooms and 40 local clients, then measures host Node CPU/RSS, snapshot gaps, event-loop delay and socket health while exercising reconnect, drain and capacity. Its CPU/RSS figures exclude native child processes; local network and browser emulator results are not physical-device performance claims. Browser prediction is checked against actual Rust movement on every map and hero. Visual acceptance covers six required viewports.
 
 ## Deploy and compatibility
 

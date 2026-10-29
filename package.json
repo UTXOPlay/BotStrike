@@ -10,7 +10,8 @@
     "test:host": "node --test host/*.test.mjs",
     "build:native": "bash scripts/build-botstrike.sh",
     "test:botstrike-native": "node tests/botstrike-native-flow.mjs",
-    "test:botstrike-online-load": "node tests/botstrike-online-load.mjs"
+    "test:botstrike-online-load": "node tests/botstrike-online-load.mjs",
+    "test:botstrike-sealing-failure": "node tests/botstrike-sealing-failure.mjs"
   },
   "dependencies": {
     "express": "5.1.0",
