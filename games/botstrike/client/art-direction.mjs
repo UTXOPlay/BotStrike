@@ -108,12 +108,20 @@ export function createArt(renderer,{mobile=false}={}){
  for(const key of ['metal','glow'])if(mobile&&!mobileBatches.has(key)){const shared=key==='glow'?new THREE.MeshBasicMaterial({vertexColors:true,toneMapped:false}):new THREE.MeshStandardMaterial({vertexColors:true,map:wear,roughness:.58,metalness:.4});mobileBatches.set(key,shared);materials.push(shared)}
  const mapMaterialStart=materials.length,mapTextureStart=textures.length;
  function dressMap(root,map,id){signCache.clear();for(const material of materials.splice(mapMaterialStart))material.dispose();for(const t of textures.splice(mapTextureStart))t.dispose();seed=2050+id;const e=map.extent;
+ const dockPaint=id===0?['#367283','#a7b9b5','#ab7655','#bd9d52','#50636b'].map(c=>mat(c,{metalness:.48,roughness:.66})):null;
+ const ground=id===0?mat('#718a91',{map:floorMap,bumpMap:floorMap,bumpScale:.06,roughness:.86,metalness:.16,envMapIntensity:.3}):m.floor;
  // Traversable ground remains perfectly flat. The material carries all grooves,
  // paint wear and drainage seams; no invisible steps or decorative collision volumes.
- box(root,e*2+40,10,e*2+40,0,-5,0,m.floor);
+ box(root,e*2+40,10,e*2+40,0,-5,0,ground);
+ if(id===0){
+  const waterMap=texture((c,s)=>{c.fillStyle='#93b7bb';c.fillRect(0,0,s,s);for(let i=0;i<1500;i++){const x=random()*s,y=random()*s;c.fillStyle=i%5?'#a4c4c6':'#bfd1cd';c.fillRect(x,y,5+random()*31,.5+random()*1.4)}},256);waterMap.repeat.set(18,18);
+  const water=new THREE.MeshBasicMaterial({color:'#79a1a7',map:waterMap});materials.push(water);
+  const sea=mesh(root,new THREE.PlaneGeometry(16000,16000),water,0,-61,0);sea.rotation.x=-Math.PI/2;sea.castShadow=sea.receiveShadow=false;
+  for(const side of [-1,1])for(let z=-e+140;z<e-100;z+=130){box(root,70,.15,4,side*(e-145),.16,z,m.warm);box(root,18,.15,4,side*(e-185),.16,z,m.black)}
+ }
  for(let z=-e+80;z<e;z+=160){for(const side of [-1,1]){box(root,35,.18,5,side*(e-65),.12,z,m.warm);box(root,35,.18,5,side*(e-65),.12,z+16,m.warm)}}
  map.obstacles.forEach((o,index)=>{const w=o.max[0]-o.min[0],h=o.max[1],d=o.max[2]-o.min[2],x=(o.min[0]+o.max[0])/2,z=(o.min[2]+o.max[2])/2;
-  const paint=architecture[(index+id*2)%architecture.length],kind=o.kind==='cover'?(['cargo','service','planter'][index%3]):o.kind;
+  const paint=id===0?dockPaint[index%dockPaint.length]:architecture[(index+id*2)%architecture.length],kind=o.kind==='cover'?(id===0?['cargo','cargo','service'][index%3]:['cargo','service','planter'][index%3]):o.kind;
   if(kind==='planter'){box(root,w,h-22,d,x,(h-22)/2,z,paint);for(const side of [-1,1]){box(root,w,22,8,x,h-11,z+side*(d/2-4),paint);box(root,8,22,d,x+side*(w/2-4),h-11,z,paint);}}else box(root,w,h,d,x,h/2,z,paint);
   for(const side of [-1,1]){const face=z+side*(d/2+.08);for(let px=-w/2+8;px<w/2-5;px+=16){box(root,2.5,h-12,.6,x+px,h/2,face,m.steel)}box(root,w-8,5,.8,x,5,face,m.black);box(root,w-8,4,.8,x,h-4,face,m.black);box(root,w-16,1.3,1,x,h-10,face, index%3?cyan:amber);
    const p=panel(root,`${id===0?'NDC':id===1?'SKY':'RX9'} / ${String(index+1).padStart(2,'0')}`,x,h*.59,face+side*.7,Math.min(w*.55,98),Math.min(23,h*.24),index%3?'#8be7f1':'#ffb56f',side<0?Math.PI:0);
@@ -136,8 +144,15 @@ export function createArt(renderer,{mobile=false}={}){
  // Railings sit on the solid perimeter; the harbour and catwalks beyond cannot
  // be reached by players. Every route and sight line inside is native-authored.
  for(const side of [-1,1]){box(root,e*2,100,20,0,50,side*(e+10),m.hull);box(root,20,100,e*2,side*(e+10),50,0,m.hull);for(let p=-e;p<=e;p+=100){beam(root,[p,104,side*(e+10)],[p,136,side*(e+10)],2);beam(root,[side*(e+10),104,p],[side*(e+10),136,p],2)}beam(root,[-e,137,side*(e+10)],[e,137,side*(e+10)],2);beam(root,[side*(e+10),137,-e],[side*(e+10),137,e],2);box(root,e*2,2,2,0,101,side*(e-1),cyan);box(root,2,2,e*2,side*(e-1),101,0,cyan)}
- // Dense, individually articulated skyline instead of repeated unlit columns.
- for(let i=0;i<62;i++){const a=i*2.39996,r=e+330+(i%4)*360,w=110+random()*150,d=100+random()*130,h=260+random()*1300,[x,z]=placeSkyline(Math.sin(a)*r,Math.cos(a)*r,w,d,e);
+ // The dock's low industrial horizon keeps its gantries visible; other maps retain their skyline.
+ for(let i=0;i<(id===0?34:62);i++){const a=i*2.39996,r=e+330+(i%4)*360,w=id===0?180+random()*170:110+random()*150,d=id===0?150+random()*150:100+random()*130,h=id===0?145+random()*230:260+random()*1300,[x,z]=placeSkyline(Math.sin(a)*r,Math.cos(a)*r,w,d,e);
+  if(id===0){
+   const paint=dockPaint[i%dockPaint.length];box(root,w,h,d,x,h/2-50,z,paint);box(root,w+18,10,d+18,x,h-45,z,m.hull);
+   for(let px=-w/2+18;px<w/2-8;px+=28){box(root,1.4,h*.72,2,x+px,h*.38,z-d/2-.8,m.steel);box(root,1.4,h*.72,2,x+px,h*.38,z+d/2+.8,m.steel)}
+   if(i%4===0){for(const dx of [-55,55]){cyl(root,24,h*.95,x+dx,h*.48-45,z+d*.35,m.silver,12);cyl(root,26,5,x+dx,h*.95-45,z+d*.35,m.black,12)}}
+   else if(i%3===0){box(root,w*.5,16,d*.2,x,h-30,z,m.black);for(let j=-2;j<=2;j++)box(root,w*.32,4,2,x,h-31,z+j*d*.035,cyan)}
+   continue;
+  }
   box(root,w,h,d,x,h/2-90,z,architecture[(i+id)%architecture.length]);box(root,w*.7,50,d*.7,x,h-70,z,m.black);beam(root,[x,h-50,z],[x,h+60+random()*100,z],2,m.steel);sphere(root,3,x,h+65,z,i%3?amber:cyan);
   for(let y=25;y<h-110;y+=26){for(let j=-w/2+10;j<w/2-8;j+=18){if(random()>.35){mesh(root,new THREE.PlaneGeometry(7,9),random()>.77?amber:cyan,x+j,y,z-d/2-.4).rotation.y=Math.PI;mesh(root,new THREE.PlaneGeometry(7,9),random()>.77?amber:cyan,x+j,y,z+d/2+.4)}}}
   for(let j=-d/2+10;j<d/2-8;j+=21)box(root,.5,h*.6,2,x+w/2+.3,h*.4,z+j,i%3?m.steel:cyan);
@@ -145,8 +160,9 @@ export function createArt(renderer,{mobile=false}={}){
  }
  // Hero port: freight gantries, suspension stays, industrial service decks.
  if(id===0){for(const side of [-1,1]){const x=side*(e+190);for(const z of [-700,700]){for(const dx of [-65,65]){beam(root,[x+dx,-45,z],[x+dx,530,z],12,m.steel);beam(root,[x-65,0,z],[x+65,260,z],5,m.steel);beam(root,[x+65,260,z],[x-65,510,z],5,m.steel)}box(root,500,22,30,x+side*140,535,z,m.container);for(let p=-100;p<=300;p+=55){beam(root,[x+side*p,535,z],[x+side*(p+55),585,z],3,m.steel);beam(root,[x+side*p,585,z],[x+side*(p+55),535,z],3,m.steel)}beam(root,[x-100,585,z],[x+450,585,z],4,m.steel);beam(root,[x+side*180,535,z],[x+side*180,200,z],1.1,m.black);box(root,34,15,12,x+side*180,193,z,amber)}
-   for(let z=-1000;z<1100;z+=180){box(root,150,50,130,x,-25,z,m.container);for(let dx=-60;dx<=60;dx+=15)box(root,2,46,132,x+dx,-25,z,m.steel)}
-  }panel(root,'NEON DOCKS  /  07',0,185,-e-14,420,44,'#ffaa67');
+   for(let z=-1000;z<1100;z+=180){box(root,150,50,130,x,-25,z,dockPaint[(Math.abs(z)/180|0)%dockPaint.length]);for(let dx=-60;dx<=60;dx+=15)box(root,2,46,132,x+dx,-25,z,m.steel)}
+   const shipX=side*(e+660);box(root,250,42,480,shipX,-35,0,m.hull);box(root,222,10,440,shipX,-8,0,m.black);box(root,150,90,100,shipX,39,150,dockPaint[1]);for(const z of [-130,-10,110])box(root,125,42,85,shipX,18,z,dockPaint[(z+130)/120|0]);beam(root,[shipX,85,150],[shipX,210,150],3,m.steel);
+  }const gantryZ=-e-250;for(const x of [-280,280]){beam(root,[x,-50,gantryZ],[x,510,gantryZ],10,m.steel);beam(root,[x-55,0,gantryZ],[x+55,510,gantryZ],4,m.steel)}box(root,700,20,30,0,525,gantryZ,m.hull);for(let x=-320;x<320;x+=80){beam(root,[x,540,gantryZ],[x+80,585,gantryZ],3,m.steel);beam(root,[x+80,540,gantryZ],[x,585,gantryZ],3,m.steel)}panel(root,'NEON DOCKS  /  07',0,185,-e-14,420,44,'#ffaa67');
  }else if(id===1){for(const side of [-1,1]){for(const z of [-600,300,900]){const x=side*(e+150);cyl(root,70,280,x,60,z,m.steel,20);for(const y of [60,140,220]){const ring=mesh(root,new THREE.TorusGeometry(110,3,6,32),cyan,x,y,z);ring.rotation.x=Math.PI/2}beam(root,[x,-70,z],[x,520,z],4,m.steel);sphere(root,6,x,530,z,amber)}box(root,170,e*.12,e*2,side*(e+300),-80,0,m.hull)}panel(root,'SKYLINE ARRAY',0,190,-e-14,400,48,'#bba2ff');
  }else{for(const side of [-1,1]){for(const x of [-e-160,e+160]){cyl(root,100,420,x,140,side*550,m.hull,24);for(const y of [0,120,240,350])cyl(root,105,8,x,y,side*550,amber,24);cable(root,[[x,340,side*550],[x,460,side*550],[0,460,side*(e+160)]],15,m.steel)}}panel(root,'REACTOR NINE',0,200,-e-14,400,48,'#ffb060');}
  // Painted zones and service seams orient players without filling sight lines.
@@ -164,8 +180,8 @@ export function createArt(renderer,{mobile=false}={}){
 }
 
 export function createAtmosphere(scene,e=2400,{mobile=false}={}){
- const sky=new THREE.Mesh(new THREE.SphereGeometry(8000,24,12),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{horizon:{value:new THREE.Color('#c2dedb')},zenith:{value:new THREE.Color('#4f8bad')}},vertexShader:`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`uniform vec3 horizon;uniform vec3 zenith;varying vec3 vPos;void main(){vec3 d=normalize(vPos);float h=max(d.y,0.);vec3 c=mix(horizon,zenith,pow(h,.55));float cloud=pow(.5+.5*sin(d.x*22.+sin(d.z*17.)*2.),8.)*smoothstep(.05,.3,h)*.08;c+=cloud;float sun=pow(max(0.,dot(d,normalize(vec3(-.5,.75,.3)))),180.);c+=sun*vec3(.7,.5,.25);gl_FragColor=vec4(c,1.);}` }));sky.frustumCulled=false;scene.add(sky);
+ const sky=new THREE.Mesh(new THREE.SphereGeometry(6000,24,12),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{horizon:{value:new THREE.Color('#c2dedb')},zenith:{value:new THREE.Color('#4f8bad')},sunStrength:{value:1}},vertexShader:`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`uniform vec3 horizon;uniform vec3 zenith;uniform float sunStrength;varying vec3 vPos;void main(){vec3 d=normalize(vPos);float h=max(d.y,0.);vec3 c=mix(horizon,zenith,pow(h,.55));float cloud=pow(.5+.5*sin(d.x*22.+sin(d.z*17.)*2.),8.)*smoothstep(.05,.3,h)*.08;c+=cloud;float sun=pow(max(0.,dot(d,normalize(vec3(-.5,.75,.3)))),180.);c+=sunStrength*sun*vec3(.7,.5,.25);gl_FragColor=vec4(c,1.);}` }));sky.frustumCulled=false;scene.add(sky);
  let seed=99;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};const p=new Float32Array(1800*3);for(let i=0;i<p.length;i+=3){p[i]=(rand()-.5)*e*2;p[i+1]=rand()*650;p[i+2]=(rand()-.5)*e*2}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));const material=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{time:{value:0}},vertexShader:`uniform float time;varying float alpha;void main(){vec3 p=position;p.y=mod(p.y-time*280.,650.);vec4 mv=modelViewMatrix*vec4(p,1.);alpha=clamp(1.-length(mv.xyz)/2800.,0.,1.)*.2;gl_PointSize=clamp(1100./-mv.z,1.,3.);gl_Position=projectionMatrix*mv;}`,fragmentShader:`varying float alpha;void main(){gl_FragColor=vec4(.55,.8,.92,alpha);}`});const rain=new THREE.Points(g,material);rain.frustumCulled=false;scene.add(rain);
- return {setMap(id){const palettes=[['#c8e4de','#528cac'],['#e4d6d9','#727ca8'],['#d5e8c8','#528f9f']];sky.material.uniforms.horizon.value.set(palettes[id][0]);sky.material.uniforms.zenith.value.set(palettes[id][1]);},frame(now,reduced,low){rain.visible=false;material.uniforms.time.value=now/1000},dispose(){scene.remove(sky,rain);sky.geometry.dispose();sky.material.dispose();g.dispose();material.dispose()}};
+ return {setMap(id){const palettes=[['#9ebdc1','#456c84'],['#e4d6d9','#727ca8'],['#d5e8c8','#528f9f']];sky.material.uniforms.horizon.value.set(palettes[id][0]);sky.material.uniforms.zenith.value.set(palettes[id][1]);sky.material.uniforms.sunStrength.value=id===0?0:1;},frame(now,reduced,low){rain.visible=false;material.uniforms.time.value=now/1000},dispose(){scene.remove(sky,rain);sky.geometry.dispose();sky.material.dispose();g.dispose();material.dispose()}};
 }
