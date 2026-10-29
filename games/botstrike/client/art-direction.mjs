@@ -54,7 +54,7 @@ export function createArt(renderer,{mobile=false}={}){
   if(mobile&&!material.transparent&&(material.map===wear||!material.map)&&material.isMeshStandardMaterial){const glowing=material.emissiveIntensity>1&&material.emissive?.getHex()!==0,key=glowing?'glow':'metal';if(!mobileBatches.has(key)){const shared=glowing?new THREE.MeshBasicMaterial({vertexColors:true,toneMapped:false}):new THREE.MeshStandardMaterial({vertexColors:true,map:wear,roughness:.58,metalness:.4});mobileBatches.set(key,shared);materials.push(shared)}const colors=new Float32Array(g.attributes.position.count*3),c=material.color;for(let i=0;i<colors.length;i+=3){colors[i]=c.r;colors[i+1]=c.g;colors[i+2]=c.b}g.setAttribute('color',new THREE.BufferAttribute(colors,3));material=mobileBatches.get(key)}
   if(!groups.has(material))groups.set(material,[]);groups.get(material).push(g);children.push(n)});for(const n of children){n.removeFromParent();n.geometry.dispose()}for(const [material,parts]of groups){const g=mergeParts(parts);mesh(root,g,material);parts.forEach(p=>p.dispose())}}
 
- function rifle(root,kind=2){const gun=new THREE.Group();root.add(gun);const length=[16,24,33,48,30,35,31,43,29,42,26,40][kind],energy=glow[[0,0,0,3,5,2,1,5,4,3,1,4][kind]];
+ function rifle(root,kind=2){const gun=new THREE.Group();root.add(gun);const length=[16,24,33,48,30,35,31,43,29,42,26,40][kind],energy=glow[[0,1,0,3,5,2,1,5,4,3,1,4][kind]],stock=kind===0?null:new THREE.Group();if(stock){stock.name='stock';gun.add(stock)}
  // Layer the receiver and vented handguard over a continuous inner chassis.
  plate(gun,5,5.5,length,0,0,0,m.black,.65);
  plate(gun,6.3,5.1,length*.46,0,.35,-length*.25,m.gunmetal,.55);
@@ -63,10 +63,10 @@ export function createArt(renderer,{mobile=false}={}){
  for(const side of [-1,1]){
   box(gun,.35,2.7,length*.43,side*3.18,.7,-length*.25,m.gunShell);
   for(let i=0;i<4;i++)box(gun,.45,1.3,2.7,side*3.42,.7,-length*.41+i*length*.095,m.black);
-  if(kind!==0){beam(gun,[side*2,-2,length*.31],[side*2,-2,length*.5+5],.55,m.gunmetal);beam(gun,[side*2,-2,length*.5+5],[side*2,2,length*.5+5],.55,m.gunmetal)}
+  if(stock){beam(stock,[side*2,-2,length*.31],[side*2,-2,length*.5+5],.55,m.gunmetal);beam(stock,[side*2,-2,length*.5+5],[side*2,2,length*.5+5],.55,m.gunmetal)}
  }
  box(gun,.3,2.5,5.5,3.72,.6,length*.15,m.black);box(gun,.45,.45,3.5,3.96,1.8,length*.15,m.silver);
- if(kind!==0)plate(gun,6.3,7.2,2.2,0,-.2,length*.5+6,m.rubber,.65).name='stock';
+ if(stock)plate(stock,kind===1?5.3:6.3,kind===1?5.8:7.2,kind===1?1.8:2.2,0,-.2,length*.5+6,m.rubber,.65);
  const grip=plate(gun,3.5,9,5.2,0,-6.3,3,m.rubber,.4);grip.rotation.x=-.22;
  for(let i=0;i<4;i++)box(gun,3.7,.3,.6,0,-4.1-i*1.5,5.7,m.gunmetal);
  beam(gun,[-2,-3,-1],[-2,-9,-1],.42,m.steel);beam(gun,[-2,-9,-1],[-2,-9,3],.42,m.steel);
@@ -84,7 +84,29 @@ export function createArt(renderer,{mobile=false}={}){
  if(kind===9){plate(gun,5,2,24,0,-3,-15,m.steel,.3);for(const side of [-1,1])beam(gun,[side*2,-3,-16],[side*5,-12,-23],.65,m.black);}
  if(kind===10){for(const side of [-1,1]){cyl(gun,2,12,side*4,0,3,energy,12);for(const y of [-6,6])cyl(gun,2.4,1.2,side*4,y,3,m.steel,12);cable(gun,[[side*4,6,3],[side*6,8,-5],[side*3,4,-13]],.6,m.black)}plate(gun,6,2,14,0,5,4,m.hull,.4);}
  if(kind===11){for(const side of [-1,1]){plate(gun,3,7,26,side*5,0,-20,m.hull,.6);box(gun,.4,4,21,side*6.6,0,-20,energy);}sphere(gun,4.2,0,1,-9,energy);plate(gun,9,9,12,0,-2,12,m.black,1);}
- if(kind===4){const pump=cyl(gun,2.3,13,0,-3,-12,m.rubber);pump.rotation.x=Math.PI/2;for(let i=0;i<6;i++)box(gun,4.2,.6,.5,0,-5,-17+i*2,m.steel)}return gun;}
+ if(kind===4){const pump=cyl(gun,2.3,13,0,-3,-12,m.rubber);pump.rotation.x=Math.PI/2;for(let i=0;i<6;i++)box(gun,4.2,.6,.5,0,-5,-17+i*2,m.steel)}
+ if(kind===0){
+  plate(gun,8.6,6.2,10,0,.4,-2,m.gunmetal,.8);
+  for(const side of [-1,1]){
+   plate(gun,1.2,5.6,11,side*4.8,.5,-2,m.warm,.3);
+   const cell=cyl(gun,1.8,7,side*5.3,2,-2,m.black,12);cell.rotation.x=Math.PI/2;
+   for(const z of [-5,1]){const ring=cyl(gun,2.1,.75,side*5.3,2,z,energy,12);ring.rotation.x=Math.PI/2;}
+   box(gun,.6,.7,8,side*2.8,4.8,-3,energy);
+   box(gun,1,2,1.1,side*2.5,7,-2.5,m.black);
+  }
+ }
+ if(kind===1){
+  plate(gun,4.5,4.2,19,0,1,-10,m.black,.5);
+  for(const side of [-1,1]){
+   plate(gun,1,4.5,19,side*4,1,-10,m.gunShell,.25);
+   box(gun,.5,.65,14,side*4.65,3,-11,energy);
+   for(let i=0;i<4;i++)box(gun,.7,1.7,.8,side*4.65,.5,-17+i*3.8,m.black);
+  }
+  const shroud=cyl(gun,2,10,0,1,-18,m.gunmetal,12);shroud.rotation.x=Math.PI/2;
+  for(const z of [-20,-16]){const collar=cyl(gun,2.25,.7,0,1,z,m.silver,12);collar.rotation.x=Math.PI/2;}
+  box(gun,1,3,1,0,7.2,-2.5,energy);
+ }
+ return gun;}
  function robot(slot,hero,weapon=hero===3?3:hero===0?1:2){const rig=new THREE.Group(),torso=new THREE.Group(),head=new THREE.Group(),legs=[],arms=[];rig.name=`hero-${hero}-slot-${slot}`;rig.add(torso,head);const paint=armor[hero],light=glow[hero],bulk=hero===2?1.22:hero===0?.83:hero===5?1.08:1;
  // Mechanical spine, suspended abdominal plates and separately bevelled shell.
  cyl(torso,5,24,0,34,1,m.black);for(let i=0;i<4;i++)plate(torso,15*bulk,3,13,0,27+i*4,1,m.steel,.5);
@@ -120,7 +142,7 @@ export function createArt(renderer,{mobile=false}={}){
  else if(kind===5||kind===10){plate(root,13,6,13,0,0,0,m.hull,1);sphere(root,4,0,4,0,light);for(const side of [-1,1]){beam(root,[side*4,0,0],[side*12,-5,side*7],1.2,m.steel);plate(root,7,2,8,side*12,-5,side*7,m.black,.4);beam(root,[side*4,0,0],[side*12,-5,-side*7],1.2,m.steel);plate(root,7,2,8,side*12,-5,-side*7,m.black,.4)}beam(root,[0,5,0],[0,18,0],.7,m.steel);sphere(root,1.2,0,18,0,light)}
  else{cyl(root,5,18,0,0,0,m.black,12);for(const y of [-9,-4,4,9])cyl(root,5.4,1.3,0,y,0,y===-4||y===4?light:m.steel,12);for(let i=0;i<6;i++){const a=i*Math.PI/3;plate(root,2.1,12,2.1,Math.cos(a)*4.6,0,Math.sin(a)*4.6,m.hull,.4)}plate(root,5,4,5,0,11,0,m.steel,.4);beam(root,[2,12,0],[6,6,0],.8,m.silver)}
  bake(root);return root;}
- function weaponModel(kind){const root=new THREE.Group(),rifleRoot=rifle(root,kind),magazine=rifleRoot.getObjectByName('magazine'),stock=rifleRoot.getObjectByName('stock');magazine?.removeFromParent();stock?.removeFromParent();bake(root);if(magazine){root.add(magazine);root.userData.magazineName='magazine';}if(stock)root.add(stock);return root;}
+ function weaponModel(kind){const root=new THREE.Group(),rifleRoot=rifle(root,kind),magazine=rifleRoot.getObjectByName('magazine'),stock=rifleRoot.getObjectByName('stock');magazine?.removeFromParent();stock?.removeFromParent();bake(root);if(magazine){root.add(magazine);root.userData.magazineName='magazine';}if(stock){bake(stock);root.add(stock)}return root;}
  const signCache=new Map();
  function sign(text,color='#8deaff',width=512,height=128){const key=JSON.stringify([text,color,width,height]);if(signCache.has(key))return signCache.get(key);const c=document.createElement('canvas');c.width=width;c.height=height;const ctx=c.getContext('2d');ctx.fillStyle='#09141c';ctx.fillRect(0,0,width,height);ctx.fillStyle=color;ctx.font='700 54px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,width/2,height/2);ctx.globalAlpha=.6;ctx.fillRect(10,10,width-20,3);ctx.fillRect(10,height-13,width-20,3);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;textures.push(t);const material=new THREE.MeshStandardMaterial({map:t,emissiveMap:t,emissive:color,emissiveIntensity:1.3,roughness:.5,metalness:.1,side:THREE.DoubleSide});materials.push(material);signCache.set(key,material);return material;}
  function panel(root,text,x,y,z,w=100,h=24,color='#85eaff',ry=0){const n=mesh(root,new THREE.PlaneGeometry(w,h),sign(text,color),x,y,z);n.rotation.y=ry;return n;}
