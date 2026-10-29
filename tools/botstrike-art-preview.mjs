@@ -54,3 +54,10 @@ window.probeFirstPerson=()=>{
  for(let frame=0;frame<300;frame++){q.time+=1000/60;q.character.update(q.player,q.state,q.time,1/60);if(frame%60===59){samples.push(arm.position.toArray());heads.push(q.character.bones.head.rotation.x);}}
  q.renderer.render(q.scene,q.camera);return {samples,heads,triangles:q.character.armTriangles};
 };
+
+window.probeReload=(seconds=.25)=>{
+ const q=showroom,p=q.player;if(q.reloadStarted===undefined){p.reload=128;q.reloadStarted=q.time}
+ for(let i=0;i<Math.round(seconds*60);i++){q.time+=1000/60;q.character.update(p,q.state,q.time,1/60);p.reload=Math.max(0,p.reload-64/60)}
+ q.scene.updateMatrixWorld(true);const bones=q.character.bones,shoulder=bones['upper_arm.L'].getWorldPosition(new THREE.Vector3()),elbow=bones['forearm.L'].getWorldPosition(new THREE.Vector3()),hand=bones['hand.L'].getWorldPosition(new THREE.Vector3()),right=bones['hand.R'].getWorldPosition(new THREE.Vector3()),magazine=q.character.model.getObjectByName('magazine').getWorldPosition(new THREE.Vector3());q.renderer.render(q.scene,q.camera);
+ return{distance:hand.distanceTo(magazine),reach:shoulder.distanceTo(elbow)+elbow.distanceTo(hand),needed:shoulder.distanceTo(magazine),hand:hand.toArray(),right:right.toArray(),magazine:magazine.toArray(),magazineScreen:magazine.clone().project(q.camera).toArray(),stockVisible:q.character.model.getObjectByName('stock')?.visible,remaining:p.reload};
+};

@@ -66,7 +66,7 @@ export function createArt(renderer,{mobile=false}={}){
   if(kind!==0){beam(gun,[side*2,-2,length*.31],[side*2,-2,length*.5+5],.55,m.gunmetal);beam(gun,[side*2,-2,length*.5+5],[side*2,2,length*.5+5],.55,m.gunmetal)}
  }
  box(gun,.3,2.5,5.5,3.72,.6,length*.15,m.black);box(gun,.45,.45,3.5,3.96,1.8,length*.15,m.silver);
- if(kind!==0)plate(gun,6.3,7.2,2.2,0,-.2,length*.5+6,m.rubber,.65);
+ if(kind!==0)plate(gun,6.3,7.2,2.2,0,-.2,length*.5+6,m.rubber,.65).name='stock';
  const grip=plate(gun,3.5,9,5.2,0,-6.3,3,m.rubber,.4);grip.rotation.x=-.22;
  for(let i=0;i<4;i++)box(gun,3.7,.3,.6,0,-4.1-i*1.5,5.7,m.gunmetal);
  beam(gun,[-2,-3,-1],[-2,-9,-1],.42,m.steel);beam(gun,[-2,-9,-1],[-2,-9,3],.42,m.steel);
@@ -120,7 +120,7 @@ export function createArt(renderer,{mobile=false}={}){
  else if(kind===5||kind===10){plate(root,13,6,13,0,0,0,m.hull,1);sphere(root,4,0,4,0,light);for(const side of [-1,1]){beam(root,[side*4,0,0],[side*12,-5,side*7],1.2,m.steel);plate(root,7,2,8,side*12,-5,side*7,m.black,.4);beam(root,[side*4,0,0],[side*12,-5,-side*7],1.2,m.steel);plate(root,7,2,8,side*12,-5,-side*7,m.black,.4)}beam(root,[0,5,0],[0,18,0],.7,m.steel);sphere(root,1.2,0,18,0,light)}
  else{cyl(root,5,18,0,0,0,m.black,12);for(const y of [-9,-4,4,9])cyl(root,5.4,1.3,0,y,0,y===-4||y===4?light:m.steel,12);for(let i=0;i<6;i++){const a=i*Math.PI/3;plate(root,2.1,12,2.1,Math.cos(a)*4.6,0,Math.sin(a)*4.6,m.hull,.4)}plate(root,5,4,5,0,11,0,m.steel,.4);beam(root,[2,12,0],[6,6,0],.8,m.silver)}
  bake(root);return root;}
- function weaponModel(kind){const root=new THREE.Group(),rifleRoot=rifle(root,kind),magazine=rifleRoot.getObjectByName('magazine');magazine?.removeFromParent();bake(root);if(magazine){root.add(magazine);root.userData.magazineName='magazine';}return root;}
+ function weaponModel(kind){const root=new THREE.Group(),rifleRoot=rifle(root,kind),magazine=rifleRoot.getObjectByName('magazine'),stock=rifleRoot.getObjectByName('stock');magazine?.removeFromParent();stock?.removeFromParent();bake(root);if(magazine){root.add(magazine);root.userData.magazineName='magazine';}if(stock)root.add(stock);return root;}
  const signCache=new Map();
  function sign(text,color='#8deaff',width=512,height=128){const key=JSON.stringify([text,color,width,height]);if(signCache.has(key))return signCache.get(key);const c=document.createElement('canvas');c.width=width;c.height=height;const ctx=c.getContext('2d');ctx.fillStyle='#09141c';ctx.fillRect(0,0,width,height);ctx.fillStyle=color;ctx.font='700 54px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,width/2,height/2);ctx.globalAlpha=.6;ctx.fillRect(10,10,width-20,3);ctx.fillRect(10,height-13,width-20,3);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;textures.push(t);const material=new THREE.MeshStandardMaterial({map:t,emissiveMap:t,emissive:color,emissiveIntensity:1.3,roughness:.5,metalness:.1,side:THREE.DoubleSide});materials.push(material);signCache.set(key,material);return material;}
  function panel(root,text,x,y,z,w=100,h=24,color='#85eaff',ry=0){const n=mesh(root,new THREE.PlaneGeometry(w,h),sign(text,color),x,y,z);n.rotation.y=ry;return n;}

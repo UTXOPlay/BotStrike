@@ -42,17 +42,17 @@ export function createCharacters(art){
    g.setIndex(keep);g.clearGroups();groups.forEach(x=>g.addGroup(x.start,x.count,x.materialIndex));o.geometry=g;o.receiveShadow=false;
   });
   if(!firstPerson){for(const side of ['L','R']){const badge=new THREE.Mesh(badgeGeometry,teamMaterials[slot<5?0:1]);badge.position.set(0,.04,-.13);bones['upper_arm.'+side].add(badge);badges.push(badge);}const shadow=new THREE.Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.y=.15;rig.add(shadow);}
-  // First-person support arm uses a dedicated shoulder stance. The world rig
-  // remains unchanged; its shorter reach cannot wrap around every rifle.
+  // The support arm has a wider first-person stance. Reloads draw the weapon
+  // inward with the trigger arm so the magazine remains within support reach.
   let gripRestore=null,lookRestore=null;
-  function supportGrip(target){
-   const a=bones['upper_arm.L'],b=bones['forearm.L'],c=bones['hand.L'];
-   gripRestore=[a,b,c].map(bone=>({bone,position:bone.position.clone(),quaternion:bone.quaternion.clone()}));
-   a.position.x+=.15;model.updateMatrixWorld(true);
+  function grip(side,target){
+   const a=bones['upper_arm.'+side],b=bones['forearm.'+side],c=bones['hand.'+side];
+   gripRestore??=[];gripRestore.push(...[a,b,c].map(bone=>({bone,position:bone.position.clone(),quaternion:bone.quaternion.clone()})));
+   if(firstPerson&&side==='L')a.position.x+=.15;model.updateMatrixWorld(true);
    const start=a.getWorldPosition(new THREE.Vector3()),joint=b.getWorldPosition(new THREE.Vector3()),end=c.getWorldPosition(new THREE.Vector3());
    const goal=model.localToWorld(target.clone()),u=start.distanceTo(joint),v=joint.distanceTo(end),delta=goal.clone().sub(start),d=Math.min(delta.length(),(u+v)*.98),axis=delta.normalize();
    const along=(u*u-v*v+d*d)/(2*d),height=Math.sqrt(Math.max(0,u*u-along*along));
-   const bend=new THREE.Vector3(-.7,-1,.3).transformDirection(model.matrixWorld);bend.addScaledVector(axis,-bend.dot(axis)).normalize();
+   const bend=new THREE.Vector3(side==='L'?-.7:.7,-1,.3).transformDirection(model.matrixWorld);bend.addScaledVector(axis,-bend.dot(axis)).normalize();
    const elbow=start.clone().addScaledVector(axis,along).addScaledVector(bend,height);
    function aim(bone,child,point){const origin=bone.getWorldPosition(new THREE.Vector3()),from=child.getWorldPosition(new THREE.Vector3()).sub(origin).normalize(),to=point.clone().sub(origin).normalize(),delta=new THREE.Quaternion().setFromUnitVectors(from,to),world=bone.getWorldQuaternion(new THREE.Quaternion());bone.quaternion.copy(bone.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(delta.multiply(world)));bone.updateMatrixWorld(true);}
    aim(a,b,elbow);aim(b,c,start.clone().addScaledVector(axis,d));
@@ -65,7 +65,7 @@ export function createCharacters(art){
   }
   let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0;
   let gun=null,magazine=null;const gunAnchor=new THREE.Group();model.add(gunAnchor);
-  function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
+  function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');const stock=gun.getObjectByName('stock');if(stock&&firstPerson)stock.visible=false;gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
   equip(weapon);
   function swap(current,next,loop=true,fade=.12){
    if(current===next)return current;next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1);next.setLoop(loop?THREE.LoopRepeat:THREE.LoopOnce,loop?Infinity:1);next.clampWhenFinished=!loop;next.play();
@@ -109,10 +109,23 @@ export function createCharacters(art){
    if(p.alive&&!reduced){lookRestore=[bones.head,bones.chest].map(bone=>({bone,quaternion:bone.quaternion.clone()}));bones.head.rotation.x-=p.pitch*.5;bones.chest.rotation.x-=p.pitch*.22;}
    model.updateMatrixWorld(true);
    // A weapon follows its articulated trigger hand; aim remains authoritative.
+   const reloading=Boolean(p.alive&&p.reload>0&&reloadDuration&&upper?.getClip().name==='upper:reload'&&magazine);
+   let reloadWeight=0;
+   if(reloading){
+    const phase=THREE.MathUtils.clamp(1-p.reload/reloadDuration,0,1);reloadWeight=Math.min(1,phase*5,(1-phase)*5);
+    if(reloadWeight>.05){
+     const right=bones['hand.R'].getWorldPosition(new THREE.Vector3()),left=bones['upper_arm.L'].getWorldPosition(new THREE.Vector3());
+     left.add(bones['upper_arm.R'].getWorldPosition(new THREE.Vector3())).multiplyScalar(.5);
+     const nearChest=model.worldToLocal(left).add(new THREE.Vector3(-.03,firstPerson?0:-.1,-.16));
+     grip('R',model.worldToLocal(right).lerp(nearChest,reloadWeight));
+    }
+   }
    bones['hand.R'].getWorldPosition(tmp);model.worldToLocal(tmp);gunAnchor.position.copy(tmp).add(new THREE.Vector3(0,.096,-.048));
-   if(firstPerson&&p.alive&&!p.reload&&now>=propUntil&&(!upperUntil||now>=upperUntil||['upper:fire','upper:hit'].includes(upper?.getClip().name)))supportGrip(gunAnchor.position.clone().add(new THREE.Vector3(-.025,-.11,-.12)));
-   gunAnchor.quaternion.copy(identity);gunAnchor.rotation.x=p.pitch||0;gunAnchor.rotation.z=p.reload?-.15*Math.sin((p.reload/64)*4):0;
+   gunAnchor.quaternion.copy(identity);gunAnchor.rotation.x=p.pitch||0;gunAnchor.rotation.y=reloading ? .35*reloadWeight : 0;gunAnchor.rotation.z=reloading ? -.55*reloadWeight-.15*Math.sin((p.reload/64)*4) : 0;
    if(magazine)magazine.position.y=-6-(p.reload&&reloadDuration?Math.sin(Math.PI*(1-p.reload/reloadDuration))*8:0);
+   if(reloading){
+    if(reloadWeight>.05){gunAnchor.updateMatrixWorld(true);const hand=bones['hand.L'].getWorldPosition(new THREE.Vector3()),contact=magazine.getWorldPosition(new THREE.Vector3());hand.lerp(contact,reloadWeight);grip('L',model.worldToLocal(hand));}
+   }else if(firstPerson&&p.alive&&!p.reload&&now>=propUntil&&(!upperUntil||now>=upperUntil||['upper:fire','upper:hit'].includes(upper?.getClip().name)))grip('L',gunAnchor.position.clone().add(new THREE.Vector3(-.025,-.11,-.12)));
    if(prop){prop.visible=p.alive&&now<propUntil;if(prop.visible){bones['hand.L'].getWorldPosition(tmp);model.worldToLocal(tmp);prop.position.copy(tmp);prop.rotation.z=.5;}}
    gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;
    return {deadAt,motion:rig.userData.motion};
