@@ -183,7 +183,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  const retentionTimer=setInterval(()=>void prune(),3600000);retentionTimer.unref();void prune();
  const heartbeat=setInterval(()=>{
   for(const ws of sockets.clients){if(!ws.alive){ws.terminate();continue;}ws.alive=false;ws.pingNonce=randomBytes(8);ws.pingAt=performance.now();ws.ping(ws.pingNonce);}
-  for(const r of rooms.values())try{if(r.status==='waiting'&&Date.now()-r.created>600000){clearTimeout(r.queueTimer);r.status='expired';r.finishedAt=Date.now();persist(r);broadcast(r);}if(!['waiting','running','sealing'].includes(r.status)&&Date.now()-(r.finishedAt||r.created)>3600000)rooms.delete(r.id);}catch(error){fail(r,'Room maintenance failed');}
+  for(const r of rooms.values())try{if(r.status==='waiting'&&Date.now()-r.created>600000){clearTimeout(r.queueTimer);r.status='expired';r.queueDeadline=null;r.finishedAt=Date.now();r.error='Matchmaking room expired. Start another match.';persist(r);broadcast(r);}if(!['waiting','running','sealing'].includes(r.status)&&Date.now()-(r.finishedAt||r.created)>3600000)rooms.delete(r.id);}catch(error){fail(r,'Room maintenance failed');}
   for(const [id,quota]of creationQuotas)if(quota.until<Date.now())creationQuotas.delete(id);
  },heartbeatMs);heartbeat.unref();
  server.requestTimeout=5000;server.headersTimeout=5000;
