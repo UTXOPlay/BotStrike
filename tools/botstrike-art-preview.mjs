@@ -24,7 +24,7 @@ window.renderArsenal=(kind,index)=>{
  clear();const width=640,height=360,renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});renderer.setSize(width,height,false);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
  const scene=new THREE.Scene();scene.background=new THREE.Color('#0b1721');scene.add(new THREE.HemisphereLight(0xc1e6ff,0x222232,1.3));for(const [color,intensity,x,y,z]of [[0xc9e8ff,4,-30,70,-50],[0xff9b67,2.7,50,25,40],[0x35dfff,2,-50,20,30]]){const light=new THREE.DirectionalLight(color,intensity);light.position.set(x,y,z);scene.add(light)}
  const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment(),env=pmrem.fromScene(room,.05);scene.environment=env.texture;scene.environmentIntensity=.7;room.dispose();pmrem.dispose();const art=createArt(renderer),model=kind==='weapon'?art.weaponModel(index):art.equipment(index);scene.add(model);model.rotation.y=kind==='weapon'?.28:-.5;
- const camera=new THREE.PerspectiveCamera(30,width/height,.1,1000);camera.position.set(kind==='weapon'?90:65,kind==='weapon'?40:35,kind==='weapon'?65:-85);camera.lookAt(0,0,kind==='weapon'?-5:0);renderer.render(scene,camera);showroom={scene,renderer,art,env};return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};
+ const camera=new THREE.PerspectiveCamera(30,width/height,.1,1000);camera.position.set(65,kind==='weapon'?30:35,kind==='weapon'?47:-85);camera.lookAt(0,0,kind==='weapon'?-5:0);renderer.render(scene,camera);showroom={scene,renderer,art,env};return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};
 };
 
 window.probeMotion=(kind,seconds=.5)=>{

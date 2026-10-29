@@ -21,9 +21,10 @@ export function createArt(renderer,{mobile=false}={}){
  function texture(paint,size=512){const c=document.createElement('canvas');c.width=c.height=size;paint(c.getContext('2d'),size);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());textures.push(t);return t;}
  const wear=texture((c,s)=>{c.fillStyle='#c4c6c8';c.fillRect(0,0,s,s);for(let i=0;i<7500;i++){const v=150+random()*95|0;c.fillStyle=`rgb(${v},${v},${v})`;const x=random()*s,y=random()*s;c.fillRect(x,y,random()*3+.4,random()*1.4+.3)}for(let i=0;i<340;i++){const x=random()*s,y=random()*s;c.strokeStyle=i%3?'#7c8185':'#242b30';c.lineWidth=.5+random()*1.6;c.beginPath();c.moveTo(x,y);c.lineTo(x+random()*25,y+random()*3);c.stroke()}for(let i=0;i<140;i++){const x=random()*s,y=random()*s;c.fillStyle=i%4?'#39434a':'#82949e';c.beginPath();c.moveTo(x,y);c.lineTo(x+random()*7+1,y+1);c.lineTo(x+random()*4,y+random()*6+1);c.fill()}c.strokeStyle='#45494c';c.lineWidth=3;c.strokeRect(7,7,s-14,s-14);c.strokeStyle='#fff';c.lineWidth=1;c.strokeRect(10,10,s-20,s-20)});
  const floorMap=texture((c,s)=>{c.fillStyle='#8899a0';c.fillRect(0,0,s,s);for(let i=0;i<16000;i++){const a=.04+random()*.14;c.fillStyle=`rgba(180,201,211,${a})`;c.fillRect(random()*s,random()*s,1,1)}c.strokeStyle='#506773';c.lineWidth=4;c.strokeRect(2,2,s-4,s-4);for(let i=0;i<12;i++){c.fillStyle='#536b77';c.fillRect(17+i*40,23,17,4);c.fillRect(17+i*40,s-27,17,4)}for(let i=0;i<16;i++){c.fillStyle='#6e767c';c.beginPath();c.arc(i%4*128+14,(i/4|0)*128+14,2,0,Math.PI*2);c.fill()}});floorMap.repeat.set(12,12);
+ const weaponFinish=texture((c,s)=>{c.fillStyle='#b7bec1';c.fillRect(0,0,s,s);for(let i=0;i<3200;i++){const v=140+random()*90|0;c.fillStyle=`rgba(${v},${v+5},${v+8},.22)`;c.fillRect(random()*s,random()*s,.4+random()*2,.4+random()*1.2)}for(let i=0;i<150;i++){c.strokeStyle=i%3?'#8f9ba0':'#d9ddda';c.lineWidth=.4+random()*.6;c.beginPath();const x=random()*s,y=random()*s;c.moveTo(x,y);c.lineTo(x+3+random()*24,y+random()*1.4);c.stroke()}},256);
 
  function mat(color,opts={}){const m=new THREE.MeshStandardMaterial({color,roughness:.44,metalness:.72,map:wear,bumpMap:wear,bumpScale:.12,...opts,...(mobile?{bumpMap:null}:{} )});materials.push(m);return m;}
- const m={steel:mat('#747e87'),black:mat('#111b24',{roughness:.66}),rubber:mat('#14171d',{metalness:.1,roughness:.88}),silver:mat('#acb5be',{roughness:.27}),warm:mat('#bd7651'),hull:mat('#607985'),container:mat('#478d9b'),floor:mat('#829aa3',{map:floorMap,bumpMap:floorMap,bumpScale:.08,roughness:.94,metalness:.1,envMapIntensity:.2})};
+ const m={steel:mat('#747e87'),black:mat('#111b24',{roughness:.66}),rubber:mat('#14171d',{metalness:.1,roughness:.88}),silver:mat('#acb5be',{roughness:.27}),warm:mat('#bd7651'),hull:mat('#607985'),container:mat('#478d9b'),floor:mat('#829aa3',{map:floorMap,bumpMap:floorMap,bumpScale:.08,roughness:.94,metalness:.1,envMapIntensity:.2}),gunmetal:mat('#5b737b',{map:weaponFinish,bumpMap:weaponFinish,bumpScale:.03,roughness:.4,metalness:.72}),gunShell:mat('#9faeac',{map:weaponFinish,bumpMap:weaponFinish,bumpScale:.02,roughness:.53,metalness:.42})};
  const architecture=['#d4ddd5','#318f9a','#d78453','#b4a9c9','#d9b957','#5d7f9d'].map(c=>mat(c,{metalness:.32,roughness:.58}));
  const ceramic=mat('#dce6df',{metalness:.18,roughness:.64}),solar=mat('#234c75',{metalness:.55,roughness:.27}),leaf=mat('#4b8e66',{metalness:0,roughness:.85}),soil=mat('#57483b',{metalness:0,roughness:.94});
  const colors=['#139fb7','#d3dfd7','#c08b2b','#684e97','#aa346e','#c46122'];
@@ -53,12 +54,30 @@ export function createArt(renderer,{mobile=false}={}){
   if(mobile&&!material.transparent&&(material.map===wear||!material.map)&&material.isMeshStandardMaterial){const glowing=material.emissiveIntensity>1&&material.emissive?.getHex()!==0,key=glowing?'glow':'metal';if(!mobileBatches.has(key)){const shared=glowing?new THREE.MeshBasicMaterial({vertexColors:true,toneMapped:false}):new THREE.MeshStandardMaterial({vertexColors:true,map:wear,roughness:.58,metalness:.4});mobileBatches.set(key,shared);materials.push(shared)}const colors=new Float32Array(g.attributes.position.count*3),c=material.color;for(let i=0;i<colors.length;i+=3){colors[i]=c.r;colors[i+1]=c.g;colors[i+2]=c.b}g.setAttribute('color',new THREE.BufferAttribute(colors,3));material=mobileBatches.get(key)}
   if(!groups.has(material))groups.set(material,[]);groups.get(material).push(g);children.push(n)});for(const n of children){n.removeFromParent();n.geometry.dispose()}for(const [material,parts]of groups){const g=mergeParts(parts);mesh(root,g,material);parts.forEach(p=>p.dispose())}}
 
- function rifle(root,kind=2){const gun=new THREE.Group();root.add(gun);const length=[16,24,33,48,30,35,31,43,29,42,26,40][kind];plate(gun,5,6,length,0,0,0,m.black,.7);plate(gun,5.5,2.8,length*.65,0,3.1,2,m.hull,.5);plate(gun,4.5,4,7,0,0,length*.5+3,m.rubber);plate(gun,3,9,5,0,-6,3,m.black,.4).rotation.x=-.22;const magazine=plate(gun,3.3,8,5,0,-6,-5,m.steel,.4);magazine.rotation.x=.12;magazine.name='magazine';
+ function rifle(root,kind=2){const gun=new THREE.Group();root.add(gun);const length=[16,24,33,48,30,35,31,43,29,42,26,40][kind],energy=glow[[0,0,0,3,5,2,1,5,4,3,1,4][kind]];
+ // Layer the receiver and vented handguard over a continuous inner chassis.
+ plate(gun,5,5.5,length,0,0,0,m.black,.65);
+ plate(gun,6.3,5.1,length*.46,0,.35,-length*.25,m.gunmetal,.55);
+ plate(gun,7.1,6.1,length*.34,0,.15,length*.17,m.gunShell,.65);
+ plate(gun,5.7,1.3,length*.65,0,3.65,-length*.07,m.gunmetal,.3);
+ for(const side of [-1,1]){
+  box(gun,.35,2.7,length*.43,side*3.18,.7,-length*.25,m.gunShell);
+  for(let i=0;i<4;i++)box(gun,.45,1.3,2.7,side*3.42,.7,-length*.41+i*length*.095,m.black);
+  if(kind!==0){beam(gun,[side*2,-2,length*.31],[side*2,-2,length*.5+5],.55,m.gunmetal);beam(gun,[side*2,-2,length*.5+5],[side*2,2,length*.5+5],.55,m.gunmetal)}
+ }
+ box(gun,.3,2.5,5.5,3.72,.6,length*.15,m.black);box(gun,.45,.45,3.5,3.96,1.8,length*.15,m.silver);
+ if(kind!==0)plate(gun,6.3,7.2,2.2,0,-.2,length*.5+6,m.rubber,.65);
+ const grip=plate(gun,3.5,9,5.2,0,-6.3,3,m.rubber,.4);grip.rotation.x=-.22;
+ for(let i=0;i<4;i++)box(gun,3.7,.3,.6,0,-4.1-i*1.5,5.7,m.gunmetal);
+ beam(gun,[-2,-3,-1],[-2,-9,-1],.42,m.steel);beam(gun,[-2,-9,-1],[-2,-9,3],.42,m.steel);
+ const magazine=new THREE.Group();magazine.name='magazine';magazine.position.set(0,-6,-5);magazine.rotation.x=.12;gun.add(magazine);
+ plate(magazine,3.6,8,5.2,0,0,0,m.gunmetal,.35);plate(magazine,4,1.3,5.7,0,-4,.2,m.black,.2);for(let i=0;i<3;i++)box(magazine,.25,.4,3.8,1.9,2-i*1.7,0,m.silver);
  const barrel=cyl(gun,1.2,12,0,1,-length*.5-5,m.black);barrel.rotation.x=Math.PI/2;const muzzle=cyl(gun,1.9,3,0,1,-length*.5-11,m.steel);muzzle.rotation.x=Math.PI/2;
- for(let i=0;i<7;i++){box(gun,4.9,.6,1,0,5,-length*.3+i*2,m.steel);box(gun,.3,1.2,1.3,2.6,0,-length*.3+i*2,m.silver)}
- box(gun,.2,.5,9,2.85,2,0,cyan);plate(gun,1,2.5,4,3.1,1,7,m.warm,.2);bolts(gun,3,4,0,0,length*.5+.2);
+ for(const z of [-length*.5-2,-length*.5-8]){const collar=cyl(gun,1.65,1.1,0,1,z,m.gunmetal,12);collar.rotation.x=Math.PI/2}
+ plate(gun,3.2,.7,length*.49,0,4.5,-length*.12,m.black,.2);
+ for(let i=0;i<8;i++)box(gun,3.4,.38,.8,0,4.95,-length*.34+i*length*.062,m.steel);
+ box(gun,.28,.6,length*.36,3.66,2.5,-length*.23,energy);plate(gun,1,2.5,4,3.8,1,length*.25,m.warm,.2);
  if(kind===3||kind===9){const scope=cyl(gun,2.6,15,0,9,-2,m.black,14);scope.rotation.x=Math.PI/2;for(const z of [-10,6]){const ring=cyl(gun,3.2,2,0,9,z,m.steel,14);ring.rotation.x=Math.PI/2;}const lens=cyl(gun,2.4,.3,0,9,7.2,glow[3],16);lens.rotation.x=Math.PI/2;beam(gun,[0,4,-6],[0,8,-6],1.2)}else{plate(gun,2.3,2.5,3,0,6.2,-4,m.black,.3);box(gun,1.3,.6,.4,0,7,-2.3,cyan)}
- const energy=glow[[0,0,0,3,5,2,1,5,4,3,1,4][kind]];
  if(kind===5){for(const side of [-1,1])for(let i=0;i<3;i++)plate(gun,1,2,6,side*3.2,2,-9+i*8,i===1?energy:m.steel,.2);plate(gun,7,5,9,0,-2,10,m.hull,.6)}
  if(kind===6||kind===8||kind===11){for(let i=0;i<4;i++){const ring=mesh(gun,new THREE.TorusGeometry(kind===11?4:3,.55,6,16),i%2?m.silver:energy,0,1,-10-i*4);ring.rotation.z=i*.4}for(const side of [-1,1]){plate(gun,2,3,22,side*4,1,-13,m.steel,.5);box(gun,.4,1,16,side*5.1,1,-13,energy)}plate(gun,4,5,8,0,0,9,energy,.5);}
  if(kind===7){plate(gun,12,10,13,0,-4,7,m.black,1);for(const side of [-1,1]){const drum=cyl(gun,6.5,5,side*7,-4,7,m.steel,16);drum.rotation.z=Math.PI/2;}for(let i=0;i<6;i++){const a=i*Math.PI/3,x=Math.cos(a)*3,y=1+Math.sin(a)*3;const tube=cyl(gun,.8,24,x,y,-26,m.black,10);tube.rotation.x=Math.PI/2;}for(const z of [-17,-32]){const collar=cyl(gun,4.4,2,0,1,z,m.steel,16);collar.rotation.x=Math.PI/2;}box(gun,1,1,12,3.5,3,7,energy);}
