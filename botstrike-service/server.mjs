@@ -34,20 +34,22 @@ export function pack(input){
  const round=n=>Math.round((n||0)*1e6)/1e6;
  return [input.seq||0,round(input.x),round(input.y),round(input.yaw),round(input.pitch),flags,input.weapon??null,input.buy??null,input.hero??null,input.item||0,input.view_tick??null];
 }
-export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.env.DATA_DIR||path.join(root,'botstrike-service/data'),assets=process.env.BOTSTRIKE_ASSETS||path.join(root,'release'),maxRooms=4,tickMs=1000/64,queueMs=10000,retentionDays=Number(process.env.REPLAY_RETENTION_DAYS||30),recordWrite=writeAll}={}){
+export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.env.DATA_DIR||path.join(root,'botstrike-service/data'),assets=process.env.BOTSTRIKE_ASSETS||path.join(root,'release'),maxRooms=4,tickMs=1000/64,queueMs=10000,heartbeatMs=5000,retentionDays=Number(process.env.REPLAY_RETENTION_DAYS||30),recordWrite=writeAll}={}){
  if(!Number.isFinite(retentionDays)||retentionDays<1)throw Error('Invalid replay retention');
+ if(!Number.isFinite(heartbeatMs)||heartbeatMs<50)throw Error('Invalid heartbeat interval');
  if(!secret||secret.length<32)throw Error('RUNTIME_TOKEN must contain at least 32 characters');
  for(const name of ['botstrike-engine','myelin-botstrike'])if(!existsSync(path.join(assets,name)))throw Error('Missing artifact '+name);
- const rooms=new Map(),accounts=new Map(),peers=new Map();let sealing=Promise.resolve(),closed=false,draining=false,pruning=false;const creationQuotas=new Map(),queueWaits=[],metrics={failedRooms:0,sealingJobs:0,lastSealMs:0,expiredReplays:0,recordingErrors:0,publicQueueRequests:0,publicQueueJoins:0,publicQueueAbandons:0,publicLateJoins:0,publicMatchesStarted:0,publicHumanSeatsAtStart:0,publicBotSeatsAtStart:0};
- function recordQueueWait(ms){queueWaits.push(Math.max(0,ms));if(queueWaits.length>256)queueWaits.shift();}
- function queueWaitSummary(){const sorted=[...queueWaits].sort((a,b)=>a-b),percentile=p=>sorted.length?sorted[Math.ceil(sorted.length*p)-1]:null;return{samples:sorted.length,p50:percentile(.5),p95:percentile(.95)};}
+ const rooms=new Map(),accounts=new Map(),peers=new Map();let sealing=Promise.resolve(),closed=false,draining=false,pruning=false;const creationQuotas=new Map(),queueWaits=[],socketRtts=[],publicSocketRtts=[],socketJitters=[],publicSocketJitters=[],reconnectDelays=[],publicReconnectDelays=[],metrics={failedRooms:0,sealingJobs:0,lastSealMs:0,sealingFailures:0,verifiedMatches:0,publicVerifiedMatches:0,expiredReplays:0,recordingErrors:0,reconnections:0,publicReconnects:0,publicQueueRequests:0,publicQueueJoins:0,publicQueueAbandons:0,publicLateJoins:0,publicMatchesStarted:0,publicHumanSeatsAtStart:0,publicBotSeatsAtStart:0};
+ function recordSample(samples,value){samples.push(Math.max(0,Math.round(value)));if(samples.length>256)samples.shift();}
+ function sampleSummary(samples){const sorted=[...samples].sort((a,b)=>a-b),percentile=p=>sorted.length?sorted[Math.ceil(sorted.length*p)-1]:null;return{samples:sorted.length,p50:percentile(.5),p95:percentile(.95)};}
+ function recordQueueWait(ms){recordSample(queueWaits,ms);}
  function recordPublicStart(r){if(r.kind!=='public'||r.publicStartRecorded)return;r.publicStartRecorded=true;metrics.publicMatchesStarted++;const now=Date.now();for(const id of r.members){if(id.startsWith('bot-'))metrics.publicBotSeatsAtStart++;else{metrics.publicHumanSeatsAtStart++;recordQueueWait(now-(r.queueJoinedAt?.[id]??r.created));}}delete r.queueJoinedAt;}
  for(const name of ['rooms','accounts'])mkdirSync(path.join(data,name),{recursive:true,mode:0o700});
  const career=new CareerStore(data);
  const roomDir=id=>path.join(data,'rooms',id);
  function save(file,value){writeFileSync(file+'.tmp',JSON.stringify(value),{mode:0o600});renameSync(file+'.tmp',file);}
  function persist(r){save(path.join(roomDir(r.id),'room.json'),{id:r.id,kind:r.kind,config:r.config,members:r.members,host:r.host,status:r.status,created:r.created,state:r.state,proof:r.proof,error:r.error,selected:r.selected,finishedAt:r.finishedAt,queueDeadline:r.queueDeadline,participants:r.participants,careerCommitted:r.careerCommitted});}
- function bind(account,id){accounts.set(account,id);save(path.join(data,'accounts',account+'.json'),{room:id});}
+ function bind(account,id){accounts.set(account,id);const r=rooms.get(id);if(r&&peers.get(account)?.size)(r.connectedEver??=new Set()).add(account);save(path.join(data,'accounts',account+'.json'),{room:id});}
  function load(id){if(!/^[a-f0-9]{24}$/.test(id||''))return null;if(rooms.has(id))return rooms.get(id);try{const r=JSON.parse(readFileSync(path.join(roomDir(id),'room.json')));if(['running','waiting','sealing'].includes(r.status)){r.status='interrupted';r.error='The server restarted. This incomplete match is not marked verified.';persist(r)}rooms.set(id,r);return r;}catch{return null;}}
  function current(account){if(!accounts.has(account)){try{accounts.set(account,JSON.parse(readFileSync(path.join(data,'accounts',account+'.json'))).room);}catch{accounts.set(account,null)}}return load(accounts.get(account));}
  function view(r,account,afterTick=-Infinity){if(!r)return{room:null};const slot=r.members.indexOf(account);if(slot<0)return{room:null};
@@ -71,8 +73,8 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
     worker.once('message',value=>{delivered=true;value.error?reject(Error(value.error)):resolve(value.proof);});
     worker.once('error',reject);worker.once('exit',code=>{if(code||!delivered)reject(Error('Replay worker exited without a result: '+code));});
    });
-   r.proof=proof;r.status='finished';r.finishedAt=Date.now();persist(r);broadcast(r);try{await career.commit(r);r.careerCommitted=true;persist(r);}catch(error){console.error('Career commit deferred',r.id,error.message);}
-  }catch(error){console.error('BotStrike verification',r.id,error.message);fail(r,'The match ended but replay verification failed. No verified result was issued.');}
+   r.proof=proof;r.status='finished';r.finishedAt=Date.now();persist(r);broadcast(r);metrics.verifiedMatches++;if(r.kind==='public')metrics.publicVerifiedMatches++;try{await career.commit(r);r.careerCommitted=true;persist(r);}catch(error){console.error('Career commit deferred',r.id,error.message);}
+  }catch(error){metrics.sealingFailures++;console.error('BotStrike verification',r.id,error.message);fail(r,'The match ended but replay verification failed. No verified result was issued.');}
   finally{metrics.sealingJobs--;metrics.lastSealMs=Math.round(performance.now()-started);}};
   sealing=sealing.then(job,job);
  }
@@ -127,7 +129,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
    publicWaitingHumans:publicRooms.filter(r=>r.status==='waiting').reduce((n,r)=>n+humans(r),0),
    publicRunningHumans:publicRooms.filter(r=>r.status==='running').reduce((n,r)=>n+humans(r),0),
    publicBotSeats:publicRooms.reduce((n,r)=>n+10-humans(r),0),
-   publicQueueWaitMs:queueWaitSummary(),diskAvailableBytes:disk.bavail*disk.bsize,retentionDays,...metrics});
+   publicQueueWaitMs:sampleSummary(queueWaits),socketRttMs:sampleSummary(socketRtts),publicSocketRttMs:sampleSummary(publicSocketRtts),socketJitterMs:sampleSummary(socketJitters),publicSocketJitterMs:sampleSummary(publicSocketJitters),reconnectDelayMs:sampleSummary(reconnectDelays),publicReconnectDelayMs:sampleSummary(publicReconnectDelays),diskAvailableBytes:disk.bavail*disk.bsize,retentionDays,...metrics});
  }
  if(req.method==='POST'&&req.url==='/api/admin/drain'){draining=true;return reply(200,{draining:true});}
  if(req.method==='GET'&&req.url==='/api/career')return reply(200,await career.view(account));
@@ -145,14 +147,40 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  else if(b.type==='input')input(account,b);
  else throw Error('Unknown action');if(r)broadcast(r);reply(200,view(r,account));
  }catch(e){if(res.headersSent){res.destroy();return;}reply(400,{error:e.message||'Request failed'})}});
- const sockets=new WebSocketServer({noServer:true,maxPayload:4096,perMessageDeflate:false});server.on('upgrade',(req,socket,head)=>{socket.on('error',()=>socket.destroy());const account=authenticate(req);if(!account||req.url!=='/api/socket'||sockets.clients.size>=160||(peers.get(account)?.size||0)>=3){socket.end('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n');return}sockets.handleUpgrade(req,socket,head,ws=>{const set=peers.get(account)||new Set();set.add(ws);peers.set(account,set);let since=Date.now(),count=0;ws.alive=true;ws.on('pong',()=>ws.alive=true);ws.on('error',()=>ws.terminate());ws.on('close',()=>{set.delete(ws);if(!set.size)peers.delete(account)});ws.on('message',(raw,binary)=>{if(Date.now()-since>=1000){since=Date.now();count=0}if(binary||++count>100){ws.close(1008,'Input limit');return}try{const b=JSON.parse(raw);if(b.type==='ping'&&Number.isFinite(b.time))send(ws,{type:'pong',time:b.time});else if(b.type==='input')input(account,b);else throw Error('Unknown realtime command')}catch(e){send(ws,{type:'error',error:e.message})}});deliverState(ws,current(account),account);});});
+ const sockets=new WebSocketServer({noServer:true,maxPayload:4096,perMessageDeflate:false});
+ server.on('upgrade',(req,socket,head)=>{
+  socket.on('error',()=>socket.destroy());const account=authenticate(req);
+  if(!account||req.url!=='/api/socket'||sockets.clients.size>=160||(peers.get(account)?.size||0)>=3){socket.end('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n');return}
+  sockets.handleUpgrade(req,socket,head,ws=>{
+   const set=peers.get(account)||new Set(),first=!set.size,r=current(account);
+   if(first&&r){
+    const disconnectedAt=r.disconnectedAt?.get(account);
+    if(r.status==='running'&&disconnectedAt!==undefined){const delay=Date.now()-disconnectedAt;metrics.reconnections++;recordSample(reconnectDelays,delay);if(r.kind==='public'){metrics.publicReconnects++;recordSample(publicReconnectDelays,delay)}}
+    r.disconnectedAt?.delete(account);(r.connectedEver??=new Set()).add(account);
+   }
+   set.add(ws);peers.set(account,set);let since=Date.now(),count=0;ws.alive=true;
+   ws.on('pong',payload=>{
+    if(ws.pingAt===undefined||!payload.equals(ws.pingNonce))return;
+    ws.alive=true;const room=current(account),rtt=performance.now()-ws.pingAt;ws.pingAt=undefined;ws.pingNonce=undefined;
+    if(room?.status!=='running')return;
+    if(ws.rttRoom!==room.id){ws.lastRtt=undefined;ws.rttRoom=room.id}
+    recordSample(socketRtts,rtt);if(room.kind==='public')recordSample(publicSocketRtts,rtt);
+    if(ws.lastRtt!==undefined){const jitter=Math.abs(rtt-ws.lastRtt);recordSample(socketJitters,jitter);if(room.kind==='public')recordSample(publicSocketJitters,jitter)}
+    ws.lastRtt=rtt;
+   });
+   ws.on('error',()=>ws.terminate());
+   ws.on('close',()=>{set.delete(ws);if(!set.size){peers.delete(account);const room=current(account);if(room?.status==='running'&&room.connectedEver?.has(account))(room.disconnectedAt??=new Map()).set(account,Date.now())}});
+   ws.on('message',(raw,binary)=>{if(Date.now()-since>=1000){since=Date.now();count=0}if(binary||++count>100){ws.close(1008,'Input limit');return}try{const b=JSON.parse(raw);if(b.type==='ping'&&Number.isFinite(b.time))send(ws,{type:'pong',time:b.time});else if(b.type==='input')input(account,b);else throw Error('Unknown realtime command')}catch(e){send(ws,{type:'error',error:e.message})}});
+   deliverState(ws,r,account);
+  });
+ });
  async function prune(){if(pruning||closed)return;pruning=true;try{await career.recover();const protectedRooms=new Set([...rooms.values()].filter(r=>['waiting','running','sealing'].includes(r.status)).map(r=>r.id));const removed=await pruneReplays(data,{days:retentionDays,protectedRooms});metrics.expiredReplays+=removed.length;for(const id of removed){rooms.delete(id);for(const [account,room]of accounts)if(room===id)accounts.delete(account);}}catch(error){console.error('Replay retention',error.message);}finally{pruning=false;}}
  const retentionTimer=setInterval(()=>void prune(),3600000);retentionTimer.unref();void prune();
  const heartbeat=setInterval(()=>{
-  for(const ws of sockets.clients){if(!ws.alive){ws.terminate();continue;}ws.alive=false;ws.ping();}
+  for(const ws of sockets.clients){if(!ws.alive){ws.terminate();continue;}ws.alive=false;ws.pingNonce=randomBytes(8);ws.pingAt=performance.now();ws.ping(ws.pingNonce);}
   for(const r of rooms.values())try{if(r.status==='waiting'&&Date.now()-r.created>600000){clearTimeout(r.queueTimer);r.status='expired';r.finishedAt=Date.now();persist(r);broadcast(r);}if(!['waiting','running','sealing'].includes(r.status)&&Date.now()-(r.finishedAt||r.created)>3600000)rooms.delete(r.id);}catch(error){fail(r,'Room maintenance failed');}
   for(const [id,quota]of creationQuotas)if(quota.until<Date.now())creationQuotas.delete(id);
- },15000);heartbeat.unref();
+ },heartbeatMs);heartbeat.unref();
  server.requestTimeout=5000;server.headersTimeout=5000;
  async function close(){closed=true;clearInterval(heartbeat);clearInterval(retentionTimer);for(const r of rooms.values()){clearTimeout(r.timer);clearTimeout(r.queueTimer);clearTimeout(r.watchdog);r.child?.kill();if(r.fd!==undefined){try{closeSync(r.fd);}catch{}delete r.fd;}}for(const ws of sockets.clients)ws.terminate();await new Promise(resolve=>server.close(resolve));}
  return{server,close,rooms,metrics,prune};
