@@ -8,7 +8,7 @@ import {createBotStrike} from '../botstrike-service/server.mjs';
 
 test('public queue and socket metrics track fill, latency and real reconnects',async()=>{
  const data=await mkdtemp(path.join(tmpdir(),'botstrike-queue-')),secret='queue-metrics-test-'.repeat(3);
- const service=createBotStrike({secret,data,queueMs:500,heartbeatMs:100}),sockets=[];
+ const service=createBotStrike({secret,data,queueMs:1000,heartbeatMs:100}),sockets=[];
  await new Promise(resolve=>service.server.listen(0,'127.0.0.1',resolve));
  const base='http://127.0.0.1:'+service.server.address().port;
  const headers=id=>({'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':id.repeat(64)});
@@ -19,6 +19,7 @@ test('public queue and socket metrics track fill, latency and real reconnects',a
  try{
   const first=await queue('a'),second=await queue('b');assert.equal(first.id,second.id);
   const waiting=await metrics();assert.equal(waiting.publicWaitingHumans,2);assert.equal(waiting.publicRunningHumans,0);assert.equal(waiting.publicQueueRequests,2);assert.equal(waiting.publicQueueJoins,1);assert.equal(waiting.publicQueueWaitMs.samples,0);assert.equal(waiting.publicBotSeats,8);
+  const queueView=(await(await fetch(base+'/api/state',{headers:headers('a')})).json()).room;assert.ok(queueView.queueRemainingMs>0&&queueView.queueRemainingMs<=1000);
   await until(()=>service.rooms.get(first.id)?.state);
   const started=await metrics();assert.equal(started.publicMatchesStarted,1);assert.equal(started.publicHumanSeatsAtStart,2);assert.equal(started.publicBotSeatsAtStart,8);assert.equal(started.publicQueueWaitMs.samples,2);assert.ok(started.publicQueueWaitMs.p95>=started.publicQueueWaitMs.p50);assert.equal(started.publicRunningHumans,2);
   const primary=await connect('a'),duplicate=await connect('a');
