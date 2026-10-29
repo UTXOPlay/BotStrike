@@ -59,11 +59,16 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  function deliverState(ws,r,account){const tick=r?.state?.tick||0;send(ws,{type:'state',...view(r,account,ws.feedbackRoom===r?.id?ws.feedbackTick:tick-128)});ws.feedbackRoom=r?.id;ws.feedbackTick=tick;}
  function broadcast(r){if(r.state&&r.sentTicks)for(let slot=0;slot<10;slot++){const list=r.sentTicks[slot];list.push(r.state.tick);while(list.length>24)list.shift();}for(const account of r.members)for(const ws of peers.get(account)||[])deliverState(ws,r,account);}
  function fail(r,message){
-  if(r.status==='failed')return;
+  if(['failed','cancelled','finished'].includes(r.status))return;
   clearTimeout(r.timer);clearTimeout(r.queueTimer);clearTimeout(r.watchdog);r.status='failed';r.finishedAt=Date.now();r.error=message;metrics.failedRooms++;
   r.child?.kill();if(r.fd!==undefined){try{closeSync(r.fd);}catch{}delete r.fd;}
   try{persist(r);}catch(error){console.error('Room failure could not persist',r.id,error.code||error.message);}
   try{broadcast(r);}catch(error){console.error('Room failure notification',error.message);}
+ }
+ function cancelEmpty(r){
+  if(r.status!=='running'||r.members.some(id=>!id.startsWith('bot-')))return;
+  r.status='cancelled';r.finishedAt=Date.now();clearTimeout(r.timer);clearTimeout(r.watchdog);
+  r.child?.kill();if(r.fd!==undefined){try{closeSync(r.fd);}catch{}delete r.fd;}
  }
  function seal(r,result){
   r.status='sealing';clearTimeout(r.watchdog);persist(r);broadcast(r);metrics.sealingJobs++;
@@ -80,7 +85,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  }
  function start(r){clearTimeout(r.queueTimer);r.queueDeadline=null;r.status='running';r.inputs=Array.from({length:10},(_,slot)=>({...neutral(),yaw:slot<5?0:Math.PI}));r.seen=Array(10).fill(0);r.sentTicks=Array.from({length:10},()=>[]);r.pulses=Array.from({length:10},()=>({}));r.buy=Array(10).fill(null);r.state=null;r.fd=openSync(path.join(roomDir(r.id),'tape.jsonl'),'w',0o600);const header=JSON.stringify({config:r.config})+'\n';writeSync(r.fd,header);r.bytes=Buffer.byteLength(header);persist(r);
  const child=spawn(path.join(assets,'botstrike-engine'),[],{stdio:['pipe','pipe','pipe']});r.child=child;let resultSeen=false,pending=false,deadline=performance.now(),lastBroadcast=-1;child.stdin.on('error',()=>{});child.on('error',()=>fail(r,'The native engine could not start'));child.stderr.on('data',b=>console.error('BotStrike engine',String(b).slice(0,500)));
- const lines=createInterface({input:child.stdout});lines.on('line',line=>{if(r.status==='failed'||closed)return;try{const msg=JSON.parse(line);if(msg.type==='ready'){r.state=msg.state;recordPublicStart(r);broadcast(r);step();}else if(msg.type==='frame'){clearTimeout(r.watchdog);pending=false;const previous=r.state,oldPhase=previous?.phase;r.state=msg.state;trackHumanFrame(r,r.state);collectFeedback(r,previous,spec);const tick=r.state.tick;if(tick-lastBroadcast>=4||r.state.events.some(e=>e.kind!=='shot')||r.state.phase!==oldPhase){lastBroadcast=tick;broadcast(r)}
+ const lines=createInterface({input:child.stdout});lines.on('line',line=>{if(r.status!=='running'||closed)return;try{const msg=JSON.parse(line);if(msg.type==='ready'){r.state=msg.state;recordPublicStart(r);broadcast(r);step();}else if(msg.type==='frame'){clearTimeout(r.watchdog);pending=false;const previous=r.state,oldPhase=previous?.phase;r.state=msg.state;trackHumanFrame(r,r.state);collectFeedback(r,previous,spec);const tick=r.state.tick;if(tick-lastBroadcast>=4||r.state.events.some(e=>e.kind!=='shot')||r.state.phase!==oldPhase){lastBroadcast=tick;broadcast(r)}
  if(tick%640===0||r.state.phase!==oldPhase)persist(r);
  if(r.state.phase==='finished'){closeSync(r.fd);delete r.fd;child.stdin.end();}else{deadline+=tickMs;if(deadline<performance.now()-250)deadline=performance.now();r.timer=setTimeout(()=>void step(),Math.max(0,deadline-performance.now()));}
  }else if(msg.type==='result'){resultSeen=true;if(!msg.result.completed)throw Error('Incomplete match');seal(r,msg.result)}}catch(e){console.error(e);fail(r,'The native engine returned an invalid match')}});
@@ -110,7 +115,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
    // false means accepted into the stream buffer, not a failed native input.
    if(!child.stdin.write(line)){r.backpressured=true;child.stdin.once('drain',()=>{r.backpressured=false;});}
    r.watchdog=setTimeout(()=>fail(r,'The native engine stopped responding'),10000);
-  }catch(error){metrics.recordingErrors++;console.error('Room step failed',r.id,error.code||error.message);fail(r,'Match recording unavailable. This incomplete match is not verified.');}
+  }catch(error){if(r.status!=='running'||closed)return;metrics.recordingErrors++;console.error('Room step failed',r.id,error.code||error.message);fail(r,'Match recording unavailable. This incomplete match is not verified.');}
  }
 
  }
@@ -143,7 +148,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  else if(b.type==='buy'){if(!r||r.status!=='running'||r.state?.phase!=='buy'||!Number.isInteger(b.item)||b.item<0||b.item>=weaponCount+itemCount)throw Error('Purchases are available during buy time');r.buy[r.members.indexOf(account)]=b.item;}
  else if(b.type==='spectate'){const self=r?.state?.players[r.members.indexOf(account)],target=r?.state?.players[b.slot];if(!self||self.alive||!Number.isInteger(b.slot)||!target?.alive||target.team!==self.team)throw Error('Choose a living teammate while spectating');r.spectating??={};r.spectating[account]=b.slot;}
  else if(b.type==='hero'){if(!r||!['waiting','running'].includes(r.status)||!Number.isInteger(b.hero)||b.hero<0||b.hero>5)throw Error('Invalid hero');const slot=r.members.indexOf(account);r.selected[slot]=b.hero;if(r.status==='waiting')r.config.heroes[slot]=b.hero;persist(r);}
- else if(b.type==='leave'){if(r&&['running','waiting'].includes(r.status)){if(r.kind==='public'&&r.status==='waiting')metrics.publicQueueAbandons++;const slot=r.members.indexOf(account);r.members[slot]='bot-'+slot;delete r.selected[slot];if(r.inputs)r.inputs[slot]=neutral();if(r.host===account)r.host=r.members.find(id=>!id.startsWith('bot-'))||null;if(r.status==='waiting'&&!r.host)r.status='cancelled';persist(r);broadcast(r)}bind(account,null);r=null;}
+ else if(b.type==='leave'){if(r&&['running','waiting'].includes(r.status)){if(r.kind==='public'&&r.status==='waiting')metrics.publicQueueAbandons++;const slot=r.members.indexOf(account);r.members[slot]='bot-'+slot;delete r.selected[slot];if(r.inputs)r.inputs[slot]=neutral();if(r.host===account)r.host=r.members.find(id=>!id.startsWith('bot-'))||null;if(r.status==='waiting'&&!r.host)r.status='cancelled';cancelEmpty(r);persist(r);broadcast(r)}bind(account,null);r=null;}
  else if(b.type==='input')input(account,b);
  else throw Error('Unknown action');if(r)broadcast(r);reply(200,view(r,account));
  }catch(e){if(res.headersSent){res.destroy();return;}reply(400,{error:e.message||'Request failed'})}});
