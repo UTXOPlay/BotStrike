@@ -48,7 +48,7 @@ Standard controller: left stick moves, right stick aims, RT fires, LT scopes, A 
 
 Version 1.2.0 adds bounded positional gunfire, running footsteps, reload and ability cues; distinct headshot/kill confirmation; directional damage, death source, active-effect timers, dynamic accuracy reticle, and relay progress/results. Running is audible; walking and crouching are quiet. Audio sends eight-sector bearings and coarse volume with wall attenuation, never hidden enemy coordinates. Event IDs prevent duplicate playback across snapshots and reconnects.
 
-ARC-9, NEEDLE, ION-5, RAIL-LANCE and SCATTER use distinct original generated shot samples; other weapons retain synthesized cues. The samples share the same bounded voice and spatial attenuation path.
+ARC-9, NEEDLE, ION-5, RAIL-LANCE and SCATTER use distinct original generated shot samples; other weapons retain synthesized cues. Confirmed body hits, headshots and damage taken use separate original impact samples. The samples share the same bounded voice and spatial attenuation path. Blind listening and physical-device speaker checks remain open.
 
 Controls can be rebound, including mouse buttons. The default crouch is F; Ctrl/Alt/Meta are excluded to avoid browser shortcuts. Settings persist volume, ADS sensitivity, Y inversion, brightness, reticle color/size and optional vibration. ADS sensitivity scales with the scoped field of view. Armory and scoreboard trap keyboard focus and close with Escape. A held scoreboard key remains a hold action; opening via its icon allows Tab navigation.
 

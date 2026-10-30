@@ -7,6 +7,8 @@ const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH
 const context=await browser.newContext({viewport:{width:1920,height:1080}});
 await context.addInitScript(()=>{
  window.__shotBuffers=[];window.__startedShots=[];
+ const OriginalSocket=WebSocket;
+ window.WebSocket=class extends OriginalSocket{constructor(...args){super(...args);window.__testSocket=this;this.addEventListener('message',event=>{try{const value=JSON.parse(event.data);if(value.room?.state)window.__testRoom=value.room;}catch{}})}};
  const original=AudioContext.prototype.createBuffer;
  AudioContext.prototype.createBuffer=function(channels,length,rate){window.__shotBuffers.push({channels,length,rate});return original.call(this,channels,length,rate)};
  const start=AudioBufferSourceNode.prototype.start;
@@ -41,8 +43,16 @@ try{
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.10&&buffer.length/buffer.rate<.11),'ION-5 sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.31&&buffer.length/buffer.rate<.33),'RAIL-LANCE sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.37&&buffer.length/buffer.rate<.39),'SCATTER sample reached Web Audio');
+ await page.waitForFunction(()=>window.__testRoom?.state);
+ await page.evaluate(()=>{
+  const room=structuredClone(window.__testRoom),tick=++room.state.tick,slot=room.slot,target=(slot+5)%10;
+  room.feedback=[{id:'impact-body',tick,kind:'hit',actor:slot,target,value:20},{id:'impact-head',tick,kind:'headshot',actor:slot,target,value:45},{id:'impact-damage',tick,kind:'hit',actor:target,target:slot,value:30,bearing:0}];
+  window.__testSocket.dispatchEvent(new MessageEvent('message',{data:JSON.stringify({type:'state',room})}));
+ });
+ await page.waitForFunction(()=>[.12,.17,.19].every(duration=>window.__startedShots.some(value=>Math.abs(value-duration)<.01)));
+ assert.equal(buffers.length,8,'five weapons and three impacts use one buffer each');
  assert.deepEqual(errors,[]);
- console.log('ARC-9, NEEDLE, ION-5, RAIL-LANCE and SCATTER sampled playback started in native practice without page errors');
+ console.log('Five weapon samples started in native practice; confirmed body, head and damage feedback started distinct samples');
 }finally{
  try{await leaveBrowserRoom(page)}finally{await browser.close()}
 }

@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-30",
+  "change": "Replace pitched hit and damage pulses with original, deterministic body, headshot and damage impact samples",
+  "baseline": "Confirmed body and headshot feedback used short sine pulses; damage taken used a low triangle pulse.",
+  "observed": {
+    "sampleDurationsMs": {"body": 120, "headshot": 170, "damage": 190},
+    "samplePeakLimit": 0.82,
+    "newMonoPcmKiBAt48kHz": 90,
+    "voiceLimit": 32,
+    "ruleOrReplayChange": false
+  },
+  "checks": {
+    "npmTest": "66/66 passed",
+    "browser": "Native practice started ARC-9, NEEDLE, ION-5, RAIL-LANCE and SCATTER samples; injected confirmed feedback started all three impact samples without page errors.",
+    "browserEngine": "Playwright Chromium headless shell 1234 on Apple M4 Max",
+    "build": "npm run build passed"
+  },
+  "limits": [
+    "The impact event test injects presentation feedback; it does not claim a human landed three different hits in a native match.",
+    "Blind listening, physical speakers or headphones, and real-device performance remain unmeasured.",
+    "The PCM estimate counts sample data only, not Web Audio implementation overhead."
+  ]
+}
