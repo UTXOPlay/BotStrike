@@ -89,6 +89,8 @@ PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-art.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
+  node tests/botstrike-scatter-browser.mjs
+PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-armory.mjs
 CHROMIUM_PATH=/path/to/chrome node tests/botstrike-gamepad-browser.mjs
 ```

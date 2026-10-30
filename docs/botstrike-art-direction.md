@@ -4,7 +4,7 @@ The 2050 cover is the art reference: six industrial robots, cyan/mint/amber/viol
 
 The six gameplay chassis adapt the Sotudios Humanoid Robot Pack under CC BY 4.0. Source `.blend` files, the vendor manifest and license records are in `../assets/characters/`; the shipped, rigged GLBs and external textures are in `../games/botstrike/web/models/`. BotStrike adds role colors, equipment and 25 animation clips. The first-person arms come from those same skinned meshes.
 
-Weapons, equipment and environments use original Three.js geometry in `games/botstrike/client/art-direction.mjs`, not a flat cover projected into gameplay. The armory and carried weapon share that factory. ARC-9 has a compact twin-cell housing; NEEDLE uses a long vented accelerator shroud. Weapon geometry is presentation only; native combat and replay rules remain independent of it.
+Weapons, equipment and environments use original Three.js geometry in `games/botstrike/client/art-direction.mjs`, not a flat cover projected into gameplay. The armory and carried weapon share that factory. ARC-9 has a compact twin-cell housing; NEEDLE uses a long vented accelerator shroud; SCATTER uses a wide muzzle, heat shroud and ribbed pump. Weapon geometry is presentation only; native combat and replay rules remain independent of it.
 
 The three map environments share the industrial palette but have different infrastructure: docks and freight cranes, antenna towers and rooftop decks, and reactor vessels/pipes. Only visual dressing is added to native collision primitives. Detail within walkable areas is flat material work; large decorative structures are outside the arena. The shared map specification still defines all movement and shot collision.
 

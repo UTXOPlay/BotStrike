@@ -84,7 +84,21 @@ export function createArt(renderer,{mobile=false}={}){
  if(kind===9){plate(gun,5,2,24,0,-3,-15,m.steel,.3);for(const side of [-1,1])beam(gun,[side*2,-3,-16],[side*5,-12,-23],.65,m.black);}
  if(kind===10){for(const side of [-1,1]){cyl(gun,2,12,side*4,0,3,energy,12);for(const y of [-6,6])cyl(gun,2.4,1.2,side*4,y,3,m.steel,12);cable(gun,[[side*4,6,3],[side*6,8,-5],[side*3,4,-13]],.6,m.black)}plate(gun,6,2,14,0,5,4,m.hull,.4);}
  if(kind===11){for(const side of [-1,1]){plate(gun,3,7,26,side*5,0,-20,m.hull,.6);box(gun,.4,4,21,side*6.6,0,-20,energy);}sphere(gun,4.2,0,1,-9,energy);plate(gun,9,9,12,0,-2,12,m.black,1);}
- if(kind===4){const pump=cyl(gun,2.3,13,0,-3,-12,m.rubber);pump.rotation.x=Math.PI/2;for(let i=0;i<6;i++)box(gun,4.2,.6,.5,0,-5,-17+i*2,m.steel)}
+ if(kind===4){
+  plate(gun,8.7,3.4,19,0,2.9,-12,m.gunmetal,.65);
+  for(const side of [-1,1]){
+   for(let i=0;i<5;i++)box(gun,.45,1.3,2,side*4.55,3,-19+i*3.4,m.black);
+   const tube=cyl(gun,1.25,19,side*2.4,-1.35,-14,m.black,12);tube.rotation.x=Math.PI/2;
+   const cap=cyl(gun,1.55,1,side*2.4,-1.35,-23.8,m.silver,12);cap.rotation.x=Math.PI/2;
+   for(let i=0;i<5;i++)box(gun,.6,2.2,.75,side*4.9,-3.4,-16+i*2.2,m.steel);
+  }
+  plate(gun,9.5,3.3,13,0,-3.4,-11,m.rubber,.7);
+  plate(gun,.6,2.7,6,3.85,.4,6,m.black,.2);
+  box(gun,.65,.45,4,4.2,1.25,6,m.silver);
+  const shroud=cyl(gun,3.4,5,0,1,-length*.5-10,m.gunmetal,16);shroud.rotation.x=Math.PI/2;
+  const bore=cyl(gun,2.8,.3,0,1,-length*.5-12.7,m.black,16);bore.rotation.x=Math.PI/2;
+  mesh(gun,new THREE.TorusGeometry(2.85,.45,6,16),m.silver,0,1,-length*.5-13);
+ }
  if(kind===0){
   plate(gun,8.6,6.2,10,0,.4,-2,m.gunmetal,.8);
   for(const side of [-1,1]){
