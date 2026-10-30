@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-30",
+  "command": "npm run test:botstrike-online-load",
+  "scope": "Four local native rooms and 40 loopback WebSocket clients for eight seconds",
+  "machine": {
+    "cpu": "Apple M4 Max",
+    "cores": 14,
+    "ramGb": 36
+  },
+  "observed": {
+    "rooms": 4,
+    "humans": 40,
+    "snapshots": 5459,
+    "durationSec": 8,
+    "hostNodeCpuPercent": 22,
+    "peakHostRssMb": 159,
+    "peakNativeRssMb": 21,
+    "nativeMemorySamples": 18,
+    "tapeMb": 1,
+    "snapshotGapMs": {"p50": 62, "p95": 65},
+    "eventLoopDelayMs": {"p50": 1, "p95": 2},
+    "socketRttMs": {"samples": 256, "p50": 3, "p95": 4},
+    "socketJitterMs": {"samples": 256, "p50": 1, "p95": 1},
+    "reconnects": 1,
+    "drain": true,
+    "emptyRoomsCancelled": true
+  },
+  "limits": [
+    "Clients use loopback and neutral inputs, so these RTT and jitter values do not represent internet play.",
+    "The CPU figure measures the host Node process only; the RSS figures separately sample the host and four native engines.",
+    "Host RSS is sampled every 100 ms and native engine RSS every 500 ms; reported peaks are the largest sampled values.",
+    "The macOS ps sampler passed; the Linux /proc sampler was not exercised on this machine.",
+    "Rooms are drained before match completion; this run does not measure replay sealing or verifier memory.",
+    "This does not measure physical-device frame pacing or human match quality."
+  ]
+}
