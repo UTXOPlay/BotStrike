@@ -6,6 +6,7 @@ import {clone} from 'three/addons/utils/SkeletonUtils.js';
 export const chassisNames=['vector','patch','bastion','spectre','glitch','forge'];
 export const motionNames=['idle','walk','run','backpedal','strafe_left','strafe_right','crouch','crouch_walk','jump','fall','land','fire','reload','equip','use_item','utility','skill','interact','hit','death_back','death_left','death_right','respawn','victory','defeat'];
 const lower=/^(root|hips|thigh|shin|foot)/;
+const gaitMotion=/^lower:(?:idle|walk|run|backpedal|strafe_left|strafe_right|crouch|crouch_walk)$/;
 const boneName=track=>track.name.slice(0,track.name.lastIndexOf('.'));
 const tmp=new THREE.Vector3(),identity=new THREE.Quaternion();
 
@@ -63,15 +64,19 @@ export function createCharacters(art){
    const original=source.clips[name];const clip=layer==='full'?original:new THREE.AnimationClip(key,original.duration,original.tracks.filter(t=>lower.test(boneName(t))===(layer==='lower')));
    const a=mixer.clipAction(clip);actions.set(key,a);return a;
   }
-  let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0;
+  let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0,gaitPhase=0;
   let gun=null,magazine=null,pump=null,pumpAt=-Infinity;const gunAnchor=new THREE.Group();model.add(gunAnchor);
   function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');pump=gun.getObjectByName('pump');pumpAt=-Infinity;const stock=gun.getObjectByName('stock');if(stock&&firstPerson)stock.visible=false;gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
   equip(weapon);
   function swap(current,next,loop=true,fade=.12){
-   if(current===next)return current;next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1);next.setLoop(loop?THREE.LoopRepeat:THREE.LoopOnce,loop?Infinity:1);next.clampWhenFinished=!loop;next.play();
+   if(current===next)return current;next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1);next.setLoop(loop?THREE.LoopRepeat:THREE.LoopOnce,loop?Infinity:1);next.clampWhenFinished=!loop;
+   if(!firstPerson&&loop&&gaitMotion.test(next.getClip().name)){const prior=current&&gaitMotion.test(current.getClip().name)?current.time/current.getClip().duration:gaitPhase;next.time=(prior%1)*next.getClip().duration;}
+   next.play();
    if(current)current.crossFadeTo(next,fade,false);return next;
   }
   function reset(p,now){mixer.stopAllAction();base=upper=full=null;upperUntil=fullUntil=0;lastLife=p.life;lastAlive=p.alive;lastAir=false;lastReload=0;deadAt=0;
+   // A stable per-life offset prevents identical run clips from marching in lockstep.
+   gaitPhase=(slot*.38196601125+(p.life||0)*.1414213562)%1;
    base=swap(null,action('idle','lower'));upper=swap(null,action('idle','upper'));lastNow=now;
   }
   function trigger(name,now,duration,value){
@@ -95,7 +100,7 @@ export function createCharacters(art){
     if(lastAir&&!air)trigger('land',now,.3);lastAir=air;
     if(state.phase==='finished'||state.phase==='round_end'){
      const name=reduced?'idle':state.winner===p.team?'victory':'defeat';full=swap(full,action(name),true,.25);base?.fadeOut(.15);upper?.fadeOut(.15);fullUntil=Infinity;
-    }else if(full&&now>=fullUntil){full.fadeOut(.16);full=null;base?.reset().fadeIn(.16).play();upper?.reset().fadeIn(.16).play();}
+    }else if(full&&now>=fullUntil){full.fadeOut(.16);full=null;base?.reset().fadeIn(.16).play();if(!firstPerson&&base)base.time=gaitPhase*base.getClip().duration;upper?.reset().fadeIn(.16).play();}
     if(!full){base=swap(base,action(motion,'lower'));base.setEffectiveTimeScale(speed>12&&!air?THREE.MathUtils.clamp(speed/(motion==='run'?250:145),.6,1.6):1);
      if(p.reload>0&&!lastReload){reloadDuration=p.reload;trigger('reload',now,p.reload/64);}
      if(state.objective?.actor===slot&&state.objective.progress>0){if(upper!==action('interact','upper'))upper=swap(upper,action('interact','upper'));upperUntil=now+100;}
