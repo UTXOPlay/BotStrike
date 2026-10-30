@@ -166,6 +166,7 @@ pub struct Player {
     pub last_seq: u32,
     pub skill_held: bool,
     pub jump_held: bool,
+    pub interact_held: bool,
     pub item_held: u8,
     pub attackers: [u32; 10],
     pub life: u32,
@@ -185,6 +186,16 @@ pub struct Utility {
     pub velocity: [f64; 3],
     pub fuse: u32,
     pub life: u32,
+}
+#[derive(Clone, Serialize, Deserialize)]
+pub struct DroppedWeapon {
+    pub id: u32,
+    pub weapon: usize,
+    pub team: usize,
+    pub position: [f64; 3],
+    pub ammo: u32,
+    pub reserve: u32,
+    pub expires: u32,
 }
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Objective {
@@ -224,6 +235,7 @@ pub struct Game {
     pub players: Vec<Player>,
     pub objective: Objective,
     pub utilities: Vec<Utility>,
+    pub drops: Vec<DroppedWeapon>,
     pub events: Vec<Event>,
     pub random: u32,
     #[serde(skip)]
@@ -327,6 +339,7 @@ impl Game {
                 actor: None,
             },
             utilities: vec![],
+            drops: vec![],
             events: vec![],
         };
         for slot in 0..10 {
@@ -370,6 +383,7 @@ impl Game {
                 last_seq: 0,
                 skill_held: false,
                 jump_held: false,
+                interact_held: false,
                 item_held: 0,
                 attackers: [0; 10],
                 life: 0,
@@ -486,6 +500,7 @@ impl Game {
         p.attackers = [0; 10];
         p.skill_held = false;
         p.jump_held = false;
+        p.interact_held = false;
         p.item_held = 0;
         if reset_loadout {
             p.owned = [false; WEAPONS];
@@ -512,6 +527,7 @@ impl Game {
             }
         }
         self.utilities.clear();
+        self.drops.clear();
         self.phase = if self.config.mode == "deathmatch" {
             "live"
         } else {
@@ -598,8 +614,8 @@ impl Game {
         p.credits -= price;
         self.event("buy", Some(slot), None, item as i32);
     }
-    fn hurt(&mut self, target: usize, attacker: usize, damage: i32, head: bool) {
-        self.hurt_piercing(target, attacker, damage, head, 0.);
+    fn hurt(&mut self, target: usize, attacker: usize, damage: i32, head: bool, rules: &Rules) {
+        self.hurt_piercing(target, attacker, damage, head, 0., rules);
     }
     fn hurt_piercing(
         &mut self,
@@ -608,6 +624,7 @@ impl Game {
         damage: i32,
         head: bool,
         pierce: f64,
+        rules: &Rules,
     ) {
         if !self.players[target].alive
             || self.players[target].protection > 0
@@ -634,6 +651,22 @@ impl Game {
             actual,
         );
         if self.players[target].health == 0 {
+            let fallen = &self.players[target];
+            let weapon = fallen.weapon;
+            if fallen.ammo[weapon] + fallen.reserve[weapon] > 0 {
+                if self.drops.len() == 8 {
+                    self.drops.remove(0);
+                }
+                self.drops.push(DroppedWeapon {
+                    id: self.tick * 10 + target as u32,
+                    weapon,
+                    team: fallen.team,
+                    position: [fallen.position[0], 0., fallen.position[2]],
+                    ammo: fallen.ammo[weapon],
+                    reserve: fallen.reserve[weapon].min(rules.weapons[weapon].magazine * 2),
+                    expires: self.tick + HZ * 20,
+                });
+            }
             self.players[target].alive = false;
             self.players[target].deaths += 1;
             self.players[target].respawn = HZ * 4;
@@ -809,6 +842,7 @@ impl Game {
                     (w.damage as f64 * falloff * if head { 2.5 } else { 1. }) as i32,
                     head,
                     w.pierce,
+                    rules,
                 );
                 if self.players[target].health < before {
                     match w.effect.as_str() {
@@ -863,6 +897,7 @@ impl Game {
                         slot,
                         (35. * (1. - distance / w.splash)) as i32,
                         false,
+                        rules,
                     );
                 }
                 self.event("plasma", Some(slot), hit, weapon as i32);
@@ -1020,7 +1055,7 @@ impl Game {
                         self.players[slot].overclock = 0;
                     }
                 } else {
-                    self.hurt(slot, u.owner, (95. * (1. - d / max)) as i32, false);
+                    self.hurt(slot, u.owner, (95. * (1. - d / max)) as i32, false, rules);
                 }
             }
         }
@@ -1068,10 +1103,12 @@ impl Game {
         }
         self.events.clear();
         self.tick += 1;
+        self.drops.retain(|drop| drop.expires > self.tick);
         if self.tick > MAX_TICKS {
             return Err("Match exceeds time limit".into());
         }
         let mut effective = inputs;
+        let mut pickup_pressed = [false; 10];
         for slot in 0..10 {
             if self.config.bots[slot] && !inputs[slot].takeover {
                 effective[slot] = self.bot(slot, rules);
@@ -1102,6 +1139,8 @@ impl Game {
             p.last_seq = input.seq;
             p.yaw = input.yaw;
             p.pitch = input.pitch;
+            pickup_pressed[slot] = input.takeover && input.interact && !p.interact_held;
+            p.interact_held = input.takeover && input.interact;
             if !p.alive {
                 if self.config.mode == "deathmatch" {
                     dec(&mut p.respawn);
@@ -1211,6 +1250,7 @@ impl Game {
             return Ok(());
         }
         self.utilities(rules);
+        self.pickup_drops(&pickup_pressed, rules);
         dec(&mut self.phase_ticks);
         if self.config.mode == "deathmatch" {
             if self.score.iter().any(|&s| s >= 50) || self.phase_ticks == 0 {
@@ -1234,6 +1274,71 @@ impl Game {
             };
         }
         Ok(())
+    }
+    fn pickup_drops(&mut self, pressed: &[bool; 10], rules: &Rules) {
+        let map = &rules.maps[self.config.map];
+        for (slot, &pressed) in pressed.iter().enumerate() {
+            if !pressed || !self.players[slot].alive {
+                continue;
+            }
+            let p = &self.players[slot];
+            if self.config.mode == "demolition"
+                && (self.objective.planted
+                    && p.team != self.attacker
+                    && dist(p.position, self.objective.position) < 95.
+                    || self.objective.carrier == Some(slot)
+                        && map.sites.iter().any(|&site| dist(site, p.position) < 125.))
+            {
+                continue;
+            }
+            let origin = eye(p);
+            let choice = self
+                .drops
+                .iter()
+                .enumerate()
+                .find(|(_, drop)| {
+                    let weapon = drop.weapon;
+                    if dist(p.position, drop.position) >= 60.
+                        || p.position[1] > 40.
+                        || p.owned[weapon] && p.reserve[weapon] >= rules.weapons[weapon].reserve
+                    {
+                        return false;
+                    }
+                    let target = [drop.position[0], 16., drop.position[2]];
+                    let length = origin
+                        .iter()
+                        .zip(target)
+                        .map(|(a, b)| (b - a).powi(2))
+                        .sum::<f64>()
+                        .sqrt();
+                    let ray = std::array::from_fn(|axis| (target[axis] - origin[axis]) / length);
+                    !map.obstacles.iter().any(|box_| {
+                        ray_box(origin, ray, box_.min, box_.max).is_some_and(|d| d < length - 1.)
+                    })
+                })
+                .map(|(index, _)| index);
+            let Some(index) = choice else {
+                continue;
+            };
+            let drop = self.drops.remove(index);
+            let p = &mut self.players[slot];
+            let weapon = drop.weapon;
+            if p.owned[weapon] {
+                p.reserve[weapon] = (p.reserve[weapon] + drop.ammo + drop.reserve)
+                    .min(rules.weapons[weapon].reserve);
+                self.event("ammo_pickup", Some(slot), None, weapon as i32);
+            } else {
+                p.owned[weapon] = true;
+                p.ammo[weapon] = drop.ammo;
+                p.reserve[weapon] = drop.reserve;
+                p.weapon = weapon;
+                p.reload = 0;
+                p.burst_remaining = 0;
+                p.fire_wait = 10;
+                p.recoil = 0.;
+                self.event("gun_pickup", Some(slot), None, weapon as i32);
+            }
+        }
     }
     fn objective_step(&mut self, inputs: &[Input; 10], rules: &Rules) {
         let map = &rules.maps[self.config.map];
@@ -1533,7 +1638,7 @@ mod tests {
     fn respawn_is_delayed_protected_and_scored() {
         let (r, mut g) = setup("deathmatch");
         combat(&mut g);
-        g.hurt(5, 0, 1000, false);
+        g.hurt(5, 0, 1000, false, &r);
         assert!(!g.players[5].alive);
         assert_eq!(g.players[0].kills, 1);
         assert_eq!(g.score, [1, 0]);
@@ -1544,7 +1649,7 @@ mod tests {
         g.step(neutral(), &r).unwrap();
         assert!(g.players[5].alive);
         let hp = g.players[5].health;
-        g.hurt(5, 0, 1000, false);
+        g.hurt(5, 0, 1000, false, &r);
         assert_eq!(g.players[5].health, hp);
     }
     #[test]
@@ -1620,6 +1725,220 @@ mod tests {
         assert_eq!(g.players[0].credits, 1300);
     }
     #[test]
+    fn fallen_gun_is_recovered_with_its_compatible_ammo() {
+        let (r, mut g) = setup("demolition");
+        combat(&mut g);
+        g.players[5].weapon = 2;
+        g.players[5].ammo[2] = 7;
+        g.players[5].reserve[2] = 80;
+        g.hurt(5, 0, 1000, false, &r);
+        assert_eq!(g.drops.len(), 1);
+        assert_eq!(g.drops[0].reserve, 60);
+        g.players[0].position = g.drops[0].position;
+        let mut input = neutral();
+        input[0].takeover = true;
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        assert!(g.drops.is_empty());
+        assert!(g.players[0].owned[2]);
+        assert!(g.players[0].owned[0], "the previous gun stays in inventory");
+        assert_eq!(g.players[0].weapon, 2);
+        assert_eq!(g.players[0].ammo[2], 7);
+        assert_eq!(g.players[0].reserve[2], 60);
+        assert!(g
+            .events
+            .iter()
+            .any(|e| e.kind == "gun_pickup" && e.actor == Some(0)));
+    }
+    #[test]
+    fn recovered_ammo_still_requires_reload_and_respects_reserve_cap() {
+        let (r, mut g) = setup("deathmatch");
+        combat(&mut g);
+        g.players[0].position = [-1100., 0., 100.];
+        g.players[0].weapon = 0;
+        g.players[0].ammo[2] = 0;
+        g.players[0].reserve[2] = 0;
+        g.drops.push(DroppedWeapon {
+            id: 1,
+            weapon: 2,
+            team: 1,
+            position: [-1100., 0., 100.],
+            ammo: 10,
+            reserve: 20,
+            expires: HZ * 20,
+        });
+        let mut input = neutral();
+        input[0].takeover = true;
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        assert_eq!(
+            g.players[0].weapon, 0,
+            "ammunition does not change the active gun"
+        );
+        assert_eq!(g.players[0].ammo[2], 0);
+        assert_eq!(g.players[0].reserve[2], 30);
+        assert!(g.events.iter().any(|e| e.kind == "ammo_pickup"));
+        input[0].interact = false;
+        input[0].weapon = Some(2);
+        input[0].reload = true;
+        for _ in 0..r.weapons[2].reload + 1 {
+            g.step(input, &r).unwrap();
+        }
+        assert_eq!(g.players[0].ammo[2], 30);
+        assert_eq!(g.players[0].reserve[2], 0);
+        g.players[0].reserve[2] = 85;
+        g.drops.push(DroppedWeapon {
+            id: 2,
+            weapon: 2,
+            team: 1,
+            position: g.players[0].position,
+            ammo: 10,
+            reserve: 20,
+            expires: g.tick + HZ * 20,
+        });
+        input[0].reload = false;
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        assert_eq!(g.players[0].reserve[2], 90);
+    }
+    #[test]
+    fn gun_pickup_requires_live_human_proximity_and_unblocked_path() {
+        let (mut r, mut g) = setup("deathmatch");
+        combat(&mut g);
+        let drop = DroppedWeapon {
+            id: 1,
+            weapon: 2,
+            team: 1,
+            position: [-1100., 0., 100.],
+            ammo: 10,
+            reserve: 20,
+            expires: HZ * 20,
+        };
+        g.drops.push(drop.clone());
+        g.players[0].reserve[2] = 0;
+        g.players[0].position = [-1100., 0., 200.];
+        let mut input = neutral();
+        input[0].takeover = true;
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        assert_eq!(g.drops.len(), 1, "distant pickups fail");
+        input[0].interact = false;
+        g.step(input, &r).unwrap();
+        g.players[0].position = [-1100., 0., 130.];
+        r.maps[0].obstacles.push(Obstacle {
+            min: [-1150., 0., 105.],
+            max: [-1050., 80., 115.],
+            kind: "cover".into(),
+        });
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        assert_eq!(g.drops.len(), 1, "cover blocks pickup");
+        input[0].interact = false;
+        g.step(input, &r).unwrap();
+        r.maps[0].obstacles.pop();
+        g.players[0].alive = false;
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        assert_eq!(g.drops.len(), 1, "dead players cannot pick up guns");
+        input[0].interact = false;
+        g.step(input, &r).unwrap();
+        g.players[0].alive = true;
+        g.players[0].position = [-1100., 0., 100.];
+        g.players[0].reserve[2] = 0;
+        g.players[1].position = [-1100., 0., 100.];
+        g.players[1].reserve[2] = 0;
+        input[0].interact = true;
+        input[1].takeover = true;
+        input[1].interact = true;
+        g.step(input, &r).unwrap();
+        assert!(g.drops.is_empty());
+        assert_eq!(g.players[0].reserve[2], 30);
+        assert_eq!(g.players[1].reserve[2], 0, "one claimant wins");
+        g.drops.push(drop);
+        input[0].interact = false;
+        input[1].interact = false;
+        g.step(input, &r).unwrap();
+        input[0].takeover = false;
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        assert_eq!(g.drops.len(), 1, "AI cover cannot recover guns");
+        input[0].takeover = true;
+        g.step(input, &r).unwrap();
+        assert!(
+            g.drops.is_empty(),
+            "a returning pilot gets a fresh interaction edge"
+        );
+    }
+    #[test]
+    fn relay_interaction_has_priority_over_a_nearby_gun() {
+        let (r, mut g) = setup("demolition");
+        combat(&mut g);
+        g.players[0].position = r.maps[0].sites[0];
+        g.objective.carrier = Some(0);
+        g.drops.push(DroppedWeapon {
+            id: 1,
+            weapon: 2,
+            team: 1,
+            position: g.players[0].position,
+            ammo: 10,
+            reserve: 20,
+            expires: HZ * 20,
+        });
+        let mut input = neutral();
+        input[0].takeover = true;
+        input[0].interact = true;
+        g.step(input, &r).unwrap();
+        g.step(input, &r).unwrap();
+        assert_eq!(g.drops.len(), 1);
+        assert!(!g.players[0].owned[2]);
+        assert_eq!(g.objective.actor, Some(0));
+        assert!(g.objective.progress > 0);
+    }
+    #[test]
+    fn deathmatch_drops_never_exceed_the_world_budget() {
+        let (r, mut g) = setup("deathmatch");
+        combat(&mut g);
+        for tick in 0..10 {
+            g.tick = tick;
+            g.players[5].alive = true;
+            g.players[5].health = 100;
+            g.players[5].weapon = 2;
+            g.players[5].ammo[2] = 1;
+            g.players[5].protection = 0;
+            g.hurt(5, 0, 1000, false, &r);
+        }
+        assert_eq!(g.drops.len(), 8);
+        assert_eq!(g.drops[0].id, 25);
+        assert_eq!(g.drops[7].id, 95);
+    }
+    #[test]
+    fn drops_expire_and_clear_between_rounds() {
+        let (r, mut g) = setup("demolition");
+        combat(&mut g);
+        g.drops.push(DroppedWeapon {
+            id: 1,
+            weapon: 0,
+            team: 1,
+            position: [0.; 3],
+            ammo: 1,
+            reserve: 1,
+            expires: g.tick + 1,
+        });
+        g.step(neutral(), &r).unwrap();
+        assert!(g.drops.is_empty());
+        g.drops.push(DroppedWeapon {
+            id: 2,
+            weapon: 0,
+            team: 1,
+            position: [0.; 3],
+            ammo: 1,
+            reserve: 1,
+            expires: g.tick + 100,
+        });
+        g.start_round(&r);
+        assert!(g.drops.is_empty());
+    }
+    #[test]
     fn plant_defuse_and_detonation_have_distinct_outcomes() {
         let (r, mut g) = setup("demolition");
         combat(&mut g);
@@ -1680,7 +1999,7 @@ mod tests {
     fn demolition_respawns_next_round_and_switches_sides() {
         let (r, mut g) = setup("demolition");
         combat(&mut g);
-        g.hurt(5, 0, 1000, false);
+        g.hurt(5, 0, 1000, false, &r);
         for _ in 0..HZ * 5 {
             g.step(neutral(), &r).unwrap()
         }

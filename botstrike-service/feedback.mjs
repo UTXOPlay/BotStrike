@@ -1,6 +1,6 @@
 import {intersectsBox,canSee} from './visibility.mjs';
 const globalKinds=new Set(['round','planted','defused','detonation','elimination','time','match_end','kill']);
-const personalKinds=new Set(['hit','headshot','buy','respawn','pickup']);
+const personalKinds=new Set(['hit','headshot','buy','respawn','pickup','gun_pickup','ammo_pickup']);
 const audibleKinds=new Set(['shot','step','land','reload','skill','item','utility','plasma']);
 export function spatialCue(listener,source,map,range=1300){
  const dx=source.position[0]-listener.position[0],dz=source.position[2]-listener.position[2],distance=Math.hypot(dx,dz);

@@ -190,3 +190,8 @@ html[data-mobile=true] #rack-next .rack-art{width:39px;height:38px}
 html[data-mobile=true] #rack-next b{font-size:9px}
 html[data-mobile=true] #rack-next small{font-size:7px}
 @media(max-width:750px){html:not([data-mobile=true]) #weapon-rack{top:335px;right:max(14px,env(safe-area-inset-right));bottom:auto;transform:none}}
+
+#pickup-hud{position:absolute;left:50%;top:calc(50% - 84px);transform:translateX(-50%);max-width:min(90vw,440px);padding:5px 9px;text-align:center;color:#ffdcac;background:#0a1b25db;border:1px solid #ffca7a99;border-radius:4px;font:600 13px/1.3 monospace;text-shadow:0 1px 2px #061018;white-space:normal}
+@media(min-width:1800px) and (min-height:1200px){#pickup-hud{font-size:16px;top:calc(50% - 116px);padding:8px 14px;max-width:640px}}
+@media(min-width:3200px) and (min-height:1800px){#pickup-hud{font-size:22px;top:calc(50% - 174px);padding:10px 20px;max-width:900px}}
+html[data-mobile=true] #pickup-hud{top:calc(50% - 74px);font-size:11px;max-width:38%;padding:3px 5px}

@@ -59,7 +59,10 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
   first.ws.send(JSON.stringify({type:'claim',room:room.id}));await until(()=>first.messages.filter(message=>message.type==='control'&&message.active).length===2);
   assert.equal(control(first,true).nextSeq,2);
   assert.notEqual(control(first,true).token,firstToken);
-  first.ws.send(packet(3,{x:1}));await until(()=>live.inputs[0].seq===3);
+  first.ws.send(packet(3,{x:1,weapon:1}));await until(()=>live.state?.players[0].last_seq===3);
+  assert.equal(live.inputs[0].weapon,undefined,'weapon selection is not retained as a held control');
+  first.ws.send(packet(4,{x:1,weapon:1}));await until(()=>live.inputs[0].seq===4);
+  assert.equal(live.pulses[0].weapon,undefined,'repeated snapshots do not queue another switch');
   const observer=await connect();await until(()=>control(observer,false));
   assert.equal((await action({type:'leave'})).status,400,'a passive tab cannot leave the live room');
   assert.equal(live.status,'running');

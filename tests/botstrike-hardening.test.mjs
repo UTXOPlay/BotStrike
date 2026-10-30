@@ -23,6 +23,17 @@ test('opponent positions behind walls or smoke never reach client; own state and
  s.players[1].revealed=30;assert.deepEqual(publicState(s,0,spec).players[1].position,[0,0,-100]);
  assert.deepEqual(s.players[1].position,[0,0,-100],'authoritative source was not mutated');
 });
+test('fallen guns are only disclosed through a clear nearby view',()=>{
+ const s=state(),spec={maps:[{obstacles:[{min:[-40,0,-60],max:[40,100,-40]}]}]};
+ s.drops=[{id:1,weapon:2,team:1,position:[0,0,-100],ammo:10,reserve:20,expires:1200}];
+ assert.deepEqual(publicState(s,0,spec).drops,[]);
+ spec.maps[0].obstacles=[];
+ assert.deepEqual(publicState(s,0,spec).drops,s.drops);
+ s.utilities=[{kind:2,fuse:0,position:[0,40,-50]}];
+ assert.deepEqual(publicState(s,0,spec).drops,[]);
+ s.utilities=[];s.drops[0].position=[0,0,-901];
+ assert.deepEqual(publicState(s,0,spec).drops,[]);
+});
 test('remote interpolation follows server time without moving local prediction or revealing a hidden life',()=>{
  const buffer=new SnapshotBuffer();buffer.push(state(10,0),0);buffer.push(state(12,20),31.25);buffer.push(state(14,40),62.5);
  const sample=buffer.sample(78.125,0);assert.equal(buffer.viewTick(),11);assert.equal(sample.players[1].position[0],10);assert.equal(sample.players[0].position[0],0);

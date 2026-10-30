@@ -27,6 +27,8 @@ export function createFeedback({audio,getPrefs,getRoom,getYaw,getGamepad,spec}){
    else if(e.kind==='match_end'){banner(s.winner===me.team?'MATCH WON':s.winner==null?'MATCH DRAW':'MATCH LOST',4500);if(fresh)audio.cue(s.winner===me.team?'win':'loss');}
    else if(e.kind==='respawn'&&fresh)audio.cue('respawn');
    else if(e.kind==='pickup')banner('RELAY ACQUIRED · HOLD USE AT A OR B');
+   else if(e.kind==='gun_pickup'&&e.actor===room.slot){banner('RECOVERED · '+(spec.weapons[e.value]?.name||'WEAPON'),1300);if(fresh)audio.cue('reload');}
+   else if(e.kind==='ammo_pickup'&&e.actor===room.slot){banner('AMMO RECOVERED · '+(spec.weapons[e.value]?.name||'WEAPON'),1300);if(fresh)audio.cue('reload');}
    else if(e.kind==='buy')banner('LOADOUT UPDATED',1000);
   }
   const objective=s.objective,progress=objective.actor===room.slot?objective.progress:0,required=objective.planted?7:3;

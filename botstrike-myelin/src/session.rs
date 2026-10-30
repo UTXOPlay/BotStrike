@@ -128,8 +128,8 @@ fn profile() -> ApplicationProfile {
     ApplicationProfile {
         application_id: ID.into(),
         program_digest: *program.finalize().as_bytes(),
-        input_schema_hash: hash(b"botstrike-2050-bounded-rewind-and-reactive-ai-v3"),
-        state_codec_hash: hash(b"serde-json-game-snapshot-v1"),
+        input_schema_hash: hash(b"botstrike-2050-salvage-pickups-v1"),
+        state_codec_hash: hash(b"serde-json-game-snapshot-v2"),
         logical_time_policy_hash: hash(b"one-accepted-action-one-logical-tick"),
         entropy_policy_hash: hash(b"deterministic-native-neon-arena-no-random-input"),
         vm: ApplicationVmProfile {
