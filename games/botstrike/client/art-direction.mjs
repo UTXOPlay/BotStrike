@@ -155,9 +155,9 @@ export function createArt(renderer,{mobile=false}={}){
  // paint wear and drainage seams; no invisible steps or decorative collision volumes.
  box(root,e*2+40,10,e*2+40,0,-5,0,ground);
  if(id===0){
-  const waterMap=texture((c,s)=>{c.fillStyle='#93b7bb';c.fillRect(0,0,s,s);for(let i=0;i<1500;i++){const x=random()*s,y=random()*s;c.fillStyle=i%5?'#a4c4c6':'#bfd1cd';c.fillRect(x,y,5+random()*31,.5+random()*1.4)}},256);waterMap.repeat.set(18,18);
+  const waterMap=texture((c,s)=>{c.fillStyle='#93b7bb';c.fillRect(0,0,s,s);for(let i=0;i<1500;i++){const x=random()*s,y=random()*s;c.fillStyle=i%5?'#a4c4c6':'#bfd1cd';c.fillRect(x,y,5+random()*31,.5+random()*1.4)}},256);waterMap.repeat.set(27,27);
   const water=new THREE.MeshBasicMaterial({color:'#79a1a7',map:waterMap});materials.push(water);
-  const sea=mesh(root,new THREE.PlaneGeometry(16000,16000),water,0,-61,0);sea.rotation.x=-Math.PI/2;sea.castShadow=sea.receiveShadow=false;
+  const sea=mesh(root,new THREE.PlaneGeometry(24000,24000),water,0,-61,0);sea.rotation.x=-Math.PI/2;sea.castShadow=sea.receiveShadow=false;
   for(const side of [-1,1])for(let z=-e+140;z<e-100;z+=130){box(root,70,.15,4,side*(e-145),.16,z,m.warm);box(root,18,.15,4,side*(e-185),.16,z,m.black)}
  }
  for(let z=-e+80;z<e;z+=160){for(const side of [-1,1]){box(root,35,.18,5,side*(e-65),.12,z,m.warm);box(root,35,.18,5,side*(e-65),.12,z+16,m.warm)}}
