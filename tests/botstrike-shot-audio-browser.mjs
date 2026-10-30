@@ -43,6 +43,20 @@ try{
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.10&&buffer.length/buffer.rate<.11),'ION-5 sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.31&&buffer.length/buffer.rate<.33),'RAIL-LANCE sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.37&&buffer.length/buffer.rate<.39),'SCATTER sample reached Web Audio');
+ await page.waitForFunction(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].alive));
+ const landingStart=await page.evaluate(()=>window.__startedShots.length);
+ await page.keyboard.press('Space',{delay:80});
+ await page.waitForFunction(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].position[1]>1));
+ await page.waitForFunction(start=>window.__startedShots.slice(start).some(value=>Math.abs(value-.23)<.003),landingStart);
+ const stepStart=await page.evaluate(()=>window.__startedShots.length);
+ const beforeMove=await page.evaluate(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].position));
+ await page.keyboard.down('KeyW');
+ try{
+  await page.waitForFunction(([start,origin])=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{
+   const position=room.state.players[room.slot].position;
+   return Math.hypot(position[0]-origin[0],position[2]-origin[2])>40&&[.125,.145].every(duration=>window.__startedShots.slice(start).some(value=>Math.abs(value-duration)<.003));
+  }),[stepStart,beforeMove]);
+ }finally{await page.keyboard.up('KeyW')}
  await page.waitForFunction(()=>window.__testRoom?.state);
  await page.evaluate(()=>{
   const room=structuredClone(window.__testRoom),tick=++room.state.tick,slot=room.slot,target=(slot+5)%10;
@@ -50,9 +64,9 @@ try{
   window.__testSocket.dispatchEvent(new MessageEvent('message',{data:JSON.stringify({type:'state',room})}));
  });
  await page.waitForFunction(()=>[.12,.17,.19].every(duration=>window.__startedShots.some(value=>Math.abs(value-duration)<.01)));
- assert.equal(buffers.length,8,'five weapons and three impacts use one buffer each');
+ assert.equal(buffers.length,11,'five weapons, three impacts and three footfalls use one buffer each');
  assert.deepEqual(errors,[]);
- console.log('Five weapon samples started in native practice; confirmed body, head and damage feedback started distinct samples');
+ console.log('Native practice started five weapon, alternating footstep and landing samples; confirmed body, head and damage feedback started distinct samples');
 }finally{
  try{await leaveBrowserRoom(page)}finally{await browser.close()}
 }
