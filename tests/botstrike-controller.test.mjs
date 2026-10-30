@@ -1,0 +1,51 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import {tmpdir} from 'node:os';
+import {mkdtemp,rm} from 'node:fs/promises';
+import {WebSocket} from 'ws';
+import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
+
+test('only the claimed tab controls a seat and takeover releases held input',async()=>{
+ const data=await mkdtemp(path.join(tmpdir(),'botstrike-controller-')),secret='controller-test-'.repeat(3),account='a'.repeat(64);
+ const service=createBotStrike({secret,data}),sockets=[];
+ await new Promise(resolve=>service.server.listen(0,'127.0.0.1',resolve));
+ const base='http://127.0.0.1:'+service.server.address().port;
+ const headers={'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':account};
+ const until=async predicate=>{const deadline=Date.now()+5000;while(!predicate()){if(Date.now()>deadline)throw Error('Controller state did not arrive');await new Promise(resolve=>setTimeout(resolve,10));}};
+ const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers}),messages=[];ws.on('message',raw=>messages.push(JSON.parse(raw)));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});sockets.push(ws);return{ws,messages};};
+ const control=(peer,active)=>peer.messages.findLast(message=>message.type==='control'&&message.active===active);
+ const packet=(seq,extra={})=>JSON.stringify({type:'input',room:room.id,input:{...neutral(),seq,...extra}});
+ let room;
+ try{
+  const created=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify({type:'create',kind:'practice',mode:'deathmatch',map:0,hero:0,difficulty:0})});
+  assert.equal(created.status,200);room=(await created.json()).room;
+  await until(()=>service.rooms.get(room.id).state?.tick>0);
+  const first=await connect(),second=await connect(),live=service.rooms.get(room.id);
+  await until(()=>control(first,true)&&control(second,false));
+  first.ws.send(packet(1,{fire:true}));await until(()=>live.inputs[0].seq===1);
+  second.ws.send(packet(100,{x:-1}));await new Promise(resolve=>setTimeout(resolve,60));
+  assert.equal(live.inputs[0].seq,1,'passive tab cannot submit input with a higher sequence');
+  second.ws.send(JSON.stringify({type:'claim',room:'0'.repeat(24)}));
+  await until(()=>second.messages.some(message=>message.type==='error'&&message.error==='No active seat to control'));
+  assert.equal(live.inputs[0].fire,true,'an invalid claim cannot release the active tab');
+  const http=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify({type:'input',room:room.id,input:{...neutral(),seq:101}})});
+  assert.equal(http.status,400,'HTTP actions cannot bypass socket control');
+  second.ws.send(JSON.stringify({type:'claim',room:room.id}));
+  await until(()=>control(first,false)&&control(second,true));
+  assert.equal(control(second,true).nextSeq,1);
+  assert.equal(live.inputs[0].fire,false,'takeover releases a held trigger');
+  assert.deepEqual(live.pulses[0],{},'takeover clears pending trigger pulses');
+  first.ws.send(packet(1000,{fire:true}));second.ws.send(packet(2,{x:-1,fire:true}));
+  await until(()=>live.inputs[0].seq===2);assert.equal(live.inputs[0].x,-1);
+  second.ws.close();await new Promise(resolve=>second.ws.once('close',resolve));
+  await until(()=>live.inputs[0].fire===false);
+  assert.equal(live.inputs[0].fire,false,'closing the controller releases a held trigger');
+  first.ws.send(packet(1001,{x:1}));await new Promise(resolve=>setTimeout(resolve,60));
+  assert.equal(live.inputs[0].seq,2,'a remaining passive tab does not take control silently');
+  first.ws.send(JSON.stringify({type:'claim',room:room.id}));await until(()=>first.messages.filter(message=>message.type==='control'&&message.active).length===2);
+  assert.equal(control(first,true).nextSeq,2);
+  first.ws.send(packet(3,{x:1}));await until(()=>live.inputs[0].seq===3);
+  assert.equal(service.metrics.reconnections,0,'tab handoffs are not network reconnects');
+ }finally{for(const ws of sockets)ws.terminate();await service.close();await rm(data,{recursive:true,force:true});}
+});

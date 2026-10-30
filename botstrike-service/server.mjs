@@ -39,7 +39,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  if(!Number.isFinite(heartbeatMs)||heartbeatMs<50)throw Error('Invalid heartbeat interval');
  if(!secret||secret.length<32)throw Error('RUNTIME_TOKEN must contain at least 32 characters');
  for(const name of ['botstrike-engine','myelin-botstrike'])if(!existsSync(path.join(assets,name)))throw Error('Missing artifact '+name);
- const rooms=new Map(),accounts=new Map(),peers=new Map();let sealing=Promise.resolve(),closed=false,draining=false,pruning=false;const creationQuotas=new Map(),queueWaits=[],socketRtts=[],publicSocketRtts=[],socketJitters=[],publicSocketJitters=[],reconnectDelays=[],publicReconnectDelays=[],metrics={failedRooms:0,sealingJobs:0,lastSealMs:0,sealingFailures:0,verifiedMatches:0,publicVerifiedMatches:0,expiredReplays:0,recordingErrors:0,reconnections:0,publicReconnects:0,publicQueueRequests:0,publicQueueJoins:0,publicQueueAbandons:0,publicLateJoins:0,publicMatchesStarted:0,publicHumanSeatsAtStart:0,publicBotSeatsAtStart:0};
+ const rooms=new Map(),accounts=new Map(),peers=new Map(),controllers=new Map();let sealing=Promise.resolve(),closed=false,draining=false,pruning=false;const creationQuotas=new Map(),queueWaits=[],socketRtts=[],publicSocketRtts=[],socketJitters=[],publicSocketJitters=[],reconnectDelays=[],publicReconnectDelays=[],metrics={failedRooms:0,sealingJobs:0,lastSealMs:0,sealingFailures:0,verifiedMatches:0,publicVerifiedMatches:0,expiredReplays:0,recordingErrors:0,reconnections:0,publicReconnects:0,publicQueueRequests:0,publicQueueJoins:0,publicQueueAbandons:0,publicLateJoins:0,publicMatchesStarted:0,publicHumanSeatsAtStart:0,publicBotSeatsAtStart:0};
  function recordSample(samples,value){samples.push(Math.max(0,Math.round(value)));if(samples.length>256)samples.shift();}
  function sampleSummary(samples){const sorted=[...samples].sort((a,b)=>a-b),percentile=p=>sorted.length?sorted[Math.ceil(sorted.length*p)-1]:null;return{samples:sorted.length,p50:percentile(.5),p95:percentile(.95)};}
  function recordQueueWait(ms){recordSample(queueWaits,ms);}
@@ -125,6 +125,8 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  function join(account,r,hero){if(draining)throw Error('Server update in progress.');if(!r||!['waiting','running'].includes(r.status)||r.kind==='practice')throw Error('Room unavailable');if(!Number.isInteger(hero)||hero<0||hero>5)throw Error('Choose a valid hero');const existing=current(account);if(existing&&['waiting','running','sealing'].includes(existing.status))throw Error('Leave your current room first');const teamCounts=[0,0];r.members.forEach((id,i)=>{if(!id.startsWith('bot-'))teamCounts[Math.floor(i/5)]++});const preferred=teamCounts[0]<=teamCounts[1]?0:1;let slot=r.members.findIndex((id,i)=>id.startsWith('bot-')&&Math.floor(i/5)===preferred);if(slot<0)slot=r.members.findIndex(id=>id.startsWith('bot-'));if(slot<0)throw Error('Room is full');r.members[slot]=account;r.selected[slot]=hero;if(r.status==='waiting'){r.config.heroes[slot]=hero;if(r.kind==='public')r.queueJoinedAt[account]=Date.now();}else if(r.kind==='public'){metrics.publicLateJoins++;recordQueueWait(0);}bind(account,r.id);persist(r);broadcast(r);if(r.kind==='public'&&r.status==='waiting'&&!r.members.some(id=>id.startsWith('bot-')))try{start(r);}catch(error){fail(r,'Unable to start match');throw error;}return r;}
  function authenticate(req){const a=Buffer.from(req.headers['x-runtime-token']||''),b=Buffer.from(secret),id=req.headers['x-utxoplay-account'];return a.length===b.length&&timingSafeEqual(a,b)&&/^[a-f0-9]{64}$/.test(id||'')?id:null;}
  function input(account,b){const r=current(account);if(!r||r.id!==b.room||r.status!=='running')throw Error('No active match');const slot=r.members.indexOf(account);if(slot<0)throw Error('Not a player');const next=safeInput(b.input);const tick=r.state?.tick||0;if(next.view_tick!==undefined){const oldest=Math.max(0,tick-12),latest=r.sentTicks[slot].at(-1)??tick;next.view_tick=Math.max(oldest,Math.min(latest,next.view_tick));}if(next.seq>r.inputs[slot].seq){for(const key of ['fire','reload','jump','ability'])if(next[key]&&!r.inputs[slot][key])r.pulses[slot][key]=true;if(next.item&&next.item!==r.inputs[slot].item)r.pulses[slot].item=next.item;r.inputs[slot]=next;r.seen[slot]=Date.now();}}
+ function releaseInput(r,account){const slot=r?.members.indexOf(account)??-1;if(r?.status!=='running'||slot<0||!r.inputs)return;const previous=r.inputs[slot],pilot=r.state?.players[slot];r.inputs[slot]={...neutral(),seq:previous.seq,yaw:pilot?.yaw??previous.yaw,pitch:pilot?.pitch??previous.pitch};r.pulses[slot]={};r.seen[slot]=0;}
+ function control(ws,account,active){const r=current(account),slot=r?.members.indexOf(account)??-1;send(ws,{type:'control',active,room:r?.id||null,nextSeq:slot>=0?r.inputs?.[slot]?.seq??0:0});}
  const server=http.createServer(async(req,res)=>{const reply=(status,v)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(v));};const account=authenticate(req);if(!account)return reply(403,{error:'Forbidden'});try{
  if(req.method==='GET'&&['/api/health','/api/metrics'].includes(req.url)){
   const disk=statfsSync(data),publicRooms=[...rooms.values()].filter(r=>r.kind==='public'&&['waiting','running'].includes(r.status));
@@ -149,7 +151,6 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  else if(b.type==='spectate'){const self=r?.state?.players[r.members.indexOf(account)],target=r?.state?.players[b.slot];if(!self||self.alive||!Number.isInteger(b.slot)||!target?.alive||target.team!==self.team)throw Error('Choose a living teammate while spectating');r.spectating??={};r.spectating[account]=b.slot;}
  else if(b.type==='hero'){if(!r||!['waiting','running'].includes(r.status)||!Number.isInteger(b.hero)||b.hero<0||b.hero>5)throw Error('Invalid hero');const slot=r.members.indexOf(account);r.selected[slot]=b.hero;if(r.status==='waiting')r.config.heroes[slot]=b.hero;persist(r);}
  else if(b.type==='leave'){if(r&&['running','waiting'].includes(r.status)){if(r.kind==='public'&&r.status==='waiting')metrics.publicQueueAbandons++;const slot=r.members.indexOf(account);r.members[slot]='bot-'+slot;delete r.selected[slot];if(r.inputs)r.inputs[slot]=neutral();if(r.host===account)r.host=r.members.find(id=>!id.startsWith('bot-'))||null;if(r.status==='waiting'&&!r.host)r.status='cancelled';cancelEmpty(r);persist(r);broadcast(r)}bind(account,null);r=null;}
- else if(b.type==='input')input(account,b);
  else throw Error('Unknown action');if(r)broadcast(r);reply(200,view(r,account));
  }catch(e){if(res.headersSent){res.destroy();return;}reply(400,{error:e.message||'Request failed'})}});
  const sockets=new WebSocketServer({noServer:true,maxPayload:4096,perMessageDeflate:false});
@@ -163,7 +164,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
     if(r.status==='running'&&disconnectedAt!==undefined){const delay=Date.now()-disconnectedAt;metrics.reconnections++;recordSample(reconnectDelays,delay);if(r.kind==='public'){metrics.publicReconnects++;recordSample(publicReconnectDelays,delay)}}
     r.disconnectedAt?.delete(account);(r.connectedEver??=new Set()).add(account);
    }
-   set.add(ws);peers.set(account,set);let since=Date.now(),count=0;ws.alive=true;
+   set.add(ws);peers.set(account,set);if(first)controllers.set(account,ws);let since=Date.now(),count=0;ws.alive=true;
    ws.on('pong',payload=>{
     if(ws.pingAt===undefined||!payload.equals(ws.pingNonce))return;
     ws.alive=true;const room=current(account),rtt=performance.now()-ws.pingAt;ws.pingAt=undefined;ws.pingNonce=undefined;
@@ -174,9 +175,13 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
     ws.lastRtt=rtt;
    });
    ws.on('error',()=>ws.terminate());
-   ws.on('close',()=>{set.delete(ws);if(!set.size){peers.delete(account);const room=current(account);if(room?.status==='running'&&room.connectedEver?.has(account))(room.disconnectedAt??=new Map()).set(account,Date.now())}});
-   ws.on('message',(raw,binary)=>{if(Date.now()-since>=1000){since=Date.now();count=0}if(binary||++count>100){ws.close(1008,'Input limit');return}try{const b=JSON.parse(raw);if(b.type==='ping'&&Number.isFinite(b.time))send(ws,{type:'pong',time:b.time});else if(b.type==='input')input(account,b);else throw Error('Unknown realtime command')}catch(e){send(ws,{type:'error',error:e.message})}});
-   deliverState(ws,r,account);
+   ws.on('close',()=>{set.delete(ws);if(controllers.get(account)===ws){controllers.delete(account);releaseInput(current(account),account)}if(!set.size){peers.delete(account);const room=current(account);if(room?.status==='running'&&room.connectedEver?.has(account))(room.disconnectedAt??=new Map()).set(account,Date.now())}});
+   ws.on('message',(raw,binary)=>{if(Date.now()-since>=1000){since=Date.now();count=0}if(binary||++count>100){ws.close(1008,'Input limit');return}try{const b=JSON.parse(raw);if(b.type==='ping'&&Number.isFinite(b.time))send(ws,{type:'pong',time:b.time});else if(b.type==='input'){if(controllers.get(account)===ws)input(account,b)}else if(b.type==='claim'){
+    const room=current(account);if(!room||room.id!==b.room||room.status!=='running'||!room.members.includes(account))throw Error('No active seat to control');
+    const previous=controllers.get(account);if(previous!==ws){releaseInput(room,account);controllers.set(account,ws);if(previous)control(previous,account,false)}
+    control(ws,account,true);deliverState(ws,room,account);
+   }else throw Error('Unknown realtime command')}catch(e){send(ws,{type:'error',error:e.message})}});
+   control(ws,account,controllers.get(account)===ws);deliverState(ws,r,account);
   });
  });
  async function prune(){if(pruning||closed)return;pruning=true;try{await career.recover();const protectedRooms=new Set([...rooms.values()].filter(r=>['waiting','running','sealing'].includes(r.status)).map(r=>r.id));const removed=await pruneReplays(data,{days:retentionDays,protectedRooms});metrics.expiredReplays+=removed.length;for(const id of removed){rooms.delete(id);for(const [account,room]of accounts)if(room===id)accounts.delete(account);}}catch(error){console.error('Replay retention',error.message);}finally{pruning=false;}}
