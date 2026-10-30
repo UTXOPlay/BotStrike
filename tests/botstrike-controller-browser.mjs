@@ -41,6 +41,15 @@ try{
  await first.locator('#resume').click();
  await first.waitForFunction(()=>document.documentElement.dataset.playing==='true');
  await second.waitForFunction(()=>document.documentElement.dataset.playing==='false');
+ assert.equal(await second.locator('#leave').isDisabled(),true);
+ const passiveLeave=await second.evaluate(()=>fetch('/games/botstrike/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'leave'})}).then(response=>response.status));
+ assert.equal(passiveLeave,400);
+ assert.equal((await state()).status,'running');
+ await first.keyboard.press('Escape');
+ const [departure]=await Promise.all([first.waitForResponse(response=>response.url().endsWith('/api/action')&&response.request().postDataJSON()?.type==='leave'),first.locator('#leave').click()]);
+ assert.equal(departure.status(),200);
+ await second.waitForFunction(()=>document.querySelector('#room-info').hidden);
+ assert.equal(await state(),null);
  assert.deepEqual(errors,[]);
  console.log('Two tabs share the room, and Resume transfers the live seat in both directions');
 }finally{await browser.close()}

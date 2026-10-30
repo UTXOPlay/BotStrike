@@ -19,7 +19,7 @@ RUNTIME_TOKEN=<stable-random-secret-at-least-32-characters> npm start
 
 Open `http://127.0.0.1:8890/games/botstrike/`. The standalone host issues a signed guest cookie. Use `WEB_PORT`, `GAME_ORIGIN` and `DATA_DIR` to configure serving and persistent match storage. Preserve `DATA_DIR` and the runtime/session secrets across restarts. Native services bind to loopback. Store integration uses private authenticated `X-Runtime-Token` / `X-UTXOPlay-Account` requests and WebSockets.
 
-Choose a chassis and operation, then solo practice, public matchmaking or a private lobby. Private lobbies have an invite code and host start button. AI fills the remaining seats. Disconnected pilots receive AI cover and can reconnect to their seat. Multiple tabs can view the same room, but only one tab sends combat input; Resume explicitly transfers control to another tab. The service bounds simultaneous live matches to four by default and serializes replay sealing.
+Choose a chassis and operation, then solo practice, public matchmaking or a private lobby. Private lobbies have an invite code and host start button. AI fills the remaining seats. Disconnected pilots receive AI cover and can reconnect to their seat. Multiple tabs can view the same room, but only the active tab sends combat input or changes a live room; Resume explicitly transfers control. The service bounds simultaneous live matches to four by default and serializes replay sealing.
 
 ## Operations
 

@@ -126,7 +126,8 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  function authenticate(req){const a=Buffer.from(req.headers['x-runtime-token']||''),b=Buffer.from(secret),id=req.headers['x-utxoplay-account'];return a.length===b.length&&timingSafeEqual(a,b)&&/^[a-f0-9]{64}$/.test(id||'')?id:null;}
  function input(account,b){const r=current(account);if(!r||r.id!==b.room||r.status!=='running')throw Error('No active match');const slot=r.members.indexOf(account);if(slot<0)throw Error('Not a player');const next=safeInput(b.input);const tick=r.state?.tick||0;if(next.view_tick!==undefined){const oldest=Math.max(0,tick-12),latest=r.sentTicks[slot].at(-1)??tick;next.view_tick=Math.max(oldest,Math.min(latest,next.view_tick));}if(next.seq>r.inputs[slot].seq){for(const key of ['fire','reload','jump','ability'])if(next[key]&&!r.inputs[slot][key])r.pulses[slot][key]=true;if(next.item&&next.item!==r.inputs[slot].item)r.pulses[slot].item=next.item;r.inputs[slot]=next;r.seen[slot]=Date.now();}}
  function releaseInput(r,account){const slot=r?.members.indexOf(account)??-1;if(r?.status!=='running'||slot<0||!r.inputs)return;const previous=r.inputs[slot],pilot=r.state?.players[slot];r.inputs[slot]={...neutral(),seq:previous.seq,yaw:pilot?.yaw??previous.yaw,pitch:pilot?.pitch??previous.pitch};r.pulses[slot]={};r.seen[slot]=0;}
- function control(ws,account,active){const r=current(account),slot=r?.members.indexOf(account)??-1;send(ws,{type:'control',active,room:r?.id||null,nextSeq:slot>=0?r.inputs?.[slot]?.seq??0:0});}
+ function control(ws,account,active){const r=current(account),slot=r?.members.indexOf(account)??-1;send(ws,{type:'control',active,room:r?.id||null,nextSeq:slot>=0?r.inputs?.[slot]?.seq??0:0,...(active?{token:ws.controlToken}:{})});}
+ function requireControl(account,b){if(!peers.get(account)?.size)return;const owner=controllers.get(account);if(!owner||typeof b.controlToken!=='string'||b.controlToken!==owner.controlToken)throw Error('Resume this tab to control the match');}
  const server=http.createServer(async(req,res)=>{const reply=(status,v)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(v));};const account=authenticate(req);if(!account)return reply(403,{error:'Forbidden'});try{
  if(req.method==='GET'&&['/api/health','/api/metrics'].includes(req.url)){
   const disk=statfsSync(data),publicRooms=[...rooms.values()].filter(r=>r.kind==='public'&&['waiting','running'].includes(r.status));
@@ -143,6 +144,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  if(req.method==='GET'&&req.url==='/api/state')return reply(200,view(current(account),account));
  if(req.method==='GET'&&req.url==='/api/export'){const r=current(account);if(!r||r.status!=='finished'||!r.proof?.verified)return reply(409,{error:'Finish a verified match before exporting'});res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'});await pipeline(createReadStream(path.join(roomDir(r.id),'export.json')),res);return;}
  if(req.method!=='POST'||req.url!=='/api/action')return reply(404,{error:'Unknown endpoint'});let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>4096)return reply(413,{error:'Request too large'})}const b=JSON.parse(raw);let r=current(account);
+ if(['start','buy','spectate','hero'].includes(b.type)||b.type==='leave'&&['waiting','running'].includes(r?.status))requireControl(account,b);
  if(b.type==='create')r=make(account,b);
  else if(b.type==='queue'){options(b);const match=[...rooms.values()].find(r=>r.kind==='public'&&['waiting','running'].includes(r.status)&&r.config.mode===b.mode&&r.config.map===b.map&&r.config.difficulty===b.difficulty&&(r.status==='waiting'||r.state?.tick<64*60)&&r.members.some(id=>id.startsWith('bot-')));r=match?join(account,match,b.hero):make(account,{...b,kind:'public'});metrics.publicQueueRequests++;if(match)metrics.publicQueueJoins++;}
  else if(b.type==='join')r=join(account,load(b.room),b.hero);
@@ -150,7 +152,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  else if(b.type==='buy'){if(!r||r.status!=='running'||r.state?.phase!=='buy'||!Number.isInteger(b.item)||b.item<0||b.item>=weaponCount+itemCount)throw Error('Purchases are available during buy time');r.buy[r.members.indexOf(account)]=b.item;}
  else if(b.type==='spectate'){const self=r?.state?.players[r.members.indexOf(account)],target=r?.state?.players[b.slot];if(!self||self.alive||!Number.isInteger(b.slot)||!target?.alive||target.team!==self.team)throw Error('Choose a living teammate while spectating');r.spectating??={};r.spectating[account]=b.slot;}
  else if(b.type==='hero'){if(!r||!['waiting','running'].includes(r.status)||!Number.isInteger(b.hero)||b.hero<0||b.hero>5)throw Error('Invalid hero');const slot=r.members.indexOf(account);r.selected[slot]=b.hero;if(r.status==='waiting')r.config.heroes[slot]=b.hero;persist(r);}
- else if(b.type==='leave'){if(r&&['running','waiting'].includes(r.status)){if(r.kind==='public'&&r.status==='waiting')metrics.publicQueueAbandons++;const slot=r.members.indexOf(account);r.members[slot]='bot-'+slot;delete r.selected[slot];if(r.inputs)r.inputs[slot]=neutral();if(r.host===account)r.host=r.members.find(id=>!id.startsWith('bot-'))||null;if(r.status==='waiting'&&!r.host)r.status='cancelled';cancelEmpty(r);persist(r);broadcast(r)}bind(account,null);r=null;}
+ else if(b.type==='leave'){if(r&&['running','waiting'].includes(r.status)){if(r.kind==='public'&&r.status==='waiting')metrics.publicQueueAbandons++;const slot=r.members.indexOf(account);r.members[slot]='bot-'+slot;delete r.selected[slot];if(r.inputs)r.inputs[slot]=neutral();if(r.host===account)r.host=r.members.find(id=>!id.startsWith('bot-'))||null;if(r.status==='waiting'&&!r.host)r.status='cancelled';cancelEmpty(r);persist(r);broadcast(r)}bind(account,null);r=null;for(const ws of peers.get(account)||[])deliverState(ws,null,account);}
  else throw Error('Unknown action');if(r)broadcast(r);reply(200,view(r,account));
  }catch(e){if(res.headersSent){res.destroy();return;}reply(400,{error:e.message||'Request failed'})}});
  const sockets=new WebSocketServer({noServer:true,maxPayload:4096,perMessageDeflate:false});
@@ -164,7 +166,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
     if(r.status==='running'&&disconnectedAt!==undefined){const delay=Date.now()-disconnectedAt;metrics.reconnections++;recordSample(reconnectDelays,delay);if(r.kind==='public'){metrics.publicReconnects++;recordSample(publicReconnectDelays,delay)}}
     r.disconnectedAt?.delete(account);(r.connectedEver??=new Set()).add(account);
    }
-   set.add(ws);peers.set(account,set);if(first)controllers.set(account,ws);let since=Date.now(),count=0;ws.alive=true;
+   set.add(ws);peers.set(account,set);if(first){controllers.set(account,ws);ws.controlToken=randomBytes(16).toString('hex')}let since=Date.now(),count=0;ws.alive=true;
    ws.on('pong',payload=>{
     if(ws.pingAt===undefined||!payload.equals(ws.pingNonce))return;
     ws.alive=true;const room=current(account),rtt=performance.now()-ws.pingAt;ws.pingAt=undefined;ws.pingNonce=undefined;
@@ -178,7 +180,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
    ws.on('close',()=>{set.delete(ws);if(controllers.get(account)===ws){controllers.delete(account);releaseInput(current(account),account)}if(!set.size){peers.delete(account);const room=current(account);if(room?.status==='running'&&room.connectedEver?.has(account))(room.disconnectedAt??=new Map()).set(account,Date.now())}});
    ws.on('message',(raw,binary)=>{if(Date.now()-since>=1000){since=Date.now();count=0}if(binary||++count>100){ws.close(1008,'Input limit');return}try{const b=JSON.parse(raw);if(b.type==='ping'&&Number.isFinite(b.time))send(ws,{type:'pong',time:b.time});else if(b.type==='input'){if(controllers.get(account)===ws)input(account,b)}else if(b.type==='claim'){
     const room=current(account);if(!room||room.id!==b.room||room.status!=='running'||!room.members.includes(account))throw Error('No active seat to control');
-    const previous=controllers.get(account);if(previous!==ws){releaseInput(room,account);controllers.set(account,ws);if(previous)control(previous,account,false)}
+    const previous=controllers.get(account);if(previous!==ws){releaseInput(room,account);controllers.set(account,ws);ws.controlToken=randomBytes(16).toString('hex');if(previous)control(previous,account,false)}
     control(ws,account,true);deliverState(ws,room,account);
    }else throw Error('Unknown realtime command')}catch(e){send(ws,{type:'error',error:e.message})}});
    control(ws,account,controllers.get(account)===ws);deliverState(ws,r,account);

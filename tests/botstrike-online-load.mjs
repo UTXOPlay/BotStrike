@@ -23,7 +23,7 @@ function percentile(values,p){if(!values.length)return null;const sorted=[...val
 async function connect(client){
  const socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(client.id)});
  sockets.push(socket);client.socket=socket;
- socket.on('message',raw=>{const message=JSON.parse(raw);if(message.type==='error')client.errors.push(message.error);if(message.type!=='state'||!message.room?.state)return;const now=performance.now();if(client.lastAt!==undefined)gaps.push(now-client.lastAt);client.lastAt=now;client.snapshots++;client.lastTick=message.room.state.tick;});
+ socket.on('message',raw=>{const message=JSON.parse(raw);if(message.type==='error')client.errors.push(message.error);if(message.type==='control'&&message.active)client.controlToken=message.token;if(message.type!=='state'||!message.room?.state)return;const now=performance.now();if(client.lastAt!==undefined)gaps.push(now-client.lastAt);client.lastAt=now;client.snapshots++;client.lastTick=message.room.state.tick;});
  await new Promise((resolve,reject)=>{socket.once('open',resolve);socket.once('error',reject)});
  return socket;
 }
@@ -46,6 +46,7 @@ try{
  await until(()=>rooms.every(id=>service.rooms.get(id)?.state?.tick>4));
  assert.equal(new Set(rooms).size,4);
  for(const client of clients)await connect(client);
+ await until(()=>clients.every(client=>client.controlToken));
  const duplicate=await connect({id:clients[0].id,snapshots:0,errors:[]});
  await close(duplicate);
  assert.equal((await metrics()).publicReconnects,0,'a duplicate tab closing is not a reconnect');
@@ -69,7 +70,7 @@ try{
  assert.ok(clients.every(client=>client.snapshots>=8&&client.lastTick>100&&!client.errors.length),'all 40 clients receive live state without socket errors');
  const drained=await fetch(base+'/api/admin/drain',{method:'POST',headers:headers(account(1))});assert.equal(drained.status,200);
  assert.equal((await action(account(42),{type:'queue',mode:'deathmatch',map:0,hero:0,difficulty:2})).status,400);
- for(const client of clients)assert.equal((await action(client.id,{type:'leave'})).status,200);
+ for(const client of clients)assert.equal((await action(client.id,{type:'leave',controlToken:client.controlToken})).status,200);
  assert.ok(rooms.every(id=>service.rooms.get(id).status==='cancelled'));
  const after=await metrics();assert.equal(after.rooms.running||0,0);assert.equal(after.failedRooms,0);assert.equal(after.verifiedMatches,0);
  const tapeBytes=(await Promise.all(rooms.map(id=>stat(path.join(data,'rooms',id,'tape.jsonl'))))).reduce((sum,file)=>sum+file.size,0);

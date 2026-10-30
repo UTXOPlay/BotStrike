@@ -70,4 +70,4 @@ try{
  await page.waitForTimeout(150);
  assert.deepEqual(errors,[]);
  console.log('Controller menu, native movement/aim/fire/skill, scoreboard and disconnect passed');
-}finally{await context.request.post(base+'/games/botstrike/api/action',{data:{type:'leave'}}).catch(()=>{});await browser.close()}
+}finally{try{if(await page.locator('#room-info').isVisible()){const departure=page.waitForResponse(response=>response.url().endsWith('/api/action')&&response.request().postDataJSON()?.type==='leave',{timeout:3000});await page.locator('#leave').evaluate(button=>button.click());assert.equal((await departure).status(),200)}}finally{await browser.close()}}

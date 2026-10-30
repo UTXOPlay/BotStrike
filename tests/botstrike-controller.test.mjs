@@ -12,6 +12,7 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
  await new Promise(resolve=>service.server.listen(0,'127.0.0.1',resolve));
  const base='http://127.0.0.1:'+service.server.address().port;
  const headers={'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':account};
+ const action=async body=>{const response=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify(body)});return{status:response.status,body:await response.json()};};
  const until=async predicate=>{const deadline=Date.now()+5000;while(!predicate()){if(Date.now()>deadline)throw Error('Controller state did not arrive');await new Promise(resolve=>setTimeout(resolve,10));}};
  const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers}),messages=[];ws.on('message',raw=>messages.push(JSON.parse(raw)));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});sockets.push(ws);return{ws,messages};};
  const control=(peer,active)=>peer.messages.findLast(message=>message.type==='control'&&message.active===active);
@@ -23,6 +24,13 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
   await until(()=>service.rooms.get(room.id).state?.tick>0);
   const first=await connect(),second=await connect(),live=service.rooms.get(room.id);
   await until(()=>control(first,true)&&control(second,false));
+  const passiveHero=await action({type:'hero',hero:2});
+  assert.equal(passiveHero.status,400,'a passive tab cannot change the active pilot');
+  assert.equal(live.selected[0],0);
+  const firstToken=control(first,true).token;
+  assert.match(firstToken,/^[a-f0-9]{32}$/);
+  assert.equal((await action({type:'hero',hero:2,controlToken:firstToken})).status,200);
+  assert.equal(live.selected[0],2);
   first.ws.send(packet(1,{fire:true}));await until(()=>live.inputs[0].seq===1);
   second.ws.send(packet(100,{x:-1}));await new Promise(resolve=>setTimeout(resolve,60));
   assert.equal(live.inputs[0].seq,1,'passive tab cannot submit input with a higher sequence');
@@ -34,6 +42,11 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
   second.ws.send(JSON.stringify({type:'claim',room:room.id}));
   await until(()=>control(first,false)&&control(second,true));
   assert.equal(control(second,true).nextSeq,1);
+  const secondToken=control(second,true).token;
+  assert.notEqual(secondToken,firstToken);
+  assert.equal((await action({type:'hero',hero:3,controlToken:firstToken})).status,400,'takeover invalidates the previous token');
+  assert.equal((await action({type:'hero',hero:4,controlToken:secondToken})).status,200);
+  assert.equal(live.selected[0],4);
   assert.equal(live.inputs[0].fire,false,'takeover releases a held trigger');
   assert.deepEqual(live.pulses[0],{},'takeover clears pending trigger pulses');
   first.ws.send(packet(1000,{fire:true}));second.ws.send(packet(2,{x:-1,fire:true}));
@@ -45,7 +58,14 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
   assert.equal(live.inputs[0].seq,2,'a remaining passive tab does not take control silently');
   first.ws.send(JSON.stringify({type:'claim',room:room.id}));await until(()=>first.messages.filter(message=>message.type==='control'&&message.active).length===2);
   assert.equal(control(first,true).nextSeq,2);
+  assert.notEqual(control(first,true).token,firstToken);
   first.ws.send(packet(3,{x:1}));await until(()=>live.inputs[0].seq===3);
+  const observer=await connect();await until(()=>control(observer,false));
+  assert.equal((await action({type:'leave'})).status,400,'a passive tab cannot leave the live room');
+  assert.equal(live.status,'running');
+  assert.equal((await action({type:'leave',controlToken:control(first,true).token})).status,200);
+  await until(()=>observer.messages.some(message=>message.type==='state'&&message.room===null));
+  assert.equal(live.status,'cancelled');
   assert.equal(service.metrics.reconnections,0,'tab handoffs are not network reconnects');
  }finally{for(const ws of sockets)ws.terminate();await service.close();await rm(data,{recursive:true,force:true});}
 });

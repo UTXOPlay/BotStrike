@@ -28,6 +28,5 @@ try{
  assert.deepEqual(errors,[]);
  console.log('ARC-9 and NEEDLE sampled playback reached Web Audio without page errors');
 }finally{
- await context.request.post(base+'/games/botstrike/api/action',{data:{type:'leave'}}).catch(()=>{});
- await browser.close();
+ try{if(await page.locator('#room-info').isVisible()){const departure=page.waitForResponse(response=>response.url().endsWith('/api/action')&&response.request().postDataJSON()?.type==='leave',{timeout:3000});await page.locator('#leave').evaluate(button=>button.click());assert.equal((await departure).status(),200)}}finally{await browser.close()}
 }

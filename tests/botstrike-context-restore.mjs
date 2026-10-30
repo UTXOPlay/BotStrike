@@ -15,4 +15,4 @@ try{
  assert.equal(result.lost,false);assert.ok(result.drawCalls>0);assert.ok(result.width*result.height<=1280*720);assert.deepEqual(errors,[]);
  await page.screenshot({path:process.env.CONTEXT_SCREENSHOT||'/tmp/botstrike-context-restored.png'});
  console.log(JSON.stringify(result));
-}finally{await page.evaluate(()=>fetch('/games/botstrike/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'leave'})})).catch(()=>{});await browser.close();}
+}finally{try{if(await page.locator('#room-info').isVisible()){const departure=page.waitForResponse(response=>response.url().endsWith('/api/action')&&response.request().postDataJSON()?.type==='leave',{timeout:3000});await page.locator('#leave').evaluate(button=>button.click());assert.equal((await departure).status(),200)}}finally{await browser.close();}}
