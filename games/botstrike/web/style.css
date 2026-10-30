@@ -165,3 +165,28 @@ html[data-gamepad=true] :is(button,a,input,select,summary):focus{outline:2px sol
  .dialog h2{font-size:45px}
  .score-row{font-size:24px}
 }
+
+/* Match arsenal: native ownership and reserve are visible beside the active gun. */
+#hud{z-index:6}
+#weapon-rack{position:absolute;right:max(28px,env(safe-area-inset-right));bottom:calc(max(24px,env(safe-area-inset-bottom)) + 112px);width:174px;display:grid;gap:4px;text-shadow:0 1px 3px #07151f}
+#weapon-rack button{pointer-events:auto;width:100%;padding:4px 8px;border-radius:5px;background:#102b38b8;border:1px solid #a4dce080;color:#f0f9fc;text-align:left;letter-spacing:0}
+#weapon-rack button:hover,#weapon-rack button:focus-visible{background:#1f5265e0;border-color:#b8f2fa}
+#weapon-rack button:disabled{opacity:.75;cursor:default}
+#rack-open{height:30px;min-height:30px;display:flex;align-items:center;gap:7px;font:600 10px monospace}
+#rack-open .control-icon{width:16px;height:16px;margin:0}
+#rack-next{height:52px;min-height:52px;display:grid;grid-template-columns:56px 1fr;align-items:center;gap:7px}
+#rack-next .rack-art{display:block;width:56px;height:42px;overflow:hidden;background:#071723;border-radius:3px}
+#rack-next img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.55)}
+#rack-next .rack-next-copy{display:grid;min-width:0;gap:2px}
+#rack-next b{font:600 11px monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#rack-next small{font:8px monospace;color:#c5e2e9;white-space:nowrap}
+@media(min-width:1600px) and (min-height:800px) and (max-height:1199px){#weapon-rack{transform:scale(1.5);transform-origin:bottom right;bottom:calc(max(24px,env(safe-area-inset-bottom)) + 136px)}}
+@media(min-width:1800px) and (min-height:1200px){#weapon-rack{transform:scale(1.5);transform-origin:bottom right;bottom:calc(max(24px,env(safe-area-inset-bottom)) + 146px)}}
+@media(min-width:3200px) and (min-height:1800px){#weapon-rack{transform:scale(2.3);bottom:calc(max(24px,env(safe-area-inset-bottom)) + 218px)}}
+html[data-mobile=true] #weapon-rack{top:calc(var(--edge-top,10px) + 104px);right:calc(var(--edge-right,14px) + 140px);bottom:auto;width:138px;transform:none}
+html[data-mobile=true] #rack-open{height:44px;min-height:44px}
+html[data-mobile=true] #rack-next{height:48px;min-height:48px;grid-template-columns:39px 1fr;gap:5px}
+html[data-mobile=true] #rack-next .rack-art{width:39px;height:38px}
+html[data-mobile=true] #rack-next b{font-size:9px}
+html[data-mobile=true] #rack-next small{font-size:7px}
+@media(max-width:750px){html:not([data-mobile=true]) #weapon-rack{top:335px;right:max(14px,env(safe-area-inset-right));bottom:auto;transform:none}}
