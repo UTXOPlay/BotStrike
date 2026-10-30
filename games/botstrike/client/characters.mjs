@@ -64,7 +64,7 @@ export function createCharacters(art){
    const original=source.clips[name];const clip=layer==='full'?original:new THREE.AnimationClip(key,original.duration,original.tracks.filter(t=>lower.test(boneName(t))===(layer==='lower')));
    const a=mixer.clipAction(clip);actions.set(key,a);return a;
   }
-  let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0,gaitPhase=0;
+  let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0,gaitPhase=0,hitAt=-Infinity,hitForce=0;
   let gun=null,magazine=null,pump=null,pumpAt=-Infinity;const gunAnchor=new THREE.Group();model.add(gunAnchor);
   function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');pump=gun.getObjectByName('pump');pumpAt=-Infinity;const stock=gun.getObjectByName('stock');if(stock&&firstPerson)stock.visible=false;gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
   equip(weapon);
@@ -74,7 +74,7 @@ export function createCharacters(art){
    next.play();
    if(current)current.crossFadeTo(next,fade,false);return next;
   }
-  function reset(p,now){mixer.stopAllAction();base=upper=full=null;upperUntil=fullUntil=0;lastLife=p.life;lastAlive=p.alive;lastAir=false;lastReload=0;deadAt=0;
+  function reset(p,now){mixer.stopAllAction();base=upper=full=null;upperUntil=fullUntil=0;lastLife=p.life;lastAlive=p.alive;lastAir=false;lastReload=0;deadAt=0;hitAt=-Infinity;hitForce=0;
    // A stable per-life offset prevents identical run clips from marching in lockstep.
    gaitPhase=(slot*.38196601125+(p.life||0)*.1414213562)%1;
    base=swap(null,action('idle','lower'));upper=swap(null,action('idle','upper'));lastNow=now;
@@ -82,6 +82,8 @@ export function createCharacters(art){
   function trigger(name,now,duration,value){
    if(!source.clips[name]||lastAlive===false)return;
    if(name==='fire'&&pump)pumpAt=now;
+   if(name==='hit'&&!firstPerson){hitAt=now;hitForce=THREE.MathUtils.clamp((value||0)/35,.7,1.2);}
+   if(name==='fire'&&upper?.getClip().name==='upper:hit'&&now<upperUntil)return;
    if(['utility','use_item'].includes(name)&&Number.isInteger(value)&&value>=0&&value<12){if(prop){prop.removeFromParent();prop.traverse(o=>o.geometry?.dispose());}prop=art.equipment(value);prop.scale.setScalar(.012);model.add(prop);propUntil=now+900;}
    const next=action(name,'upper');if(upper===next){next.reset().play();}else upper=swap(upper,next,false,name==='hit'?.045:.08);
    const seconds=duration||source.clips[name].duration;next.setEffectiveTimeScale(source.clips[name].duration/Math.max(.1,seconds));upperUntil=now+seconds*1000;
@@ -112,7 +114,9 @@ export function createCharacters(art){
    if(lookRestore){for(const saved of lookRestore)saved.bone.quaternion.copy(saved.quaternion);lookRestore=null;}
    if(upper)upper.paused=reduced&&upper===action('idle','upper');mixer.update(Math.min(.1,Math.max(0,dt)));
    // Small tracking offsets follow the gameplay look direction after blending.
-   if(p.alive&&!reduced){lookRestore=[bones.head,bones.chest].map(bone=>({bone,quaternion:bone.quaternion.clone()}));bones.head.rotation.x-=p.pitch*.5;bones.chest.rotation.x-=p.pitch*.22;}
+   if(p.alive&&!reduced){lookRestore=[bones.head,bones.chest].map(bone=>({bone,quaternion:bone.quaternion.clone()}));bones.head.rotation.x-=p.pitch*.5;bones.chest.rotation.x-=p.pitch*.22;
+    if(!firstPerson&&now-hitAt<320){const pulse=Math.sin(Math.PI*Math.max(0,now-hitAt)/320)*hitForce;bones.chest.rotation.x-=pulse*.30;bones.head.rotation.x+=pulse*.22;}
+   }
    model.updateMatrixWorld(true);
    // A weapon follows its articulated trigger hand; aim remains authoritative.
    const reloading=Boolean(p.alive&&p.reload>0&&reloadDuration&&upper?.getClip().name==='upper:reload'&&magazine);

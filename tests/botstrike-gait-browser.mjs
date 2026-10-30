@@ -40,6 +40,28 @@ try{
  await page.evaluate(()=>renderHero(0));
  const jump=await page.evaluate(()=>probeMotion('jump',.2));
  const fall=await page.evaluate(()=>probeMotion('fall',.2));
+ await page.evaluate(()=>renderHero(0));
+ const miss=await page.evaluate(()=>probeRunningContact());
+ await page.screenshot({path:join(out,'running-miss.png')});
+ await page.evaluate(()=>renderHero(0));
+ const hit=await page.evaluate(()=>probeRunningContact(true));
+ await page.screenshot({path:join(out,'running-hit.png')});
+ await page.evaluate(()=>renderHero(0));
+ const hitFire=await page.evaluate(()=>probeRunningContact(true,true));
+ await page.screenshot({path:join(out,'running-hit-fire.png')});
+ await page.evaluate(()=>renderHero(0));
+ const reducedMiss=await page.evaluate(()=>probeRunningContact(false,false,true));
+ await page.evaluate(()=>renderHero(0));
+ const reducedHit=await page.evaluate(()=>probeRunningContact(true,false,true));
+ await page.evaluate(()=>renderHero(0));
+ const recoveredMiss=await page.evaluate(()=>probeRunningContact(false,false,false,40));
+ await page.evaluate(()=>renderHero(0));
+ const recoveredHit=await page.evaluate(()=>probeRunningContact(true,false,false,40));
+ await page.evaluate(()=>renderHero(0));
+ const repeatedHit=await page.evaluate(()=>probeRunningContact(true,false,false,8,true));
+ const poseDistance=(a,b)=>Math.hypot(a.chest[0]-b.chest[0],a.chest[2]-b.chest[2],a.head[0]-b.head[0],a.head[2]-b.head[2]);
+ const hitPose=poseDistance(hit,miss),hitFirePose=poseDistance(hitFire,miss),reducedHitPose=poseDistance(reducedHit,reducedMiss),recoveryPose=poseDistance(recoveredHit,recoveredMiss),repeatedPose=poseDistance(repeatedHit,miss);
+ await writeFile(join(out,'hit-pose.json'),JSON.stringify({miss,hit,hitFire,reducedMiss,reducedHit,recoveredMiss,recoveredHit,repeatedHit,hitPose,hitFirePose,reducedHitPose,recoveryPose,repeatedPose},null,2));
  assert.deepEqual(errors,[]);
  assert.ok(samples.every(actor=>actor.motion.every(name=>name==='lower:run')),'every actor uses the run clip');
  assert.equal(jump.motion,'lower:jump');
@@ -49,6 +71,7 @@ try{
   assert.ok(new Set(samples.map(actor=>actor.root[0].toFixed(2))).size>=4,'running actors still pose together');
   assert.ok(new Set(jittered.map(actor=>actor.root[0].toFixed(2))).size>=4,'irregular frame times synchronized the group');
  }
+ if(!process.env.HIT_BASELINE){assert.ok(hitPose>.4,`confirmed hit pose is too subtle: ${hitPose}`);assert.ok(hitFirePose>.4,`gunfire cancelled the hit pose: ${hitFirePose}`);assert.ok(reducedHitPose>.1&&reducedHitPose<hitPose,`reduced-motion hit cue was lost or amplified: ${reducedHitPose}`);assert.ok(recoveryPose<.05,`hit pose did not recover: ${recoveryPose}`);assert.ok(repeatedPose<.8,`repeated hit pose accumulated: ${repeatedPose}`)}
  let nativeMotion=null;
  if(process.env.STORE_URL){
   const live=await browser.newPage({viewport:{width:844,height:390}});
@@ -73,5 +96,5 @@ try{
    await live.waitForFunction(async()=>{const room=(await(await fetch('/games/botstrike/api/state')).json()).room;return room.state.players[room.slot].position[1]>1});
   }finally{await leaveBrowserRoom(live);await live.close()}
  }
- console.log(JSON.stringify({rootRange,hipRange,phaseCorrelation,nativeBotSamples:nativeMotion?.length,out}));
+ console.log(JSON.stringify({rootRange,hipRange,phaseCorrelation,hitPose,hitFirePose,reducedHitPose,recoveryPose,repeatedPose,nativeBotSamples:nativeMotion?.length,out}));
 }finally{await browser.close();server.close()}

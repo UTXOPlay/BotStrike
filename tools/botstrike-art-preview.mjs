@@ -57,6 +57,17 @@ window.probeMotion=(kind,seconds=.5)=>{
  return {prior,motion:bot.rig.userData.motion,bounds:box.getSize(new THREE.Vector3()).toArray(),minimum:box.min.toArray(),geometries:q.renderer.info.memory.geometries,textures:q.renderer.info.memory.textures};
 };
 
+window.probeRunningContact=(confirmed=false,fireAfter=false,reduced=false,frames=8,repeat=false)=>{
+ const q=showroom,p=q.player,bot=q.character;
+ p.velocity=[0,0,-250];p.position[1]=0;
+ for(let i=0;i<30;i++){q.time+=1000/60;bot.update(p,q.state,q.time,1/60,{reduced});}
+ if(confirmed)bot.trigger('hit',q.time,undefined,35);
+ if(fireAfter)bot.trigger('fire',q.time+10);
+ for(let i=0;i<frames;i++){q.time+=1000/60;if(repeat&&i===4)bot.trigger('hit',q.time,undefined,35);bot.update(p,q.state,q.time,1/60,{reduced});}
+ q.renderer.render(q.scene,q.camera);
+ return {motion:bot.rig.userData.motion,chest:bot.bones.chest.rotation.toArray(),head:bot.bones.head.rotation.toArray()};
+};
+
 window.renderFirstPerson=async(hero=0,weapon=2)=>{
  await window.renderHero(hero,844,390,weapon);const q=showroom;q.character.dispose();q.character=q.characters.actor(0,hero,weapon,{firstPerson:true});q.character.rig.scale.setScalar(.8);q.character.rig.position.set(0,-56*.8-5,-10);for(const child of [...q.scene.children])if(child.isMesh)q.scene.remove(child);q.scene.add(q.camera);q.camera.position.set(0,0,0);q.camera.rotation.set(0,0,0);q.camera.fov=80;q.camera.updateProjectionMatrix();q.camera.add(q.character.rig);q.character.update(q.player,q.state,1000,.016);q.scene.updateMatrixWorld(true);q.renderer.render(q.scene,q.camera);
  return Object.fromEntries(Object.entries(q.character.bones).filter(([n])=>/arm|hand/.test(n)).map(([n,b])=>[n,q.character.model.worldToLocal(b.getWorldPosition(new THREE.Vector3())).toArray()]));
