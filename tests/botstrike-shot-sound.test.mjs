@@ -5,7 +5,7 @@ import {makeShotSample} from '../games/botstrike/client/shot-sound.mjs';
 function rms(samples,start=0,end=samples.length){let energy=0;for(let i=start;i<end;i++)energy+=samples[i]*samples[i];return Math.sqrt(energy/(end-start));}
 
 test('sampled shots have bounded peaks and decays at common sample rates',()=>{
- for(const rate of [44100,48000])for(const weapon of [0,1,4]){
+ for(const rate of [44100,48000])for(const weapon of [0,1,3,4]){
   const samples=makeShotSample(weapon,rate),head=rms(samples,0,Math.floor(rate*.025)),tail=rms(samples,samples.length-Math.floor(rate*.025));
   assert.ok(samples.length>=rate*.14&&samples.length<=rate*.39);
   assert.ok(samples.every(Number.isFinite));
@@ -29,4 +29,13 @@ test('SCATTER has a longer blast and a distinct pump return transient',()=>{
  assert.ok(window(scatter,.05)>window(arc,.05));
  assert.ok(window(scatter,.30)>window(scatter,.25)*1.8);
  assert.deepEqual(scatter,makeShotSample(4,rate),'sample generation remains deterministic');
+});
+
+test('RAIL-LANCE has a compact coil tail without the SCATTER pump return',()=>{
+ const rate=48000,rail=makeShotSample(3,rate),scatter=makeShotSample(4,rate);
+ const window=(samples,start)=>rms(samples,Math.floor(start*rate),Math.floor((start+.01)*rate));
+ assert.ok(rail.length>rate*.3&&rail.length<scatter.length);
+ assert.ok(window(rail,.06)>window(rail,.24)*4);
+ assert.ok(window(rail,.30)<window(scatter,.30)*.5);
+ assert.deepEqual(rail,makeShotSample(3,rate),'sample generation remains deterministic');
 });

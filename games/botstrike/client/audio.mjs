@@ -1,6 +1,6 @@
 import {makeShotSample} from './shot-sound.mjs';
 
-const sampledWeapons=[0,1,4];
+const sampledWeapons=[0,1,3,4];
 
 // Bounded voices and one master gain for all feedback.
 export function createAudio(settings){
