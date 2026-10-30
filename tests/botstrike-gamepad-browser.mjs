@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
+import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const base=process.env.STORE_URL||'http://127.0.0.1:19885';
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),args:['--no-sandbox','--enable-unsafe-swiftshader']});
@@ -70,4 +71,4 @@ try{
  await page.waitForTimeout(150);
  assert.deepEqual(errors,[]);
  console.log('Controller menu, native movement/aim/fire/skill, scoreboard and disconnect passed');
-}finally{try{if(await page.locator('#room-info').isVisible()){const departure=page.waitForResponse(response=>response.url().endsWith('/api/action')&&response.request().postDataJSON()?.type==='leave',{timeout:3000});await page.locator('#leave').evaluate(button=>button.click());assert.equal((await departure).status(),200)}}finally{await browser.close()}}
+}finally{try{await leaveBrowserRoom(page)}finally{await browser.close()}}

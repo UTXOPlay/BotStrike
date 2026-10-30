@@ -2,6 +2,7 @@ import {mkdirSync} from 'node:fs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const base=process.env.STORE_URL||'http://127.0.0.1:19885',out=process.env.CONTROL_ARTIFACTS||'/tmp/botstrike-browser';mkdirSync(out,{recursive:true});
 import assert from 'node:assert/strict';
+import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),args:['--no-sandbox','--enable-unsafe-swiftshader']});
 const errors=[],sent=[],nativeSnapshots=[];const desktop=await browser.newContext({viewport:{width:1920,height:1080}}),mobile=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
 const a=await desktop.newPage(),b=await mobile.newPage();a.on('websocket',ws=>{ws.on('framereceived',e=>{try{const m=JSON.parse(e.payload);if(m.type==='error')console.log('SOCKET ERROR',m);if(m.type==='state'&&m.room?.state)nativeSnapshots.push(m.room.state.players[0])}catch{}});ws.on('framesent',e=>{try{const m=JSON.parse(e.payload);if(m.type==='input')sent.push(m.input)}catch{}})});for(const p of [a,b]){p.on('console',m=>{if(m.type()==='error')console.log('BROWSER',m.text())});p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400)console.log('HTTP',r.status(),r.url())})}
@@ -30,4 +31,4 @@ try{
  console.log('touch firing and aim reached native authority');
  }const shot=await b.screenshot({path:`${out}/play-${w}x${h}.png`});assert.ok(await sceneColors(b,shot)>12,`blank touch scene at ${w}x${h}`);console.log('touch',w,h,'passed');}
  assert.deepEqual(errors,[]);console.log('Browser joining, native movement, skill and six viewports passed');
-}catch(error){console.log('browser failure context',await a.evaluate(()=>({playing:document.documentElement.dataset.playing,status:document.querySelector('#status')?.textContent})),JSON.stringify({sent:sent.slice(-3),native:nativeSnapshots.slice(-2).map(p=>({seq:p.last_seq,alive:p.alive,yaw:p.yaw,skill:p.skill_wait}))}));throw error}finally{await browser.close()}
+}catch(error){console.log('browser failure context',await a.evaluate(()=>({playing:document.documentElement.dataset.playing,status:document.querySelector('#status')?.textContent})),JSON.stringify({sent:sent.slice(-3),native:nativeSnapshots.slice(-2).map(p=>({seq:p.last_seq,alive:p.alive,yaw:p.yaw,skill:p.skill_wait}))}));throw error}finally{try{try{await leaveBrowserRoom(a)}finally{await leaveBrowserRoom(b)}}finally{await browser.close()}}
