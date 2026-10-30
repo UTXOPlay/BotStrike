@@ -1,9 +1,11 @@
 import {makeShotSample} from './shot-sound.mjs';
 
+const sampledWeapons=[0,1,4];
+
 // Bounded voices and one master gain for all feedback.
 export function createAudio(settings){
  let context,bus,voices=0,lastStep=0;const shotBuffers=new Map();
- function ready(){try{context??=new AudioContext();if(!bus){bus=context.createGain();bus.connect(context.destination)}for(const weapon of [0,1])if(!shotBuffers.has(weapon)){const samples=makeShotSample(weapon,context.sampleRate),buffer=context.createBuffer(1,samples.length,context.sampleRate);buffer.copyToChannel(samples,0);shotBuffers.set(weapon,buffer)}bus.gain.value=settings().sound?(settings().volume??.6)*.3:0;if(context.state==='suspended')void context.resume();return context}catch{return null}}
+ function ready(){try{context??=new AudioContext();if(!bus){bus=context.createGain();bus.connect(context.destination)}for(const weapon of sampledWeapons)if(!shotBuffers.has(weapon)){const samples=makeShotSample(weapon,context.sampleRate),buffer=context.createBuffer(1,samples.length,context.sampleRate);buffer.copyToChannel(samples,0);shotBuffers.set(weapon,buffer)}bus.gain.value=settings().sound?(settings().volume??.6)*.3:0;if(context.state==='suspended')void context.resume();return context}catch{return null}}
  function pulse(frequency,duration=.12,level=.2,type='triangle',delay=0,spatial=null){
   if(globalThis.document?.hidden)return;const c=ready();if(!c||!settings().sound||voices>=32)return;voices++;
   const start=c.currentTime+delay,osc=c.createOscillator(),envelope=c.createGain(),pan=c.createStereoPanner();pan.pan.value=spatial?.pan||0;
@@ -20,7 +22,7 @@ export function createAudio(settings){
   source.connect(filter).connect(gain).connect(pan).connect(bus);
   source.onended=()=>{voices--;source.disconnect();filter.disconnect();gain.disconnect();pan.disconnect()};source.start();
  }
- const shot=(weapon=0,spatial)=>{if(weapon===0||weapon===1){sampledShot(weapon,spatial);return}pulse([410,870,250,1200,95,670,1500,170,1900,740,1120,65][weapon]||410,.08+(weapon===11?.2:0),.38,'sawtooth',0,spatial);pulse(75,.08,.22,'triangle',0,spatial)};
+ const shot=(weapon=0,spatial)=>{if(sampledWeapons.includes(weapon)){sampledShot(weapon,spatial);return}pulse([410,870,250,1200,95,670,1500,170,1900,740,1120,65][weapon]||410,.08+(weapon===11?.2:0),.38,'sawtooth',0,spatial);pulse(75,.08,.22,'triangle',0,spatial)};
  function cue(kind,spatial){
   if(kind==='step'||kind==='land'){const now=performance.now();if(now-lastStep<60)return;lastStep=now;pulse(55,.045,kind==='land'?.12:.06,'triangle',0,spatial);}
   else if(kind==='reload'){pulse(620,.04,.12,'square',0,spatial);pulse(900,.035,.1,'square',.09,spatial);}
