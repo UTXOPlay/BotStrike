@@ -83,6 +83,8 @@ node tests/botstrike-long-replay.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-browser.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
+  node tests/botstrike-reconnect-browser.mjs
+PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-art.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-armory.mjs
