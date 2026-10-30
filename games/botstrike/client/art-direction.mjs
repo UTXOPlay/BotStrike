@@ -24,7 +24,7 @@ export function createArt(renderer,{mobile=false}={}){
  const weaponFinish=texture((c,s)=>{c.fillStyle='#b7bec1';c.fillRect(0,0,s,s);for(let i=0;i<3200;i++){const v=140+random()*90|0;c.fillStyle=`rgba(${v},${v+5},${v+8},.22)`;c.fillRect(random()*s,random()*s,.4+random()*2,.4+random()*1.2)}for(let i=0;i<150;i++){c.strokeStyle=i%3?'#8f9ba0':'#d9ddda';c.lineWidth=.4+random()*.6;c.beginPath();const x=random()*s,y=random()*s;c.moveTo(x,y);c.lineTo(x+3+random()*24,y+random()*1.4);c.stroke()}},256);
 
  function mat(color,opts={}){const m=new THREE.MeshStandardMaterial({color,roughness:.44,metalness:.72,map:wear,bumpMap:wear,bumpScale:.12,...opts,...(mobile?{bumpMap:null}:{} )});materials.push(m);return m;}
- const m={steel:mat('#747e87'),black:mat('#111b24',{roughness:.66}),rubber:mat('#14171d',{metalness:.1,roughness:.88}),silver:mat('#acb5be',{roughness:.27}),warm:mat('#bd7651'),hull:mat('#607985'),container:mat('#478d9b'),floor:mat('#829aa3',{map:floorMap,bumpMap:floorMap,bumpScale:.08,roughness:.94,metalness:.1,envMapIntensity:.2}),gunmetal:mat('#5b737b',{map:weaponFinish,bumpMap:weaponFinish,bumpScale:.03,roughness:.4,metalness:.72}),gunShell:mat('#9faeac',{map:weaponFinish,bumpMap:weaponFinish,bumpScale:.02,roughness:.53,metalness:.42})};
+ const m={steel:mat('#747e87'),black:mat('#111b24',{roughness:.66}),rubber:mat('#14171d',{metalness:.1,roughness:.88}),silver:mat('#acb5be',{roughness:.27}),warm:mat('#bd7651'),hull:mat('#607985'),container:mat('#478d9b'),floor:mat('#829aa3',{map:floorMap,bumpMap:floorMap,bumpScale:.08,roughness:.94,metalness:.1,envMapIntensity:.2}),gunmetal:mat('#5b737b',{map:weaponFinish,bumpMap:weaponFinish,bumpScale:.03,roughness:.4,metalness:.72}),gunShell:mat('#9faeac',{map:weaponFinish,bumpMap:weaponFinish,bumpScale:.02,roughness:.53,metalness:.42}),optic:mat('#213744',{map:null,bumpMap:null,roughness:.13,metalness:.62,emissive:'#38264b',emissiveIntensity:.16})};
  const architecture=['#d4ddd5','#318f9a','#d78453','#b4a9c9','#d9b957','#5d7f9d'].map(c=>mat(c,{metalness:.32,roughness:.58}));
  const ceramic=mat('#dce6df',{metalness:.18,roughness:.64}),solar=mat('#234c75',{metalness:.55,roughness:.27}),leaf=mat('#4b8e66',{metalness:0,roughness:.85}),soil=mat('#57483b',{metalness:0,roughness:.94});
  const colors=['#139fb7','#d3dfd7','#c08b2b','#684e97','#aa346e','#c46122'];
@@ -77,7 +77,20 @@ export function createArt(renderer,{mobile=false}={}){
  plate(gun,3.2,.7,length*.49,0,4.5,-length*.12,m.black,.2);
  for(let i=0;i<8;i++)box(gun,3.4,.38,.8,0,4.95,-length*.34+i*length*.062,m.steel);
  box(gun,.28,.6,length*.36,3.66,2.5,-length*.23,energy);plate(gun,1,2.5,4,3.8,1,length*.25,m.warm,.2);
- if(kind===3||kind===9){const scope=cyl(gun,2.6,15,0,9,-2,m.black,14);scope.rotation.x=Math.PI/2;for(const z of [-10,6]){const ring=cyl(gun,3.2,2,0,9,z,m.steel,14);ring.rotation.x=Math.PI/2;}const lens=cyl(gun,2.4,.3,0,9,7.2,glow[3],16);lens.rotation.x=Math.PI/2;beam(gun,[0,4,-6],[0,8,-6],1.2)}else{plate(gun,2.3,2.5,3,0,6.2,-4,m.black,.3);box(gun,1.3,.6,.4,0,7,-2.3,cyan)}
+ if(kind===3||kind===9){const scope=cyl(gun,2.6,15,0,9,-2,m.black,14);scope.rotation.x=Math.PI/2;for(const z of [-10,6]){const ring=cyl(gun,3.2,2,0,9,z,m.steel,14);ring.rotation.x=Math.PI/2;}const lens=cyl(gun,2.4,.3,0,9,7.2,kind===3?m.optic:glow[3],16);lens.rotation.x=Math.PI/2;beam(gun,[0,4,-6],[0,8,-6],1.2)}else{plate(gun,2.3,2.5,3,0,6.2,-4,m.black,.3);box(gun,1.3,.6,.4,0,7,-2.3,cyan)}
+ if(kind===3){
+  const bell=cyl(gun,3.6,4,0,9,-11,m.gunmetal,14);bell.rotation.x=Math.PI/2;
+  const frontGlass=cyl(gun,3.25,.25,0,9,-13.15,m.optic,14);frontGlass.rotation.x=Math.PI/2;
+  mesh(gun,new THREE.TorusGeometry(1.65,.13,5,18),energy,0,9,7.38);
+  for(const side of [-1,1]){
+   plate(gun,1.7,2.8,27,side*4.6,1,-20,m.gunmetal,.3);
+   plate(gun,.75,1.2,23,side*5.6,2,-20,m.black,.2);
+   for(let i=0;i<4;i++)box(gun,.5,.75,2.1,side*5.65,2,-28+i*5.3,energy);
+   beam(gun,[side*2.4,-1,-5],[side*4.4,-1,-30],.55,m.steel);
+  }
+  for(const z of [-9,-31])beam(gun,[-4.6,1,z],[4.6,1,z],.65,m.silver);
+  plate(gun,8,2.7,10,0,-1.4,5,m.black,.4);
+ }
  if(kind===5){for(const side of [-1,1])for(let i=0;i<3;i++)plate(gun,1,2,6,side*3.2,2,-9+i*8,i===1?energy:m.steel,.2);plate(gun,7,5,9,0,-2,10,m.hull,.6)}
  if(kind===6||kind===8||kind===11){for(let i=0;i<4;i++){const ring=mesh(gun,new THREE.TorusGeometry(kind===11?4:3,.55,6,16),i%2?m.silver:energy,0,1,-10-i*4);ring.rotation.z=i*.4}for(const side of [-1,1]){plate(gun,2,3,22,side*4,1,-13,m.steel,.5);box(gun,.4,1,16,side*5.1,1,-13,energy)}plate(gun,4,5,8,0,0,9,energy,.5);}
  if(kind===7){plate(gun,12,10,13,0,-4,7,m.black,1);for(const side of [-1,1]){const drum=cyl(gun,6.5,5,side*7,-4,7,m.steel,16);drum.rotation.z=Math.PI/2;}for(let i=0;i<6;i++){const a=i*Math.PI/3,x=Math.cos(a)*3,y=1+Math.sin(a)*3;const tube=cyl(gun,.8,24,x,y,-26,m.black,10);tube.rotation.x=Math.PI/2;}for(const z of [-17,-32]){const collar=cyl(gun,4.4,2,0,1,z,m.steel,16);collar.rotation.x=Math.PI/2;}box(gun,1,1,12,3.5,3,7,energy);}
