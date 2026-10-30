@@ -134,6 +134,17 @@ export function createArt(renderer,{mobile=false}={}){
   for(const z of [-20,-16]){const collar=cyl(gun,2.25,.7,0,1,z,m.silver,12);collar.rotation.x=Math.PI/2;}
   box(gun,1,3,1,0,7.2,-2.5,energy);
  }
+ if(kind===2){
+  plate(gun,7.8,4.6,18,0,1,-12,m.black,.6);
+  for(const side of [-1,1]){
+   plate(gun,1.4,4.4,18,side*4.6,1.1,-12,m.gunmetal,.25);
+   box(gun,.55,.65,15,side*5.45,3.25,-12,energy);
+   for(let i=0;i<4;i++)box(gun,.8,2.8,1.3,side*5.5,1,-18+i*4,m.warm);
+  }
+  for(const z of [-24,-20,-16]){const coil=cyl(gun,3,.9,0,1,z,m.warm,16);coil.rotation.x=Math.PI/2;}
+  const sleeve=cyl(gun,2.65,13,0,1,-20,m.gunmetal,16);sleeve.rotation.x=Math.PI/2;
+  const tip=cyl(gun,2.2,1,0,1,-27,m.black,16);tip.rotation.x=Math.PI/2;
+ }
  return gun;}
  function robot(slot,hero,weapon=hero===3?3:hero===0?1:2){const rig=new THREE.Group(),torso=new THREE.Group(),head=new THREE.Group(),legs=[],arms=[];rig.name=`hero-${hero}-slot-${slot}`;rig.add(torso,head);const paint=armor[hero],light=glow[hero],bulk=hero===2?1.22:hero===0?.83:hero===5?1.08:1;
  // Mechanical spine, suspended abdominal plates and separately bevelled shell.

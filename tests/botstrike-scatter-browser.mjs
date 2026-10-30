@@ -5,7 +5,7 @@ import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const base=process.env.STORE_URL||'http://127.0.0.1:19885',out=process.env.ART_OUTPUT||'/tmp/botstrike-scatter-browser';
 const weapon=Number(process.env.WEAPON_CASE??4),spec=JSON.parse(readFileSync(new URL('../botstrike/spec.json',import.meta.url)));
-assert.ok([3,4].includes(weapon));
+assert.ok([2,3,4].includes(weapon));
 mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),args:['--no-sandbox','--enable-unsafe-swiftshader']});
 const page=await browser.newPage({viewport:{width:1920,height:1080}}),errors=[];
