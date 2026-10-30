@@ -85,14 +85,15 @@ export function createArt(renderer,{mobile=false}={}){
  if(kind===10){for(const side of [-1,1]){cyl(gun,2,12,side*4,0,3,energy,12);for(const y of [-6,6])cyl(gun,2.4,1.2,side*4,y,3,m.steel,12);cable(gun,[[side*4,6,3],[side*6,8,-5],[side*3,4,-13]],.6,m.black)}plate(gun,6,2,14,0,5,4,m.hull,.4);}
  if(kind===11){for(const side of [-1,1]){plate(gun,3,7,26,side*5,0,-20,m.hull,.6);box(gun,.4,4,21,side*6.6,0,-20,energy);}sphere(gun,4.2,0,1,-9,energy);plate(gun,9,9,12,0,-2,12,m.black,1);}
  if(kind===4){
+  const pump=new THREE.Group();pump.name='pump';gun.add(pump);
   plate(gun,8.7,3.4,19,0,2.9,-12,m.gunmetal,.65);
   for(const side of [-1,1]){
    for(let i=0;i<5;i++)box(gun,.45,1.3,2,side*4.55,3,-19+i*3.4,m.black);
    const tube=cyl(gun,1.25,19,side*2.4,-1.35,-14,m.black,12);tube.rotation.x=Math.PI/2;
    const cap=cyl(gun,1.55,1,side*2.4,-1.35,-23.8,m.silver,12);cap.rotation.x=Math.PI/2;
-   for(let i=0;i<5;i++)box(gun,.6,2.2,.75,side*4.9,-3.4,-16+i*2.2,m.steel);
+   for(let i=0;i<5;i++)box(pump,.6,2.2,.75,side*4.9,-3.4,-16+i*2.2,m.steel);
   }
-  plate(gun,9.5,3.3,13,0,-3.4,-11,m.rubber,.7);
+  plate(pump,9.5,3.3,13,0,-3.4,-11,m.rubber,.7);
   plate(gun,.6,2.7,6,3.85,.4,6,m.black,.2);
   box(gun,.65,.45,4,4.2,1.25,6,m.silver);
   const shroud=cyl(gun,3.4,5,0,1,-length*.5-10,m.gunmetal,16);shroud.rotation.x=Math.PI/2;
@@ -156,7 +157,7 @@ export function createArt(renderer,{mobile=false}={}){
  else if(kind===5||kind===10){plate(root,13,6,13,0,0,0,m.hull,1);sphere(root,4,0,4,0,light);for(const side of [-1,1]){beam(root,[side*4,0,0],[side*12,-5,side*7],1.2,m.steel);plate(root,7,2,8,side*12,-5,side*7,m.black,.4);beam(root,[side*4,0,0],[side*12,-5,-side*7],1.2,m.steel);plate(root,7,2,8,side*12,-5,-side*7,m.black,.4)}beam(root,[0,5,0],[0,18,0],.7,m.steel);sphere(root,1.2,0,18,0,light)}
  else{cyl(root,5,18,0,0,0,m.black,12);for(const y of [-9,-4,4,9])cyl(root,5.4,1.3,0,y,0,y===-4||y===4?light:m.steel,12);for(let i=0;i<6;i++){const a=i*Math.PI/3;plate(root,2.1,12,2.1,Math.cos(a)*4.6,0,Math.sin(a)*4.6,m.hull,.4)}plate(root,5,4,5,0,11,0,m.steel,.4);beam(root,[2,12,0],[6,6,0],.8,m.silver)}
  bake(root);return root;}
- function weaponModel(kind){const root=new THREE.Group(),rifleRoot=rifle(root,kind),magazine=rifleRoot.getObjectByName('magazine'),stock=rifleRoot.getObjectByName('stock');magazine?.removeFromParent();stock?.removeFromParent();bake(root);if(magazine){root.add(magazine);root.userData.magazineName='magazine';}if(stock){bake(stock);root.add(stock)}return root;}
+ function weaponModel(kind){const root=new THREE.Group(),rifleRoot=rifle(root,kind),magazine=rifleRoot.getObjectByName('magazine'),stock=rifleRoot.getObjectByName('stock'),pump=rifleRoot.getObjectByName('pump');magazine?.removeFromParent();stock?.removeFromParent();pump?.removeFromParent();bake(root);if(magazine){root.add(magazine);root.userData.magazineName='magazine';}if(stock){bake(stock);root.add(stock)}if(pump){bake(pump);root.add(pump)}return root;}
  const signCache=new Map();
  function sign(text,color='#8deaff',width=512,height=128){const key=JSON.stringify([text,color,width,height]);if(signCache.has(key))return signCache.get(key);const c=document.createElement('canvas');c.width=width;c.height=height;const ctx=c.getContext('2d');ctx.fillStyle='#09141c';ctx.fillRect(0,0,width,height);ctx.fillStyle=color;ctx.font='700 54px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,width/2,height/2);ctx.globalAlpha=.6;ctx.fillRect(10,10,width-20,3);ctx.fillRect(10,height-13,width-20,3);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;textures.push(t);const material=new THREE.MeshStandardMaterial({map:t,emissiveMap:t,emissive:color,emissiveIntensity:1.3,roughness:.5,metalness:.1,side:THREE.DoubleSide});materials.push(material);signCache.set(key,material);return material;}
  function panel(root,text,x,y,z,w=100,h=24,color='#85eaff',ry=0){const n=mesh(root,new THREE.PlaneGeometry(w,h),sign(text,color),x,y,z);n.rotation.y=ry;return n;}

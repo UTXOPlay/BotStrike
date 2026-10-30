@@ -61,3 +61,12 @@ window.probeReload=(seconds=.25)=>{
  q.scene.updateMatrixWorld(true);const bones=q.character.bones,shoulder=bones['upper_arm.L'].getWorldPosition(new THREE.Vector3()),elbow=bones['forearm.L'].getWorldPosition(new THREE.Vector3()),hand=bones['hand.L'].getWorldPosition(new THREE.Vector3()),right=bones['hand.R'].getWorldPosition(new THREE.Vector3()),magazine=q.character.model.getObjectByName('magazine').getWorldPosition(new THREE.Vector3());q.renderer.render(q.scene,q.camera);
  return{distance:hand.distanceTo(magazine),reach:shoulder.distanceTo(elbow)+elbow.distanceTo(hand),needed:shoulder.distanceTo(magazine),hand:hand.toArray(),right:right.toArray(),magazine:magazine.toArray(),magazineScreen:magazine.clone().project(q.camera).toArray(),stockVisible:q.character.model.getObjectByName('stock')?.visible,remaining:p.reload};
 };
+
+window.probePump=(reduced=false,stopAt=350)=>{
+ const q=showroom,p=q.player,bot=q.character,pump=bot.model.getObjectByName('pump');
+ if(!pump)return null;
+ p.reload=0;bot.update(p,q.state,q.time,.016,{reduced});bot.trigger('fire',q.time);
+ const positions=[];let elapsed=0;
+ for(const delay of [50,50,50,50,150]){if(elapsed+delay>stopAt)break;elapsed+=delay;q.time+=delay;bot.update(p,q.state,q.time,delay/1000,{reduced});positions.push(pump.position.z)}
+ q.renderer.render(q.scene,q.camera);return positions;
+};

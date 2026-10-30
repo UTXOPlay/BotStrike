@@ -64,8 +64,8 @@ export function createCharacters(art){
    const a=mixer.clipAction(clip);actions.set(key,a);return a;
   }
   let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0;
-  let gun=null,magazine=null;const gunAnchor=new THREE.Group();model.add(gunAnchor);
-  function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');const stock=gun.getObjectByName('stock');if(stock&&firstPerson)stock.visible=false;gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
+  let gun=null,magazine=null,pump=null,pumpAt=-Infinity;const gunAnchor=new THREE.Group();model.add(gunAnchor);
+  function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');pump=gun.getObjectByName('pump');pumpAt=-Infinity;const stock=gun.getObjectByName('stock');if(stock&&firstPerson)stock.visible=false;gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
   equip(weapon);
   function swap(current,next,loop=true,fade=.12){
    if(current===next)return current;next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1);next.setLoop(loop?THREE.LoopRepeat:THREE.LoopOnce,loop?Infinity:1);next.clampWhenFinished=!loop;next.play();
@@ -76,6 +76,7 @@ export function createCharacters(art){
   }
   function trigger(name,now,duration,value){
    if(!source.clips[name]||lastAlive===false)return;
+   if(name==='fire'&&pump)pumpAt=now;
    if(['utility','use_item'].includes(name)&&Number.isInteger(value)&&value>=0&&value<12){if(prop){prop.removeFromParent();prop.traverse(o=>o.geometry?.dispose());}prop=art.equipment(value);prop.scale.setScalar(.012);model.add(prop);propUntil=now+900;}
    const next=action(name,'upper');if(upper===next){next.reset().play();}else upper=swap(upper,next,false,name==='hit'?.045:.08);
    const seconds=duration||source.clips[name].duration;next.setEffectiveTimeScale(source.clips[name].duration/Math.max(.1,seconds));upperUntil=now+seconds*1000;
@@ -122,10 +123,11 @@ export function createCharacters(art){
    }
    bones['hand.R'].getWorldPosition(tmp);model.worldToLocal(tmp);gunAnchor.position.copy(tmp).add(new THREE.Vector3(0,.096,-.048));
    gunAnchor.quaternion.copy(identity);gunAnchor.rotation.x=p.pitch||0;gunAnchor.rotation.y=reloading ? .35*reloadWeight : 0;gunAnchor.rotation.z=reloading ? -.55*reloadWeight-.15*Math.sin((p.reload/64)*4) : 0;
+   if(pump){const phase=(now-pumpAt)/320;pump.position.z=p.alive&&!reduced&&phase>=0&&phase<1?5.2*(phase<.45?phase/.45:(1-phase)/.55):0;}
    if(magazine)magazine.position.y=-6-(p.reload&&reloadDuration?Math.sin(Math.PI*(1-p.reload/reloadDuration))*8:0);
    if(reloading){
     if(reloadWeight>.05){gunAnchor.updateMatrixWorld(true);const hand=bones['hand.L'].getWorldPosition(new THREE.Vector3()),contact=magazine.getWorldPosition(new THREE.Vector3());hand.lerp(contact,reloadWeight);grip('L',model.worldToLocal(hand));}
-   }else if(firstPerson&&p.alive&&!p.reload&&now>=propUntil&&(!upperUntil||now>=upperUntil||['upper:fire','upper:hit'].includes(upper?.getClip().name)))grip('L',gunAnchor.position.clone().add(new THREE.Vector3(-.025,-.11,-.12)));
+   }else if(firstPerson&&p.alive&&!p.reload&&now>=propUntil&&(!upperUntil||now>=upperUntil||['upper:fire','upper:hit'].includes(upper?.getClip().name)))grip('L',gunAnchor.position.clone().add(new THREE.Vector3(-.025,-.11,-.12+(pump?.position.z||0)*.016)));
    if(prop){prop.visible=p.alive&&now<propUntil;if(prop.visible){bones['hand.L'].getWorldPosition(tmp);model.worldToLocal(tmp);prop.position.copy(tmp);prop.rotation.z=.5;}}
    gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;
    return {deadAt,motion:rig.userData.motion};
