@@ -20,7 +20,7 @@ try{
  await page.locator('#practice').click();
  try{await page.waitForFunction(()=>document.documentElement.dataset.playing==='true'&&document.querySelector('#phase').textContent==='TEAM DEATHMATCH',undefined,{timeout:15000});}
  catch(error){console.error('Practice startup:',await page.evaluate(()=>({status:document.querySelector('#status').textContent,phase:document.querySelector('#phase').textContent,playing:document.documentElement.dataset.playing})),errors);throw error;}
- for(const [key,weapon,name,duration]of [['Digit1',0,'ARC-9',.28],['Digit2',1,'NEEDLE',.15],['Digit4',3,'RAIL-LANCE',.32],['Digit5',4,'SCATTER',.38]]){
+ for(const [key,weapon,name,duration]of [['Digit1',0,'ARC-9',.28],['Digit2',1,'NEEDLE',.15],['Digit3',2,'ION-5',.105],['Digit4',3,'RAIL-LANCE',.32],['Digit5',4,'SCATTER',.38]]){
   await page.keyboard.press(key);
   await page.waitForFunction(expected=>document.querySelector('#weapon-label').textContent===expected,name);
   const canvas=await page.locator('#arena').boundingBox();await page.mouse.move(canvas.x+canvas.width/2,canvas.y+canvas.height/2);
@@ -34,14 +34,15 @@ try{
   finally{await page.mouse.up();}
   await page.waitForFunction(before=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{const pilot=room.state.players[room.slot];return pilot.shots>before.shots&&pilot.last_seq>before.seq}),before, {timeout:5000});
  }
- await page.waitForFunction(()=>window.__shotBuffers.length>=4);
+ await page.waitForFunction(()=>window.__shotBuffers.length>=5);
  const buffers=await page.evaluate(()=>window.__shotBuffers);
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.27&&buffer.length/buffer.rate<.29),'ARC-9 sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.14&&buffer.length/buffer.rate<.16),'NEEDLE sample reached Web Audio');
+ assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.10&&buffer.length/buffer.rate<.11),'ION-5 sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.31&&buffer.length/buffer.rate<.33),'RAIL-LANCE sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.37&&buffer.length/buffer.rate<.39),'SCATTER sample reached Web Audio');
  assert.deepEqual(errors,[]);
- console.log('ARC-9, NEEDLE, RAIL-LANCE and SCATTER sampled playback started in native practice without page errors');
+ console.log('ARC-9, NEEDLE, ION-5, RAIL-LANCE and SCATTER sampled playback started in native practice without page errors');
 }finally{
  try{await leaveBrowserRoom(page)}finally{await browser.close()}
 }
