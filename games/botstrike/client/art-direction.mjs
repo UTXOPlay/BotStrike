@@ -159,6 +159,12 @@ export function createArt(renderer,{mobile=false}={}){
   const water=new THREE.MeshBasicMaterial({color:'#79a1a7',map:waterMap});materials.push(water);
   const sea=mesh(root,new THREE.PlaneGeometry(24000,24000),water,0,-61,0);sea.rotation.x=-Math.PI/2;sea.castShadow=sea.receiveShadow=false;
   for(const side of [-1,1])for(let z=-e+140;z<e-100;z+=130){box(root,70,.15,4,side*(e-145),.16,z,m.warm);box(root,18,.15,4,side*(e-185),.16,z,m.black)}
+  const guide=mat('#a89677',{map:null,bumpMap:null,metalness:0,roughness:1});
+  const arrowShape=new THREE.Shape();arrowShape.moveTo(-40,0);arrowShape.lineTo(0,-16);arrowShape.lineTo(0,-6);arrowShape.lineTo(40,-6);arrowShape.lineTo(40,6);arrowShape.lineTo(0,6);arrowShape.lineTo(0,16);arrowShape.closePath();
+  for(let team=0;team<2;team++){const side=team===0?-1:1,spawn=map.spawns[team][0],forward=-Math.sign(spawn[2]);
+   const arrow=mesh(root,new THREE.ShapeGeometry(arrowShape),guide,spawn[0],.22,spawn[2]+forward*205);arrow.rotation.x=-Math.PI/2;arrow.scale.x=team===0?1:-1;arrow.castShadow=false;
+   for(let n=0;n<7;n++)box(root,4,.12,32,side*(e-65),.18,spawn[2]+forward*(110+n*75),guide).castShadow=false;
+  }
  }
  for(let z=-e+80;z<e;z+=160){for(const side of [-1,1]){box(root,35,.18,5,side*(e-65),.12,z,m.warm);box(root,35,.18,5,side*(e-65),.12,z+16,m.warm)}}
  map.obstacles.forEach((o,index)=>{const w=o.max[0]-o.min[0],h=o.max[1],d=o.max[2]-o.min[2],x=(o.min[0]+o.max[0])/2,z=(o.min[2]+o.max[2])/2;
