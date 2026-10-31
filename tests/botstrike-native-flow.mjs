@@ -6,6 +6,7 @@ import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {WebSocket} from 'ws';
 import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
+import {matchResults} from '../games/botstrike/client/post-match.mjs';
 const secret='botstrike-integration-private-token-2050',data=mkdtempSync(path.join(tmpdir(),'botstrike-flow-'));
 const service=createBotStrike({secret,data,tickMs:0});await new Promise(r=>service.server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+service.server.address().port;
 const accounts=['a'.repeat(64),'b'.repeat(64)];const headers=id=>({'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':id});
@@ -27,6 +28,7 @@ try{
  const deadline=Date.now()+180000;let end;
  do{await new Promise(r=>setTimeout(r,500));end=(await request(accounts[0])).room;if(end.status==='failed')throw Error(end.error);if(Date.now()>deadline)throw Error('Complete native room did not seal in time');}while(end.status!=='finished');
  assert.equal(end.proof.verified,true);assert.ok(end.state.players.some(p=>p.deaths>1),'respawns occur in the complete match');
+ const results=matchResults(end);assert.ok(results,'a verified native room exposes post-match results');assert.equal(results.self.slot,end.slot);assert.equal(results.teams.reduce((sum,team)=>sum+team.players.length,0),10);assert.equal(results.teams[0].score,end.state.score[results.self.team]);assert.equal(results.winner,end.state.winner);
  const exported=await fetch(base+'/api/export',{headers:headers(accounts[0])});assert.equal(exported.status,200);const exp=await exported.json();const exportPath=path.join(data,'export.json');writeFileSync(exportPath,JSON.stringify(exp));
  const verify=JSON.parse(execFileSync('release/myelin-botstrike',['verify',exportPath],{env:{...process.env,BOTSTRIKE_ASSETS:path.resolve('release')},timeout:180000,maxBuffer:200e6}));assert.equal(verify.verified,true);
  const actionPath=path.join(data,'rooms',id,'match.json'),action=JSON.parse(readFileSync(actionPath));action.result.score[0]+=1;const tampered=path.join(data,'tampered.json');writeFileSync(tampered,JSON.stringify(action));assert.throws(()=>execFileSync('release/myelin-botstrike',['record',path.join(data,'tamper-session'),tampered],{env:{...process.env,BOTSTRIKE_ASSETS:path.resolve('release')},timeout:180000,stdio:'pipe'}),'tampered result must be rejected');

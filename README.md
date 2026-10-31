@@ -56,6 +56,8 @@ Choose a new chassis in the match menu; native rules apply it during buy time or
 
 Career records start with this release: authenticated-account K/D, wins/losses and the latest 50 completed, verified matches. Only frames actually controlled by a human contribute; AI cover is excluded. Leaving or having no human input in the final 30 seconds gives no win/loss. Existing matches are not backfilled because their human/AI attribution is incomplete. Aggregates and recent history persist separately from recordings, which still expire after 30 days. Guest history depends on keeping the same guest session. Download signed match exports replay evidence for the exact native verifier; it is not a playable video.
 
+The attached room's match-end view shows the final team score, your K/D/A and damage, and all ten players' K/D/A and damage. Combat MVP goes to the most kills, then assists, damage, fewer deaths and lower slot for ties; a match without a combat contribution has no MVP. Results appear while native replay verification is pending, but only a verified match offers the signed export. Individual plants and defuses are not yet tracked, so this MVP does not claim objective credit.
+
 Version 1.2.0 changed presentation and host metadata only. Later native rule changes use their own exact application profiles; see the acceptance records for each release.
 
 ## Readability and combat tuning (1.4.0)

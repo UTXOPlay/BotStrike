@@ -6,7 +6,8 @@
   const canFullscreen=()=>typeof root.requestFullscreen==='function'&&document.fullscreenEnabled;
   let blocked=false,pending=false;
   function update(){
-    const next=mobile()&&(portrait.matches||(canFullscreen()&&!document.fullscreenElement));
+    const reviewingResult=!document.getElementById('panel').hidden&&document.getElementById('panel').dataset.result==='true';
+    const next=mobile()&&!reviewingResult&&(portrait.matches||(canFullscreen()&&!document.fullscreenElement));
     root.dataset.mobile=String(mobile());root.dataset.immersiveBlocked=String(next);gate.hidden=!next;content.inert=next;content.setAttribute('aria-hidden',String(next));
     title.textContent=portrait.matches?'Turn to landscape':'Go fullscreen';
     hint.textContent=portrait.matches?'Turn your phone sideways for room to move and aim.':'Enter fullscreen to keep the browser bars out of your match.';
@@ -22,7 +23,7 @@
     }catch{update();hint.textContent='Fullscreen was not allowed. Tap again, or open this game in your browser.';}
     finally{pending=false;button.disabled=false;}
   }
-  window.BotStrikeImmersive={get blocked(){return blocked},enter};
+  window.BotStrikeImmersive={get blocked(){return blocked},enter,refresh:update};
   button.addEventListener('click',enter);touch.addEventListener('change',update);portrait.addEventListener('change',update);addEventListener('resize',update);document.addEventListener('fullscreenchange',update);addEventListener('pageshow',update);
   addEventListener('pagehide',()=>{try{screen.orientation?.unlock?.()}catch{}});
   update();
