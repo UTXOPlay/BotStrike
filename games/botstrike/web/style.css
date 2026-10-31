@@ -180,6 +180,12 @@ html[data-gamepad=true] :is(button,a,input,select,summary):focus{outline:2px sol
 #rack-next .rack-next-copy{display:grid;min-width:0;gap:2px}
 #rack-next b{font:600 11px monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #rack-next small{font:8px monospace;color:#c5e2e9;white-space:nowrap}
+#rack-choices{display:grid;gap:4px}
+#rack-choices .rack-choice{height:39px;min-height:39px;display:grid;grid-template-columns:42px 1fr;gap:6px;align-items:center}
+#rack-choices img{display:block;width:42px;height:31px;object-fit:cover;transform:scale(1.18)}
+#rack-choices .rack-choice span{display:grid;min-width:0;gap:1px}
+#rack-choices b{font:600 10px monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#rack-choices small{font:8px monospace;color:#b9d4dc}
 @media(min-width:1600px) and (min-height:800px) and (max-height:1199px){#weapon-rack{transform:scale(1.5);transform-origin:bottom right;bottom:calc(max(24px,env(safe-area-inset-bottom)) + 136px)}}
 @media(min-width:1800px) and (min-height:1200px){#weapon-rack{transform:scale(1.5);transform-origin:bottom right;bottom:calc(max(24px,env(safe-area-inset-bottom)) + 146px)}}
 @media(min-width:3200px) and (min-height:1800px){#weapon-rack{transform:scale(2.3);bottom:calc(max(24px,env(safe-area-inset-bottom)) + 218px)}}
@@ -189,9 +195,19 @@ html[data-mobile=true] #rack-next{height:48px;min-height:48px;grid-template-colu
 html[data-mobile=true] #rack-next .rack-art{width:39px;height:38px}
 html[data-mobile=true] #rack-next b{font-size:9px}
 html[data-mobile=true] #rack-next small{font-size:7px}
-@media(max-width:750px){html:not([data-mobile=true]) #weapon-rack{top:335px;right:max(14px,env(safe-area-inset-right));bottom:auto;transform:none}}
+html[data-mobile=true] #rack-open{font-size:8px;padding:4px 5px;gap:4px}
+html[data-mobile=true] #rack-open .control-icon{width:14px;height:14px}
+html[data-mobile=true] #rack-choices{display:none}
+@media(max-width:750px){html:not([data-mobile=true]) #weapon-rack{right:max(14px,env(safe-area-inset-right));transform:none}html:not([data-mobile=true]) #rack-choices{display:none}}
 
 #pickup-hud{position:absolute;left:50%;top:calc(50% - 84px);transform:translateX(-50%);max-width:min(90vw,440px);padding:5px 9px;text-align:center;color:#ffdcac;background:#0a1b25db;border:1px solid #ffca7a99;border-radius:4px;font:600 13px/1.3 monospace;text-shadow:0 1px 2px #061018;white-space:normal}
+@media(min-width:1600px) and (min-height:800px) and (max-height:1199px){#pickup-hud{font-size:16px;max-width:600px;padding:7px 12px}}
 @media(min-width:1800px) and (min-height:1200px){#pickup-hud{font-size:16px;top:calc(50% - 116px);padding:8px 14px;max-width:640px}}
 @media(min-width:3200px) and (min-height:1800px){#pickup-hud{font-size:22px;top:calc(50% - 174px);padding:10px 20px;max-width:900px}}
-html[data-mobile=true] #pickup-hud{top:calc(50% - 74px);font-size:11px;max-width:38%;padding:3px 5px}
+html[data-mobile=true] #pickup-hud{top:calc(50% - 74px);font-size:11px;max-width:29%;padding:3px 5px}
+#drop-marker{position:absolute;transform:translate(-50%,-100%);max-width:190px;padding:4px 7px;border:1px solid #ffc879a6;border-radius:3px;background:#0a1b25e8;color:#ffe0b6;font:600 10px/1.25 monospace;text-align:center;text-shadow:0 1px 2px #061018;white-space:nowrap;pointer-events:none}
+#drop-marker[data-available=false]{color:#aebec8;border-color:#aebec880}
+@media(min-width:1600px) and (min-height:800px) and (max-height:1199px){#drop-marker{font-size:14px;max-width:265px;padding:6px 9px}}
+@media(min-width:1800px) and (min-height:1200px){#drop-marker{font-size:15px;padding:6px 10px;max-width:285px}}
+@media(min-width:3200px) and (min-height:1800px){#drop-marker{font-size:21px;padding:8px 14px;max-width:400px}}
+html[data-mobile=true] #drop-marker{font-size:9px;padding:3px 5px;max-width:140px;overflow:hidden;text-overflow:ellipsis}

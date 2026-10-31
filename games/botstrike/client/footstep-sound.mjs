@@ -1,7 +1,7 @@
 const profiles={
- step0:{duration:.125,thump:105,drop:35,weight:.52,weightDecay:.045,plate:640,plateLevel:.24,plateDecay:.055,click:.62,rattleAt:.029},
- step1:{duration:.145,thump:92,drop:29,weight:.56,weightDecay:.05,plate:730,plateLevel:.2,plateDecay:.065,click:.54,rattleAt:.038},
- land:{duration:.23,thump:90,drop:45,weight:.8,weightDecay:.09,plate:420,plateLevel:.32,plateDecay:.12,click:.75,rattleAt:.062},
+ step0:{duration:.11,thump:86,drop:25,weight:.68,weightDecay:.042,plate:340,plateLevel:.09,plateDecay:.024,click:.2},
+ step1:{duration:.125,thump:78,drop:22,weight:.72,weightDecay:.047,plate:300,plateLevel:.08,plateDecay:.027,click:.17},
+ land:{duration:.19,thump:82,drop:32,weight:.86,weightDecay:.09,plate:270,plateLevel:.13,plateDecay:.055,click:.25},
 };
 
 export function makeFootstepSample(kind,sampleRate=44100){
@@ -16,11 +16,10 @@ export function makeFootstepSample(kind,sampleRate=44100){
   low+=(noise-low)*lowStep;
   phase+=2*Math.PI*(profile.thump-profile.drop*Math.min(1,t/.08))/sampleRate;
   const weight=Math.sin(phase)*profile.weight*Math.exp(-t/profile.weightDecay);
-  const strike=(noise-low)*profile.click*Math.exp(-t/.006);
+  const strike=(noise-low)*profile.click*Math.exp(-t/.004);
   const plate=Math.sin(2*Math.PI*profile.plate*t)*profile.plateLevel*Math.exp(-t/profile.plateDecay);
-  const rattle=t>profile.rattleAt?(noise-low)*.18*Math.exp(-(t-profile.rattleAt)/.009):0;
   const fade=Math.min(1,(profile.duration-t)/.012);
-  const value=(weight+strike+plate+rattle+low*.28*Math.exp(-t/.045))*fade;
+  const value=(weight+strike+plate+low*.24*Math.exp(-t/.04))*fade;
   samples[i]=value;peak=Math.max(peak,Math.abs(value));
  }
  if(peak>0)for(let i=0;i<count;i++)samples[i]*=.8/peak;

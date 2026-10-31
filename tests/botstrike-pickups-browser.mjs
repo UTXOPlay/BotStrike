@@ -9,7 +9,7 @@ const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH
 const desktop=await browser.newContext({viewport:{width:1920,height:1080}}),touch=await browser.newContext({viewport:{width:844,height:390},hasTouch:true,isMobile:true});
 const pages=[await desktop.newPage(),await touch.newPage()],errors=[],sent=[];
 for(const page of pages){page.setDefaultTimeout(60000);page.on('pageerror',e=>errors.push(e.message));page.on('websocket',ws=>ws.on('framesent',e=>{try{const v=JSON.parse(e.payload);if(v.type==='input')sent.push(v.input)}catch{}}));await page.addInitScript(()=>{const Original=WebSocket;window.WebSocket=class extends Original{constructor(...args){super(...args);window.testSocket=this;this.addEventListener('message',e=>{if(window.freezeGame&&!e.synthetic&&JSON.parse(e.data).type==='state'){e.stopImmediatePropagation();return;}try{const v=JSON.parse(e.data);if(v.room?.state)window.testRoom=v.room;}catch{}})}};});}
-const inject=async(page,drop,picked=false,weapons=[2],eventKind='gun_pickup')=>page.evaluate(({drop,picked,weapons,eventKind})=>{window.freezeGame=true;const room=structuredClone(window.testRoom),s=room.state,me=s.players[room.slot];s.tick++;s.phase='live';me.position=[-1100,0,100];me.velocity=[0,0,0];me.yaw=0;me.pitch=-.1;me.reserve[2]=0;if(picked)me.weapon=2;s.drops=drop?weapons.map((weapon,i)=>({id:42+i,weapon,team:1,position:[-1100+i*12,0,46],ammo:10,reserve:20,expires:s.tick+1000})):[];room.feedback=picked?[{id:eventKind+'-'+s.tick,tick:s.tick,kind:eventKind,actor:room.slot,value:2}]:[];const e=new MessageEvent('message',{data:JSON.stringify({type:'state',room})});e.synthetic=true;testSocket.dispatchEvent(e);},{drop,picked,weapons,eventKind});
+const inject=async(page,drop,picked=false,weapons=[2],eventKind='gun_pickup',distance=54,unowned=false)=>page.evaluate(({drop,picked,weapons,eventKind,distance,unowned})=>{window.freezeGame=true;const room=structuredClone(window.testRoom),s=room.state,me=s.players[room.slot];s.tick++;s.phase='live';me.position=[-1100,0,100];me.velocity=[0,0,0];me.yaw=0;me.pitch=-.1;me.reserve[2]=0;me.owned[2]=!unowned;if(picked)me.weapon=2;s.drops=drop?weapons.map((weapon,i)=>({id:42+i,weapon,team:1,position:[-1100+i*12,0,100-distance],ammo:10,reserve:20,expires:s.tick+1000})):[];room.feedback=picked?[{id:eventKind+'-'+s.tick,tick:s.tick,kind:eventKind,actor:room.slot,value:2}]:[];const e=new MessageEvent('message',{data:JSON.stringify({type:'state',room})});e.synthetic=true;testSocket.dispatchEvent(e);},{drop,picked,weapons,eventKind,distance,unowned});
 try{
  const [desk,phone]=pages;
  await desk.goto(base+'/games/botstrike/');
@@ -19,12 +19,23 @@ try{
  await desk.waitForFunction(()=>document.documentElement.dataset.playing==='true'&&!!window.testRoom?.state);
  await desk.keyboard.press('Digit2');
  await desk.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].weapon===1});
+ await inject(desk,true,false,[2],'gun_pickup',180);
+ await desk.waitForFunction(()=>document.querySelector('#drop-marker').textContent.includes('AMMO · ION-5'));
+ assert.equal(await desk.locator('#pickup-hud').isHidden(),true);
+ const marker=await desk.locator('#drop-marker').boundingBox();assert.ok(marker&&marker.x>=0&&marker.y>=0&&marker.x+marker.width<=1920&&marker.y+marker.height<=1080);
+ await desk.screenshot({path:out+'/drop-marker-approach.png'});
  await inject(desk,true);
  await desk.waitForFunction(()=>document.querySelector('#pickup-hud').textContent.includes('RECOVER ION-5'));
  await desk.locator('#arena').dispatchEvent('mousemove',{movementX:0,movementY:130,buttons:1});
  await desk.waitForTimeout(150);
- assert.match(await desk.locator('#pickup-hud').textContent(),/\+30 RESERVE/);
+ assert.match(await desk.locator('#pickup-hud').textContent(),/\+30 RESERVE AMMO/);
+ assert.equal(await desk.locator('#drop-marker').isHidden(),true);
  assert.equal(await desk.locator('#touch-interact').getAttribute('hidden'),null);
+ await inject(desk,true,false,[2],'gun_pickup',54,true);
+ await desk.waitForFunction(()=>document.querySelector('#pickup-hud').textContent.includes('TAKE ION-5'));
+ assert.match(await desk.locator('#pickup-hud').textContent(),/10 \/ 20 ROUNDS/);
+ assert.equal(await desk.locator('#touch-interact').getAttribute('aria-label'),'Take ION-5');
+ await inject(desk,true);
  await desk.keyboard.down('KeyE');
  await desk.waitForTimeout(150);
  await desk.keyboard.up('KeyE');
@@ -32,8 +43,10 @@ try{
  for(const [width,height] of [[1920,1080],[2560,1080],[2560,1440],[3840,2160],[390,844],[844,390]]){
   await desk.setViewportSize({width,height});
   await desk.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-  const box=await desk.locator('#pickup-hud').boundingBox();
+  const box=await desk.locator('#pickup-hud').boundingBox(),rack=await desk.locator('#weapon-rack').boundingBox();
   assert.ok(box&&box.x>=0&&box.y>=0&&box.x+box.width<=width&&box.y+box.height<=height,JSON.stringify({width,height,box}));
+  assert.ok(rack&&rack.x>=0&&rack.y>=0&&rack.x+rack.width<=width&&rack.y+rack.height<=height,JSON.stringify({width,height,rack}));
+  assert.ok(box.x+box.width<=rack.x||rack.x+rack.width<=box.x||box.y+box.height<=rack.y||rack.y+rack.height<=box.y,JSON.stringify({width,height,box,rack}));
   await desk.screenshot({path:`${out}/pickup-${width}x${height}.png`});
  }
  const dropDrawCalls=Number(await desk.evaluate(()=>document.documentElement.dataset.drawCalls));
@@ -44,6 +57,7 @@ try{
  await inject(desk,true,true);
  await desk.waitForTimeout(150);
  assert.ok(sent.slice(before).some(input=>input.weapon==null),'confirmed pickup clears a stale weapon choice');
+ assert.match(await desk.locator('#combat-banner').textContent(),/PREVIOUS GUN KEPT/);
  await inject(desk,false);
  await desk.locator('#pickup-hud').waitFor({state:'hidden'});
  await desk.waitForTimeout(150);
@@ -55,6 +69,7 @@ try{
  }
  await inject(desk,false,true,[2],'ammo_pickup');
  await desk.waitForFunction(()=>document.querySelector('#combat-banner').textContent.includes('AMMO RECOVERED'));
+ assert.match(await desk.locator('#combat-banner').textContent(),/RELOAD/);
  await leaveBrowserRoom(desk);
 
  await phone.goto(base+'/games/botstrike/');
@@ -66,11 +81,16 @@ try{
  await phone.waitForFunction(()=>document.documentElement.dataset.playing==='true'&&!!window.testRoom?.state);
  await inject(phone,true);
  await phone.locator('#pickup-hud').waitFor({state:'visible'});
+ assert.match(await phone.locator('#pickup-hud').textContent(),/^TAP HAND · RECOVER ION-5/);
+ const prompt=await phone.locator('#pickup-hud').boundingBox(),rack=await phone.locator('#weapon-rack').boundingBox();
+ assert.ok(prompt&&rack&&(prompt.x+prompt.width<=rack.x||rack.x+rack.width<=prompt.x||prompt.y+prompt.height<=rack.y||rack.y+rack.height<=prompt.y),'touch pickup prompt must not cover the weapon controls');
  const touchBox=await phone.locator('#touch-interact').boundingBox();
  assert.ok(touchBox&&touchBox.x>=0&&touchBox.y>=0&&touchBox.x+touchBox.width<=844&&touchBox.y+touchBox.height<=390);
  await phone.locator('#touch-interact').tap();
  assert.ok(sent.some(input=>input.interact),'touch interact reaches the room input path');
  await phone.screenshot({path:out+'/pickup-touch.png'});
+ await phone.evaluate(()=>document.fullscreenElement&&document.exitFullscreen());
+ await phone.locator('#immersive-gate').waitFor({state:'visible'});
  await phone.setViewportSize({width:390,height:844});
  await phone.locator('#immersive-gate').waitFor({state:'visible'});
  await phone.screenshot({path:out+'/portrait-gate.png'});

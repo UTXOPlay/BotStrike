@@ -47,14 +47,14 @@ try{
  const landingStart=await page.evaluate(()=>window.__startedShots.length);
  await page.keyboard.press('Space',{delay:80});
  await page.waitForFunction(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].position[1]>1));
- await page.waitForFunction(start=>window.__startedShots.slice(start).some(value=>Math.abs(value-.23)<.003),landingStart);
+ await page.waitForFunction(start=>window.__startedShots.slice(start).some(value=>Math.abs(value-.19)<.003),landingStart);
  const stepStart=await page.evaluate(()=>window.__startedShots.length);
  const beforeMove=await page.evaluate(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].position));
  await page.keyboard.down('KeyW');
  try{
   await page.waitForFunction(([start,origin])=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{
    const position=room.state.players[room.slot].position;
-   return Math.hypot(position[0]-origin[0],position[2]-origin[2])>40&&[.125,.145].every(duration=>window.__startedShots.slice(start).some(value=>Math.abs(value-duration)<.003));
+   return Math.hypot(position[0]-origin[0],position[2]-origin[2])>40&&[.11,.125].every(duration=>window.__startedShots.slice(start).some(value=>Math.abs(value-duration)<.003));
   }),[stepStart,beforeMove]);
  }finally{await page.keyboard.up('KeyW')}
  await page.waitForFunction(()=>window.__testRoom?.state);

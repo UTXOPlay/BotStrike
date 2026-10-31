@@ -6,7 +6,7 @@ const sampledWeapons=[0,1,2,3,4];
 
 // Bounded voices and one master gain for all feedback.
 export function createAudio(settings){
- let context,bus,voices=0,lastStep=0,stepIndex=0;const shotBuffers=new Map(),impactBuffers=new Map(),footstepBuffers=new Map();
+ let context,bus,voices=0,lastRemoteStep=0;const shotBuffers=new Map(),impactBuffers=new Map(),footstepBuffers=new Map(),lastStepByActor=new Map(),stepPhaseByActor=new Map();
  function ready(){
   try{
    context??=new AudioContext();
@@ -47,7 +47,14 @@ export function createAudio(settings){
  }
  const shot=(weapon=0,spatial)=>{if(sampledWeapons.includes(weapon)){sampled(shotBuffers,weapon,spatial);return}pulse([410,870,250,1200,95,670,1500,170,1900,740,1120,65][weapon]||410,.08+(weapon===11?.2:0),.38,'sawtooth',0,spatial);pulse(75,.08,.22,'triangle',0,spatial)};
  function cue(kind,spatial){
-  if(kind==='step'||kind==='land'){const now=performance.now();if(now-lastStep<60)return;lastStep=now;sampled(footstepBuffers,kind==='land'?'land':'step'+stepIndex++%2,spatial);}
+  if(kind==='step'||kind==='land'){
+   const now=performance.now(),actor=spatial?.source??-1,self=spatial?.self??true,previous=lastStepByActor.get(actor)??-Infinity;
+   if(kind==='step'&&(now-previous<240||!self&&now-lastRemoteStep<140))return;
+   if(kind==='step'){lastStepByActor.set(actor,now);if(!self)lastRemoteStep=now;}
+   const phase=stepPhaseByActor.get(actor)||0;if(kind==='step')stepPhaseByActor.set(actor,phase+1);
+   const mix=self?(kind==='land'?0.7:0.6):(kind==='land'?0.38:0.3);
+   sampled(footstepBuffers,kind==='land'?'land':'step'+phase%2,{...spatial,level:(spatial?.level??1)*mix});
+  }
   else if(kind==='reload'){pulse(620,.04,.12,'square',0,spatial);pulse(900,.035,.1,'square',.09,spatial);}
   else if(kind==='skill'){pulse(300,.25,.15,'sine',0,spatial);pulse(900,.15,.12,'sine',.08,spatial);}
   else if(['item','utility','plasma'].includes(kind))pulse(kind==='plasma'?50:160,.18,.2,'sawtooth',0,spatial);

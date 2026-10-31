@@ -1,7 +1,7 @@
 import {drawSignal,signalSvg,signalColors} from './team-signals.mjs';
 import {loadSession} from './session-startup.mjs';
 import {createWorld} from './scene.mjs';
-import {assistTarget,assistStep} from './aim-assist.mjs';
+import {assistTarget,assistStep,blocked} from './aim-assist.mjs';
 import {LocalPrediction} from './prediction.mjs';
 import {SnapshotBuffer} from './snapshots.mjs';
 import {startRenderLoop} from '../../../shared/game-performance.mjs';
@@ -13,16 +13,30 @@ import {installDialogs} from './dialogs.mjs';
 const startup=window.BotStrikeStartup;startup?.boot();
 const $=id=>document.getElementById(id),api='/games/botstrike/api',canvas=$('arena');
 const pickupHud=document.createElement('div');pickupHud.id='pickup-hud';pickupHud.hidden=true;$('hud').append(pickupHud);
+const dropMarker=document.createElement('div');dropMarker.id='drop-marker';dropMarker.hidden=true;dropMarker.setAttribute('aria-hidden','true');$('hud').append(dropMarker);
 const spec=await fetch('./spec.json').then(r=>{if(!r.ok)throw Error('World specification unavailable');return r.json()});
 let storedPrefs={};try{storedPrefs=JSON.parse(localStorage.getItem('botstrike:settings')||'{}')}catch{}
 let prefs=loadPreferences(storedPrefs,matchMedia('(pointer:coarse)').matches);
 let lastAimAt=-Infinity;
 const keyName=code=>formatKeyName(code,prefs.keyboardLayout);
-const actionPrompt=action=>lastControl==='gamepad'?({reload:'X',skill:'Y',utility:'D-PAD DOWN',use:'R3'}[action]||keyName(prefs.bindings[action])):keyName(prefs.bindings[action]);
+const actionPrompt=action=>lastControl==='gamepad'?({reload:'X',skill:'Y',utility:'D-PAD DOWN',use:'R3'}[action]||keyName(prefs.bindings[action])):prefs.touch?({reload:'RELOAD',skill:'SKILL',utility:'EQUIPMENT',use:'HAND'}[action]||keyName(prefs.bindings[action])):keyName(prefs.bindings[action]);
 function recoveryTarget(state,player){
  if(!player?.alive||state.phase!=='live'||player.position[1]>40)return null;
  if(state.config.mode==='demolition'&&(state.objective.planted&&player.team!==state.attacker&&Math.hypot(player.position[0]-state.objective.position[0],player.position[2]-state.objective.position[2])<95||state.objective.carrier===player.slot&&spec.maps[state.config.map].sites.some(site=>Math.hypot(player.position[0]-site[0],player.position[2]-site[2])<125)))return null;
- return state.drops?.find(drop=>{const weapon=spec.weapons[drop.weapon];return Math.hypot(player.position[0]-drop.position[0],player.position[2]-drop.position[2])<60&&(!player.owned[drop.weapon]||player.reserve[drop.weapon]<weapon.reserve);})||null;
+ const eye=[player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]],map=spec.maps[state.config.map];
+ return state.drops?.find(drop=>{const weapon=spec.weapons[drop.weapon],target=[drop.position[0],16,drop.position[2]];return Math.hypot(player.position[0]-drop.position[0],player.position[2]-drop.position[2])<60&&(!player.owned[drop.weapon]||player.reserve[drop.weapon]<weapon.reserve)&&!map.obstacles.some(box=>blocked(eye,target,box));})||null;
+}
+function updateDropMarker(state,player){
+ if(!active||!player?.alive||state.phase!=='live'){dropMarker.hidden=true;return}
+ const eye=[player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]],map=spec.maps[state.config.map];let nearest=null,distance=260;
+ for(const drop of state.drops||[]){const d=Math.hypot(player.position[0]-drop.position[0],player.position[2]-drop.position[2]);if(d>=distance||map.obstacles.some(box=>blocked(eye,[drop.position[0],16,drop.position[2]],box)))continue;nearest=drop;distance=d}
+ if(!nearest||distance<60&&!pickupHud.hidden){dropMarker.hidden=true;return}
+ const point=world?.projectDrop(nearest.position);if(!point){dropMarker.hidden=true;return}
+ const owned=player.owned[nearest.weapon],available=owned?Math.max(0,Math.min(spec.weapons[nearest.weapon].reserve-player.reserve[nearest.weapon],nearest.ammo+nearest.reserve)):0;
+ const label=owned?(available?`AMMO · ${spec.weapons[nearest.weapon].name} · +${available}`:`${spec.weapons[nearest.weapon].name} · AMMO FULL`):`WEAPON · ${spec.weapons[nearest.weapon].name}`;
+ if(dropMarker.textContent!==label)dropMarker.textContent=label;
+ const availableState=String(!owned||available>0);if(dropMarker.dataset.available!==availableState)dropMarker.dataset.available=availableState;
+ dropMarker.style.left=point[0]+'px';dropMarker.style.top=point[1]+'px';dropMarker.hidden=false;
 }
 const audio=createAudio(()=>prefs),keys=new Set();let selectedHero=0,selectedMap=0,room=null,queueEndAt=null,world,socket,active=false,controller=false,controlToken=null,claimPending=false,enterPending=false,resyncNeeded=false,busy=false,disposed=false,sequence=0,yaw=0,pitch=0,retry=0,retryTimer,lastPacket=0,lastTick=-1,lastRoom=null,lastAmmo=null,lastHealth=100,lastAlive=false,rtt=0,hitUntil=0,damageUntil=0,statsOpen=false,shotAt=0;
 let fire=false,firePulse=false,scope=false,move={x:0,y:0},tap={},touchHeld={},selectedWeapon=null,local=null;const departedRooms=new Set(),snapshots=new SnapshotBuffer(),prediction=new LocalPrediction(),cancelTouches=[],feeds=[];let lastSend=-Infinity,sendTimer,feedbackAt=0,feedbackWeapon=-1;const reduced=()=>!prefs.motion||matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -66,18 +80,28 @@ for(const category of ['weapon','equipment']){const b=document.createElement('bu
 function openBuy(){if(!room?.state||room.status!=='running')return;clear();$('buy-menu').hidden=false;if(document.pointerLockElement)document.exitPointerLock?.();updateBuy()}
 function updateBuy(){const me=room?.state?.players[room.slot];if(!me)return;const buying=room.state.phase==='buy';text('buy-balance',buying?'₡ '+me.credits+' AVAILABLE · '+Math.ceil(room.state.phase_ticks/64)+'s BUY TIME':'FIELD LOADOUT · SELECT A WEAPON OR DEPLOY EQUIPMENT');[...$('buy-items').children].forEach((b,i)=>{const a=armory[i],owned=a.kind==='weapon'&&me.owned[a.index],count=me.items[a.index]||0,full=a.kind==='equipment'&&(a.index===0?me.armor>=100:count>=a.capacity);b.disabled=!me.alive||(!owned&&(buying?me.credits<a.cost||full:a.kind==='weapon'||a.index===0||count===0));b.querySelector('.armory-action').textContent=owned?(me.weapon===a.index?'EQUIPPED':'EQUIP'):buying?'₡ '+a.cost+(a.kind==='equipment'&&a.index>0?' · '+count+'/'+a.capacity:''):a.index===0?'PASSIVE ARMOR':(a.activation==='throw'?'DEPLOY':'USE')+' · '+count;b.setAttribute('aria-pressed',String(owned&&me.weapon===a.index))})}
 $('buy-open').onclick=openBuy;$('buy-close').onclick=()=>enter();
-const weaponRack=document.createElement('div');weaponRack.id='weapon-rack';weaponRack.innerHTML='<button id="rack-open" type="button" title="Open armory"><svg class="control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#icon-backpack"/></svg><span></span></button><button id="rack-next" type="button"><span class="rack-art"><img width="640" height="360" alt=""></span><span class="rack-next-copy"><b></b><small></small></span></button>';$('hud').append(weaponRack);
+const weaponRack=document.createElement('div');weaponRack.id='weapon-rack';weaponRack.innerHTML='<button id="rack-open" type="button" title="Open armory"><svg class="control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#icon-backpack"/></svg><span></span></button><button id="rack-next" type="button"><span class="rack-art"><img width="640" height="360" alt=""></span><span class="rack-next-copy"><b></b><small></small></span></button><div id="rack-choices"></div>';$('hud').append(weaponRack);
 const rackOpen=$('rack-open'),rackCount=rackOpen.querySelector('span'),rackNext=$('rack-next'),rackImage=rackNext.querySelector('img'),rackName=rackNext.querySelector('b'),rackAmmo=rackNext.querySelector('small');rackOpen.onclick=openBuy;
-rackNext.onclick=()=>{const me=room?.state?.players[room.slot],index=Number(rackNext.dataset.weapon);if(!active||!controller||!controlToken||!me?.alive||!me.owned[index])return;selectedWeapon=index;send()};
+const rackChoices=Array.from({length:2},()=>{const button=document.createElement('button');button.type='button';button.className='rack-choice';button.innerHTML='<img width="640" height="360" alt=""><span><b></b><small></small></span>';$('rack-choices').append(button);return button});
+function equipRack(index){const me=room?.state?.players[room.slot];if(!active||!controller||!controlToken||!me?.alive||!me.owned[index])return;selectedWeapon=index;send()}
+rackNext.onclick=()=>equipRack(Number(rackNext.dataset.weapon));for(const button of rackChoices)button.onclick=()=>equipRack(Number(button.dataset.weapon));
 function updateWeaponRack(me){
- const owned=me.owned.flatMap((yes,i)=>yes?[i]:[]),next=owned[(owned.indexOf(me.weapon)+1)%owned.length],canControl=active&&controller&&!!controlToken&&me.alive;
+ const owned=me.owned.flatMap((yes,i)=>yes?[i]:[]),current=owned.indexOf(me.weapon),next=owned[(current+1)%owned.length],canControl=active&&controller&&!!controlToken&&me.alive;
  weaponRack.hidden=!me.alive;
- const count=`${owned.length} OWNED`,openLabel=`Open armory, ${owned.length} weapons owned`;
+ const count=`${owned.length} WEAPON${owned.length===1?'':'S'} · ARMORY`,openLabel=`Open armory, ${owned.length} weapons owned`;
  if(rackCount.textContent!==count)rackCount.textContent=count;
  if(rackOpen.getAttribute('aria-label')!==openLabel)rackOpen.setAttribute('aria-label',openLabel);
  rackOpen.disabled=!canControl;rackNext.hidden=owned.length<2;
+ for(const [offset,button]of rackChoices.entries()){
+  const index=owned[(current+offset+2)%owned.length];button.hidden=owned.length<offset+3;if(button.hidden)continue;
+  const weapon=spec.weapons[index],ammo=`${me.ammo[index]} / ${me.reserve[index]}`;
+  if(button.dataset.weapon!==String(index)){button.dataset.weapon=String(index);button.querySelector('img').src=`./art/weapon-${index}.webp`}
+  if(button.querySelector('b').textContent!==weapon.name)button.querySelector('b').textContent=weapon.name;
+  if(button.querySelector('small').textContent!==ammo)button.querySelector('small').textContent=ammo;
+  button.setAttribute('aria-label',`Equip ${weapon.name}, ${me.ammo[index]} rounds, ${me.reserve[index]} reserve`);button.disabled=!canControl;
+ }
  if(rackNext.hidden)return;
- const weapon=spec.weapons[next],ammo=`NEXT · ${me.ammo[next]} / ${me.reserve[next]}`,nextLabel=`Equip ${weapon.name}, ${me.ammo[next]} rounds, ${me.reserve[next]} reserve`;
+ const weapon=spec.weapons[next],ammo=`EQUIP · ${me.ammo[next]} / ${me.reserve[next]}`,nextLabel=`Equip ${weapon.name}, ${me.ammo[next]} rounds, ${me.reserve[next]} reserve`;
  if(rackNext.dataset.weapon!==String(next)){rackNext.dataset.weapon=String(next);rackImage.src=`./art/weapon-${next}.webp`}
  if(rackName.textContent!==weapon.name)rackName.textContent=weapon.name;
  if(rackAmmo.textContent!==ammo)rackAmmo.textContent=ammo;
@@ -99,8 +123,8 @@ function accept(value){if(!('room'in value))return;const next=value.room;if(next
  for(const [team,id]of [[0,'a'],[1,'b']]){const relation=team===me.team?'ally':'enemy',badge=$('iff-'+id);if(badge.dataset.relation!==relation){badge.dataset.relation=relation;badge.innerHTML=signalSvg(relation)+'<span>'+relation.toUpperCase()+'</span>';badge.style.color=signalColors[relation];$('score-'+id).style.color=signalColors[relation];$('score-'+id).setAttribute('aria-label',relation+' score');}}
  text('score-a',s.score[0]);text('score-b',s.score[1]);text('phase',s.phase==='buy'?'BUY PHASE':s.phase==='round_end'?'ROUND COMPLETE':s.config.mode==='deathmatch'?'TEAM DEATHMATCH':'RELAY DEMOLITION');const seconds=Math.ceil((s.objective.planted?s.objective.fuse:s.phase_ticks)/64);text('clock',`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`);text('round',s.config.mode==='deathmatch'?'FIRST TO 50':`ROUND ${s.round} · FIRST TO 13`);
  const hero=spec.heroes[me.hero];text('hero-label',hero.name+' / '+hero.role.toUpperCase());text('health',me.health);text('armor',me.armor);$('health-bar').max=hero.health;$('health-bar').value=me.health;text('weapon-label',spec.weapons[me.weapon].name);text('ammo',me.ammo[me.weapon]);text('reserve','/ '+me.reserve[me.weapon]);updateWeaponRack(me);text('reload-state',me.reload?'RELOADING '+(me.reload/64).toFixed(1)+'s':me.ammo[me.weapon]===0?actionPrompt('reload')+' · RELOAD':'');const cooldown=me.disabled||me.skill_wait; text('touch-skill-value',cooldown?Math.ceil(cooldown/64):'');$('touch-skill-value').hidden=!cooldown;$('touch-skill').classList.toggle('cooling',!!cooldown);$('touch-scope').hidden=!spec.weapons[me.weapon].scoped;$('touch-interact').hidden=s.config.mode!=='demolition';text('touch-utility-value',me.items[Number($('utility-choice').value)]);$('touch-utility').setAttribute('aria-label','Use '+spec.items[Number($('utility-choice').value)].name);text('gear-label',spec.items[Number($('utility-choice').value)].name+' × '+me.items[Number($('utility-choice').value)]+' · '+actionPrompt('utility'));if(!$('buy-menu').hidden)for(const o of $('utility-choice').options){const label=spec.items[Number(o.value)].name+' × '+me.items[Number(o.value)];if(o.textContent!==label)o.textContent=label;}text('skill-name',hero.ability.toUpperCase());text('skill-state',me.disabled?'EMP '+Math.ceil(me.disabled/64)+'s':me.skill_wait?Math.ceil(me.skill_wait/64)+'s':actionPrompt('skill')+' · READY');$('scope').hidden=!me.scoped||!me.alive;document.documentElement.dataset.scoped=String(me.scoped&&me.alive);text('scope-label',(spec.weapons[me.weapon].id==='rail'?'4.8× RAIL OPTIC':'2.4× RECON OPTIC')+' · '+(me.ammo[me.weapon]||0));let objective='';if(s.config.mode==='demolition'){const attack=me.team===s.attacker;objective=s.objective.planted?(attack?'DEFEND THE RELAY':'HOLD '+actionPrompt('use')+' TO DEFUSE'):(attack?(s.objective.carrier===room.slot?'CARRYING RELAY · HOLD '+actionPrompt('use')+' AT A OR B':'ESCORT THE RELAY TO A OR B'):'DEFEND A AND B');if(s.objective.actor!==null)objective+=' · '+(s.objective.progress/64).toFixed(1)+'s';}text('objective-hud',objective);$('buy-open').hidden=!me.alive;text('credits',me.credits);if(!$('buy-menu').hidden)updateBuy();$('death').hidden=me.alive||s.phase==='buy'||s.phase==='round_end';const spectatee=!me.alive?(s.players[room.spectate]?.alive&&s.players[room.spectate].team===me.team?s.players[room.spectate]:s.players.find(p=>p.team===me.team&&p.alive)):null;$('spectating').hidden=!spectatee;$('spectate-next').disabled=s.players.filter(p=>p.team===me.team&&p.alive).length<2;if(spectatee)text('spectator-name','WATCHING '+room.roster[spectatee.slot].name);
- const drop=recoveryTarget(s,me),interactLabel=drop?'Recover '+spec.weapons[drop.weapon].name:'Plant or defuse relay';
- pickupHud.hidden=!drop;if(drop){const supply=me.owned[drop.weapon]?`+${Math.min(spec.weapons[drop.weapon].reserve-me.reserve[drop.weapon],drop.ammo+drop.reserve)} RESERVE`:`${drop.ammo} / ${drop.reserve} ROUNDS`;pickupHud.textContent=`${actionPrompt('use')} · ${me.owned[drop.weapon]?'RECOVER':'TAKE'} ${spec.weapons[drop.weapon].name} · ${supply}`;}
+ const drop=recoveryTarget(s,me),interactLabel=drop?(me.owned[drop.weapon]?'Recover ammo for ':'Take ')+spec.weapons[drop.weapon].name:'Plant or defuse relay';
+ pickupHud.hidden=!drop;if(drop){const supply=me.owned[drop.weapon]?`+${Math.min(spec.weapons[drop.weapon].reserve-me.reserve[drop.weapon],drop.ammo+drop.reserve)} RESERVE AMMO`:`${drop.ammo} / ${drop.reserve} ROUNDS`;pickupHud.textContent=`${prefs.touch&&lastControl!=='gamepad'?'TAP ':''}${actionPrompt('use')} · ${me.owned[drop.weapon]?'RECOVER':'TAKE'} ${spec.weapons[drop.weapon].name} · ${supply}`;}
  $('touch-interact').hidden=s.config.mode!=='demolition'&&!drop;$('touch-interact').setAttribute('aria-label',interactLabel);$('touch-interact').title=interactLabel;
  text('respawn-label',s.config.mode==='deathmatch'?'REBOOT IN '+Math.ceil(me.respawn/64)+'s':'SPECTATING · NEXT ROUND');drawMap($('radar').getContext('2d'),spec.maps[s.config.map],240,s.players,room.slot,s.objective);if(!$('scoreboard').hidden)score();
  }
@@ -200,7 +224,7 @@ stopRender=startRenderLoop((now,elapsed)=>{
   }
   const next=input();sequence--;local=prediction.step(next,now,spec.maps[state.config.map],spec.heroes[me.hero],spec.weapons[me.weapon],me.alive&&state.phase==='live');previewShot(next,now);$('flash').style.opacity=String(me.flash?Math.min(reduced()?.45:.95,me.flash/64):0);
  }
- if(active&&$('buy-menu').hidden&&$('scoreboard').hidden)world.frame(snapshots.sample(now,room?.slot||0)||state,room?.slot||0,now,dt,{active,yaw,pitch,local,spectator:room?.spectate,reduced:reduced()});
+ if(active&&$('buy-menu').hidden&&$('scoreboard').hidden){world.frame(snapshots.sample(now,room?.slot||0)||state,room?.slot||0,now,dt,{active,yaw,pitch,local,spectator:room?.spectate,reduced:reduced()});updateDropMarker(state,me)}else dropMarker.hidden=true;
  feedback.render(now);document.documentElement.dataset.viewModelTriangles=world.viewModelTriangles;document.documentElement.dataset.drawCalls=world.renderer.info.render.calls;document.documentElement.dataset.renderTriangles=world.renderer.info.render.triangles;
 },{active:()=>active&&room?.status==='running',maxFps:60,initialResolution:.75,maxResolution:matchMedia('(pointer:coarse)').matches?1:1.5,onResolution:ratio=>world?.resolution(ratio)});
 startup?.ready();inputTimer=setInterval(send,1000/60);queueTimer=setInterval(updateQueueStatus,250);pingTimer=setInterval(()=>{if(socket?.readyState===WebSocket.OPEN){if(!document.hidden&&performance.now()-lastPacket>30000){socket.close();return}socket.send(JSON.stringify({type:'ping',time:performance.now()}))}},2000);
