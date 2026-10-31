@@ -70,6 +70,10 @@ try{
   assert.ok(Math.abs(phaseCorrelation)<.9,`running actors still share the same gait phase: ${phaseCorrelation}`);
   assert.ok(new Set(samples.map(actor=>actor.root[0].toFixed(2))).size>=4,'running actors still pose together');
   assert.ok(new Set(jittered.map(actor=>actor.root[0].toFixed(2))).size>=4,'irregular frame times synchronized the group');
+  for(const [label,actors]of [['steady',samples],['jittered',jittered]]){
+   assert.equal(actors[0].ground.length,60,`${label} run clip has missing mesh samples`);
+   assert.ok(actors[0].ground.every(y=>y>=-1&&y<=.5),`${label} run clip lost ground contact`);
+  }
  }
  if(!process.env.HIT_BASELINE){assert.ok(hitPose>.4,`confirmed hit pose is too subtle: ${hitPose}`);assert.ok(hitFirePose>.4,`gunfire cancelled the hit pose: ${hitFirePose}`);assert.ok(reducedHitPose>.1&&reducedHitPose<hitPose,`reduced-motion hit cue was lost or amplified: ${reducedHitPose}`);assert.ok(recoveryPose<.05,`hit pose did not recover: ${recoveryPose}`);assert.ok(repeatedPose<.8,`repeated hit pose accumulated: ${repeatedPose}`)}
  let nativeMotion=null;
@@ -96,5 +100,5 @@ try{
    await live.waitForFunction(async()=>{const room=(await(await fetch('/games/botstrike/api/state')).json()).room;return room.state.players[room.slot].position[1]>1});
   }finally{await leaveBrowserRoom(live);await live.close()}
  }
- console.log(JSON.stringify({rootRange,hipRange,phaseCorrelation,hitPose,hitFirePose,reducedHitPose,recoveryPose,repeatedPose,nativeBotSamples:nativeMotion?.length,out}));
+ console.log(JSON.stringify({rootRange,hipRange,phaseCorrelation,groundRange:[Math.min(...samples[0].ground),Math.max(...samples[0].ground)],jitteredGroundRange:[Math.min(...jittered[0].ground),Math.max(...jittered[0].ground)],hitPose,hitFirePose,reducedHitPose,recoveryPose,repeatedPose,nativeBotSamples:nativeMotion?.length,out}));
 }finally{await browser.close();server.close()}
