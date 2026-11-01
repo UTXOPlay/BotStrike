@@ -19,7 +19,7 @@ RUNTIME_TOKEN=<stable-random-secret-at-least-32-characters> npm start
 
 Open `http://127.0.0.1:8890/games/botstrike/`. The standalone host issues a signed guest cookie. Use `WEB_PORT`, `GAME_ORIGIN` and `DATA_DIR` to configure serving and persistent match storage. Preserve `DATA_DIR` and the runtime/session secrets across restarts. Native services bind to loopback. Store integration uses private authenticated `X-Runtime-Token` / `X-UTXOPlay-Account` requests and WebSockets.
 
-Choose a chassis and operation, then solo practice, public matchmaking or a private lobby. Private lobbies have an invite code and host start button. AI fills the remaining seats. Disconnected pilots receive AI cover and can reconnect to their seat. The service bounds simultaneous live matches to four by default and serializes replay sealing.
+Choose a chassis and operation, then solo practice, public matchmaking or a private lobby. Private lobbies have an invite code and host start button. AI fills the remaining seats. Disconnected pilots receive AI cover and can reconnect to their seat. Multiple tabs can view the same room, but only the active tab sends combat input or changes a live room; Resume explicitly transfers control. The service bounds simultaneous live matches to four by default and serializes replay sealing.
 
 ## Operations
 
@@ -40,17 +40,23 @@ Twelve weapons: ARC-9, NEEDLE, ION-5, RAIL-LANCE, SCATTER, HELIX-3, AURORA, KRAK
 
 Twelve equipment systems: composite plating, photon flash, carbon veil, shard cluster, blackout capsule, echo beacon, nanite injector, armor patch, cryo cell, redline chip, repair swarm and capacitor pack. Buy within credit/carry limits during demolition preparation. Use the field loadout to equip owned weapons or deploy equipment during combat. Deathmatch supplies the full arsenal each respawn. See `botstrike/spec.json` for exact values.
 
-Desktop: WASD, mouse aim, click fire, R reload, Q skill, E use, B armory/loadout, 1–0 / minus / equals or mouse wheel weapons, Z/X/C throwables, G selected equipment, Shift walk, F crouch, Space jump, right-click sniper scope, Tab scoreboard. Touch: left thumb movement, right-side aiming, drag the fire icon while holding it to aim and shoot. Menus and controls remain inside the game scene.
+Desktop: WASD, mouse aim, click fire, R reload, Q skill, E use or recover a nearby gun, B armory/loadout, 1–0 / minus / equals or mouse wheel weapons, Z/X/C throwables, G selected equipment, Shift walk, F crouch, Space jump, right-click sniper scope, Tab scoreboard. Touch: left thumb movement, right-side aiming, drag the fire icon while holding it to aim and shoot. Menus and controls remain inside the game scene.
+
+Standard controller: left stick moves, right stick aims, RT fires, LT scopes, A jumps or confirms, B crouches or goes back, X reloads, Y uses the hero skill, R3 interacts, D-pad down uses selected equipment, D-pad up opens the armory, LB/RB cycle weapons or spectated teammates, View holds the scoreboard, and Menu opens the menu or resumes play. The D-pad and left stick navigate menus. Settings include separate controller look speed and aim assist; vibration works when the browser and device support it. Controller button remapping is not yet available.
 
 ## Combat feedback and preferences
 
 Version 1.2.0 adds bounded positional gunfire, running footsteps, reload and ability cues; distinct headshot/kill confirmation; directional damage, death source, active-effect timers, dynamic accuracy reticle, and relay progress/results. Running is audible; walking and crouching are quiet. Audio sends eight-sector bearings and coarse volume with wall attenuation, never hidden enemy coordinates. Event IDs prevent duplicate playback across snapshots and reconnects.
+
+ARC-9, NEEDLE, ION-5, RAIL-LANCE and SCATTER use distinct original generated shot samples; other weapons retain synthesized cues. Confirmed body hits, headshots and damage taken use separate original impact samples. Running on the shared industrial floor alternates two damped metal footfalls; landing has a heavier sample. Local footfalls retain their cadence when several nearby robots move, while remote steps are quieter and limited in density. The samples share the same bounded voice and spatial attenuation path. Human listening and physical-device speaker checks remain open.
 
 Controls can be rebound, including mouse buttons. The default crouch is F; Ctrl/Alt/Meta are excluded to avoid browser shortcuts. Settings persist volume, ADS sensitivity, Y inversion, brightness, reticle color/size and optional vibration. ADS sensitivity scales with the scoped field of view. Armory and scoreboard trap keyboard focus and close with Escape. A held scoreboard key remains a hold action; opening via its icon allows Tab navigation.
 
 Choose a new chassis in the match menu; native rules apply it during buy time or on reboot. Dead players can switch among living teammates with the spectator icon or left/right arrows. Spectator visibility and audio follow the selected teammate.
 
 Career records start with this release: authenticated-account K/D, wins/losses and the latest 50 completed, verified matches. Only frames actually controlled by a human contribute; AI cover is excluded. Leaving or having no human input in the final 30 seconds gives no win/loss. Existing matches are not backfilled because their human/AI attribution is incomplete. Aggregates and recent history persist separately from recordings, which still expire after 30 days. Guest history depends on keeping the same guest session. Download signed match exports replay evidence for the exact native verifier; it is not a playable video.
+
+The attached room's match-end view shows the final team score, your K/D/A and damage, and all ten players' K/D/A and damage. Combat MVP goes to the most kills, then assists, damage, fewer deaths and lower slot for ties; a match without a combat contribution has no MVP. Results appear while native replay verification is pending, but only a verified match offers the signed export. Individual plants and defuses are not yet tracked, so this MVP does not claim objective credit.
 
 Version 1.2.0 changed presentation and host metadata only. Later native rule changes use their own exact application profiles; see the acceptance records for each release.
 
@@ -62,7 +68,13 @@ Touch aim assist defaults to Standard; mouse defaults to Off. Off/Standard/Stron
 
 The HUD uses fewer filled panels, with icon controls retained. Death recaps show the attacker, weapon, hit count and health damage. Brighter environments use varied architectural materials, detailed service equipment, planted cover, site markings and distinct skyline landmarks. Static geometry stays batched and GPU resolution remains bounded.
 
-The native version is `botstrike-2050-readability-v5`. The current pair and all three older verifier pairs remain available; signed saves select their original exact profile. This is off-chain host replay, not CKB settlement. Bot-only simulations and browser software rendering do not replace human balance testing or real-device performance measurement.
+The 1.4.0 native version was `botstrike-2050-readability-v5`. Its production release retained all three older verifier pairs so signed saves select their original exact profile. This is off-chain host replay, not CKB settlement. Bot-only simulations and browser software rendering do not replace human balance testing or real-device performance measurement.
+
+## Salvage candidate (improvements branch)
+
+Eliminated pilots now leave their equipped gun for 20 seconds, with its remaining magazine and up to two magazines of reserve. At most eight drops exist at once; round transitions clear them. A living human can press Use within 60 world units when cover does not block the path; touch uses the hand button and controllers use R3. Recovering a new gun adds and equips it while retaining the previous gun; recovering an owned gun adds only compatible rounds to its reserve without switching guns, capped by that weapon's normal limit. Reload still transfers reserve into the magazine. Bots ignore drops, and relay plant or defuse interactions take priority. Visible drops show a world-space weapon or ammo marker on approach and a contextual action prompt within reach; full reserves are identified. The field HUD shows several directly selectable owned guns on desktop, the next gun on touch, and the armory opens the full inventory. Hidden drops are omitted from public snapshots.
+
+This candidate uses native result version `botstrike-2050-salvage-v1` and a distinct Myelin application profile. The release manifest requires the recorded exact `readability-v5`, `tactics-v4`, `network-v3` and `arsenal-v2` verifier pairs before publication. These historical binaries are absent from this local checkout; source builds cannot substitute for their recorded hashes. The candidate has automated rule, browser and signed-match checks, but still needs human encounter feedback and physical-device frame pacing measurements.
 
 ## Source and verification
 
@@ -75,16 +87,27 @@ The native version is `botstrike-2050-readability-v5`. The current pair and all 
 ```sh
 cargo test --release --locked --manifest-path botstrike/Cargo.toml
 npm run test:botstrike-native
+npm run test:botstrike-sealing-failure
+npm run test:botstrike-online-load
 node tests/botstrike-long-replay.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-browser.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
+  node tests/botstrike-reconnect-browser.mjs
+PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
+  node tests/botstrike-controller-browser.mjs
+PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
+  node tests/botstrike-lobby-browser.mjs
+PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-art.mjs
 PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
+  node tests/botstrike-scatter-browser.mjs
+PLAYWRIGHT_ENTRY=/path/to/playwright/index.mjs CHROMIUM_PATH=/path/to/chrome \
   node tests/botstrike-armory.mjs
+CHROMIUM_PATH=/path/to/chrome node tests/botstrike-gamepad-browser.mjs
 ```
 
-Browser tests use an isolated host on port 19885 by default (`STORE_URL` overrides it). `PUBLIC_GUEST=1` enables a disposable store guest when testing through the public gateway. Native integration completes a real match, verifies its signed export and rejects a tampered result. Browser prediction is checked against actual Rust movement on every map and hero. Visual acceptance covers six required viewports. Emulator evidence is not a physical-device performance claim.
+Browser tests use an isolated host on port 19885 by default (`STORE_URL` overrides it). `PUBLIC_GUEST=1` enables a disposable store guest when testing through the public gateway. Native integration completes a real match, verifies its signed export and rejects a tampered result. The opt-in sealing-failure run completes a native match with an unavailable verifier and requires a failed room, no verified result and no export. The opt-in online load run starts four native rooms and 40 local clients, then measures host Node CPU/RSS, combined native engine RSS, snapshot gaps, event-loop delay and socket health while exercising reconnect, drain and capacity. Its CPU figure excludes native child processes; local network and browser emulator results are not physical-device performance claims. Browser prediction is checked against actual Rust movement on every map and hero. Visual acceptance covers six required viewports.
 
 ## Deploy and compatibility
 
@@ -98,8 +121,10 @@ docker build -f deploy/Dockerfile -t myelin-botstrike:release .
 
 Run on the private `utxoplay-games` network with port 8080 inside the container, a new persistent directory and an untracked token. Set the store's `MYELIN_BOTSTRIKE_URL=http://myelin-botstrike:8080` and matching `MYELIN_BOTSTRIKE_TOKEN`. Do not reuse the OpenStrike save directory. See [release procedure](docs/BOTSTRIKE-RELEASE.md).
 
-Current matches use `botstrike-2050-network-v3` with bounded historical hit poses and deterministic AI reaction. Older signed exports retain their original profile; never import them as new matches. Releases include the exact `arsenal-v2` engine/verifier pair under `release/legacy/arsenal-v2`, plus SHA-256 manifest `release/verifiers.json`. Run `node tools/verifier-manifest.mjs` after building a release, then `node tools/verify-export.mjs <export.json>` to dispatch to the matching verifier without changing an export. Source-only builds can verify current matches directly with `release/myelin-botstrike verify`.
+Version 1.1.0 matches used `botstrike-2050-network-v3` with bounded historical hit poses and deterministic AI reaction. Older signed exports retain their original profile; never import them as new matches. Released builds retain each exact historical engine/verifier pair under `release/legacy/`, plus SHA-256 manifest `release/verifiers.json`. Run `node tools/verifier-manifest.mjs` after assembling every recorded pair, then `node tools/verify-export.mjs <export.json>` to dispatch to the matching verifier without changing an export. Source-only builds can verify new candidate matches directly with `release/myelin-botstrike verify`.
 
-Completed recordings expire after **30 days**. Live, waiting and sealing rooms are protected. The runtime checks retention at startup and hourly. Public matchmaking waits up to ten seconds for humans and only auto-joins a running match within its first minute. A suspended client receives AI cover after two seconds without input.
+Completed recordings expire after **30 days**. Live, waiting and sealing rooms are protected. The runtime checks retention at startup and hourly. Public matchmaking waits up to ten seconds for humans and only auto-joins a running match within its first minute. During buy time, a human-owned seat stays neutral until its pilot connects, so AI cannot spend that pilot's credits. During combat, a suspended client receives AI cover after two seconds without input. An explicit departure keeps the match alive for remaining pilots; when the last pilot leaves, the incomplete match is cancelled and its room capacity is released without a verified result.
 
-The private authenticated `/api/metrics` endpoint reports room states, disk availability, replay failures and sealing duration. `/health` checks the native room service. Before replacing an already updated service, POST to its private `/api/admin/drain` endpoint, wait for no running/waiting/sealing rooms, and back up the data volume before switching images. Admin endpoints are not forwarded by the game host.
+The private authenticated `/api/metrics` endpoint reports room states, disk availability, replay failures, sealing duration, verified matches, reconnects and socket health. WebSocket heartbeat RTT, absolute change between consecutive RTT samples, and reconnect gaps use bounded 256-sample p50/p95 windows; public-room values are reported separately. These process-local aggregates contain no player identifiers and are not physical-device latency benchmarks. `/health` checks the native room service. Before replacing an already updated service, POST to its private `/api/admin/drain` endpoint, wait for no running/waiting/sealing rooms, and back up the data volume before switching images. Admin endpoints are not forwarded by the game host.
+
+Public queue metrics include requests, joins, abandons, late joins, human/bot seats at match start, current public occupancy and p50/p95 wait times for the latest 256 successfully placed players. All counters reset on service restart.

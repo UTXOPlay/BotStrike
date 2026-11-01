@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader']});
 const page=await browser.newPage({viewport:{width:844,height:390},hasTouch:true,isMobile:true}),errors=[];
@@ -15,4 +16,4 @@ try{
  assert.equal(result.lost,false);assert.ok(result.drawCalls>0);assert.ok(result.width*result.height<=1280*720);assert.deepEqual(errors,[]);
  await page.screenshot({path:process.env.CONTEXT_SCREENSHOT||'/tmp/botstrike-context-restored.png'});
  console.log(JSON.stringify(result));
-}finally{await page.evaluate(()=>fetch('/games/botstrike/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'leave'})})).catch(()=>{});await browser.close();}
+}finally{try{await leaveBrowserRoom(page)}finally{await browser.close();}}

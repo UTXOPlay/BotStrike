@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-30",
+  "change": "Replace the generic running and landing pulse with two alternating industrial footfalls and a heavier landing sample",
+  "baseline": "Running and landing both used a 55 Hz triangle pulse lasting 45 ms.",
+  "observed": {
+    "sampleDurationsMs": {"step0": 125, "step1": 145, "land": 230},
+    "samplePeakLimit": 0.8,
+    "newMonoPcmKiBAt48kHz": 94,
+    "voiceLimit": 32,
+    "ruleOrReplayChange": false
+  },
+  "checks": {
+    "npmTest": "68/68 passed",
+    "browser": "Native practice acknowledged a human jump and movement over 40 world units; landing and both footstep buffers started, alongside the existing weapon and impact samples, without page errors.",
+    "browserEngine": "Playwright Chromium headless shell 1234 on Apple M4 Max",
+    "build": "npm run build passed"
+  },
+  "limits": [
+    "The three maps currently share one walkable floor type; this does not claim separate audio for distinct surface materials.",
+    "Blind listening, physical speakers or headphones, and real-device frame pacing remain unmeasured.",
+    "The PCM estimate counts sample data only, not Web Audio implementation overhead."
+  ]
+}

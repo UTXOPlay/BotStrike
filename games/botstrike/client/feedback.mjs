@@ -1,9 +1,9 @@
 import {FeedbackCursor,spreadDegrees,scopeFov} from './preferences.mjs';
-export function createFeedback({audio,getPrefs,getRoom,getYaw,spec}){
+export function createFeedback({audio,getPrefs,getRoom,getYaw,getGamepad,spec}){
  const $=id=>document.getElementById(id);let cursor=new FeedbackCursor(),roomId=null,hitUntil=0,hitHead=false,hurtUntil=0,hurtLevel=0,bearing=null,bannerUntil=0,lastProgress=0,lastPlanted=false,lastBeep=-1,lastLife=null,lastVibration=0,received=new Map();
  const text=(id,v)=>{if($(id).textContent!==v)$(id).textContent=v;};
  function banner(message,ms=2600){text('combat-banner',message);bannerUntil=performance.now()+ms;}
- function vibrate(ms){const prefs=getPrefs(),now=performance.now();if(prefs.haptics&&prefs.motion&&navigator.vibrate&&now-lastVibration>100){lastVibration=now;navigator.vibrate(ms);}}
+ function vibrate(ms){const prefs=getPrefs(),now=performance.now();if(!prefs.haptics||!prefs.motion||now-lastVibration<=100)return;lastVibration=now;navigator.vibrate?.(ms);const actuator=getGamepad?.()?.vibrationActuator;if(actuator?.effects?.includes('dual-rumble'))void actuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:.35,weakMagnitude:.6}).catch(()=>{});}
  function accept(room){
   if(!room?.state)return;
   if(room.id!==roomId){roomId=room.id;cursor=new FeedbackCursor();lastLife=null;lastProgress=0;lastPlanted=false;lastBeep=-1;hitUntil=hurtUntil=bannerUntil=0;}
@@ -13,7 +13,7 @@ export function createFeedback({audio,getPrefs,getRoom,getYaw,spec}){
   for(const e of cursor.consume(room.feedback,s.tick)){
    const fresh=s.tick-e.tick<=32;
    if(e.kind==='shot'){if(fresh&&!e.self)audio.shot(e.value,{pan:Math.sin(e.bearing+getYaw()),level:e.level,muffled:e.muffled});}
-   else if(['step','land','reload','skill','item','utility','plasma'].includes(e.kind)){if(fresh)audio.cue(e.kind,{pan:e.self?0:Math.sin(e.bearing+getYaw()),level:e.level,muffled:e.muffled});}
+   else if(['step','land','reload','skill','item','utility','plasma'].includes(e.kind)){if(fresh)audio.cue(e.kind,{pan:e.self?0:Math.sin(e.bearing+getYaw()),level:e.level,muffled:e.muffled,self:e.self,source:e.actor});}
    else if(e.kind==='hit'||e.kind==='headshot'){
     if(e.actor===room.slot){hitUntil=now+170;hitHead=e.kind==='headshot';if(fresh)audio.hit(hitHead);}
     if(e.target===room.slot){const hit=received.get(e.actor)||{damage:0,hits:0,head:false};hit.damage+=e.value;hit.hits++;hit.head ||= e.kind==='headshot';hit.bearing=e.bearing;received.set(e.actor,hit);hurtUntil=now+1100;hurtLevel=Math.min(.32,.10+e.value/240);bearing=e.bearing;if(fresh){audio.damage(e.value);vibrate(15);}}
@@ -27,6 +27,8 @@ export function createFeedback({audio,getPrefs,getRoom,getYaw,spec}){
    else if(e.kind==='match_end'){banner(s.winner===me.team?'MATCH WON':s.winner==null?'MATCH DRAW':'MATCH LOST',4500);if(fresh)audio.cue(s.winner===me.team?'win':'loss');}
    else if(e.kind==='respawn'&&fresh)audio.cue('respawn');
    else if(e.kind==='pickup')banner('RELAY ACQUIRED · HOLD USE AT A OR B');
+   else if(e.kind==='gun_pickup'&&e.actor===room.slot){banner((spec.weapons[e.value]?.name||'WEAPON')+' EQUIPPED · PREVIOUS GUN KEPT',1700);if(fresh)audio.cue('reload');}
+   else if(e.kind==='ammo_pickup'&&e.actor===room.slot){banner('AMMO RECOVERED · '+(spec.weapons[e.value]?.name||'WEAPON')+' · '+(me.weapon===e.value?'RELOAD':'EQUIP TO RELOAD'),1700);if(fresh)audio.cue('reload');}
    else if(e.kind==='buy')banner('LOADOUT UPDATED',1000);
   }
   const objective=s.objective,progress=objective.actor===room.slot?objective.progress:0,required=objective.planted?7:3;

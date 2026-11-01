@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-31",
+  "scope": "Review the previously committed per-actor gait phase and confirmed-hit pose against the current local build",
+  "status": "Automated presentation checks passed; human and physical-device acceptance remains open",
+  "observed": {
+    "nativeBotSamples": 143,
+    "nativeBotHeightAndVerticalVelocity": "All sampled moving bots stayed at zero; a human jump still changed native height.",
+    "steadyRunGroundRangeWorldUnits": [-0.6005, 0.1880],
+    "jitteredRunGroundRangeWorldUnits": [-0.6110, 0.1880],
+    "characterHeightWorldUnitsApprox": 70,
+    "runPhaseCorrelationBetweenFirstTwoActors": 0.0154,
+    "confirmedHitPoseDistance": 0.5382,
+    "hitDuringFirePoseDistance": 0.5382,
+    "reducedMotionHitPoseDistance": 0.2104,
+    "recoveredPoseDistance": 0.0111,
+    "repeatedHitPoseDistance": 0.2387,
+    "ruleOrReplayChange": false
+  },
+  "checks": {
+    "browser": "tests/botstrike-gait-browser.mjs passed against native local practice and the art harness at steady and irregular frame times.",
+    "visual": "Reviewed running group, confirmed hit and miss screenshots at 1920x1080. The raised feet in the group capture belong to the running stride; mesh ground clearance stayed within 0.62 world units of the floor.",
+    "hardware": "Apple M4 Max; Playwright Chromium headless shell 1234 using SwiftShader software rendering."
+  },
+  "limits": [
+    "The art lineup and hit poses are deterministic fixtures, not blind player observations or a delayed-network encounter.",
+    "No human comparison of hit versus miss or actual jump versus running was performed.",
+    "Physical-device frame pacing and controller feel remain unmeasured.",
+    "This measures the current local build only and does not establish a before/after improvement from the earlier gait and hit commits."
+  ]
+}

@@ -6,6 +6,7 @@ import {clone} from 'three/addons/utils/SkeletonUtils.js';
 export const chassisNames=['vector','patch','bastion','spectre','glitch','forge'];
 export const motionNames=['idle','walk','run','backpedal','strafe_left','strafe_right','crouch','crouch_walk','jump','fall','land','fire','reload','equip','use_item','utility','skill','interact','hit','death_back','death_left','death_right','respawn','victory','defeat'];
 const lower=/^(root|hips|thigh|shin|foot)/;
+const gaitMotion=/^lower:(?:idle|walk|run|backpedal|strafe_left|strafe_right|crouch|crouch_walk)$/;
 const boneName=track=>track.name.slice(0,track.name.lastIndexOf('.'));
 const tmp=new THREE.Vector3(),identity=new THREE.Quaternion();
 
@@ -42,17 +43,17 @@ export function createCharacters(art){
    g.setIndex(keep);g.clearGroups();groups.forEach(x=>g.addGroup(x.start,x.count,x.materialIndex));o.geometry=g;o.receiveShadow=false;
   });
   if(!firstPerson){for(const side of ['L','R']){const badge=new THREE.Mesh(badgeGeometry,teamMaterials[slot<5?0:1]);badge.position.set(0,.04,-.13);bones['upper_arm.'+side].add(badge);badges.push(badge);}const shadow=new THREE.Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.y=.15;rig.add(shadow);}
-  // First-person support arm uses a dedicated shoulder stance. The world rig
-  // remains unchanged; its shorter reach cannot wrap around every rifle.
+  // The support arm has a wider first-person stance. Reloads draw the weapon
+  // inward with the trigger arm so the magazine remains within support reach.
   let gripRestore=null,lookRestore=null;
-  function supportGrip(target){
-   const a=bones['upper_arm.L'],b=bones['forearm.L'],c=bones['hand.L'];
-   gripRestore=[a,b,c].map(bone=>({bone,position:bone.position.clone(),quaternion:bone.quaternion.clone()}));
-   a.position.x+=.15;model.updateMatrixWorld(true);
+  function grip(side,target){
+   const a=bones['upper_arm.'+side],b=bones['forearm.'+side],c=bones['hand.'+side];
+   gripRestore??=[];gripRestore.push(...[a,b,c].map(bone=>({bone,position:bone.position.clone(),quaternion:bone.quaternion.clone()})));
+   if(firstPerson&&side==='L')a.position.x+=.15;model.updateMatrixWorld(true);
    const start=a.getWorldPosition(new THREE.Vector3()),joint=b.getWorldPosition(new THREE.Vector3()),end=c.getWorldPosition(new THREE.Vector3());
    const goal=model.localToWorld(target.clone()),u=start.distanceTo(joint),v=joint.distanceTo(end),delta=goal.clone().sub(start),d=Math.min(delta.length(),(u+v)*.98),axis=delta.normalize();
    const along=(u*u-v*v+d*d)/(2*d),height=Math.sqrt(Math.max(0,u*u-along*along));
-   const bend=new THREE.Vector3(-.7,-1,.3).transformDirection(model.matrixWorld);bend.addScaledVector(axis,-bend.dot(axis)).normalize();
+   const bend=new THREE.Vector3(side==='L'?-.7:.7,-1,.3).transformDirection(model.matrixWorld);bend.addScaledVector(axis,-bend.dot(axis)).normalize();
    const elbow=start.clone().addScaledVector(axis,along).addScaledVector(bend,height);
    function aim(bone,child,point){const origin=bone.getWorldPosition(new THREE.Vector3()),from=child.getWorldPosition(new THREE.Vector3()).sub(origin).normalize(),to=point.clone().sub(origin).normalize(),delta=new THREE.Quaternion().setFromUnitVectors(from,to),world=bone.getWorldQuaternion(new THREE.Quaternion());bone.quaternion.copy(bone.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(delta.multiply(world)));bone.updateMatrixWorld(true);}
    aim(a,b,elbow);aim(b,c,start.clone().addScaledVector(axis,d));
@@ -63,19 +64,26 @@ export function createCharacters(art){
    const original=source.clips[name];const clip=layer==='full'?original:new THREE.AnimationClip(key,original.duration,original.tracks.filter(t=>lower.test(boneName(t))===(layer==='lower')));
    const a=mixer.clipAction(clip);actions.set(key,a);return a;
   }
-  let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0;
-  let gun=null,magazine=null;const gunAnchor=new THREE.Group();model.add(gunAnchor);
-  function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
+  let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0,gaitPhase=0,hitAt=-Infinity,hitForce=0;
+  let gun=null,magazine=null,pump=null,pumpAt=-Infinity;const gunAnchor=new THREE.Group();model.add(gunAnchor);
+  function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');pump=gun.getObjectByName('pump');pumpAt=-Infinity;const stock=gun.getObjectByName('stock');if(stock&&firstPerson)stock.visible=false;gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
   equip(weapon);
   function swap(current,next,loop=true,fade=.12){
-   if(current===next)return current;next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1);next.setLoop(loop?THREE.LoopRepeat:THREE.LoopOnce,loop?Infinity:1);next.clampWhenFinished=!loop;next.play();
+   if(current===next)return current;next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1);next.setLoop(loop?THREE.LoopRepeat:THREE.LoopOnce,loop?Infinity:1);next.clampWhenFinished=!loop;
+   if(!firstPerson&&loop&&gaitMotion.test(next.getClip().name)){const prior=current&&gaitMotion.test(current.getClip().name)?current.time/current.getClip().duration:gaitPhase;next.time=(prior%1)*next.getClip().duration;}
+   next.play();
    if(current)current.crossFadeTo(next,fade,false);return next;
   }
-  function reset(p,now){mixer.stopAllAction();base=upper=full=null;upperUntil=fullUntil=0;lastLife=p.life;lastAlive=p.alive;lastAir=false;lastReload=0;deadAt=0;
+  function reset(p,now){mixer.stopAllAction();base=upper=full=null;upperUntil=fullUntil=0;lastLife=p.life;lastAlive=p.alive;lastAir=false;lastReload=0;deadAt=0;hitAt=-Infinity;hitForce=0;
+   // A stable per-life offset prevents identical run clips from marching in lockstep.
+   gaitPhase=(slot*.38196601125+(p.life||0)*.1414213562)%1;
    base=swap(null,action('idle','lower'));upper=swap(null,action('idle','upper'));lastNow=now;
   }
   function trigger(name,now,duration,value){
    if(!source.clips[name]||lastAlive===false)return;
+   if(name==='fire'&&pump)pumpAt=now;
+   if(name==='hit'&&!firstPerson){hitAt=now;hitForce=THREE.MathUtils.clamp((value||0)/35,.7,1.2);}
+   if(name==='fire'&&upper?.getClip().name==='upper:hit'&&now<upperUntil)return;
    if(['utility','use_item'].includes(name)&&Number.isInteger(value)&&value>=0&&value<12){if(prop){prop.removeFromParent();prop.traverse(o=>o.geometry?.dispose());}prop=art.equipment(value);prop.scale.setScalar(.012);model.add(prop);propUntil=now+900;}
    const next=action(name,'upper');if(upper===next){next.reset().play();}else upper=swap(upper,next,false,name==='hit'?.045:.08);
    const seconds=duration||source.clips[name].duration;next.setEffectiveTimeScale(source.clips[name].duration/Math.max(.1,seconds));upperUntil=now+seconds*1000;
@@ -94,7 +102,7 @@ export function createCharacters(art){
     if(lastAir&&!air)trigger('land',now,.3);lastAir=air;
     if(state.phase==='finished'||state.phase==='round_end'){
      const name=reduced?'idle':state.winner===p.team?'victory':'defeat';full=swap(full,action(name),true,.25);base?.fadeOut(.15);upper?.fadeOut(.15);fullUntil=Infinity;
-    }else if(full&&now>=fullUntil){full.fadeOut(.16);full=null;base?.reset().fadeIn(.16).play();upper?.reset().fadeIn(.16).play();}
+    }else if(full&&now>=fullUntil){full.fadeOut(.16);full=null;base?.reset().fadeIn(.16).play();if(!firstPerson&&base)base.time=gaitPhase*base.getClip().duration;upper?.reset().fadeIn(.16).play();}
     if(!full){base=swap(base,action(motion,'lower'));base.setEffectiveTimeScale(speed>12&&!air?THREE.MathUtils.clamp(speed/(motion==='run'?250:145),.6,1.6):1);
      if(p.reload>0&&!lastReload){reloadDuration=p.reload;trigger('reload',now,p.reload/64);}
      if(state.objective?.actor===slot&&state.objective.progress>0){if(upper!==action('interact','upper'))upper=swap(upper,action('interact','upper'));upperUntil=now+100;}
@@ -106,13 +114,29 @@ export function createCharacters(art){
    if(lookRestore){for(const saved of lookRestore)saved.bone.quaternion.copy(saved.quaternion);lookRestore=null;}
    if(upper)upper.paused=reduced&&upper===action('idle','upper');mixer.update(Math.min(.1,Math.max(0,dt)));
    // Small tracking offsets follow the gameplay look direction after blending.
-   if(p.alive&&!reduced){lookRestore=[bones.head,bones.chest].map(bone=>({bone,quaternion:bone.quaternion.clone()}));bones.head.rotation.x-=p.pitch*.5;bones.chest.rotation.x-=p.pitch*.22;}
+   if(p.alive&&!reduced){lookRestore=[bones.head,bones.chest].map(bone=>({bone,quaternion:bone.quaternion.clone()}));bones.head.rotation.x-=p.pitch*.5;bones.chest.rotation.x-=p.pitch*.22;
+    if(!firstPerson&&now-hitAt<320){const pulse=Math.sin(Math.PI*Math.max(0,now-hitAt)/320)*hitForce;bones.chest.rotation.x-=pulse*.30;bones.head.rotation.x+=pulse*.22;}
+   }
    model.updateMatrixWorld(true);
    // A weapon follows its articulated trigger hand; aim remains authoritative.
+   const reloading=Boolean(p.alive&&p.reload>0&&reloadDuration&&upper?.getClip().name==='upper:reload'&&magazine);
+   let reloadWeight=0;
+   if(reloading){
+    const phase=THREE.MathUtils.clamp(1-p.reload/reloadDuration,0,1);reloadWeight=Math.min(1,phase*5,(1-phase)*5);
+    if(reloadWeight>.05){
+     const right=bones['hand.R'].getWorldPosition(new THREE.Vector3()),left=bones['upper_arm.L'].getWorldPosition(new THREE.Vector3());
+     left.add(bones['upper_arm.R'].getWorldPosition(new THREE.Vector3())).multiplyScalar(.5);
+     const nearChest=model.worldToLocal(left).add(new THREE.Vector3(-.03,firstPerson?0:-.1,-.16));
+     grip('R',model.worldToLocal(right).lerp(nearChest,reloadWeight));
+    }
+   }
    bones['hand.R'].getWorldPosition(tmp);model.worldToLocal(tmp);gunAnchor.position.copy(tmp).add(new THREE.Vector3(0,.096,-.048));
-   if(firstPerson&&p.alive&&!p.reload&&now>=propUntil&&(!upperUntil||now>=upperUntil||['upper:fire','upper:hit'].includes(upper?.getClip().name)))supportGrip(gunAnchor.position.clone().add(new THREE.Vector3(-.025,-.11,-.12)));
-   gunAnchor.quaternion.copy(identity);gunAnchor.rotation.x=p.pitch||0;gunAnchor.rotation.z=p.reload?-.15*Math.sin((p.reload/64)*4):0;
+   gunAnchor.quaternion.copy(identity);gunAnchor.rotation.x=p.pitch||0;gunAnchor.rotation.y=reloading ? .35*reloadWeight : 0;gunAnchor.rotation.z=reloading ? -.55*reloadWeight-.15*Math.sin((p.reload/64)*4) : 0;
+   if(pump){const phase=(now-pumpAt)/320;pump.position.z=p.alive&&!reduced&&phase>=0&&phase<1?5.2*(phase<.45?phase/.45:(1-phase)/.55):0;}
    if(magazine)magazine.position.y=-6-(p.reload&&reloadDuration?Math.sin(Math.PI*(1-p.reload/reloadDuration))*8:0);
+   if(reloading){
+    if(reloadWeight>.05){gunAnchor.updateMatrixWorld(true);const hand=bones['hand.L'].getWorldPosition(new THREE.Vector3()),contact=magazine.getWorldPosition(new THREE.Vector3());hand.lerp(contact,reloadWeight);grip('L',model.worldToLocal(hand));}
+   }else if(firstPerson&&p.alive&&!p.reload&&now>=propUntil&&(!upperUntil||now>=upperUntil||['upper:fire','upper:hit'].includes(upper?.getClip().name)))grip('L',gunAnchor.position.clone().add(new THREE.Vector3(-.025,-.11,-.12+(pump?.position.z||0)*.016)));
    if(prop){prop.visible=p.alive&&now<propUntil;if(prop.visible){bones['hand.L'].getWorldPosition(tmp);model.worldToLocal(tmp);prop.position.copy(tmp);prop.rotation.z=.5;}}
    gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;
    return {deadAt,motion:rig.userData.motion};
@@ -122,5 +146,5 @@ export function createCharacters(art){
   return {rig,model,bones,mixer,hero,slot,armTriangles,setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
  }
  function dispose(){const geometries=new Set(),materials=new Set(),textures=new Set();for(const t of templates)t.model.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});for(const gun of weaponTemplates.values())gun.traverse(o=>{if(o.geometry)geometries.add(o.geometry)});badgeGeometry.dispose();teamMaterials.forEach(m=>m.dispose());shadowGeometry.dispose();shadowMaterial.dispose();shadowTexture.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}
- return {preload,actor,dispose};
+ return {preload,actor,dispose,weaponModel:kind=>weaponTemplates.get(kind)?.clone(true)};
 }

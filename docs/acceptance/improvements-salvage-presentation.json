@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-31",
+  "change": "Clarify dropped-gun recovery and owned weapons in play, revise relay geometry, and rebalance movement audio",
+  "baseline": {
+    "pickup": "A dropped gun was visible only nearby, with an interaction sentence at 60 world units; touch showed the keyboard E prompt and the HUD showed only the next owned gun.",
+    "relay": "The world objective was two plain boxes with one emissive top plate.",
+    "audio": "The footfall had a strong high-frequency strike and a single 60 ms gate shared by every actor."
+  },
+  "observed": {
+    "recovery": "Native rules retain the previous gun on new-gun pickup and transfer same-type drop rounds to capped reserve; the match HUD now identifies those outcomes and shows a visible drop before interaction range.",
+    "weapons": "Deathmatch exposes three immediate alternative weapon buttons on desktop, a next-gun button on touch, and the full 12-gun armory. Demolition begins with one gun until purchases or recovery.",
+    "relay": "The original R-7 relay mesh has a power core, status face and antenna silhouette; cyan channels change to amber when planted. A visible device added 22 draw calls in the sampled SwiftShader scene (48 hidden, 70 visible).",
+    "footsteps": "Local and remote steps have separate cadence limits; remote steps play at half the local step level at equal spatial level. The new samples are 110, 125 and 190 ms for the two steps and landing.",
+    "ruleOrReplayChange": false
+  },
+  "checks": {
+    "native": "cargo test --manifest-path botstrike/Cargo.toml: 33/33 passed, including dropped-gun, same-type ammo, capacity, line of sight and objective-priority cases.",
+    "javascript": "npm test: 69/69 passed.",
+    "build": "npm run build passed.",
+    "pickupBrowser": "Native practice plus synthetic visible-drop snapshots: keyboard and touch interaction packets, recovery wording, marker approach, drop removal and six required viewports passed.",
+    "armoryBrowser": "Native practice: rejected unowned choice, direct desktop equip, touch next-gun equip and armory equip passed.",
+    "audioBrowser": "Native practice started revised running and landing buffers alongside weapon and impact samples without page errors.",
+    "relayBrowser": "Visible versus hidden draw calls, planted capture and frame-pixel variation passed at 1920x1080, 2560x1080, 2560x1440, 3840x2160, 390x844 and 844x390, plus a touch-enabled 844x390 capture.",
+    "hardware": "Apple M4 Max; Playwright Chromium headless shell 1234 using SwiftShader software rendering."
+  },
+  "limits": [
+    "The browser drop snapshots are synthetic UI fixtures; native pickup behavior is covered by Rust tests, not a human encounter in this run.",
+    "No human listening comparison, physical speakers or headphones, real mobile GPU frame pacing, or human multiplayer playtest was performed.",
+    "The local improvements branch has not been pushed, opened as a PR or deployed; the public store may still show the older build."
+  ]
+}

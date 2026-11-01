@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-31",
+  "scope": "Post-match team and player results for the attached BotStrike room",
+  "status": "Automated presentation and native integration checks passed; human and physical-device acceptance remains open",
+  "baseline": "The match-end menu showed a win/loss title and replay status but kept the pre-match roster; players had to open the live scoreboard to see combat stats.",
+  "observed": {
+    "result": "Final score, personal K/D/A and damage, both teams' ten player lines, and a combat MVP appear from the final native room snapshot during sealing and after verification.",
+    "ranking": "Most kills, then assists, damage, fewer deaths and lower slot settle combat MVP; no combat contribution yields no MVP.",
+    "navigation": "Controller focus starts on the result summary and reaches player rows; touch users can review the final panel after exiting fullscreen in portrait.",
+    "verification": "Pending replay sealing does not expose the signed export; a verified finish does. Interrupted and failed rooms hide the final table.",
+    "ruleOrReplayChange": false
+  },
+  "checks": {
+    "build": "npm run build passed.",
+    "unit": "npm test: 73/73 passed, including MVP tie breaks, scoreless draw, result gating and portrait gate reset.",
+    "host": "npm run test:host: 4/4 passed.",
+    "native": "npm run test:botstrike-native: completed 19,594 ticks at 50-33; ten final players, verified signed replay, rejected tampered result, private join, public matchmaking, reconnect and balanced teams passed.",
+    "browser": "tests/botstrike-post-match-browser.mjs: winner, loser, draw, sealing, verified, failed, ten rows, controller row focus across a state update, synthetic finished-room reload, result controls and no page errors passed.",
+    "viewports": "Browser captures and horizontal-overflow checks passed at 1920x1080, 2560x1080, 2560x1440, 3840x2160, 390x844 and 844x390; touch-enabled landscape and portrait result captures passed.",
+    "hardware": "Apple M4 Max; Playwright Chromium headless shell 1234 with SwiftShader software rendering."
+  },
+  "limits": [
+    "Browser final-state and reload checks use a final native-state fixture over a live local practice room; the complete native signed match is covered separately by integration tests.",
+    "No human comprehension check, physical controller or phone test, or physical-device frame pacing measurement was performed.",
+    "Individual plants, defuses and other objective contributions are not in the native player stats, so this is a combat award rather than an overall match MVP.",
+    "Full historical scoreboards are not retained in career history after leaving a room."
+  ]
+}

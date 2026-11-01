@@ -33,7 +33,7 @@ export function publicState(state,slot,spec,spectate=null){
  const result={...state,config:{map:state.config.map,mode:state.config.mode}};
  delete result.random;
  result.players=state.players.map(p=>{
-  if(p.slot===slot){const own={...p};for(const key of Object.keys(own))if(key.startsWith('ai_')||['attackers','skill_held','jump_held','item_held'].includes(key))delete own[key];return own;}
+  if(p.slot===slot){const own={...p};for(const key of Object.keys(own))if(key.startsWith('ai_')||['attackers','skill_held','jump_held','interact_held','item_held'].includes(key))delete own[key];return own;}
   const visible=canSee(state,viewer,p,spec.maps[state.config.map]);
   const out={};
   for(const key of ['slot','team','hero','alive','kills','deaths','assists','damage','life'])out[key]=p[key];
@@ -41,6 +41,13 @@ export function publicState(state,slot,spec,spectate=null){
   if(visible)for(const key of ['position','velocity','yaw','pitch','crouch','scoped','weapon','health','armor','revealed','reload','effect','disabled'])out[key]=p[key];
   else {out.position=null;out.velocity=[0,0,0];out.yaw=out.pitch=0;out.weapon=0;out.crouch=out.scoped=false;}
   return out;
+ });
+ const map=spec.maps[state.config.map],eye=[viewer.position[0],viewer.position[1]+(viewer.crouch?37:56),viewer.position[2]];
+ result.drops=(state.drops||[]).filter(drop=>{
+  const point=[drop.position[0],drop.position[1]+16,drop.position[2]];
+  return Math.hypot(point[0]-eye[0],point[2]-eye[2])<900
+   &&!map.obstacles.some(box=>intersectsBox(eye,point,box))
+   &&!state.utilities.some(u=>u.kind===2&&u.fuse===0&&crossesSmoke(eye,point,u));
  });
  if(state.objective?.carrier!=null&&result.players.find(p=>p.slot===state.objective.carrier)?.hidden)result.objective={...state.objective,hidden:true,position:null};
  return result;
