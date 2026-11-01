@@ -179,7 +179,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
    ws.on('error',()=>ws.terminate());
    ws.on('close',()=>{set.delete(ws);if(controllers.get(account)===ws){controllers.delete(account);releaseInput(current(account),account)}if(!set.size){peers.delete(account);const room=current(account);if(room?.status==='running'&&room.connectedEver?.has(account))(room.disconnectedAt??=new Map()).set(account,Date.now())}});
    ws.on('message',(raw,binary)=>{if(Date.now()-since>=1000){since=Date.now();count=0}if(binary||++count>100){ws.close(1008,'Input limit');return}try{const b=JSON.parse(raw);if(b.type==='ping'&&Number.isFinite(b.time))send(ws,{type:'pong',time:b.time});else if(b.type==='input'){if(controllers.get(account)===ws)input(account,b)}else if(b.type==='claim'){
-    const room=current(account);if(!room||room.id!==b.room||room.status!=='running'||!room.members.includes(account))throw Error('No active seat to control');
+    const room=current(account);if(!room||room.id!==b.room||!['waiting','running'].includes(room.status)||!room.members.includes(account))throw Error('No active seat to control');
     const previous=controllers.get(account);if(previous!==ws){releaseInput(room,account);controllers.set(account,ws);ws.controlToken=randomBytes(16).toString('hex');if(previous)control(previous,account,false)}
     control(ws,account,true);deliverState(ws,room,account);
    }else throw Error('Unknown realtime command')}catch(e){send(ws,{type:'error',error:e.message})}});

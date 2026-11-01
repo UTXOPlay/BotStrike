@@ -58,12 +58,13 @@ try{
   }),[stepStart,beforeMove]);
  }finally{await page.keyboard.up('KeyW')}
  await page.waitForFunction(()=>window.__testRoom?.state);
+ const impactStart=await page.evaluate(()=>window.__startedShots.length);
  await page.evaluate(()=>{
   const room=structuredClone(window.__testRoom),tick=++room.state.tick,slot=room.slot,target=(slot+5)%10;
   room.feedback=[{id:'impact-body',tick,kind:'hit',actor:slot,target,value:20},{id:'impact-head',tick,kind:'headshot',actor:slot,target,value:45},{id:'impact-damage',tick,kind:'hit',actor:target,target:slot,value:30,bearing:0}];
   window.__testSocket.dispatchEvent(new MessageEvent('message',{data:JSON.stringify({type:'state',room})}));
  });
- await page.waitForFunction(()=>[.12,.17,.19].every(duration=>window.__startedShots.some(value=>Math.abs(value-duration)<.01)));
+ await page.waitForFunction(start=>[.12,.17,.19].every(duration=>window.__startedShots.slice(start).some(value=>Math.abs(value-duration)<.003)),impactStart);
  assert.equal(buffers.length,11,'five weapons, three impacts and three footfalls use one buffer each');
  assert.deepEqual(errors,[]);
  console.log('Native practice started five weapon, alternating footstep and landing samples; confirmed body, head and damage feedback started distinct samples');

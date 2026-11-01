@@ -6,6 +6,44 @@ import {mkdtemp,rm} from 'node:fs/promises';
 import {WebSocket} from 'ws';
 import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
 
+for(const closeController of [false,true])for(const nextAction of ['start','leave']){
+ test(`a waiting lobby can be claimed and ${nextAction==='start'?'started':'left'} ${closeController?'after its controller closes':'while its controller remains open'}`,async()=>{
+  const data=await mkdtemp(path.join(tmpdir(),'botstrike-lobby-control-')),secret='lobby-control-test-'.repeat(3),account='a'.repeat(64);
+  const service=createBotStrike({secret,data}),sockets=[];
+  await new Promise(resolve=>service.server.listen(0,'127.0.0.1',resolve));
+  const base='http://127.0.0.1:'+service.server.address().port;
+  const headers={'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':account};
+  const action=async body=>{const response=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify(body)});return{status:response.status,body:await response.json()};};
+  const until=async predicate=>{const deadline=Date.now()+5000;while(!predicate()){if(Date.now()>deadline)throw Error('Lobby control did not arrive');await new Promise(resolve=>setTimeout(resolve,10));}};
+  const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers}),messages=[];sockets.push(ws);ws.on('message',raw=>messages.push(JSON.parse(raw)));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});return{ws,messages};};
+  const control=(peer,active)=>peer.messages.findLast(message=>message.type==='control'&&message.active===active);
+  try{
+   const created=await action({type:'create',kind:'private',mode:'deathmatch',map:0,hero:0,difficulty:0});
+   assert.equal(created.status,200);const room=service.rooms.get(created.body.room.id);
+   const first=await connect(),second=await connect();
+   await until(()=>control(first,true)&&control(second,false));
+   const previousToken=control(first,true).token;
+   second.ws.send(JSON.stringify({type:'claim',room:'0'.repeat(24)}));
+   await until(()=>second.messages.some(message=>message.type==='error'));
+   assert.equal((await action({type:'hero',hero:1,controlToken:previousToken})).status,200,'an invalid room cannot revoke lobby control');
+   if(closeController){first.ws.close();await new Promise(resolve=>first.ws.once('close',resolve));}
+   second.ws.send(JSON.stringify({type:'claim',room:room.id}));
+   await until(()=>control(second,true));
+   if(!closeController)await until(()=>control(first,false));
+   const token=control(second,true).token;
+   assert.notEqual(token,previousToken);assert.equal(control(second,true).nextSeq,0);
+   assert.equal(room.status,'waiting','claiming a lobby never starts simulation');
+   assert.equal((await action({type:'hero',hero:2,controlToken:previousToken})).status,400,'the old controller token is invalid');
+   assert.equal((await action({type:'hero',hero:3,controlToken:token})).status,200);
+   assert.equal(room.config.heroes[0],3);
+   assert.equal((await action({type:nextAction,controlToken:previousToken})).status,400);
+   const result=await action({type:nextAction,controlToken:token});assert.equal(result.status,200);
+   if(nextAction==='start'){await until(()=>room.state?.tick>0);assert.equal(room.status,'running');}
+   else{assert.equal(result.body.room,null);assert.equal(room.status,'cancelled');}
+  }finally{for(const ws of sockets)ws.terminate();await service.close();await rm(data,{recursive:true,force:true});}
+ });
+}
+
 test('only the claimed tab controls a seat and takeover releases held input',async()=>{
  const data=await mkdtemp(path.join(tmpdir(),'botstrike-controller-')),secret='controller-test-'.repeat(3),account='a'.repeat(64);
  const service=createBotStrike({secret,data}),sockets=[];
