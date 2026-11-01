@@ -1,5 +1,5 @@
 import {mkdirSync} from 'node:fs';
-import {resizeMobile} from './mobile-viewport.mjs';
+import {resizeMobile,screenshotMobile} from './mobile-viewport.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const base=process.env.STORE_URL||'http://127.0.0.1:19885',out=process.env.CONTROL_ARTIFACTS||'/tmp/botstrike-browser';mkdirSync(out,{recursive:true});
 import assert from 'node:assert/strict';
@@ -23,13 +23,13 @@ try{
   assert.ok(hud['#radar'].width>=(w>=3200?350:230),JSON.stringify({viewport:[w,h],radar:hud['#radar']}));
   const shot=await a.screenshot({path:`${out}/play-${w}x${h}.png`});assert.ok(await sceneColors(a,shot)>12,`blank desktop scene at ${w}x${h}`);console.log('desktop',w,h,'passed')}
  await b.bringToFront();await b.locator('#resume').click();await b.waitForFunction(()=>document.documentElement.dataset.playing==='true');
- await resizeMobile(b,390,844);await b.locator('#immersive-gate').waitFor();assert.equal(await b.locator('html').getAttribute('data-playing'),'false');await b.screenshot({path:out+'/portrait-gate.png'});await resizeMobile(b,844,390);await b.locator('#immersive-gate').waitFor({state:'hidden'});await b.locator('#resume').click();
+ await resizeMobile(b,390,844);await b.locator('#immersive-gate').waitFor();assert.equal(await b.locator('html').getAttribute('data-playing'),'false');await screenshotMobile(b,out+'/portrait-gate.png');await resizeMobile(b,844,390);await b.locator('#immersive-gate').waitFor({state:'hidden'});await b.locator('#resume').click();
  for(const [w,h]of [[844,390]]){await resizeMobile(b,w,h);await b.waitForTimeout(200);const controls=await b.locator('#touch button').evaluateAll(elements=>elements.filter(e=>e.getBoundingClientRect().width).map(e=>{const r=e.getBoundingClientRect();return{id:e.id,x:r.x,y:r.y,w:r.width,h:r.height}}));for(const c of controls){assert.ok(c.x>=0&&c.y>=0&&c.x+c.w<=w&&c.y+c.h<=h,JSON.stringify(c));assert.ok(c.w>=44&&c.h>=44,JSON.stringify(c))}assert.equal(await b.locator('#utility-choice').isVisible(),false,'equipment picker lives inside the armory');const pad=await b.locator('#move-pad').boundingBox(),cdp=await mobile.newCDPSession(b);const touch={x:pad.x+pad.width/2,y:pad.y+pad.height/2,id:1};await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[touch]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{...touch,x:touch.x+35}]});await b.waitForTimeout(250);r=await state(mobile);assert.ok(r.state.players[5].last_seq>0);await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});if(w===844){
  await b.waitForFunction(async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[5].alive});
  const before=(await state(mobile)).state.players[5],fireButton=await b.locator('#touch-fire').boundingBox(),finger={id:2,x:fireButton.x+fireButton.width/2,y:fireButton.y+fireButton.height/2};
  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[finger]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{...finger,x:finger.x-24,y:finger.y-10}]});await b.waitForTimeout(500);await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
  await b.waitForFunction(before=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(r=>{const p=r.room.state.players[5];return p.shots>before.shots&&Math.abs(p.yaw-before.yaw)>.01}),before,{timeout:8000});
  console.log('touch firing and aim reached native authority');
- }const shot=await b.screenshot({path:`${out}/play-${w}x${h}.png`});assert.ok(await sceneColors(b,shot)>12,`blank touch scene at ${w}x${h}`);console.log('touch',w,h,'passed');}
+ }const shot=await screenshotMobile(b,`${out}/play-${w}x${h}.png`);assert.ok(await sceneColors(b,shot)>12,`blank touch scene at ${w}x${h}`);console.log('touch',w,h,'passed');}
  assert.deepEqual(errors,[]);console.log('Browser joining, native movement, skill and six viewports passed');
 }catch(error){console.log('browser failure context',await a.evaluate(()=>({playing:document.documentElement.dataset.playing,status:document.querySelector('#status')?.textContent})),JSON.stringify({sent:sent.slice(-3),native:nativeSnapshots.slice(-2).map(p=>({seq:p.last_seq,alive:p.alive,yaw:p.yaw,skill:p.skill_wait}))}));throw error}finally{try{try{await leaveBrowserRoom(a)}finally{await leaveBrowserRoom(b)}}finally{await browser.close()}}

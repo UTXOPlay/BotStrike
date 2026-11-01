@@ -70,11 +70,11 @@ The HUD uses fewer filled panels, with icon controls retained. Death recaps show
 
 The 1.4.0 native version was `botstrike-2050-readability-v5`. Its production release retained all three older verifier pairs so signed saves select their original exact profile. This is off-chain host replay, not CKB settlement. Bot-only simulations and browser software rendering do not replace human balance testing or real-device performance measurement.
 
-## Salvage candidate (improvements branch)
+## Weapon salvage (salvage-v1)
 
 Eliminated pilots now leave their equipped gun for 20 seconds, with its remaining magazine and up to two magazines of reserve. At most eight drops exist at once; round transitions clear them. A living human can press Use within 60 world units when cover does not block the path; touch uses the hand button and controllers use R3. Recovering a new gun adds and equips it while retaining the previous gun; recovering an owned gun adds only compatible rounds to its reserve without switching guns, capped by that weapon's normal limit. Reload still transfers reserve into the magazine. Bots ignore drops, and relay plant or defuse interactions take priority. Visible drops show a world-space weapon or ammo marker on approach and a contextual action prompt within reach; full reserves are identified. The field HUD shows several directly selectable owned guns on desktop, the next gun on touch, and the armory opens the full inventory. Hidden drops are omitted from public snapshots.
 
-This candidate uses native result version `botstrike-2050-salvage-v1` and a distinct Myelin application profile. The release manifest requires the recorded exact `readability-v5`, `tactics-v4`, `network-v3` and `arsenal-v2` verifier pairs before publication. These historical binaries are absent from this local checkout; source builds cannot substitute for their recorded hashes. The candidate has automated rule, browser and signed-match checks, but still needs human encounter feedback and physical-device frame pacing measurements.
+This release uses native result version `botstrike-2050-salvage-v1` and a distinct Myelin application profile. Production retains the recorded exact `readability-v5`, `tactics-v4`, `network-v3` and `arsenal-v2` verifier pairs; all four historical exports were verified before rollout. Source checkouts must obtain these historical artifacts without rebuilding or substituting their recorded bytes. See [release acceptance](docs/acceptance/salvage-pr1.json). Automated checks do not replace human encounter feedback or physical-device frame pacing measurements.
 
 ## Source and verification
 

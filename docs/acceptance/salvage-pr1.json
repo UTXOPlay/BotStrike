@@ -1,0 +1,172 @@
+{
+  "date": "2026-11-01",
+  "sourceCommit": "4603f6927f683c7ec9e54087fb0e27d4b71fc11e",
+  "runtimeFixCommit": "9cf496f16fd077646deb6bfb05627076af6be94e",
+  "nativeVersion": "botstrike-2050-salvage-v1",
+  "profile": "642acc7500efb2635dfa6aca1603b31a6624f3101ccdf5f6986da75c22419cf9",
+  "mode": "local-poa-host-replay",
+  "ckbSettled": false,
+  "verifiers": [
+    {
+      "name": "salvage-v1",
+      "directory": ".",
+      "sha256": {
+        "botstrike-engine": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+        "myelin-botstrike": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575"
+      }
+    },
+    {
+      "name": "readability-v5",
+      "directory": "legacy/readability-v5",
+      "sha256": {
+        "botstrike-engine": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+        "myelin-botstrike": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30"
+      }
+    },
+    {
+      "name": "tactics-v4",
+      "directory": "legacy/tactics-v4",
+      "sha256": {
+        "botstrike-engine": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+        "myelin-botstrike": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7"
+      }
+    },
+    {
+      "name": "network-v3",
+      "directory": "legacy/network-v3",
+      "sha256": {
+        "botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+        "myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+      }
+    },
+    {
+      "name": "arsenal-v2",
+      "directory": "legacy/arsenal-v2",
+      "sha256": {
+        "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+        "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+      }
+    }
+  ],
+  "validation": {
+    "javascriptTests": 77,
+    "hostTests": 4,
+    "rustRuleTests": 33,
+    "waitingLobbyCases": [
+      "controller still connected, then start",
+      "controller still connected, then leave",
+      "controller closed, then start",
+      "controller closed, then leave"
+    ],
+    "localAndCandidateBrowserLobbyHandoff": true,
+    "candidateNativeFlow": {
+      "data": "/validation/botstrike-flow-7HNek1",
+      "ticks": 23040,
+      "score": [
+        47,
+        42
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "legacyReplayVerification": [
+      {
+        "verifier": "readability-v5",
+        "authority": "023943b22c961f09aa77ad969b9204ca677b7901787d60991ab5b1547045827c11",
+        "frames": 1,
+        "state_root": "ad555a1ec85ed1c2edd062ace11c55c3a520faa4ea17d83a3a1f6cced7ba0627",
+        "verified": true
+      },
+      {
+        "verifier": "tactics-v4",
+        "authority": "0210799f1074043223710544fab20eff43e3701b2a581a58c21e4d84c7138d34e4",
+        "frames": 1,
+        "state_root": "caecbbe1c259d7ad2b46f782dc951c4b6ce7d4070a1ae9778661c240434bb0bb",
+        "verified": true
+      },
+      {
+        "verifier": "network-v3",
+        "authority": "03523d567a6e072412706cd363708c8e157d48c1acf4de5bbfff6b0fb6e337496c",
+        "frames": 1,
+        "state_root": "371169f0445eef85d56969ce922819b74fda0923efbb30531c27e9eff4618165",
+        "verified": true
+      },
+      {
+        "verifier": "arsenal-v2",
+        "authority": "02e87363ddcaab306fefd66e7143ae2bfae62072c8f8dd002e0316814e435fc02e",
+        "frames": 1,
+        "state_root": "1f3cd69483ef4cdae6869ef901af0fa1b4df89a80c30ed33209c83b787a2e122",
+        "verified": true
+      }
+    ],
+    "viewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "candidateNativeMovementSkillTouchFireAndAim": true,
+    "resultPageSixViewportsAndTouch": true,
+    "publicStoreDesktopLaunchAndGameplay": true,
+    "publicStoreMobileFailureRetryAndGameplay": true,
+    "publicMobileFullscreenExitInputGateAndReentry": true,
+    "publicMobileReentryPreservesIframeSandboxAndMatch": true,
+    "publicWaitingLobbyHandoffStartHeroAndLeave": true,
+    "browserHarness": {
+      "canonicalStoreRoute": "/games/botstrike/",
+      "mobileRotation": "CDP device metrics while fullscreen; capture the actual device viewport without restoring portrait",
+      "nestedFullscreenExit": [
+        "IFRAME",
+        "DIV"
+      ]
+    },
+    "additionalConcurrentCandidateRun": {
+      "result": "failed",
+      "observedClientRttMs": 9897,
+      "detail": "An extra shared-software-rendering run failed during input/cleanup; it is not counted as a performance pass. Earlier candidate native-input checks and independent public launch and handoff checks passed."
+    }
+  },
+  "deployment": {
+    "image": "myelin-botstrike:salvage-pr1-9cf496f",
+    "healthy": true,
+    "activeRoomsAtSwitch": 0,
+    "otherChangedContainers": [],
+    "compose": "/data/utxoplay/releases/20261101-botstrike-salvage-pr1/game.compose.json",
+    "backup": "/data/utxoplay/releases/20261101-botstrike-salvage-pr1/botstrike-data-before.tar.gz",
+    "bundleSha256": "943e19395c4ba46af1d171164094e418e40ce23847534cbe221dc0a3b428d639",
+    "imageId": "sha256:e773e694473c7c57c058cc39c718c2b13effc252183d352315320d8419222f91"
+  },
+  "limitations": [
+    "Browser checks use Chromium software rendering and emulated touch, not physical-device performance measurements.",
+    "Myelin verifies exact-profile off-chain host replay; it does not perform CKB settlement.",
+    "Human listening, physical controller/phone behavior and internet frame pacing remain unmeasured; automated acceptance does not establish handset FPS."
+  ],
+  "url": "https://store.utxoplay.io/games/botstrike/"
+}
