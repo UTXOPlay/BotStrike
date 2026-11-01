@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
+import {AnimationMotion} from './animation-motion.mjs';
+import {LocomotionBlend,locomotionClips} from './locomotion-blend.mjs';
 
 export const chassisNames=['vector','patch','bastion','spectre','glitch','forge'];
 export const motionNames=['idle','walk','run','backpedal','strafe_left','strafe_right','crouch','crouch_walk','jump','fall','land','fire','reload','equip','use_item','utility','skill','interact','hit','death_back','death_left','death_right','respawn','victory','defeat'];
@@ -30,7 +32,7 @@ export function createCharacters(art){
   }));
   for(let kind=0;kind<12;kind++){weaponTemplates.set(kind,art.weaponModel(kind));await new Promise(requestAnimationFrame);}
  }
- function actor(slot,hero,weapon=2,{firstPerson=false}={}){
+ function actor(slot,hero,weapon=2,{firstPerson=false,legacyLocomotion=false}={}){
   const source=templates[hero];if(!source)throw Error('Chassis has not loaded');
   const badges=[];const rig=new THREE.Group(),model=clone(source.model);rig.add(model);model.scale.setScalar(70/1.94);
   const bones={};model.traverse(o=>{if(o.isBone)bones[o.name]=o;for(const side of ['L','R'])for(const part of ['upper_arm','forearm','hand','thigh','shin','foot'])if(o.name===part+side)bones[part+'.'+side]=o;});
@@ -45,7 +47,13 @@ export function createCharacters(art){
   if(!firstPerson){for(const side of ['L','R']){const badge=new THREE.Mesh(badgeGeometry,teamMaterials[slot<5?0:1]);badge.position.set(0,.04,-.13);bones['upper_arm.'+side].add(badge);badges.push(badge);}const shadow=new THREE.Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.y=.15;rig.add(shadow);}
   // The support arm has a wider first-person stance. Reloads draw the weapon
   // inward with the trigger arm so the magazine remains within support reach.
-  let gripRestore=null,lookRestore=null;
+  let gripRestore=null,lookRestore=null,warped=false;
+  const warpRestore={hips:new THREE.Quaternion(),spine:new THREE.Quaternion()};
+  function restorePose(){
+   if(gripRestore){for(const saved of gripRestore){saved.bone.position.copy(saved.position);saved.bone.quaternion.copy(saved.quaternion);}gripRestore=null;}
+   if(lookRestore){for(const saved of lookRestore)saved.bone.quaternion.copy(saved.quaternion);lookRestore=null;}
+   if(warped){bones.hips.quaternion.copy(warpRestore.hips);bones.spine.quaternion.copy(warpRestore.spine);warped=false;}
+  }
   function grip(side,target){
    const a=bones['upper_arm.'+side],b=bones['forearm.'+side],c=bones['hand.'+side];
    gripRestore??=[];gripRestore.push(...[a,b,c].map(bone=>({bone,position:bone.position.clone(),quaternion:bone.quaternion.clone()})));
@@ -65,6 +73,10 @@ export function createCharacters(art){
    const a=mixer.clipAction(clip);actions.set(key,a);return a;
   }
   let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0,gaitPhase=0,hitAt=-Infinity,hitForce=0;
+  const hybrid=!firstPerson&&!legacyLocomotion,signals=new AnimationMotion(),blend=new LocomotionBlend(locomotionClips.map(name=>source.clips[name].duration));
+  const lowerActions=hybrid?locomotionClips.map(name=>action(name,'lower')):[];
+  // The glTF root converts Blender's Z-up bone space into scene Y-up.
+  const yawWarp=new THREE.Quaternion(),counterWarp=new THREE.Quaternion(),up=new THREE.Vector3(0,0,1);
   let gun=null,magazine=null,pump=null,pumpAt=-Infinity;const gunAnchor=new THREE.Group();model.add(gunAnchor);
   function equip(kind){if(gun)gunAnchor.remove(gun);gun=weaponTemplates.get(kind).clone(true);magazine=gun.getObjectByName('magazine');pump=gun.getObjectByName('pump');pumpAt=-Infinity;const stock=gun.getObjectByName('stock');if(stock&&firstPerson)stock.visible=false;gun.scale.setScalar(.016);gunAnchor.add(gun);lastWeapon=kind;}
   equip(weapon);
@@ -77,6 +89,7 @@ export function createCharacters(art){
   function reset(p,now){mixer.stopAllAction();base=upper=full=null;upperUntil=fullUntil=0;lastLife=p.life;lastAlive=p.alive;lastAir=false;lastReload=0;deadAt=0;hitAt=-Infinity;hitForce=0;
    // A stable per-life offset prevents identical run clips from marching in lockstep.
    gaitPhase=(slot*.38196601125+(p.life||0)*.1414213562)%1;
+   signals.clear();blend.clear(gaitPhase);
    base=swap(null,action('idle','lower'));upper=swap(null,action('idle','upper'));lastNow=now;
   }
   function trigger(name,now,duration,value){
@@ -89,6 +102,9 @@ export function createCharacters(art){
    const seconds=duration||source.clips[name].duration;next.setEffectiveTimeScale(source.clips[name].duration/Math.max(.1,seconds));upperUntil=now+seconds*1000;
   }
   function update(p,state,now,dt,{reduced=false}={}){
+   // Undo last frame's procedural pose before reset, crossfades or mixer sampling.
+   restorePose();
+   if(lastNow&&now-lastNow>250)signals.clear();
    if(lastLife!==p.life||lastAlive===null){const reboot=lastLife!==null&&p.alive;reset(p,now);if(reboot)lastAlive=false;}
    if(lastPhase!==state.phase&&state.phase!=='finished'&&state.phase!=='round_end'&&fullUntil===Infinity&&p.alive)fullUntil=0;lastPhase=state.phase;
    if(p.weapon!==lastWeapon){equip(p.weapon);if(p.alive)trigger('equip',now,.4);}
@@ -103,16 +119,27 @@ export function createCharacters(art){
     if(state.phase==='finished'||state.phase==='round_end'){
      const name=reduced?'idle':state.winner===p.team?'victory':'defeat';full=swap(full,action(name),true,.25);base?.fadeOut(.15);upper?.fadeOut(.15);fullUntil=Infinity;
     }else if(full&&now>=fullUntil){full.fadeOut(.16);full=null;base?.reset().fadeIn(.16).play();if(!firstPerson&&base)base.time=gaitPhase*base.getClip().duration;upper?.reset().fadeIn(.16).play();}
-    if(!full){base=swap(base,action(motion,'lower'));base.setEffectiveTimeScale(speed>12&&!air?THREE.MathUtils.clamp(speed/(motion==='run'?250:145),.6,1.6):1);
+    if(!full){if(!hybrid){base=swap(base,action(motion,'lower'));base.setEffectiveTimeScale(speed>12&&!air?THREE.MathUtils.clamp(speed/(motion==='run'?250:145),.6,1.6):1);}
      if(p.reload>0&&!lastReload){reloadDuration=p.reload;trigger('reload',now,p.reload/64);}
      if(state.objective?.actor===slot&&state.objective.progress>0){if(upper!==action('interact','upper'))upper=swap(upper,action('interact','upper'));upperUntil=now+100;}
      else if(now>=upperUntil)upper=swap(upper,action('idle','upper'),true,.16);
     }
    }
    lastReload=p.reload||0;lastAlive=p.alive;lastNow=now;
-   if(gripRestore){for(const saved of gripRestore){saved.bone.position.copy(saved.position);saved.bone.quaternion.copy(saved.quaternion);}gripRestore=null;}
-   if(lookRestore){for(const saved of lookRestore)saved.bone.quaternion.copy(saved.quaternion);lookRestore=null;}
+   const motionSignals=signals.update(p,dt,state.config?.map??0);
+   if(hybrid){
+    blend.update(motionSignals,dt,{active:p.alive&&!full,reduced,phase:motionSignals.reset?gaitPhase:blend.phase});
+    for(let i=0;i<lowerActions.length;i++){const a=lowerActions[i];a.enabled=true;a.play();a.paused=true;a.time=blend.times[i];a.setEffectiveWeight(blend.weights[i]*blend.gain);}
+    base=action(blend.dominant,'lower');gaitPhase=blend.phase;
+   }
    if(upper)upper.paused=reduced&&upper===action('idle','upper');mixer.update(Math.min(.1,Math.max(0,dt)));
+   if(hybrid&&blend.orientation){
+    // Rotate the pelvis only. Counter-rotate its direct spine child so aiming,
+    // hit reactions and weapon/hand placement retain their blended world pose.
+    warpRestore.hips.copy(bones.hips.quaternion);warpRestore.spine.copy(bones.spine.quaternion);warped=true;
+    yawWarp.setFromAxisAngle(up,blend.orientation);bones.hips.quaternion.premultiply(yawWarp);
+    counterWarp.copy(bones.hips.quaternion).invert().multiply(warpRestore.hips);bones.spine.quaternion.premultiply(counterWarp);
+   }
    // Small tracking offsets follow the gameplay look direction after blending.
    if(p.alive&&!reduced){lookRestore=[bones.head,bones.chest].map(bone=>({bone,quaternion:bone.quaternion.clone()}));bones.head.rotation.x-=p.pitch*.5;bones.chest.rotation.x-=p.pitch*.22;
     if(!firstPerson&&now-hitAt<320){const pulse=Math.sin(Math.PI*Math.max(0,now-hitAt)/320)*hitForce;bones.chest.rotation.x-=pulse*.30;bones.head.rotation.x+=pulse*.22;}
@@ -143,7 +170,7 @@ export function createCharacters(art){
   }
   function dispose(){prop?.traverse(o=>o.geometry?.dispose());mixer.stopAllAction();mixer.uncacheRoot(model);if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)o.geometry.dispose();});rig.removeFromParent();}
   let armTriangles=0;if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)armTriangles+=(o.geometry.index?.count||0)/3;});
-  return {rig,model,bones,mixer,hero,slot,armTriangles,setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
+  return {rig,model,bones,mixer,hero,slot,armTriangles,animation:{signals:signals.output,blend,hybrid},invalidate(){signals.clear();lastLife=null;lastAlive=null;},setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
  }
  function dispose(){const geometries=new Set(),materials=new Set(),textures=new Set();for(const t of templates)t.model.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});for(const gun of weaponTemplates.values())gun.traverse(o=>{if(o.geometry)geometries.add(o.geometry)});badgeGeometry.dispose();teamMaterials.forEach(m=>m.dispose());shadowGeometry.dispose();shadowMaterial.dispose();shadowTexture.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}
  return {preload,actor,dispose,weaponModel:kind=>weaponTemplates.get(kind)?.clone(true)};

@@ -48,7 +48,7 @@ export function createWorld(canvas,spec){
  const trails=[];for(let n=0;n<32;n++){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1,4),new THREE.MeshBasicMaterial({color:'#baf6ff',transparent:true,opacity:.6}));mesh.visible=false;scene.add(mesh);trails.push({mesh,until:0})}let trailIndex=0,shotUntil=0,recoilAt=-Infinity,impactAt=-Infinity;
  function shoot(slot,player,now){const d=new THREE.Vector3(-Math.sin(player.yaw)*Math.cos(player.pitch),Math.sin(player.pitch),-Math.cos(player.yaw)*Math.cos(player.pitch));const t=trails[trailIndex++%trails.length],origin=new THREE.Vector3(player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]),start=15,end=shotTrailEnd(origin.toArray(),d.toArray(),spec.maps[mapId]?.obstacles||[]);t.mesh.visible=end>start;if(t.mesh.visible){t.mesh.position.copy(origin).addScaledVector(d,(start+end)/2);t.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);t.mesh.scale.y=end-start;t.until=now+55;}if(slot===localSlot){shotUntil=now+40;recoilAt=now;firstPerson?.trigger('fire',now);}else bots[slot]?.trigger('fire',now);}
  let localSlot=0,roomId=null,motionCursor=new FeedbackCursor();
- function accept(room){if(!room?.state)return;const now=performance.now();if(room.id!==roomId){motionCursor=new FeedbackCursor();roomId=room.id;}
+ function accept(room){if(!room?.state)return;const now=performance.now();if(room.id!==roomId){motionCursor=new FeedbackCursor();roomId=room.id;bots.forEach(bot=>bot.invalidate());firstPerson?.invalidate();}
   for(const e of motionCursor.consume(room.feedback,room.state.tick)){
    if(room.state.tick-e.tick>32)continue;
    if(e.kind==='motion'){const p=room.state.players[e.actor];if(!p||p.hidden||p.life!==e.life)continue;
@@ -63,7 +63,7 @@ export function createWorld(canvas,spec){
  function sparks(player,now){sparkOrigin=[player.position[0],player.position[1]+(player.crouch?32:46),player.position[2]];sparkAt=now;}
 const positions=Array.from({length:10},()=>new THREE.Vector3());
  function frame(state,slot,now,dt,{active=false,yaw=0,pitch=0,local=null,spectator=null,reduced=false,weapon=0}={}){if(contextLost||disposed)return;localSlot=slot;if(state){const me=state.players[slot],chosen=state.players[spectator],viewing=me.alive?me:chosen?.alive&&chosen.team===me.team?chosen:state.players.find(p=>p.team===me.team&&p.alive);setMap(state.config.map);for(const p of state.players){let bot=bots[p.slot];if(!bot)continue;if(!p.hidden&&bot.hero!==p.hero){bot.dispose();bot=bots[p.slot]=robot(p.slot,p.hero,p.weapon);}
- const shown=!p.hidden&&!!p.position&&(!active||p.slot!==viewing?.slot);bot.rig.visible=shown;if(!shown)continue;
+ const shown=!p.hidden&&!!p.position&&(!active||p.slot!==viewing?.slot);if(!shown&&bot.rig.visible)bot.invalidate();bot.rig.visible=shown;if(!shown)continue;
  bot.setAlly(p.team===me.team);bot.rig.position.copy(positions[p.slot].fromArray(p.position));bot.rig.rotation.y=p.yaw;const motion=bot.update(p,state,now,dt,{reduced});if(!p.alive&&now-motion.deadAt>5000)bot.rig.visible=false;}
 
  for(let i=0;i<utilities.length;i++){const u=state.utilities[i],mesh=utilities[i];mesh.visible=!!u;if(!u)continue;mesh.position.fromArray(u.position);mesh.scale.setScalar(u.kind===2&&u.fuse===0?175:6);mesh.material.opacity=u.kind===2&&u.fuse===0?Math.min(.93,u.life/64):u.fuse===0?.12:1;mesh.material.color.set(spec.items[u.kind]?.color||'#b4c1d8');if(u.fuse===0&&u.kind===5)mesh.scale.set(450,3,450);if(u.fuse===0&&u.kind===10)mesh.scale.set(220,3,220);}

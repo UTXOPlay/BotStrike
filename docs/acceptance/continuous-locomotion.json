@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "0c2c5f91712e69661b4cd2cc9326f21b58375208",
+  "scope": "First hybrid-animation slice: render-only directional blending and development motion instrumentation",
+  "status": "Automated checks passed; draft pending human comparison and physical-device performance acceptance",
+  "environment": {
+    "browser": "Google Chrome for Testing headless shell 156.0.8078.4",
+    "flags": ["--no-sandbox", "--enable-unsafe-swiftshader"],
+    "reportedRenderer": "WebKit WebGL",
+    "hardwarePerformanceAcceptance": false
+  },
+  "checks": {
+    "build": "npm run build passed; the motion lab and capture tools are absent from dist",
+    "javascript": "npm test: 81 passed, zero failed or skipped",
+    "host": "npm run test:host: 4 passed",
+    "motionBrowser": "28 fixtures passed: seven sequences at 30/60/120 fps, then all seven with jitter and reduced motion; ten rigs spanning all six chassis in every fixture",
+    "motionAssertions": ["finite normalized bone transforms", "no mutation of player state", "repeatable reset pose", "bounded backing resolution"],
+    "viewports": [[1920,1080],[2560,1080],[2560,1440],[3840,2160],[390,844],[844,390]],
+    "existingGaitBrowser": "Steady/jittered run contact, independent actor phases, jump/fall labels, confirmed hit/fire priority and recovery passed",
+    "reloadBrowser": "Six chassis, first- and third-person reload-contact assertions passed",
+    "localGameBrowser": "Native multiplayer join, acknowledged movement/skill input, all six viewports, portrait rotation gate and touch fire-plus-aim passed",
+    "browserCleanup": "Initial runs passed gameplay assertions but timed out during background-page departure. The helper now foregrounds the page, claims through the existing UI when necessary, and awaits the response concurrently. The full command then exited successfully.",
+    "nativeReplay": "Complete 23040-tick match, respawns, native human input, signed export verification and tamper rejection passed using the existing matching release pair",
+    "rules": "No changes to native source, simulation specification, input/prediction, weapon rules or Myelin application profile"
+  },
+  "gaitRegressionSamples": {
+    "runMeshGroundRange": [-0.6014,0.1880],
+    "jitteredRunMeshGroundRange": [-0.5996,0.1880],
+    "firstTwoActorPhaseCorrelation": 0.01984,
+    "confirmedHitPoseDistance": 0.5382,
+    "hitDuringFirePoseDistance": 0.5382,
+    "reducedMotionHitPoseDistance": 0.2104,
+    "recoveredPoseDistance": 0.0111
+  },
+  "diagnosticComparison": {
+    "fixture": "circle, ten rigs, 60 fps, 2.5 simulated seconds, both paths warmed",
+    "cpuScope": "Actor updates, root synchronization and event dispatch only; excludes fixture construction, transform validation, scene rendering and contact diagnostics",
+    "cpuTimerCaveat": "Browser timer quantization is visible. These headless samples establish neither a physical-device budget nor real-time frame pacing.",
+    "baselineCpuMs": {"median": 0.1, "p95": 0.2},
+    "candidateCpuMs": {"median": 0.1, "p95": 0.2},
+    "baselineMaxEstimatedFootBoneDrift": 78.4262,
+    "candidateMaxEstimatedFootBoneDrift": 80.3277,
+    "contactCaveat": "Phase-estimated stance and raw foot-bone drift are diagnostics, not calibrated sole contact errors. Sliding remains large on both paths; the proposal's provisional 2-unit contact target is not met or claimed."
+  },
+  "recordings": {
+    "baseline": "../assets/botstrike/locomotion/baseline-circle.mp4",
+    "candidate": "../assets/botstrike/locomotion/candidate-circle.mp4",
+    "configuration": "Identical circle fixture and follow camera; six simulated seconds, 180 frames at fixed 1/30-second steps, 1280x720, ten rigs",
+    "interpretation": "Render captures, not human-match footage or real-time performance recordings"
+  },
+  "openAcceptance": [
+    "Representative desktop/mobile animation CPU and frame-pacing budgets",
+    "Human A/B playtesting of animation quality and immediate control feel",
+    "Detailed knee, weapon clipping and silhouette review across transitions",
+    "Phase 2: calibrated foot contacts and constrained leg IK",
+    "Later phases: spatial stride warping, braking/pivot clips and inertialisation"
+  ]
+}
