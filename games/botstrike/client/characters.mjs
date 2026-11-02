@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
-import {AnimationMotion} from './animation-motion.mjs';
+import {AnimationMotion,isGrounded} from './animation-motion.mjs';
 import {LocomotionBlend,locomotionClips} from './locomotion-blend.mjs';
 import {FootIK,calibrateFeet} from './foot-ik.mjs';
 import {TwoBoneIK} from './two-bone-ik.mjs';
@@ -11,10 +11,11 @@ import {AnimationSprings} from './animation-springs.mjs';
 import {motionProfiles} from './motion-profiles.mjs';
 import {PoseInertia} from './pose-inertia.mjs';
 import {advanceStridePlan} from './locomotion-gait.mjs';
+import {DeathPresentation} from './death-presentation.mjs';
 
 export const chassisNames=['vector','patch','bastion','spectre','glitch','forge'];
 export const transitionNames=['start','brake','pivot_left','pivot_right','pivot_back_left','pivot_back_right','land_hard','crouch_enter','weapon_ready'];
-export const motionNames=['idle','walk','run','backpedal','strafe_left','strafe_right','crouch','crouch_walk','jump','fall','land','fire','reload','equip','use_item','utility','skill','interact','hit','death_back','death_left','death_right','respawn','victory','defeat',...transitionNames];
+export const motionNames=['idle','walk','run','backpedal','strafe_left','strafe_right','crouch','crouch_walk','jump','fall','land','fire','reload','equip','use_item','utility','skill','interact','hit','death_back','death_left','death_right','death_back_crouch','death_left_crouch','death_right_crouch','respawn','victory','defeat',...transitionNames];
 const lower=/^(root|hips|thigh|shin|foot)/;
 const gaitMotion=/^lower:(?:idle|walk|run|backpedal|strafe_left|strafe_right|crouch|crouch_walk)$/;
 const boneName=track=>track.name.slice(0,track.name.lastIndexOf('.'));
@@ -68,10 +69,10 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    const groups=[];for(const group of g.groups.length?g.groups:[{start:0,count:indices.length,materialIndex:0}]){const begin=keep.length;for(let i=group.start;i<group.start+group.count;i+=3)if(arm(indices[i])&&arm(indices[i+1])&&arm(indices[i+2]))keep.push(indices[i],indices[i+1],indices[i+2]);groups.push({start:begin,count:keep.length-begin,materialIndex:group.materialIndex});}
    g.setIndex(keep);g.clearGroups();groups.forEach(x=>g.addGroup(x.start,x.count,x.materialIndex));o.geometry=g;o.receiveShadow=false;
   });
-  if(!firstPerson){for(const side of ['L','R']){const badge=new THREE.Mesh(badgeGeometry,teamMaterials[slot<5?0:1]);badge.position.set(0,.04,-.13);bones['upper_arm.'+side].add(badge);badges.push(badge);}const shadow=new THREE.Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.y=.15;rig.add(shadow);}
+  let shadow=null;if(!firstPerson){for(const side of ['L','R']){const badge=new THREE.Mesh(badgeGeometry,teamMaterials[slot<5?0:1]);badge.position.set(0,.04,-.13);bones['upper_arm.'+side].add(badge);badges.push(badge);}shadow=new THREE.Mesh(shadowGeometry,shadowMaterial);shadow.name='contact-shadow';shadow.rotation.x=-Math.PI/2;shadow.position.y=.15;rig.add(shadow);}
   // The support arm has a wider first-person stance. Reloads draw the weapon
   // inward with the trigger arm so the magazine remains within support reach.
-  const pose=new BonePose(bones),profile=motionProfiles[hero],springs=new AnimationSprings(profile),inertia=new PoseInertia(bones,profile);
+  const pose=new BonePose(bones),profile=motionProfiles[hero],springs=new AnimationSprings(profile),inertia=new PoseInertia(bones,profile),corpse=new DeathPresentation(bones);let lastRenderYaw=0;
   const baseModelPosition=model.position.clone(),baseModelRotation=model.quaternion.clone();
   const armSolvers=Object.fromEntries(['L','R'].map(side=>[side,new TwoBoneIK(bones['upper_arm.'+side],bones['forearm.'+side],bones['hand.'+side],{minBend:.08,maxBend:2.95})]));
   const gripTarget=new THREE.Vector3(),gripPole=new THREE.Vector3(),triggerOffset=new THREE.Vector3();let leftWidened=false,fireAt=-Infinity,fireImpulses=0;
@@ -161,7 +162,7 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
   function reset(p,now,reason='life'){mixer.stopAllAction();base=upper=full=null;upperUntil=fullUntil=0;lastLife=p.life;lastAlive=p.alive;lastAir=false;lastReload=0;deadAt=0;hitAt=-Infinity;hitForce=0;
    // A stable per-life offset prevents identical run clips from marching in lockstep.
    gaitPhase=(slot*.38196601125+(p.life||0)*.1414213562)%1;
-   signals.clear(reason);blend.clear(gaitPhase);feet?.clear(reason);springs.reset();inertia.reset();transition=null;transitionUntil=0;transitionKind=null;lastCrouch=!!p.crouch;lastScoped=!!p.scoped;pivotAngle=0;fireAt=pumpAt=-Infinity;fireImpulses=0;propUntil=0;reloadDuration=0;
+   signals.clear(reason);blend.clear(gaitPhase);feet?.clear(reason);springs.reset();inertia.reset();corpse.reset();transition=null;transitionUntil=0;transitionKind=null;lastCrouch=!!p.crouch;lastScoped=!!p.scoped;pivotAngle=0;fireAt=pumpAt=-Infinity;fireImpulses=0;propUntil=0;reloadDuration=0;
    base=swap(null,action('idle','lower'));upper=swap(null,action('idle','upper'));lastNow=now;
   }
   function trigger(name,now,duration,value,life=null,sampled=false){
@@ -182,6 +183,9 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    if(name==='reload'){reloadDuration=Math.max(reloadDuration,Math.round(seconds*64),weapons?.[lastWeapon]?.reload||0);next.time=source.clips.reload.duration*Math.max(0,1-seconds*64/reloadDuration);next.setEffectiveTimeScale(source.clips.reload.duration/(reloadDuration/64));}
   }
   function update(p,state,now,dt,{reduced=false}={}){
+   const justDied=!p.alive&&lastAlive===true&&lastLife===p.life;
+   // Capture the actual outgoing pose, including the solved crouch/feet, once.
+   if(justDied)corpse.begin(p,now,{fromPose:true,yaw:lastRenderYaw,vertical:signals.vy});
    // Undo last frame's procedural pose before reset, crossfades or mixer sampling.
    restorePose();
    if(lastNow&&now-lastNow>250)signals.clear('gap');
@@ -190,13 +194,13 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    if(p.weapon!==lastWeapon){equip(p.weapon);if(p.alive)trigger('equip',now,.4);}
    if(!p.alive){
     pendingEvents.length=0;
-    if(lastAlive){deadAt=now;const name=['death_back','death_left','death_right'][(slot+(p.life||0))%3];full=swap(full,action(name),false,.07);base?.fadeOut(.07);upper?.fadeOut(.07);fullUntil=Infinity;}
-    if(!deadAt){deadAt=now;full=swap(full,action('death_back'),false,0);full.time=source.clips.death_back.duration;}
+    if(justDied){deadAt=now;const crouched=p.crouch||signals.output.crouchAmount>.05,name=['death_back','death_left','death_right'][(slot+(p.life||0))%3]+(crouched?'_crouch':'');full=swap(full,action(name),false,.07);base?.fadeOut(.07);upper?.fadeOut(.07);fullUntil=Infinity;}
+    if(!corpse.active){corpse.begin(p,now,{settled:true});deadAt=now;const name='death_back'+(p.crouch?'_crouch':'');full=swap(null,action(name),false,0);full.time=source.clips[name].duration;full.paused=true;fullUntil=Infinity;}
    }else{
     if(!lastAlive){reset(p,now,'respawn');full=swap(null,action('respawn'),false,.1);base.fadeOut(.1);upper.fadeOut(.1);fullUntil=now+850;}
     if(pendingEvents.length){const events=pendingEvents.splice(0);for(const e of events)if(e.life===null||e.life===p.life)trigger(e.name,e.now,e.duration,e.value,p.life,true);}
     if(full?.getClip().name.endsWith('|respawn')&&(now-fireAt<180||p.reload>0||['upper:utility','upper:use_item','upper:skill'].includes(upper?.getClip().name))){full.fadeOut(.05);full=null;upper?.fadeIn(.05);base?.fadeIn(.05);}
-    const air=p.position[1]>1,vertical=p.velocity[1],speed=Math.hypot(p.velocity[0],p.velocity[2]);
+    const air=!isGrounded(p),vertical=p.velocity[1],speed=Math.hypot(p.velocity[0],p.velocity[2]);
     let motion='idle';if(air)motion=vertical>0?'jump':'fall';else if(p.crouch)motion=speed>12?'crouch_walk':'crouch';else if(speed>12){const forward=-p.velocity[0]*Math.sin(p.yaw)-p.velocity[2]*Math.cos(p.yaw),side=p.velocity[0]*Math.cos(p.yaw)-p.velocity[2]*Math.sin(p.yaw);motion=Math.abs(side)>Math.abs(forward)*1.4?(side>0?'strafe_right':'strafe_left'):forward<-20?'backpedal':speed>180?'run':'walk';}
     if(lastAir&&!air)trigger('land',now,.3);lastAir=air;
     if(state.phase==='finished'||state.phase==='round_end'){
@@ -211,6 +215,7 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    }
    lastReload=p.reload||0;lastAlive=p.alive;lastNow=now;
    const runSpeed=(heroes?.[hero]?.speed||250)*(weapons?.[p.weapon]?.mobility??1),motionSignals=signals.update(p,dt,state.config?.map??0,runSpeed);
+   if(!p.alive&&motionSignals.reset&&motionSignals.reset!=='death'){corpse.begin(p,now,{settled:true});full.time=full.getClip().duration;full.paused=true;deadAt=now;}
    if(motionSignals.reset||full||!p.alive||reduced){transition?.stop();transition=null;transitionKind=null;pivotAngle=0;}
    else{
     pivotAngle+=motionSignals.yawDelta;
@@ -243,11 +248,13 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
     counterWarp.copy(bones.hips.quaternion).invert().multiply(warpRestore.hips);bones.spine.quaternion.premultiply(counterWarp);
    }
    if(p.alive&&!full&&!reduced){bones.hips.position.z+=springs.landing.value[0];bones.spine.rotation.x+=springs.lean.value[0]*.7;bones.spine.rotation.y+=springs.lean.value[1]*.6;bones.chest.rotation.x-=springs.recoil.value[0];}
+   if(p.alive&&!full){bones.spine.rotation.x+=motionSignals.crouchAmount*.14;bones.chest.rotation.x-=motionSignals.crouchAmount*.07;}
    const inertialTag=(full?.getClip().name||(continuous?(motionSignals.grounded?'ground':'air'):base?.getClip().name)||'idle')+'/'+(upper?.getClip().name||'idle');
    inertia.apply(inertialTag,dt,{enabled:p.alive&&!full&&!reduced&&!motionSignals.reset,immediate:now-fireAt<100||now-hitAt<320});
    if(p.alive&&!full){warpRestore.hips.copy(bones.hips.quaternion);bones.hips.rotation.x=THREE.MathUtils.clamp(bones.hips.rotation.x,-.25,.25);bones.hips.rotation.y=THREE.MathUtils.clamp(bones.hips.rotation.y,-.25,.25);bones.hips.rotation.z=THREE.MathUtils.clamp(bones.hips.rotation.z,-.85,.85);counterWarp.copy(bones.hips.quaternion).invert().multiply(warpRestore.hips);bones.spine.quaternion.premultiply(counterWarp);}
    const transitionDrop=transitionKind&&source.compression[transitionKind]?Math.max(0,-source.compression[transitionKind].evaluate(transition.time)[2]*.55):0;
-   feet?.apply(motionSignals,blend,dt,{active:p.alive&&!full,reduced,compression:Math.min(motionSignals.crouch?1.5:5,(Math.max(0,-springs.landing.value[0])+transitionDrop)*model.scale.x)});
+   feet?.apply(motionSignals,blend,dt,{active:p.alive&&!full,reduced,compression:Math.min(5-3.5*motionSignals.crouchAmount,(Math.max(0,-springs.landing.value[0])+transitionDrop)*model.scale.x)});
+   if(!p.alive)corpse.apply(now,model,rig,{reduced});
    if(firstPerson&&p.alive&&!reduced){
     const phase=(continuous?blend.phase:base?.time/(base?.getClip().duration||1))*Math.PI*2,moving=THREE.MathUtils.clamp(motionSignals.speed/motionSignals.runSpeed,0,1),sway=profile.sway*(p.reload?.25:1);
     model.position.x+=springs.sway.value[0]+Math.sin(phase)*moving*.007*sway;
@@ -287,12 +294,13 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
     tmp.setFromMatrixPosition(supportGrip.matrixWorld);grip('L',model.worldToLocal(tmp));wrist('L');contacts.L.engaged=true;contacts.L.kind='support';contacts.L.weight=1;
    }
    if(prop){prop.visible=p.alive&&now<propUntil;if(prop.visible){bones['hand.L'].getWorldPosition(tmp);model.worldToLocal(tmp);prop.position.copy(tmp);prop.rotation.z=.5;}}
-   gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;
+   if(shadow)shadow.position.y=.15-Math.max(0,p.position[1]);
+   gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;if(p.alive)lastRenderYaw=rig.rotation.y;
    return {deadAt,motion:rig.userData.motion};
   }
   function dispose(){prop?.traverse(o=>o.geometry?.dispose());mixer.stopAllAction();mixer.uncacheRoot(model);if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)o.geometry.dispose();});rig.removeFromParent();}
   let armTriangles=0;if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)armTriangles+=(o.geometry.index?.count||0)/3;});
-  return {rig,model,bones,mixer,hero,slot,armTriangles,animation:{signals:signals.output,blend,hybrid,feet,stride:feet||viewStride,springs,inertia,contacts,profile,get transition(){return transitionKind;},get action(){return {upper:upper?.getClip().name,full:full?.getClip().name,reloadPhase:upper?.getClip().name==='upper:reload'?upper.time/source.clips.reload.duration:null};}},invalidate(reason='visibility'){pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);springs.reset();inertia.reset();lastLife=null;lastAlive=null;},setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
+  return {rig,model,bones,mixer,hero,slot,armTriangles,animation:{signals:signals.output,blend,hybrid,feet,stride:feet||viewStride,springs,inertia,contacts,profile,get transition(){return transitionKind;},get action(){return {upper:upper?.getClip().name,full:full?.getClip().name,reloadPhase:upper?.getClip().name==='upper:reload'?upper.time/source.clips.reload.duration:null};}},invalidate(reason='visibility'){pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);springs.reset();inertia.reset();corpse.reset();lastLife=null;lastAlive=null;},setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
  }
  function dispose(){const geometries=new Set(),materials=new Set(),textures=new Set();for(const t of templates)t.model.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});for(const gun of weaponTemplates.values())gun.traverse(o=>{if(o.geometry)geometries.add(o.geometry)});badgeGeometry.dispose();teamMaterials.forEach(m=>m.dispose());shadowGeometry.dispose();shadowMaterial.dispose();shadowTexture.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}
  return {preload,actor,dispose,weaponModel:kind=>weaponTemplates.get(kind)?.clone(true)};

@@ -2,7 +2,7 @@
 
 The six playable chassis adapt the Humanoid Robot Pack by Sotudios under CC BY 4.0. See `vendor.json` for the download URL, SHA-256 and exact character mapping, and `licenses/` for the supplied license and provenance. Attribution also appears in the game menu.
 
-The source meshes retain their normal, metallic, roughness and worn paint maps. BotStrike adds role colors and equipment, a measured 19-bone skeleton, connectivity-based arm weights, solved weapon grips, and 34 authored animation clips. The nine added transitions cover start, brake, left/right pivot, left/right reversal pivot, hard landing, crouch entry and weapon readiness. The `.blend` sources are editable; the GLBs are the actual runtime assets, using Meshopt geometry and external 1024px WebP textures. Same-origin texture URLs satisfy the store gateway CSP without requiring blob URLs. The native hit volumes and gameplay rules are independent of render meshes.
+The source meshes retain their normal, metallic, roughness and worn paint maps. BotStrike adds role colors and equipment, a measured 19-bone skeleton, connectivity-based arm weights, solved weapon grips, and 37 authored animation clips. The additions cover nine start/brake/pivot/landing/crouch/weapon-ready transitions and three crouched-death variants. The `.blend` sources are editable; the GLBs are the actual runtime assets, using Meshopt geometry and external 1024px WebP textures. Same-origin texture URLs satisfy the store gateway CSP without requiring blob URLs. The native hit volumes and gameplay rules are independent of render meshes.
 
 ## Reproduction
 

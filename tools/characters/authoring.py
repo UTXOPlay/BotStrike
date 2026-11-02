@@ -5,7 +5,7 @@ hard surfaces; articulated knees, ankles, elbows and wrists remain independent.
 """
 import bpy, math, os, sys, json, random, argparse
 import numpy as np
-from mathutils import Vector, Quaternion
+from mathutils import Vector, Quaternion, Euler
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 NAMES=['VECTOR','PATCH','BASTION','SPECTRE','GLITCH','FORGE']
@@ -156,10 +156,24 @@ def animate(rig,hero):
    r('spine',.3,0,0);r('head',.25,0,0);r('upper_arm.L',.9+.08*math.sin(phase*2),-.35,0);r('forearm.L',1.0,0,0);r('hand.L',.1*math.sin(phase*3),0,.1)
   if kind=='hit':r('chest',-.18*bump,.10*bump,-.12*bump);r('head',.16*math.sin(math.pi*min(1,t*1.3)),0,.12*bump);r('spine',-.08*bump,0,0)
   if kind.startswith('death'):
-   side=-1 if kind=='death_left' else 1;collapse=min(1,max(0,(t-.08)/.72));ease=collapse*collapse*(3-2*collapse);impact=math.sin(min(1,max(0,(t-.65)/.35))*math.pi)*.045
-   l('hips',side*.07*ease,(-.14 if kind=='death_back' else .12)*ease,-.78*ease+impact);r('hips',(-1.37 if kind=='death_back' else -1.45)*ease,side*(.24 if kind=='death_back' else .48)*ease,side*(.12 if kind=='death_back' else .42)*ease)
-   r('spine',.18*ease,0,side*.14*ease);r('chest',-.15*ease,0,-side*.20*ease);r('head',.25*ease,side*.12*ease,side*.23*ease)
-   for s,sg in [('L',-1),('R',1)]:r('upper_arm.'+s,.85*(1-ease)+.2*ease,sg*(.4+.3*ease),sg*.3*ease);r('forearm.'+s,.66*(1-ease)+.25*ease,0,0);r('thigh.'+s,.45*ease,0,sg*.16*ease);r('shin.'+s,-.82*ease,0,0);r('foot.'+s,.32*ease,0,0)
+   direction=kind.removesuffix('_crouch');side=-1 if direction=='death_left' else 1;collapse=min(1,max(0,(t-.08)/.72));ease=collapse*collapse*(3-2*collapse);impact=math.sin(min(1,max(0,(t-.65)/.35))*math.pi)*.045
+   # Keep the knees folded until the torso is falling. Straightening them at
+   # the start pushes a crouched victim back up before the collapse.
+   unfold=min(1,max(0,(ease-.60)/.40));crouched=(1-unfold*unfold*(3-2*unfold)) if kind.endswith('_crouch') else 0
+   l('hips',side*.07*ease,(-.14 if direction=='death_back' else .12)*ease-.08*crouched,-.78*ease+impact-.62*crouched)
+   # Turn the fall direction in the ground plane. Rolling a spread arm below
+   # the torso would support the body above the floor instead of settling it.
+   back=direction=='death_back';turn=0 if back else side*.55
+   rots['hips']=tuple((Quaternion(Vector((0,0,1)),turn*ease)@Quaternion(Vector((1,0,0)),(1 if back else -1)*math.pi*.5*ease)).to_euler('XYZ'))
+   r('spine',.04*ease+.24*crouched,0,side*.04*ease);r('chest',-.02*ease-.12*crouched,0,-side*.04*ease);r('head',.05*ease,side*.04*ease,side*.04*ease)
+   # Relax limbs into the torso's resting plane. Bent arms/legs underneath it
+   # otherwise prop the entire grounded corpse up like a suspended plank.
+   for s,sg in [('L',-1),('R',1)]:r('upper_arm.'+s,.85*(1-ease),sg*(.4*(1-ease)+.04*ease),sg*.04*ease);r('forearm.'+s,.66*(1-ease)+.08*ease,0,0);r('thigh.'+s,(.25 if back else .12)*ease+1.55*crouched,0,sg*.02*ease);r('shin.'+s,(-.35 if back else -.34)*ease-2.40*crouched,0,0);r('foot.'+s,.03*ease+.85*crouched,0,0)
+   # Boots must not point through the floor and lift the entire torso when
+   # ground-normalizing the clip. The rig shares uniform rest bone axes.
+   for s in ['L','R']:
+    parent=Euler(rots['hips'],'XYZ').to_quaternion()@Euler(rots['thigh.'+s],'XYZ').to_quaternion()@Euler(rots['shin.'+s],'XYZ').to_quaternion()
+    rots['foot.'+s]=tuple(parent.inverted().to_euler('XYZ'))
   if kind=='respawn':
    e=(1-t)**2;l('hips',0,-.05*e,-.50*e);r('spine',.33*e,0,0);r('head',.30*e,0,0)
    for s in ['L','R']:r('thigh.'+s,1.0*e,0,0);r('shin.'+s,-1.50*e,0,0);r('foot.'+s,.5*e,0,0)
@@ -170,7 +184,7 @@ def animate(rig,hero):
   grip=1 if not kind.startswith('death') else 1-ease
   for bone,base in armed.items():rots[bone]=tuple(rots.get(bone,neutral[bone])[i]+(base[i]-neutral[bone][i])*grip for i in range(3))
   return rots,locs
- clips={'idle':3,'walk':1,'run':.66,'backpedal':1.1,'strafe_left':1,'strafe_right':1,'crouch':2,'crouch_walk':1.2,'jump':.5,'fall':1,'land':.4,'fire':.22,'reload':2.2,'equip':.4,'use_item':1.0,'utility':.8,'skill':1.1,'interact':2,'hit':.38,'death_back':1.4,'death_left':1.4,'death_right':1.4,'respawn':.9,'victory':2,'defeat':2,
+ clips={'idle':3,'walk':1,'run':.66,'backpedal':1.1,'strafe_left':1,'strafe_right':1,'crouch':2,'crouch_walk':1.2,'jump':.5,'fall':1,'land':.4,'fire':.22,'reload':2.2,'equip':.4,'use_item':1.0,'utility':.8,'skill':1.1,'interact':2,'hit':.38,'death_back':1.4,'death_left':1.4,'death_right':1.4,'death_back_crouch':1.4,'death_left_crouch':1.4,'death_right_crouch':1.4,'respawn':.9,'victory':2,'defeat':2,
         'start':.20,'brake':.28,'pivot_left':.26,'pivot_right':.26,'pivot_back_left':.40,'pivot_back_right':.40,'land_hard':.45,'crouch_enter':.24,'weapon_ready':.20}
  for kind,duration in clips.items():
   action=bpy.data.actions.new(NAMES[hero]+'|'+kind);rig.animation_data.action=action;frames=2*max(1,round(duration*fps/2))

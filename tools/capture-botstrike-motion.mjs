@@ -6,7 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {startMotionLab} from './serve-botstrike-motion-lab.mjs';
 import {scenarios} from './motion-sequences.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
-const selection=process.env.MOTION_SCENARIO||'circle',selected=selection==='all'?scenarios:[selection];
+const selection=process.env.MOTION_SCENARIO||'circle',selected=selection==='all'?scenarios:selection.split(',');
 if(selected.some(s=>!scenarios.includes(s)))throw Error('Unknown motion scenario');
 const view=process.env.MOTION_VIEW||'lineup',hero=process.env.MOTION_HERO===undefined?null:Number(process.env.MOTION_HERO),weapon=Number(process.env.MOTION_WEAPON||2),seconds=Number(process.env.MOTION_SECONDS||6),fps=30;
 const modes=(process.env.MOTION_MODES||'baseline,candidate').split(',');if(modes.some(m=>!['baseline','candidate'].includes(m)))throw Error('Unknown animation mode');

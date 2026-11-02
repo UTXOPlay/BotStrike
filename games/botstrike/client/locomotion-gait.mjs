@@ -13,11 +13,12 @@ export function runningAmount(motion){
  if(motion.crouch||motion.scoped)return 0;
  return Number.isFinite(motion.runAmount)?clamp(motion.runAmount,0,1):calculateRunAmount(motion.speed,motion.runSpeed);
 }
+export function crouchAmount(motion){return Number.isFinite(motion.crouchAmount)?clamp(motion.crouchAmount,0,1):Number(!!motion.crouch);}
 export function advanceStridePlan(plan,motion,dt){
- const seconds=Number.isFinite(dt)?Math.max(0,dt):0,lateral=motion.speed>1?Math.abs(motion.side)/motion.speed:0;
- plan.travelGoal=Math.min(plan.legLength*(motion.crouch?.70:.90),lateral>.001?plan.footWidth*.72/lateral:Infinity);
+ const seconds=Number.isFinite(dt)?Math.max(0,dt):0,lateral=motion.speed>1?Math.abs(motion.side)/motion.speed:0,crouch=crouchAmount(motion);
+ plan.travelGoal=Math.min(plan.legLength*(.90-.20*crouch),lateral>.001?plan.footWidth*.72/lateral:Infinity);
  if(motion.reset)plan.supportTravel=plan.travelGoal;else plan.supportTravel+=(plan.travelGoal-plan.supportTravel)*-Math.expm1(-seconds/.06);
- const styleDuty=motion.crouch?.50:.52+(.25-.52)*runningAmount(motion);
+ const standingDuty=.52+(.25-.52)*runningAmount(motion),styleDuty=standingDuty+(.50-standingDuty)*crouch;
  // Lateral steps have less room. Bound support duration so the minimum cycle
  // time cannot make a planted foot travel beyond its planned reach.
  plan.duty=Math.min(styleDuty,plan.supportTravel/(Math.max(12,motion.speed)*.26));

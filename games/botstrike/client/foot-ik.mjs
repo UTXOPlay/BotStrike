@@ -1,6 +1,6 @@
 import {Vector3,Quaternion} from 'three';
 import {TwoBoneIK} from './two-bone-ik.mjs';
-import {advanceStridePlan,runningAmount} from './locomotion-gait.mjs';
+import {advanceStridePlan,runningAmount,crouchAmount} from './locomotion-gait.mjs';
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 const sides=['L','R'];
@@ -76,7 +76,7 @@ export class FootIK{
   const lateral=motion.speed>1?Math.abs(motion.side)/motion.speed:0;
   // A model's wide bind pose is not a walking stance. Keep forward steps under
   // the visible hip lanes, opening only as much as lateral travel needs.
-  const width=Math.min(this.footWidth,Math.max(this.hipWidth*(motion.crouch?1.45:motion.speed<5?1.25:1),this.travelGoal*lateral+this.hipWidth*.18));
+  const stanceWidth=motion.speed<5?1.25:1,width=Math.min(this.footWidth,Math.max(this.hipWidth*(stanceWidth+(1.45-stanceWidth)*crouchAmount(motion)),this.travelGoal*lateral+this.hipWidth*.18));
   for(const f of this.feet){const x=this.laneCenter+(f.side==='L'?-1:1)*width*.5;f.home.x+=(x-f.home.x)*(motion.reset?1:-Math.expm1(-Math.max(0,dt)/.09));}
   return this.cycleDuration;
  }
@@ -125,7 +125,7 @@ export class FootIK{
     const tangent=-motion.speed*this.cycleDuration*(1-this.duty)/this.supportTravel;
     const travel=stance?.5-u:(2*u3-3*u2+1)*-.5+(u3-2*u2+u)*tangent+(-2*u3+3*u2)*.5+(u3-u2)*tangent;
     f.desired.copy(f.homeWorld).addScaledVector(this.travel,clamp(travel,-.65,.65)*this.supportTravel);
-    const lift=motion.crouch?.65+.45*smooth((motion.speed-40)/90):1.25+2.25*runningAmount(motion);
+    const standingLift=1.25+2.25*runningAmount(motion),lift=standingLift+(.65+.45*smooth((motion.speed-40)/90)-standingLift)*crouchAmount(motion);
     f.desired.y=stance?0:Math.sin(Math.PI*u)**2*lift*this.profile.lift*(reduced?.65:1);
     if(!f.ready||!f.released)f.goal.copy(f.desired);else f.goal.lerp(f.desired,-Math.expm1(-seconds/.035));
     if(!f.ready)f.rotation.copy(this.flatRotation);else f.rotation.slerp(this.flatRotation,-Math.expm1(-seconds/.045));

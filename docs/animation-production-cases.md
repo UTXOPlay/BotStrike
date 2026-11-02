@@ -30,6 +30,8 @@ We therefore keep reload animation aligned with weapon-rule duration and test pe
 
 The follow-up [walk/run comparison](walk-run-transitions.md) examines Riot's control settings, Valve's public playback-rate code and Epic's documented speed ranges. It explains the normalized gait mapping now shared by BotStrike's body, feet and first-person response.
 
+The [posture follow-up](posture-transitions.md) adds Valve's shipped CS2 airborne-crouch/IK fixes and Naughty Dog's Uncharted 4 physics-animation overview. It distinguishes those production facts from our authored collapse variants, pose-preserving death blend and bounded cosmetic fall.
+
 | Priority | Work | Required evidence |
 | --- | --- | --- |
 | Current experiment | Remove repeated whole-weapon matrix traversal | Compare against `c978ba4` across six characters, twelve weapons and both views; sampled pose/contact delta below `1e-8`, plus existing contact and lifecycle checks |

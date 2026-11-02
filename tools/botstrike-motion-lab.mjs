@@ -61,6 +61,7 @@ function step(dt,{check=false}={}){
   if(a.labFirstPerson){a.rig.position.set(0,-49.8,-10);a.rig.rotation.y=0;}else{a.rig.position.fromArray(p.position);a.rig.rotation.y=p.yaw;}
   for(const [at,name,duration,value]of m.events)if(time<at&&next>=at)a.trigger(name,at*1000,name==='reload'?spec.weapons[current.weapon].reload/64:duration,value,p.life);
   a.update(p,state,next*1000,dt,{reduced:current.reduced});
+  if(a.labFirstPerson)a.rig.position.y+=13.6*(a.animation?.signals.crouchAmount??Number(p.crouch));
   if(a.slot===0&&a.animation?.signals.reset)contacts[0]={L:null,R:null};
  }
  const cpu=performance.now()-started;
@@ -115,7 +116,7 @@ function step(dt,{check=false}={}){
 function draw(){
  const m=motionFrame(current.scenario,time),focus=new THREE.Vector3(trailX+m.offset,current.view==='feet'?5:35,trailZ+(current.count===1?0:45));
  const desiredFov=current.view==='first-person'?80:45;if(camera.fov!==desiredFov){camera.fov=desiredFov;camera.updateProjectionMatrix();}
- if(current.view==='first-person'){camera.position.set(trailX+m.offset,m.y+56,trailZ);camera.rotation.set(.25*Math.sin(time),m.yaw,0,'YXZ');}
+ if(current.view==='first-person'){camera.position.set(trailX+m.offset,m.y+(m.crouch?37:56),trailZ);camera.rotation.set(.25*Math.sin(time),m.yaw,0,'YXZ');}
  else{const offset={front:[-35,25,-150],side:[150,25,0],back:[0,25,150],feet:[-35,18,-65]}[current.view]||[-250,190,-470];camera.position.copy(focus).add(new THREE.Vector3(...offset));camera.lookAt(focus);}
  renderer.render(scene,camera);
  if(!current.diagnostics){hud.textContent=`${current.mode} · ${current.scenario} · ${time.toFixed(2)} s · diagnostics off`;return;}
@@ -143,11 +144,20 @@ window.motionLabReady=(async()=>{
  document.querySelector('#fullscreen').onclick=async()=>{if(document.fullscreenElement)await document.exitFullscreen?.();else if(document.documentElement.requestFullscreen){await document.documentElement.requestFullscreen();try{await screen.orientation?.lock?.('landscape');}catch{}}else document.querySelector('#measure-status').textContent='Fullscreen is unavailable. Use landscape edge-to-edge, or add this page to your Home Screen.';};
  Object.assign(window.motionLab,{frame(dt){const start=performance.now(),result=step(dt);draw();return {...result,frameCpu:performance.now()-start};},config:()=>({...current}),device(){const gl=renderer.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');return {renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),vendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),userAgent:navigator.userAgent,cores:navigator.hardwareConcurrency,memoryGB:navigator.deviceMemory,viewport:[innerWidth,innerHeight],backing:[canvas.width,canvas.height],dpr:devicePixelRatio};}});
  Object.assign(window.motionLab,{
+  bodyMetrics({geometry=false,regions=false}={}){
+   const a=actors[current.mode][0],points={};
+   a.model.traverse(o=>{if(o.isSkinnedMesh)o.skeleton.update();});
+   for(const name of ['root','hips','head','thigh.L','shin.L','foot.L','thigh.R','shin.R','foot.R'])points[name]=a.bones[name].getWorldPosition(new THREE.Vector3()).toArray();
+   let minY=Infinity,maxY=-Infinity,torsoMinY=Infinity;
+   if(geometry)a.model.traverse(o=>{if(o.isSkinnedMesh)for(let i=0;i<o.geometry.attributes.position.count;i++){o.getVertexPosition(i,vector);vector.applyMatrix4(o.matrixWorld);minY=Math.min(minY,vector.y);maxY=Math.max(maxY,vector.y);if(regions){let weight=0;for(let j=0;j<4;j++)if(/^(hips|spine|chest)$/.test(o.skeleton.bones[o.geometry.attributes.skinIndex.getComponent(i,j)].name))weight+=o.geometry.attributes.skinWeight.getComponent(i,j);if(weight>.8)torsoMinY=Math.min(torsoMinY,vector.y);}}});
+   return {points,minY:geometry?minY:null,maxY:geometry?maxY:null,torsoMinY:regions?torsoMinY:null,shadowY:a.rig.getObjectByName('contact-shadow')?.getWorldPosition(new THREE.Vector3()).y??null,rigYaw:a.rig.rotation.y,rigPosition:a.rig.position.toArray(),modelPosition:a.model.position.toArray()};
+  },
   sample({player,dt=1/60,now=(time+dt)*1000,state={phase:'live',config:{map:0},objective:{}},events=[],invalidate=null}){
    const a=actors[current.mode][0];if(invalidate)a.invalidate?.(invalidate);
    if(a.labFirstPerson){a.rig.position.set(0,-49.8,-10);a.rig.rotation.y=0;}else{a.rig.position.fromArray(player.position);a.rig.rotation.y=player.yaw;}
    for(const event of events)a.trigger(event.name,now,event.duration,event.value,event.life??player.life);
    a.update(player,state,now,dt,{reduced:current.reduced});time=now/1000;scene.updateMatrixWorld(true);
+   if(a.labFirstPerson){a.rig.position.y+=13.6*(a.animation?.signals.crouchAmount??Number(player.crouch));scene.updateMatrixWorld(true);}
    const contacts={};
    for(const side of ['L','R']){
     const c=a.animation?.contacts[side],hand=a.bones['hand.'+side].getWorldPosition(new THREE.Vector3());
@@ -155,7 +165,7 @@ window.motionLabReady=(async()=>{
     contacts[side]={...c,position:hand.toArray(),actualError:target?hand.distanceTo(target.getWorldPosition(new THREE.Vector3())):null};
    }
    const bones=[...new Set(Object.values(a.bones))];
-   return {contacts,action:a.animation?.action,transition:a.animation?.transition,reset:a.animation?.signals.reset,gait:a.animation?{runSpeed:a.animation.signals.runSpeed,speedFraction:a.animation.signals.speedFraction,runAmount:a.animation.signals.runAmount,phase:a.animation.blend.phase,weights:[...a.animation.blend.weights],cycleDuration:a.animation.stride?.cycleDuration,duty:a.animation.stride?.duty}:null,feet:a.animation?.feet?.feet.map(f=>({side:f.side,status:f.status,reason:f.reason,scheduled:f.wasStance,feasible:f.feasible,plantId:f.plantId,error:f.error,bend:f.solver.result.bend})),springs:a.animation?Object.fromEntries(['lean','recoil','landing','ready','sway'].map(k=>[k,[...a.animation.springs[k].value]])):null,finite:bones.every(b=>[...b.position,...b.quaternion,...b.scale].every(Number.isFinite)&&Math.abs(b.quaternion.length()-1)<.001),pose:bones.flatMap(b=>[...b.position,...b.quaternion]),modelPose:[...a.model.position,...a.model.quaternion]};
+   return {contacts,action:a.animation?.action,transition:a.animation?.transition,reset:a.animation?.signals.reset,posture:a.animation?{crouchAmount:a.animation.signals.crouchAmount,grounded:a.animation.signals.grounded,takeoff:a.animation.signals.takeoff,riseProgress:a.animation.signals.riseProgress,landed:a.animation.signals.landed,landingSpeed:a.animation.signals.landingSpeed}:null,gait:a.animation?{runSpeed:a.animation.signals.runSpeed,speedFraction:a.animation.signals.speedFraction,runAmount:a.animation.signals.runAmount,phase:a.animation.blend.phase,weights:[...a.animation.blend.weights],cycleDuration:a.animation.stride?.cycleDuration,duty:a.animation.stride?.duty}:null,feet:a.animation?.feet?.feet.map(f=>({side:f.side,status:f.status,reason:f.reason,scheduled:f.wasStance,feasible:f.feasible,plantId:f.plantId,error:f.error,bend:f.solver.result.bend})),springs:a.animation?Object.fromEntries(['lean','recoil','landing','ready','sway'].map(k=>[k,[...a.animation.springs[k].value]])):null,finite:bones.every(b=>[...b.position,...b.quaternion,...b.scale].every(Number.isFinite)&&Math.abs(b.quaternion.length()-1)<.001),pose:bones.flatMap(b=>[...b.position,...b.quaternion]),modelPose:[...a.model.position,...a.model.quaternion]};
   },
   matrixWork(config={}){
    // Structural work count, not a timing benchmark. Restore shared prototypes
