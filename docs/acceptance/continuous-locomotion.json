@@ -1,58 +1,488 @@
 {
   "date": "2026-11-02",
   "baseCommit": "0c2c5f91712e69661b4cd2cc9326f21b58375208",
-  "scope": "First hybrid-animation slice: render-only directional blending and development motion instrumentation",
-  "status": "Automated checks passed; draft pending human comparison and physical-device performance acceptance",
-  "environment": {
-    "browser": "Google Chrome for Testing headless shell 156.0.8078.4",
-    "flags": ["--no-sandbox", "--enable-unsafe-swiftshader"],
-    "reportedRenderer": "WebKit WebGL",
-    "hardwarePerformanceAcceptance": false
+  "scope": "Full hybrid-animation proposal phases 0–3; one draft PR",
+  "status": "Implementation and automated checks passed; human gait re-review and physical Android acceptance remain open",
+  "sourceSha256": {
+    "games/botstrike/client/animation-motion.mjs": "e72470f0f26a48e1138ebe684ac9345526e412e3ccff808a744d3ac081dead7a",
+    "games/botstrike/client/locomotion-blend.mjs": "657da4509c47c7d876a74ba12ae601368e94486309529ecebfd07701e870a8d5",
+    "games/botstrike/client/characters.mjs": "16091b91b4cf0c3a4092488e9f13c484ad7534c07b04ee1efb97665cacbba493",
+    "games/botstrike/client/scene.mjs": "9c2ef9bf9d35f0c86874865ad7a907c28ae372697f28e0171887cdc8f2a15caf",
+    "games/botstrike/client/foot-ik.mjs": "a7165a36d2ee7d372b2de9a0cf206865cea987588acb4f8e4055ed4e5ccfc9a9",
+    "games/botstrike/client/two-bone-ik.mjs": "1c10cd63e39743c1e94e427823173e4e0f208b0a20b419d3a65748c43530c4a3",
+    "games/botstrike/client/animation-springs.mjs": "b89918f6f3f6cabc998fd19a7f675a7b107ab627fa03114af3aab149834a13d1",
+    "games/botstrike/client/pose-inertia.mjs": "2d9b553d0080a2385163877208b430dca6b4a71498a324deea1debba5a5ee549",
+    "games/botstrike/client/bone-pose.mjs": "7982ad8d8566f916c10aed494f5753fc828c90e715a56e0249ac8d3db22f5c78",
+    "games/botstrike/client/motion-profiles.mjs": "79fb1883393c31abbd2a066baaca24bdfeadb90039232284ab1791b738a3a3cd",
+    "games/botstrike/web/app.js": "e39cf4321e270526b69ad42aa3ae9758a0568186a1c5c9419f095c78214c8082"
   },
   "checks": {
-    "build": "npm run build passed; the motion lab and capture tools are absent from dist",
-    "javascript": "npm test: 81 passed, zero failed or skipped",
-    "host": "npm run test:host: 4 passed",
-    "motionBrowser": "28 fixtures passed: seven sequences at 30/60/120 fps, then all seven with jitter and reduced motion; ten rigs spanning all six chassis in every fixture",
-    "motionAssertions": ["finite normalized bone transforms", "no mutation of player state", "repeatable reset pose", "bounded backing resolution"],
-    "viewports": [[1920,1080],[2560,1080],[2560,1440],[3840,2160],[390,844],[844,390]],
-    "existingGaitBrowser": "Steady/jittered run contact, independent actor phases, jump/fall labels, confirmed hit/fire priority and recovery passed",
-    "reloadBrowser": "Six chassis, first- and third-person reload-contact assertions passed",
-    "localGameBrowser": "Native multiplayer join, acknowledged movement/skill input, all six viewports, portrait rotation gate and touch fire-plus-aim passed",
-    "browserCleanup": "Initial runs passed gameplay assertions but timed out during background-page departure. The helper now foregrounds the page, claims through the existing UI when necessary, and awaits the response concurrently. The full command then exited successfully.",
-    "nativeReplay": "Complete 23040-tick match, respawns, native human input, signed export verification and tamper rejection passed using the existing matching release pair",
-    "rules": "No changes to native source, simulation specification, input/prediction, weapon rules or Myelin application profile"
+    "javascript": {
+      "passed": 89,
+      "failed": 0,
+      "skipped": 0
+    },
+    "host": {
+      "passed": 4,
+      "failed": 0
+    },
+    "build": "Passed; lab, frozen baseline and review harnesses excluded from dist",
+    "motion": {
+      "fixtures": 32,
+      "sequences": 8,
+      "rigs": 10,
+      "chassis": 6,
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "jitterAndReduced": true,
+      "allFiniteAndReadOnly": true
+    },
+    "contacts": {
+      "maxIndependentSoleError": 7.015212128518772e-13,
+      "maxSoleHeight": 0.1101925157766187,
+      "maxSoleDrift": 6.893884843043216e-13,
+      "maxAnchorDrift": 0,
+      "minimumFeasibleToScheduled": 0.967032967032967,
+      "errorLimitNativeUnits": 2
+    },
+    "composition": {
+      "cases": 144,
+      "framesPerCase": 420,
+      "views": 2,
+      "weapons": 12,
+      "chassis": 6,
+      "includesAirborneReload": true,
+      "maxIndependentGripError": 8.903074960742904e-14,
+      "maxWristRadians": 1.1,
+      "lifecycleCases": 12
+    },
+    "stability": {
+      "jitterReducedFixtures": 16,
+      "cycles": 1200,
+      "frames": 28800,
+      "maxRepeatPoseError": 0,
+      "maxBendRadians": 1.4706766729169924
+    },
+    "gait": "Steady and jittered actual-mesh contact, independent phase, preserved body weight transfer, jump/fall, hit/fire/reduced/recovery passed",
+    "actualGame": {
+      "passed": true,
+      "hardwareBrowser": "Google Chrome 155, headful Intel Iris Xe",
+      "viewports": [
+        [
+          1920,
+          1080
+        ],
+        [
+          2560,
+          1080
+        ],
+        [
+          2560,
+          1440
+        ],
+        [
+          3840,
+          2160
+        ],
+        [
+          390,
+          844
+        ],
+        [
+          844,
+          390
+        ]
+      ],
+      "checks": [
+        "native private joining",
+        "exact acknowledged input sequence",
+        "movement and skill",
+        "visible scene and HUD in bounds",
+        "portrait gate and held-input stop",
+        "touch movement and simultaneous firing/aim"
+      ]
+    },
+    "native": {
+      "ticks": 20477,
+      "score": [
+        50,
+        44
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "ruleBoundary": "No diff to native simulation/spec/service, input/preferences/prediction or exact application profile. Shared Store fullscreen policy and opaque sandbox unchanged.",
+    "assets": {
+      "characters": 6,
+      "bonesPerRig": 19,
+      "clipsPerRig": 34,
+      "newTransitionsPerRig": 9,
+      "sourcePoseRenders": 162,
+      "decodedGeometryAndSkinAttributesIdentical": true,
+      "glbReexportsByteIdentical": true,
+      "blender": "5.2.2 LTS",
+      "licenses": "Unchanged Sotudios CC BY 4.0 provenance and attribution"
+    }
   },
-  "gaitRegressionSamples": {
-    "runMeshGroundRange": [-0.6014,0.1880],
-    "jitteredRunMeshGroundRange": [-0.5996,0.1880],
-    "firstTwoActorPhaseCorrelation": 0.01984,
-    "confirmedHitPoseDistance": 0.5382,
-    "hitDuringFirePoseDistance": 0.5382,
-    "reducedMotionHitPoseDistance": 0.2104,
-    "recoveredPoseDistance": 0.0111
+  "gaitReview": {
+    "status": "Awaiting human re-review after two failed Android visual reviews",
+    "history": [
+      {
+        "result": "failed",
+        "feedback": "步态是不是有点外八字，然后走路脚走向后抬太高"
+      },
+      {
+        "result": "failed",
+        "feedback": "有点恼火 外八字还是很明显 你去参考一下别人怎么做的"
+      }
+    ],
+    "corrections": [
+      "Use actual toe/heel vertex landmarks instead of sole PCA",
+      "Set forward lanes from visible hip width instead of wide bind pose",
+      "Separate walk/run clearance and shorten unreachable swing horizontally",
+      "Adjust pelvis from actual support reach, anticipate contact, recover toward authored motion"
+    ],
+    "referenceSources": [
+      "https://threejs.org/examples/webgl_animation_skinning_blending.html",
+      "https://dev.epicgames.com/documentation/en-us/unreal-engine/pose-warping-in-unreal-engine"
+    ],
+    "selfReview": {
+      "frames": 144,
+      "chassis": 6,
+      "views": [
+        "front",
+        "side",
+        "feet"
+      ],
+      "note": "Rendered continuous samples inspected by the agent; not human playtest acceptance"
+    },
+    "measurements": "hybrid-animation/foot-gaits.json",
+    "maxToeYawRadians": 0.01431006787200662,
+    "maxWalkingLaneToHipWidth": 1.2525228182297103,
+    "maxWalkingClearance": 1.4339168541813745,
+    "maxMeanWalkingPelvisDrop": 2.4406183298429642
   },
-  "diagnosticComparison": {
-    "fixture": "circle, ten rigs, 60 fps, 2.5 simulated seconds, both paths warmed",
-    "cpuScope": "Actor updates, root synchronization and event dispatch only; excludes fixture construction, transform validation, scene rendering and contact diagnostics",
-    "cpuTimerCaveat": "Browser timer quantization is visible. These headless samples establish neither a physical-device budget nor real-time frame pacing.",
-    "baselineCpuMs": {"median": 0.1, "p95": 0.2},
-    "candidateCpuMs": {"median": 0.1, "p95": 0.2},
-    "baselineMaxEstimatedFootBoneDrift": 78.4262,
-    "candidateMaxEstimatedFootBoneDrift": 80.3277,
-    "contactCaveat": "Phase-estimated stance and raw foot-bone drift are diagnostics, not calibrated sole contact errors. Sliding remains large on both paths; the proposal's provisional 2-unit contact target is not met or claimed."
+  "hardware": {
+    "desktop": {
+      "status": "Observed budgets failed; host contention makes attribution inconclusive; quiet-host rerun required",
+      "software": false,
+      "device": {
+        "renderer": "ANGLE (Intel, Mesa Intel(R) Iris(R) Xe Graphics (RPL-P), OpenGL ES 3.2)",
+        "vendor": "Google Inc. (Intel)",
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "cores": 20,
+        "memoryGB": 32,
+        "viewport": [
+          1920,
+          1080
+        ],
+        "backing": [
+          1920,
+          1080
+        ],
+        "dpr": 1
+      },
+      "host": {
+        "cpu": "13th Gen Intel(R) Core(TM) i9-13900H",
+        "logicalCores": 20,
+        "platform": "linux",
+        "browser": "155.0.8059.84",
+        "thermalBefore": [
+          {
+            "type": "acpitz",
+            "celsius": 27.8
+          },
+          {
+            "type": "SEN0",
+            "celsius": 83.05
+          },
+          {
+            "type": "SEN6",
+            "celsius": 29.95
+          },
+          {
+            "type": "SEN8",
+            "celsius": 67.65
+          },
+          {
+            "type": "SEND",
+            "celsius": 25.75
+          },
+          {
+            "type": "SENE",
+            "celsius": 41.75
+          },
+          {
+            "type": "SENF",
+            "celsius": 42.15
+          },
+          {
+            "type": "SENI",
+            "celsius": 47.55
+          },
+          {
+            "type": "SENJ",
+            "celsius": 47.75
+          },
+          {
+            "type": "SENN",
+            "celsius": 41.25
+          },
+          {
+            "type": "SENO",
+            "celsius": 41.65
+          },
+          {
+            "type": "SENP",
+            "celsius": 43.85
+          },
+          {
+            "type": "INT3400 Thermal",
+            "celsius": 20
+          },
+          {
+            "type": "SENQ",
+            "celsius": 35.75
+          },
+          {
+            "type": "x86_pkg_temp",
+            "celsius": 95
+          },
+          {
+            "type": "iwlwifi_1",
+            "celsius": 38
+          },
+          {
+            "type": "SEN1",
+            "celsius": 59.95
+          },
+          {
+            "type": "TCPU",
+            "celsius": 95.05
+          },
+          {
+            "type": "TCPU_PCI",
+            "celsius": 95
+          },
+          {
+            "type": "SEN2",
+            "celsius": 39.05
+          },
+          {
+            "type": "SEN3",
+            "celsius": 59.15
+          },
+          {
+            "type": "SEN4",
+            "celsius": 58.45
+          },
+          {
+            "type": "SEN5",
+            "celsius": 38.25
+          }
+        ],
+        "thermalAfter": [
+          {
+            "type": "acpitz",
+            "celsius": 27.8
+          },
+          {
+            "type": "SEN0",
+            "celsius": 85.05
+          },
+          {
+            "type": "SEN6",
+            "celsius": 30.35
+          },
+          {
+            "type": "SEN8",
+            "celsius": 76.35
+          },
+          {
+            "type": "SEND",
+            "celsius": 25.85
+          },
+          {
+            "type": "SENE",
+            "celsius": 42.45
+          },
+          {
+            "type": "SENF",
+            "celsius": 42.95
+          },
+          {
+            "type": "SENI",
+            "celsius": 48.05
+          },
+          {
+            "type": "SENJ",
+            "celsius": 48.25
+          },
+          {
+            "type": "SENN",
+            "celsius": 41.55
+          },
+          {
+            "type": "SENO",
+            "celsius": 42.15
+          },
+          {
+            "type": "SENP",
+            "celsius": 44.35
+          },
+          {
+            "type": "INT3400 Thermal",
+            "celsius": 20
+          },
+          {
+            "type": "SENQ",
+            "celsius": 35.75
+          },
+          {
+            "type": "x86_pkg_temp",
+            "celsius": 84
+          },
+          {
+            "type": "iwlwifi_1",
+            "celsius": 37
+          },
+          {
+            "type": "SEN1",
+            "celsius": 67.65
+          },
+          {
+            "type": "TCPU",
+            "celsius": 83.05
+          },
+          {
+            "type": "TCPU_PCI",
+            "celsius": 83
+          },
+          {
+            "type": "SEN2",
+            "celsius": 39.95
+          },
+          {
+            "type": "SEN3",
+            "celsius": 62.05
+          },
+          {
+            "type": "SEN4",
+            "celsius": 61.35
+          },
+          {
+            "type": "SEN5",
+            "celsius": 38.65
+          }
+        ]
+      },
+      "secondsPerPass": 90,
+      "rounds": 2,
+      "aggregate": {
+        "baseline": {
+          "rafMs": {
+            "samples": 18807,
+            "p50": 8.30000000000291,
+            "p95": 8.5,
+            "p99": 41.600000000034925,
+            "max": 91.5
+          },
+          "animationCpuMs": {
+            "samples": 18807,
+            "p50": 0.29999999701976776,
+            "p95": 0.5999999940395355,
+            "p99": 1.1000000089406967,
+            "max": 14.699999988079071
+          },
+          "frameCpuMs": {
+            "samples": 18807,
+            "p50": 1.2999999970197678,
+            "p95": 4.800000011920929,
+            "p99": 13.5,
+            "max": 36.20000000298023
+          }
+        },
+        "candidate": {
+          "rafMs": {
+            "samples": 17465,
+            "p50": 8.300000000017462,
+            "p95": 16.79999999998836,
+            "p99": 41.60000000000582,
+            "max": 258.4000000000233
+          },
+          "animationCpuMs": {
+            "samples": 17465,
+            "p50": 0.7999999970197678,
+            "p95": 1.8999999910593033,
+            "p99": 2.8999999910593033,
+            "max": 40.5
+          },
+          "frameCpuMs": {
+            "samples": 17465,
+            "p50": 2.0999999940395355,
+            "p95": 7,
+            "p99": 16.5,
+            "max": 56.099999994039536
+          }
+        }
+      },
+      "budget": {
+        "animationP95LimitMs": 1,
+        "frameP95LimitMs": 10.5,
+        "animationPass": false,
+        "framePass": false
+      },
+      "evidence": "hybrid-animation/desktop-contended.json.gz",
+      "contentionEvidence": {
+        "observation": "Immediately after the run, a separate artifact_checke process was consuming about 1730% CPU on the 20-logical-core host; subsequent samples remained above 1600%. This was not a continuous load trace during the run.",
+        "loadAverageAfter": [
+          23.01,
+          13.33,
+          8.16
+        ],
+        "baselineFirstRafP95": 8.400000000008731,
+        "baselineLastRafP95": 33.399999999965075,
+        "interpretation": "The baseline also deteriorated within the run. Retain the failed measurements; do not attribute the whole change to animation or close the gate. The driver now records host load in future runs."
+      }
+    },
+    "android": {
+      "status": "Open; user confirmed Android Chrome but model and physical measurements have not been received"
+    },
+    "budget": {
+      "desktopAnimationP95Ms": 1,
+      "mobileAnimationP95Ms": 2,
+      "frameP95Rule": "candidate <= max(baseline * 1.1, baseline + 2ms)"
+    },
+    "limitations": [
+      "Synthetic ten-rig lab is not full-match performance",
+      "Browser CPU and RAF observations do not measure GPU completion or end-to-end input latency",
+      "Physical mobile thermal state and human control response require acceptance"
+    ]
   },
-  "recordings": {
-    "baseline": "../assets/botstrike/locomotion/baseline-circle.mp4",
-    "candidate": "../assets/botstrike/locomotion/candidate-circle.mp4",
-    "configuration": "Identical circle fixture and follow camera; six simulated seconds, 180 frames at fixed 1/30-second steps, 1280x720, ten rigs",
-    "interpretation": "Render captures, not human-match footage or real-time performance recordings"
+  "evidence": {
+    "rigFixtures": "hybrid-animation/rig-fixtures.json.gz",
+    "composition": "hybrid-animation/composition.json.gz",
+    "stability": "hybrid-animation/stability.json.gz",
+    "walkFrames": "hybrid-animation/walk-review.json.gz",
+    "sourcePoses": "hybrid-animation/source-poses.json",
+    "assetClips": "hybrid-character-clips.json",
+    "assetReproduction": "hybrid-animation-repro.json",
+    "recordings": "../assets/botstrike/locomotion/",
+    "gaitReview": "../assets/botstrike/walk-review/"
   },
   "openAcceptance": [
-    "Representative desktop/mobile animation CPU and frame-pacing budgets",
-    "Human A/B playtesting of animation quality and immediate control feel",
-    "Detailed knee, weapon clipping and silhouette review across transitions",
-    "Phase 2: calibrated foot contacts and constrained leg IK",
-    "Later phases: spatial stride warping, braking/pivot clips and inertialisation"
+    "Physical Android model, matched A/B animation CPU and frame pacing, thermal duration",
+    "Matched quiet-host desktop budget rerun; observed contended-host budget failure remains open",
+    "Human gait re-review, knee/weapon clipping and movement/aim responsiveness"
   ]
 }

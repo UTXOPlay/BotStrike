@@ -70,9 +70,15 @@ try{
   assert.ok(Math.abs(phaseCorrelation)<.9,`running actors still share the same gait phase: ${phaseCorrelation}`);
   assert.ok(new Set(samples.map(actor=>actor.root[0].toFixed(2))).size>=4,'running actors still pose together');
   assert.ok(new Set(jittered.map(actor=>actor.root[0].toFixed(2))).size>=4,'irregular frame times synchronized the group');
+  assert.ok(hipRange.every(range=>range>.25&&range<3),'foot reach correction flattened or amplified authored body weight transfer');
   for(const [label,actors]of [['steady',samples],['jittered',jittered]]){
    assert.equal(actors[0].ground.length,60,`${label} run clip has missing mesh samples`);
-   assert.ok(actors[0].ground.every(y=>y>=-1&&y<=.5),`${label} run clip lost ground contact`);
+   // Running now has deliberate intervals with both feet in swing. Retain the
+   // penetration bound, bound flight clearance, and require real mesh contact
+   // in a substantial part of the cycle. The lab independently checks every
+   // feasible stance against its actual calibrated sole and world anchor.
+   assert.ok(actors[0].ground.every(y=>y>=-1&&y<=2),`${label} run mesh exceeded ground/flight bounds`);
+   assert.ok(actors[0].ground.filter(y=>Math.abs(y)<=.5).length>=24,`${label} run has insufficient ground-contact coverage`);
   }
  }
  if(!process.env.HIT_BASELINE){assert.ok(hitPose>.4,`confirmed hit pose is too subtle: ${hitPose}`);assert.ok(hitFirePose>.4,`gunfire cancelled the hit pose: ${hitFirePose}`);assert.ok(reducedHitPose>.1&&reducedHitPose<hitPose,`reduced-motion hit cue was lost or amplified: ${reducedHitPose}`);assert.ok(recoveryPose<.05,`hit pose did not recover: ${recoveryPose}`);assert.ok(repeatedPose<.8,`repeated hit pose accumulated: ${repeatedPose}`)}

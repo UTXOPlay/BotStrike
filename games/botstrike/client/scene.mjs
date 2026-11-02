@@ -21,9 +21,9 @@ export function createWorld(canvas,spec){
  function consolidate(group){const batches=new Map();for(const m of [...group.children])if(m.isMesh){m.updateMatrix();const g=m.geometry.clone().applyMatrix4(m.matrix);if(!batches.has(m.material))batches.set(m.material,[]);batches.get(m.material).push(g);group.remove(m);m.geometry.dispose();}for(const [material,parts]of batches){const merged=new THREE.Mesh(mergeParts(parts),material);merged.castShadow=true;merged.receiveShadow=true;group.add(merged);parts.forEach(g=>g.dispose());}}
  const art=createArt(renderer,{mobile}),atmosphere=createAtmosphere(scene,2400,{mobile}),bots=[];
  const rim=new THREE.DirectionalLight(0x8ddae3,.9);rim.position.set(900,700,-1100);scene.add(rim);
- const signals=createTeamSignals(scene);const characters=createCharacters(art);let firstPerson=null;
+ const signals=createTeamSignals(scene);const characters=createCharacters(art,{weapons:spec.weapons});let firstPerson=null;
  function robot(slot,hero,weapon){const bot=characters.actor(slot,hero,weapon);bot.rig.name=`hero-${hero}-slot-${slot}`;scene.add(bot.rig);return bot;}
- function viewModel(player){if(firstPerson?.hero!==player.hero){firstPerson?.dispose();firstPerson=characters.actor(player.slot,player.hero,player.weapon,{firstPerson:true});firstPerson.rig.scale.setScalar(.8);camera.add(firstPerson.rig);}return firstPerson;}
+ function viewModel(player){if(firstPerson?.hero!==player.hero||firstPerson?.slot!==player.slot){firstPerson?.dispose();firstPerson=characters.actor(player.slot,player.hero,player.weapon,{firstPerson:true});firstPerson.rig.scale.setScalar(.8);camera.add(firstPerson.rig);}return firstPerson;}
  const flash=new THREE.PointLight(0x80eaff,0,160,2);flash.visible=!mobile;camera.add(flash);flash.position.set(5,-4,-30);
  let staticRoot=new THREE.Group(),mapId=-1,ratio=.75,fov=80;scene.add(staticRoot);const generatedMaterials=[];
  function disposeStatic(){staticRoot.traverse(m=>m.geometry?.dispose());scene.remove(staticRoot);for(const m of generatedMaterials){m.map?.dispose();m.dispose()}generatedMaterials.length=0;staticRoot=new THREE.Group();scene.add(staticRoot);}
@@ -46,14 +46,16 @@ export function createWorld(canvas,spec){
  scene.add(objective);let relayArmed=false;
  const markerPoint=new THREE.Vector3();
  const trails=[];for(let n=0;n<32;n++){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1,4),new THREE.MeshBasicMaterial({color:'#baf6ff',transparent:true,opacity:.6}));mesh.visible=false;scene.add(mesh);trails.push({mesh,until:0})}let trailIndex=0,shotUntil=0,recoilAt=-Infinity,impactAt=-Infinity;
- function shoot(slot,player,now){const d=new THREE.Vector3(-Math.sin(player.yaw)*Math.cos(player.pitch),Math.sin(player.pitch),-Math.cos(player.yaw)*Math.cos(player.pitch));const t=trails[trailIndex++%trails.length],origin=new THREE.Vector3(player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]),start=15,end=shotTrailEnd(origin.toArray(),d.toArray(),spec.maps[mapId]?.obstacles||[]);t.mesh.visible=end>start;if(t.mesh.visible){t.mesh.position.copy(origin).addScaledVector(d,(start+end)/2);t.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);t.mesh.scale.y=end-start;t.until=now+55;}if(slot===localSlot){shotUntil=now+40;recoilAt=now;firstPerson?.trigger('fire',now);}else bots[slot]?.trigger('fire',now);}
+ function shoot(slot,player,now){const d=new THREE.Vector3(-Math.sin(player.yaw)*Math.cos(player.pitch),Math.sin(player.pitch),-Math.cos(player.yaw)*Math.cos(player.pitch));const t=trails[trailIndex++%trails.length],origin=new THREE.Vector3(player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]),start=15,end=shotTrailEnd(origin.toArray(),d.toArray(),spec.maps[mapId]?.obstacles||[]);t.mesh.visible=end>start;if(t.mesh.visible){t.mesh.position.copy(origin).addScaledVector(d,(start+end)/2);t.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);t.mesh.scale.y=end-start;t.until=now+55;}if(slot===localSlot){shotUntil=now+40;recoilAt=now;firstPerson?.trigger('fire',now,undefined,undefined,player.life);}else bots[slot]?.trigger('fire',now,undefined,undefined,player.life);}
  let localSlot=0,roomId=null,motionCursor=new FeedbackCursor();
- function accept(room){if(!room?.state)return;const now=performance.now();if(room.id!==roomId){motionCursor=new FeedbackCursor();roomId=room.id;bots.forEach(bot=>bot.invalidate());firstPerson?.invalidate();}
+ function accept(room){if(!room?.state)return;const now=performance.now();if(room.id!==roomId){motionCursor=new FeedbackCursor();roomId=room.id;bots.forEach(bot=>bot.invalidate('room'));firstPerson?.invalidate('room');}
   for(const e of motionCursor.consume(room.feedback,room.state.tick)){
    if(room.state.tick-e.tick>32)continue;
    if(e.kind==='motion'){const p=room.state.players[e.actor];if(!p||p.hidden||p.life!==e.life)continue;
+    if(!bots[e.actor]||bots[e.actor].hero!==p.hero){bots[e.actor]?.dispose();bots[e.actor]=robot(e.actor,p.hero,p.weapon);}
+    if(e.actor===room.slot)viewModel(p);
     if(e.action==='fire'){if(e.actor!==room.slot)shoot(e.actor,p,now);}
-    else {bots[e.actor]?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value);if(e.actor===room.slot)firstPerson?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value);}
+    else {bots[e.actor]?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value,e.life);if(e.actor===room.slot)firstPerson?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value,e.life);}
     if(e.action==='hit'){sparks(p,now);if(e.actor===room.slot)impactAt=now;}
    }
   }

@@ -96,6 +96,9 @@ def animate(rig,hero):
    l('hips',.012*math.sin(phase),0,.012+abs(math.cos(phase))*(.023 if kind=='run' else .012));r('spine',.11 if kind=='run' else .055,0,.04*math.sin(phase));r('chest',-.025,0,-.04*math.sin(phase+.4));r('head',-.035,0,.018*math.sin(phase+.8))
    if kind.startswith('strafe'):
     direction=1 if kind=='strafe_left' else -1;r('hips',0,0,direction*.12);r('chest',0,0,-direction*.08)
+    # Actual lateral leg abduction, rather than only yawing a forward walk.
+    for i,(side,sign) in enumerate([('L',-1),('R',1)]):
+     s=math.sin(phase+i*math.pi);r('thigh.'+side,.18*s,direction*.30*s+sign*.025,0);r('shin.'+side,-.12-max(0,-s)*.48,0,0)
    if kind=='crouch_walk':l('hips',0,-.025,-.34);r('spine',.20,0,.02*math.sin(phase));
   if kind=='crouch' or kind=='crouch_walk':
    l('hips',0,-.08,-.62);r('spine',.24,0,0);r('chest',-.12,0,0)
@@ -104,6 +107,33 @@ def animate(rig,hero):
   # One-shot weights use eased anticipation, action, then recovery; no root travel
   # for jumping because native position owns the capsule.
   bump=math.sin(math.pi*min(1,t))
+  transition=kind in ['start','brake','pivot_left','pivot_right','pivot_back_left','pivot_back_right','land_hard','crouch_enter','weapon_ready']
+  if transition:
+   for b in ['hips','spine','chest','head']:r(b,0,0,0)
+  # Short reusable body transitions. Runtime applies bounded body-only additive
+  # masks and resolves legs against the ground afterward; native root motion
+  # and the camera never follow these authored offsets.
+  if kind=='start':
+   l('hips',0,-.025*bump,-.035*bump);r('spine',-.12*bump,0,0);r('chest',.04*bump,0,0)
+   for side in ['L','R']:r('thigh.'+side,.20*bump,0,0);r('shin.'+side,-.38*bump,0,0)
+  if kind=='brake':
+   l('hips',0,-.04*bump,-.055*bump);r('hips',.07*bump,0,0);r('spine',.12*bump,0,0);r('chest',-.05*bump,0,0)
+  if kind.startswith('pivot_'):
+   direction=1 if kind.endswith('left') else -1;hard='back' in kind
+   l('hips',direction*.015*bump,0,-(.045 if hard else .025)*bump);r('hips',-.035*bump,0,direction*(.38 if hard else .25)*bump)
+   r('spine',0,0,-direction*.16*bump);r('chest',0,0,-direction*.08*bump)
+   r('thigh.L',.12*bump,-.10*bump,0);r('thigh.R',.12*bump,.10*bump,0)
+  if kind=='land_hard':
+   l('hips',0,-.04*bump,-.23*bump);r('spine',-.14*bump,0,0);r('chest',.10*bump,0,0);r('head',.10*bump,0,0)
+   for side in ['L','R']:r('thigh.'+side,.70*bump,0,0);r('shin.'+side,-1.15*bump,0,0);r('foot.'+side,.45*bump,0,0)
+  if kind=='crouch_enter':
+   l('hips',0,-.025*bump,-.075*bump);r('spine',-.07*bump,0,0)
+   for side in ['L','R']:r('thigh.'+side,.25*bump,0,0);r('shin.'+side,-.45*bump,0,0)
+  if kind=='weapon_ready':
+   r('spine',-.045*bump,0,0);r('chest',.025*bump,0,0);r('upper_arm.R',.85+.10*bump,.40,.08);r('forearm.R',.66-.08*bump,0,-.14)
+  if transition:
+   # Exact neutral endpoints for body-only additive runtime masks.
+   for b,base in {'hips':(0,0,0),'spine':(.035,0,0),'chest':(-.02,0,.012*math.sin(1)),'head':(0,0,0)}.items():rots[b]=tuple(rots[b][i]+base[i] for i in range(3))
   if kind=='jump':
    for side in ['L','R']:r('thigh.'+side,.22+.55*bump,0,0);r('shin.'+side,-.4-.65*bump,0,0);r('foot.'+side,.2,0,0)
    r('spine',.1,0,0)
@@ -140,9 +170,10 @@ def animate(rig,hero):
   grip=1 if not kind.startswith('death') else 1-ease
   for bone,base in armed.items():rots[bone]=tuple(rots.get(bone,neutral[bone])[i]+(base[i]-neutral[bone][i])*grip for i in range(3))
   return rots,locs
- clips={'idle':3,'walk':1,'run':.66,'backpedal':1.1,'strafe_left':1,'strafe_right':1,'crouch':2,'crouch_walk':1.2,'jump':.5,'fall':1,'land':.4,'fire':.22,'reload':2.2,'equip':.4,'use_item':1.0,'utility':.8,'skill':1.1,'interact':2,'hit':.38,'death_back':1.4,'death_left':1.4,'death_right':1.4,'respawn':.9,'victory':2,'defeat':2}
+ clips={'idle':3,'walk':1,'run':.66,'backpedal':1.1,'strafe_left':1,'strafe_right':1,'crouch':2,'crouch_walk':1.2,'jump':.5,'fall':1,'land':.4,'fire':.22,'reload':2.2,'equip':.4,'use_item':1.0,'utility':.8,'skill':1.1,'interact':2,'hit':.38,'death_back':1.4,'death_left':1.4,'death_right':1.4,'respawn':.9,'victory':2,'defeat':2,
+        'start':.20,'brake':.28,'pivot_left':.26,'pivot_right':.26,'pivot_back_left':.40,'pivot_back_right':.40,'land_hard':.45,'crouch_enter':.24,'weapon_ready':.20}
  for kind,duration in clips.items():
-  action=bpy.data.actions.new(NAMES[hero]+'|'+kind);rig.animation_data.action=action;frames=max(2,round(duration*fps))
+  action=bpy.data.actions.new(NAMES[hero]+'|'+kind);rig.animation_data.action=action;frames=2*max(1,round(duration*fps/2))
   for frame in range(0,frames+1,2):
    t=frame/frames;rots,locs=pose(kind,t,duration)
    for bone in rig.pose.bones:

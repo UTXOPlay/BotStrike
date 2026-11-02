@@ -17,6 +17,12 @@ try{
   assert.equal(r.finite,true,`${scenario}/${fps}: invalid or accumulated transforms`);
   assert.equal(r.unchanged,true,`${scenario}/${fps}: actor mutated native state`);
   assert.ok(Object.values(r.debug.weights).every(Number.isFinite));results.push(r);
+  for(const [slot,s]of r.debug.contactStats.entries()){
+   assert.ok(s.scheduled>0,`${scenario}/${fps}/${slot}: no scheduled support`);
+   assert.ok(s.feasible/s.scheduled>.75,`${scenario}/${fps}/${slot}: support was silently released too often: ${s.feasible}/${s.scheduled}`);
+   assert.ok(s.maxError<=2&&s.maxSoleHeight<=2&&s.maxSoleDrift<=2,`${scenario}/${fps}/${slot}: calibrated sole contact exceeded two world units: ${JSON.stringify(s)}`);
+   assert.ok(s.maxAnchorDrift<1e-6,`${scenario}/${fps}/${slot}: planted target moved`);
+  }
  }
  for(const scenario of scenarios){
   const r=await page.evaluate(config=>motionLab.run(config),{scenario,jitter:true,reduced:true,seconds:6,count:10});

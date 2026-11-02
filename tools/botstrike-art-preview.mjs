@@ -21,10 +21,11 @@ window.renderLineup=async(sameHero=false)=>{clear();world=createWorld(canvas,spe
 window.probeRunGroup=(jitter=false)=>{
  const bots=world.scene.children.filter(node=>node.name.startsWith('hero-')&&Number(node.name.split('slot-')[1])<6).sort((a,b)=>Number(a.name.split('slot-')[1])-Number(b.name.split('slot-')[1]));
  const state={tick:1,config:{map:0,mode:'deathmatch'},phase:'live',utilities:[],events:[],objective:{},players:Array.from({length:10},(_,slot)=>({slot,hero:0,team:slot<5?0:1,life:1,weapon:2,alive:true,hidden:slot>=6,position:[(slot-2.5)*62,0,950+slot%2*9],velocity:[0,0,-250],yaw:0,pitch:0}))};
- const samples=bots.map(()=>({root:[],hip:[],motion:[],ground:[]}));let now=1000;
+ const samples=bots.map(()=>({root:[],hip:[],motion:[],ground:[]}));let now=1000,travel=0;
  const vertex=new THREE.Vector3();
  for(let frame=0;frame<75;frame++){
   const dt=jitter?[.012,.026,.009,.022,.014][frame%5]:1/60;now+=dt*1000;
+  travel+=250*dt;for(const p of state.players)p.position[2]-=250*dt;
   state.tick++;world.frame(state,0,now,dt,{active:false});world.scene.updateMatrixWorld(true);
   if(frame<15)continue;
   bots.forEach((bot,i)=>{
@@ -34,7 +35,7 @@ window.probeRunGroup=(jitter=false)=>{
    if(i===0){let lowest=Infinity;bot.traverse(o=>{if(!o.isSkinnedMesh)return;for(let j=0;j<o.geometry.attributes.position.count;j++){o.getVertexPosition(j,vertex);vertex.applyMatrix4(o.matrixWorld);lowest=Math.min(lowest,vertex.y);}});samples[i].ground.push(lowest);}
   });
  }
- world.camera.position.set(-60,100,600);world.camera.lookAt(0,40,950);world.camera.fov=45;world.camera.updateProjectionMatrix();world.renderer.render(world.scene,world.camera);
+ world.camera.position.set(-60,100,600-travel);world.camera.lookAt(0,40,950-travel);world.camera.fov=45;world.camera.updateProjectionMatrix();world.renderer.render(world.scene,world.camera);
  return samples;
 };
 window.checkMapResources=()=>{world.setMap(0);world.renderer.render(world.scene,world.camera);const before={...world.renderer.info.memory};for(let i=0;i<9;i++){world.setMap(i%3);world.renderer.render(world.scene,world.camera)}world.setMap(0);world.renderer.render(world.scene,world.camera);return{before,after:{...world.renderer.info.memory}}};

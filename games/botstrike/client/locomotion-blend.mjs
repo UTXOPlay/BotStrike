@@ -22,7 +22,7 @@ export function locomotionTargets(motion,out=new Float64Array(locomotionClips.le
 export class LocomotionBlend{
  constructor(durations=duration){this.durations=durations;this.weights=new Float64Array(10);this.targets=new Float64Array(10);this.times=new Float64Array(10);this.clear();}
  clear(phase=0){this.ready=false;this.phase=((phase%1)+1)%1;this.idleTime=this.phase*this.durations[0];this.airTime=0;this.airKind=null;this.gain=1;this.orientation=0;this.cadenceScale=1;this.dominant='idle';this.weights.fill(0);this.weights[0]=1;}
- update(motion,dt,{active=true,reduced=false,phase=this.phase}={}){
+ update(motion,dt,{active=true,reduced=false,phase=this.phase,cycleDuration=null}={}){
   const seconds=Number.isFinite(dt)?clamp(dt,0,.1):0;
   locomotionTargets(motion,this.targets);
   if(!this.ready||motion.reset){this.clear(phase);this.weights.set(this.targets);this.ready=true;}
@@ -35,6 +35,7 @@ export class LocomotionBlend{
   for(let i=0;i<this.weights.length;i++)this.weights[i]/=sum;
   for(const i of moving){travel+=this.weights[i];reference+=this.weights[i]*referenceSpeed[i];cycle+=this.weights[i]*this.durations[i];}
   this.cadenceScale=travel>1e-5?clamp(motion.speed/(reference/travel),.6,1.6):1;
+  if(Number.isFinite(cycleDuration)&&cycleDuration>0&&travel>1e-5)this.cadenceScale=(cycle/travel)/clamp(cycleDuration,.26,1.25);
   if(active&&motion.grounded&&motion.speed>1&&travel>1e-5)this.phase=(this.phase+seconds*this.cadenceScale/(cycle/travel))%1;
   this.idleTime+=seconds;
   const airKind=motion.grounded?null:motion.rising?'jump':'fall';

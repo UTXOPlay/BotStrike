@@ -61,3 +61,15 @@ test('render signals preserve authoritative state, wrap yaw and detect discontin
  assert.equal(signals.update(p,.5,1).reset,'gap');
  signals.clear();assert.equal(signals.update(p,1/60,1).reset,'initial');
 });
+
+test('gradual start and stop cross hysteresis at 30, 60 and 120 fps',()=>{
+ for(const fps of [30,60,120]){
+  const signals=new AnimationMotion(),p={life:1,alive:true,position:[0,0,0],velocity:[0,0,0],yaw:0};let starts=0,stops=0;
+  signals.update(p,1/fps);
+  for(let frame=1;frame<=fps;frame++){
+   const t=frame/fps,speed=t<=.5?t*1000:Math.max(0,500-(t-.5)*1200);p.velocity[2]=-speed;p.position[2]-=speed/fps;
+   const m=signals.update(p,1/fps);starts+=Number(m.starting);stops+=Number(m.stopping);
+  }
+  assert.equal(starts,1,`${fps} fps start`);assert.equal(stops,1,`${fps} fps stop`);
+ }
+});
