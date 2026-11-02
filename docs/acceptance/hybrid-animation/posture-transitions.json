@@ -120,14 +120,14 @@
   "measurements": {
     "priorCrouchedDeathMaxHeadRise": 19.715548107401325,
     "candidateCrouchedDeathMaxHeadRise": 0.32049546660305595,
-    "candidateRestingTorsoMaxHeight": 1.8459672379583987,
-    "candidateFinalAirborneCorpseMaxSoleHeight": 0.17361389947139294,
     "maxGripError": 3.515571301265078e-13,
     "maxCrouchWeightDifference": 2.7050637299046647e-16,
     "maxGroundShadowError": 1.4155343563970746e-15,
     "airContactViolations": 0,
     "minFeasibleScheduledSupport": 0.9693593314763231,
-    "maxPostSkinningContactError": 7.015212128518772e-13
+    "maxPostSkinningContactError": 7.015212128518772e-13,
+    "candidateFinalAirborneCorpseMaxLowestVertexHeight": 0.17361389947139294,
+    "candidateRestingTorsoMaxLowestSurfaceHeight": 1.8459672379583987
   },
   "referenceLimitations": "Production references were official release notes and session overview. Paired clips are fixed-step comparisons against the complete 7b71c06 client/model tree; they are not performance or human acceptance.",
   "remainingAcceptance": [
@@ -235,5 +235,9 @@
     "matchedShortRunFrameGatePassed": true,
     "priorLongRunFrameReferenceMs": 20.3,
     "interpretation": "Current short ABBA reports 0.5 -> 1.1 ms animation CPU p95, missing the 1 ms gate. RAF p95 is 20.6 -> 21.5 ms; it passes this run's relative frame gate but remains above the prior long-run 20.3 ms reference. This does not close sustained/Android/input-latency acceptance."
+  },
+  "deployment": {
+    "sourceCommit": "989a634cd34075037149cb897de03c65b4a8b5e0",
+    "record": "posture-deployment.json"
   }
 }

@@ -1,0 +1,7 @@
+Guest session response 200
+Store iframe move/crouch/jump reached native authority
+Store card → loader completion → playable desktop match passed
+Guest session response 200
+Store iframe simultaneous touch movement, aim and fire reached native authority
+Mobile fullscreen exit {"levels":["IFRAME","DIV"],"fullscreen":null,"coarse":true,"displayFullscreen":false,"entryHidden":true,"inert":false}
+Mobile launcher failure/retry and gameplay passed

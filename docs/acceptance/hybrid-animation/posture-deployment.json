@@ -1,0 +1,122 @@
+{
+  "commit": "989a634cd34075037149cb897de03c65b4a8b5e0",
+  "image": "myelin-botstrike:hybrid-989a634",
+  "imageId": "sha256:b2fe2395c84df246d772b62ef020b8fa0e1cd48ef1bf60ddddf5a67649ff7b0c",
+  "healthy": true,
+  "activeRoomsAtSwitch": 0,
+  "dataBackup": "/data/utxoplay/releases/20261102-botstrike-posture-989a634/botstrike-data-before.tar.gz",
+  "compose": "/data/utxoplay/releases/20261102-botstrike-posture-989a634/game.compose.json",
+  "rollbackCompose": "/data/utxoplay/releases/20261102-botstrike-posture-989a634/rollback.compose.json",
+  "protectedFilesIdentical": 28,
+  "otherChangedContainers": [],
+  "metrics": {
+    "ok": true,
+    "draining": false,
+    "rooms": {},
+    "publicWaitingHumans": 0,
+    "publicRunningHumans": 0,
+    "publicBotSeats": 0,
+    "publicQueueWaitMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "socketRttMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicSocketRttMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "socketJitterMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicSocketJitterMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "reconnectDelayMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicReconnectDelayMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "diskAvailableBytes": 65898770432,
+    "retentionDays": 30,
+    "failedRooms": 0,
+    "sealingJobs": 0,
+    "lastSealMs": 0,
+    "sealingFailures": 0,
+    "verifiedMatches": 0,
+    "publicVerifiedMatches": 0,
+    "expiredReplays": 0,
+    "recordingErrors": 0,
+    "reconnections": 0,
+    "publicReconnects": 0,
+    "publicQueueRequests": 0,
+    "publicQueueJoins": 0,
+    "publicQueueAbandons": 0,
+    "publicLateJoins": 0,
+    "publicMatchesStarted": 0,
+    "publicHumanSeatsAtStart": 0,
+    "publicBotSeatsAtStart": 0
+  },
+  "verifiedAt": "2026-11-02T05:40:16.685Z",
+  "url": "https://store.utxoplay.io/games/botstrike/",
+  "sourceCommit": "989a634cd34075037149cb897de03c65b4a8b5e0",
+  "authorization": "Earlier explicit push/deploy request, followed by approval and continuation in PR #2 on 2026-11-02. Deployment does not close the remaining acceptance gates.",
+  "browserFilesVerified": 67,
+  "onlyChangedPublicFiles": [
+    "app.js",
+    "models/vector.glb",
+    "models/patch.glb",
+    "models/bastion.glb",
+    "models/spectre.glb",
+    "models/glitch.glb",
+    "models/forge.glb"
+  ],
+  "stage": {
+    "healthy": true,
+    "protectedFilesIdentical": 28,
+    "browserFilesVerified": 67,
+    "nativeTicks": 21144,
+    "signedReplay": true,
+    "tamperRejected": true,
+    "browser": true
+  },
+  "publicChecks": {
+    "storeDesktopLaunch": true,
+    "mobileFailureRetry": true,
+    "sixViewportSizes": true,
+    "fullscreenExitReentryPreservesIframeSandboxAndMatch": true,
+    "nativeMoveCrouchJumpFromStoreIframe": true,
+    "simultaneousTouchMoveAimFire": true,
+    "standaloneHarnessNote": "Direct game-DOM harness is not applicable to the public Store wrapper; that attempt failed at the wrapper selector and was replaced by real Store iframe input checks."
+  },
+  "backupCheck": {
+    "bytes": 7048629,
+    "sha256": "a68dba1bc375c391c38fc5a08a4d40ed8c556b08f0275fe84a30a66066776291"
+  },
+  "evidenceSha256": {
+    "posture-stage-native.txt": "6196e3dc7e5e890c8e849ee3026aa5fa3542f01d6a5c7a5fbae5a18db9e9c062",
+    "posture-stage-browser.txt": "3dd1de0a3df00738fb8d15bbda735813663d7bc228572400f925f835abf2f9f2",
+    "posture-public-store.txt": "c3e28f362d54aa8e59fa4cc832b5b37bc9511b1183645fd5952dc243c7263f72",
+    "posture-public-standalone-harness-failed.txt": "8f485865ef0467872a5de9d442927f8d5947220cb3b5abbc7ddc1e60dee2856d",
+    "posture-public-assets.json.gz": "c9195a5f565db5f487df3cdbd98d1b4300caa6404ae9d07296daa1e745a91fde"
+  },
+  "remainingAcceptance": [
+    "1 ms CPU budget: latest short physical-GPU candidate p95 is 1.1 ms",
+    "Sustained frame pacing, Android performance and thermal data",
+    "Human review of the new actions, clipping and control feel"
+  ]
+}

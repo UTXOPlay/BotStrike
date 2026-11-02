@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-11-02",
   "sourceParent": "534f9a6f22efa49d66c366d7c92588bc8adf5a49",
-  "scope": "Presentation-only normalized walk/run mapping and continuous first-person cadence; not deployed.",
+  "scope": "Presentation-only normalized walk/run mapping and continuous first-person cadence; not deployed when these measurements were recorded.",
   "rulesAndInputChanges": false,
   "clientSha256": {
     "games/botstrike/client/aim-assist.mjs": "f6448da1f629bf13c7a8661f335eee9fb9d0020f1e0c49a7b8aa938e92549bcb",
@@ -148,5 +148,9 @@
     "walk-run-controls-capture-race.txt": {
       "sha256": "764bff36bf1ea4d7c19061a12cf6ea60ca15cb8deef3f5c90facd2b5407de107"
     }
+  },
+  "deployment": {
+    "sourceCommit": "989a634cd34075037149cb897de03c65b4a8b5e0",
+    "record": "posture-deployment.json"
   }
 }
