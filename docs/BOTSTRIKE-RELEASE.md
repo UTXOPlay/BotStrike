@@ -73,3 +73,16 @@ The portable Rust 1.97.1 engine and adapter use the new `botstrike-2050-salvage-
 Validation includes 77 JavaScript tests, four host tests, 33 native rule tests, native input and six required viewport checks, and real public Store desktop/mobile launch. Mobile checks cover failed-module retry, landscape rotation, fullscreen exit input gating, and re-entry with the same iframe, sandbox and match. Public two-tab checks reproduce both a live controller handoff and recovery after controller closure. Browser evidence uses software rendering; an additional concurrent candidate run failed under roughly ten-second observed client RTT, and is not counted as a performance pass.
 
 Compose: `/data/utxoplay/releases/20261101-botstrike-salvage-pr1/game.compose.json`. The same directory retains `rollback.compose.json`, `botstrike-data-before.tar.gz`, native/legacy validation logs and `rollout.json`. Rollout drained to zero active rooms, stopped only BotStrike for a coherent data backup, retained all runtime/session secrets and the data volume, and changed no other container IDs. See [acceptance evidence](acceptance/salvage-pr1.json).
+
+
+## Hybrid animation — 2026-11-02
+
+The user explicitly requested push and deployment of branch commit `f952afd` while the remaining performance/device/artistic gates stay open. The signed implementation is pushed in PR #2. Production now runs `myelin-botstrike:hybrid-f952afd`, built by overlaying only `dist` on the exact previous production image. PR #2 remains draft; deployment is not a claim that all animation acceptance gates passed.
+
+The isolated image passed 67 browser-file hashes, equality of 28 protected runtime/backend files, a complete 18,168-tick native match, signed export verification and tamper rejection. Its real browser check passed native movement/skill acknowledgement, simultaneous touch fire/aim, portrait gating and all six required sizes. Production drained to zero active/waiting/sealing rooms before a stopped-writer backup. The native salvage-v1 profile and all historical verifier bytes, secrets and persistent data mount were retained. Store and other container IDs stayed unchanged during the switch.
+
+Public acceptance passed all 66 non-HTML asset hashes and the actual Store card/loader/iframe flow on desktop and mobile, all six sizes, failed-module retry, landscape/portrait handling, fullscreen-exit input gating and re-entry with the same iframe, sandbox and match. These are browser checks, not physical Android acceptance.
+
+The final six-minute desktop A/B report records animation CPU p95 of 1.0 ms against a 1 ms budget. RAF p95 is 21.3 ms, exceeding its matched 20.3 ms limit; that gate remains failed. Physical Android measurements and the latest human gait review remain open. The earlier contended-host failure is retained as separate evidence.
+
+Release/Compose: `/data/utxoplay/releases/20261102-botstrike-hybrid-f952afd/game.compose.json`. Rollback Compose and `botstrike-data-before.tar.gz` are in the same directory. Roll back the image/configuration against the current data; no schema or rule migration was introduced. See [deployment evidence](acceptance/hybrid-animation-deployment.json) and the [completion ledger](hybrid-animation-requirements.md).
