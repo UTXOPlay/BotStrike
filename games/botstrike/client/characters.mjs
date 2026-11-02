@@ -92,11 +92,19 @@ export function createCharacters(art,{weapons=null}={}){
    const angle=handWorld.angleTo(handGoal),bound=1.1;if(angle>bound)handWorld.slerp(handGoal,bound/angle);else handWorld.copy(handGoal);
    handParent.setFromRotationMatrix(handMatrix.extractRotation(hand.parent.matrixWorld)).normalize();hand.quaternion.copy(handParent.invert().multiply(handWorld)).normalize();contacts[side].wrist=Math.min(angle,bound);hand.updateWorldMatrix(false,true);
   }
+  function updateWeaponFrames(){
+   // IK needs the weapon root and contact markers. Static render meshes get
+   // their world matrices during drawing, after the final weapon placement.
+   // The model/skeleton were refreshed above, including airborne and full-body
+   // paths. Reading contacts does not need another walk through those parents.
+   gunAnchor.updateWorldMatrix(false,false);gun.updateWorldMatrix(false,false,true);
+   triggerGrip.updateWorldMatrix(false,false,true);supportGrip.updateWorldMatrix(false,false,true);magazine?.updateWorldMatrix(false,false,true);
+  }
   function fitWeaponGrip(leftTarget){
    // Project the rigid weapon translation into both arms' reachable shells.
    // Keep aim/orientation unchanged and preserve every authored bone length.
    if(firstPerson&&!leftWidened){bones['upper_arm.L'].position.x+=.15;leftWidened=true;bones['upper_arm.L'].updateWorldMatrix(false,true);}
-   gunAnchor.updateMatrixWorld(true);gripFit.delta.set(0,0,0);model.getWorldScale(gripFit.scale);
+   updateWeaponFrames();gripFit.delta.set(0,0,0);gripFit.scale.setFromMatrixScale(model.matrixWorld);
    for(const side of ['R','L']){
     const f=gripFit[side],solver=armSolvers[side];f.shoulder.setFromMatrixPosition(solver.upper.matrixWorld);
     f.min=f.minLocal*gripFit.scale.x+.05;f.max=f.maxLocal*gripFit.scale.x-.05;
@@ -112,7 +120,7 @@ export function createCharacters(art,{weapons=null}={}){
    }
    if(gripFit.delta.lengthSq()<1e-10)return;
    gripFit.target.copy(gripFit.R.point).add(gripFit.delta);grip('R',model.worldToLocal(gripFit.local.copy(gripFit.target)));
-   bones['hand.R'].getWorldPosition(gripFit.target);model.worldToLocal(gripFit.target);gunAnchor.position.copy(gripFit.target).sub(triggerOffset);gunAnchor.updateMatrixWorld(true);
+   bones['hand.R'].getWorldPosition(gripFit.target);model.worldToLocal(gripFit.target);gunAnchor.position.copy(gripFit.target).sub(triggerOffset);updateWeaponFrames();
   }
   const mixer=new THREE.AnimationMixer(model),actions=new Map();
   function action(name,layer='full'){
@@ -264,13 +272,13 @@ export function createCharacters(art,{weapons=null}={}){
    if(magazine)magazine.position.y=-6-(reloading?Math.sin(Math.PI*THREE.MathUtils.clamp(upper.time/source.clips.reload.duration,0,1))*8:0);
    const holding=p.alive&&!p.reload&&now>=propUntil&&(!upperUntil||now>=upperUntil||['upper:fire','upper:hit','upper:equip'].includes(upper?.getClip().name));
    supportGrip.position.z=-7.5+(pump?.position.z||0);
-   if(reloading&&reloadWeight>.05)fitWeaponGrip(magazine);else if(holding)fitWeaponGrip(supportGrip);else gunAnchor.updateWorldMatrix(true,false);
+   if(reloading&&reloadWeight>.05)fitWeaponGrip(magazine);else if(holding)fitWeaponGrip(supportGrip);else updateWeaponFrames();
    contacts.R.engaged=p.alive;contacts.R.kind='trigger';contacts.R.weight=1;contacts.L.engaged=false;contacts.L.kind=null;contacts.L.weight=0;
    if(p.alive)wrist('R');
    if(reloading){
-    if(reloadWeight>.05){gunAnchor.updateMatrixWorld(true);const hand=bones['hand.L'].getWorldPosition(new THREE.Vector3()),contact=magazine.getWorldPosition(new THREE.Vector3());hand.lerp(contact,reloadWeight);grip('L',model.worldToLocal(hand));wrist('L');contacts.L.engaged=true;contacts.L.kind='magazine';contacts.L.weight=reloadWeight;}
+    if(reloadWeight>.05){const hand=bones['hand.L'].getWorldPosition(new THREE.Vector3()),contact=new THREE.Vector3().setFromMatrixPosition(magazine.matrixWorld);hand.lerp(contact,reloadWeight);grip('L',model.worldToLocal(hand));wrist('L');contacts.L.engaged=true;contacts.L.kind='magazine';contacts.L.weight=reloadWeight;}
    }else if(holding){
-    supportGrip.position.z=-7.5+(pump?.position.z||0);gunAnchor.updateMatrixWorld(true);supportGrip.getWorldPosition(tmp);grip('L',model.worldToLocal(tmp));wrist('L');contacts.L.engaged=true;contacts.L.kind='support';contacts.L.weight=1;
+    tmp.setFromMatrixPosition(supportGrip.matrixWorld);grip('L',model.worldToLocal(tmp));wrist('L');contacts.L.engaged=true;contacts.L.kind='support';contacts.L.weight=1;
    }
    if(prop){prop.visible=p.alive&&now<propUntil;if(prop.visible){bones['hand.L'].getWorldPosition(tmp);model.worldToLocal(tmp);prop.position.copy(tmp);prop.rotation.z=.5;}}
    gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;

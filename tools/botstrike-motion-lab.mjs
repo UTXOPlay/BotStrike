@@ -154,6 +154,18 @@ window.motionLabReady=(async()=>{
    const bones=[...new Set(Object.values(a.bones))];
    return {contacts,action:a.animation?.action,transition:a.animation?.transition,reset:a.animation?.signals.reset,feet:a.animation?.feet?.feet.map(f=>({side:f.side,status:f.status,reason:f.reason,feasible:f.feasible,plantId:f.plantId,error:f.error,bend:f.solver.result.bend})),springs:a.animation?Object.fromEntries(['lean','recoil','landing','ready','sway'].map(k=>[k,[...a.animation.springs[k].value]])):null,finite:bones.every(b=>[...b.position,...b.quaternion,...b.scale].every(Number.isFinite)&&Math.abs(b.quaternion.length()-1)<.001),pose:bones.flatMap(b=>[...b.position,...b.quaternion]),modelPose:[...a.model.position,...a.model.quaternion]};
   },
+  matrixWork(config={}){
+   // Structural work count, not a timing benchmark. Restore shared prototypes
+   // even on failure; this opt-in probe is absent from the shipping client.
+   playing=false;reset({...config,count:10,view:'lineup',diagnostics:false});for(let i=0;i<30;i++)step(1/60);
+   const objects=THREE.Object3D.prototype,matrices=THREE.Matrix4.prototype,world=objects.updateMatrixWorld,controlled=objects.updateWorldMatrix,multiply=matrices.multiplyMatrices;
+   const counts={subtreeCalls:0,controlledCalls:0,matrixMultiplications:0};
+   objects.updateMatrixWorld=function(force){counts.subtreeCalls++;return world.call(this,force);};
+   objects.updateWorldMatrix=function(parents,children,force){counts.controlledCalls++;return controlled.call(this,parents,children,force);};
+   matrices.multiplyMatrices=function(a,b){counts.matrixMultiplications++;return multiply.call(this,a,b);};
+   try{for(let i=0;i<120;i++)step(1/60);}finally{objects.updateMatrixWorld=world;objects.updateWorldMatrix=controlled;matrices.multiplyMatrices=multiply;}
+   return {mode:current.mode,frames:120,rigs:10,counts,scope:'Actor updates only; excludes drawing. Counts do not establish CPU/GPU timing.'};
+  },
   soleMetrics(){
    const actor=actors[current.mode][0];actor.model.traverse(o=>{if(o.isSkinnedMesh)o.skeleton.update();});
    return actor.animation?.feet?.feet.map(f=>{

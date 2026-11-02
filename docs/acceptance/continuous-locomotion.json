@@ -135,7 +135,7 @@
     }
   },
   "gaitReview": {
-    "status": "Awaiting human re-review after two failed Android visual reviews",
+    "status": "User reports the listed gait issues are no longer present; broader artistic/control-feel acceptance remains open",
     "history": [
       {
         "result": "failed",
@@ -144,6 +144,11 @@
       {
         "result": "failed",
         "feedback": "有点恼火 外八字还是很明显 你去参考一下别人怎么做的"
+      },
+      {
+        "result": "passed-scoped-gait-recheck",
+        "feedbackEnglish": "The user reports the listed toe-out, high rear-foot lift and knee-popping issues are no longer present.",
+        "scope": "Gait issues only; phone identity, physical performance, weapon clipping and perceived responsiveness are not inferred from this answer."
       }
     ],
     "corrections": [
@@ -4110,6 +4115,9 @@
   "openAcceptance": [
     "Physical Android model, matched A/B animation CPU and frame pacing, thermal duration",
     "Desktop frame interval p95 remains above budget (21.3ms observed, 20.3ms limit); animation CPU p95 meets 1ms budget",
-    "Human gait re-review, knee/weapon clipping and movement/aim responsiveness"
-  ]
+    "Broader human weapon-clipping, transition and control-feel review; listed gait issues passed user recheck"
+  ],
+  "followupWork": "hybrid-animation/weapon-transform-work.json",
+  "candidateCommit": "f952afdddd8d2f98425ac08826925ccbe47c4387",
+  "evidenceScope": "Original integration/production measurements describe f952afd; the later transform-work candidate has its own source fingerprint and evidence in followupWork."
 }

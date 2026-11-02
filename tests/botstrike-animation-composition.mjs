@@ -1,20 +1,21 @@
 import assert from 'node:assert/strict';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {startMotionLab} from '../tools/serve-botstrike-motion-lab.mjs';
 import spec from '../botstrike/spec.json' with {type:'json'};
 
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const out=process.env.ART_OUTPUT||'/tmp/botstrike-animation-composition';await mkdir(out,{recursive:true});
+const recordPoses=!!(process.env.POSE_TRACE||process.env.POSE_REFERENCE),reference=process.env.POSE_REFERENCE?JSON.parse(await readFile(process.env.POSE_REFERENCE,'utf8')):null;
 const server=await startMotionLab(),browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),args:['--no-sandbox','--enable-unsafe-swiftshader']});
 const page=await browser.newPage({viewport:{width:1920,height:1080}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(180000);
 try{
  await page.goto(`http://127.0.0.1:${server.address().port}`);await page.evaluate(()=>motionLabReady);
  const results=[];
  for(let hero=0;hero<6;hero++)for(let weapon=0;weapon<12;weapon++)for(const firstPerson of [false,true]){
-  const result=await page.evaluate(({hero,weapon,firstPerson,reloadTicks})=>{
+  const result=await page.evaluate(({hero,weapon,firstPerson,reloadTicks,recordPoses})=>{
    motionLab.reset({hero,weapon,count:1,view:firstPerson?'first-person':'front'});
    let maxError=0,maxWrist=0,contacts=0,finite=true,unchanged=true,hitPreservedReload=false,x=0,z=0,previous=0;
-   const bad=[];
+   const bad=[],poses=[];
    for(let frame=0;frame<420;frame++){
     const t=frame/60,dt=1/60,yaw=Math.sin(t*2)*Math.PI,pitch=Math.sin(t*1.7)*1.15,speed=t<4?240:90;
     const air=t-4,y=air>0&&air<.8?200*air*(.8-air):0,vertical=air>0&&air<.8?200*(.8-2*air):0;
@@ -24,14 +25,15 @@ try{
     const events=[];
     for(const [at,name]of [[.3,'fire'],[1,'reload'],[1.3,'hit'],[5,'fire'],[5.5,'utility']])if(previous<at&&t>=at)events.push({name,duration:name==='reload'?reloadTicks/64:undefined,value:name==='hit'?35:undefined});
     const before=JSON.stringify(player),r=motionLab.sample({player,dt,now:t*1000+1,events});previous=t;finite&&=r.finite;unchanged&&=before===JSON.stringify(player);
+    if(recordPoses&&[0,1,18,19,60,78,120,240,270,300,330,419].includes(frame))poses.push({frame,values:[...r.pose,...r.modelPose,...Object.values(r.contacts).flatMap(c=>c.position)]});
     if(t>=1.3&&t<1.4&&r.action.upper==='upper:reload')hitPreservedReload=true;
     for(const [side,c]of Object.entries(r.contacts))if(c.engaged&&c.weight>=.999){
      contacts++;maxError=Math.max(maxError,c.actualError);maxWrist=Math.max(maxWrist,c.wrist);
      if(c.actualError>2&&bad.length<3)bad.push({t,side,...c,action:r.action});
     }
    }
-   motionLab.render();return {hero,weapon,firstPerson,maxError,maxWrist,contacts,finite,unchanged,hitPreservedReload,bad};
-  },{hero,weapon,firstPerson,reloadTicks:spec.weapons[weapon].reload});
+   motionLab.render();return {hero,weapon,firstPerson,maxError,maxWrist,contacts,finite,unchanged,hitPreservedReload,bad,...(recordPoses?{poses}:{})};
+  },{hero,weapon,firstPerson,reloadTicks:spec.weapons[weapon].reload,recordPoses});
   results.push(result);
   assert.ok(result.finite&&result.unchanged,JSON.stringify(result));
   assert.ok(result.contacts>400&&result.maxError<=2&&result.maxWrist<=1.10001,JSON.stringify(result));
@@ -56,6 +58,16 @@ try{
   return results;
  });
  for(const r of lifecycle){assert.ok(r.finite);assert.equal(r.fresh.upper,'upper:fire');assert.equal(r.fresh.full,undefined);assert.ok(r.firstShotRecoil>0);assert.equal(r.switched.upper,'upper:fire');assert.ok(r.switchedRecoil>.02);assert.notEqual(r.noStale.upper,'upper:reload');assert.deepEqual(r.resets,['room','visibility','gap','correction','map']);if(!r.firstPerson){assert.ok(r.air.every(f=>!f.feasible&&f.reason==='air'));assert.ok(r.pivot.every(f=>!f.feasible&&f.reason==='pivot'));assert.ok(r.settled.every(f=>f.feasible));assert.ok(r.unreachable.every(f=>!f.feasible&&['unreachable','joint-limit'].includes(f.reason)));}}
- assert.deepEqual(errors,[]);await writeFile(`${out}/measurements.json`,JSON.stringify({results,lifecycle},null,2));
- console.log(JSON.stringify({cases:results.length,framesPerCase:420,maxGripError:Math.max(...results.map(r=>r.maxError)),lifecycle:12,out}));
+ let maxPoseDelta=null;
+ if(reference){
+  assert.equal(reference.results.length,results.length);maxPoseDelta=0;
+  for(let i=0;i<results.length;i++){
+   const a=results[i],b=reference.results[i];assert.deepEqual([a.hero,a.weapon,a.firstPerson],[b.hero,b.weapon,b.firstPerson]);assert.equal(a.poses.length,b.poses.length);
+   for(let j=0;j<a.poses.length;j++){assert.equal(a.poses[j].frame,b.poses[j].frame);assert.equal(a.poses[j].values.length,b.poses[j].values.length);for(let k=0;k<a.poses[j].values.length;k++)maxPoseDelta=Math.max(maxPoseDelta,Math.abs(a.poses[j].values[k]-b.poses[j].values[k]));}
+  }
+  assert.ok(maxPoseDelta<1e-8,'Matrix optimization changed the sampled pose/contact: '+maxPoseDelta);
+ }
+ const manifest=await page.evaluate(()=>fetch('./manifest.json').then(r=>r.json()));
+ assert.deepEqual(errors,[]);await writeFile(`${out}/measurements.json`,JSON.stringify({results,lifecycle,maxPoseDelta,manifest},null,2));
+ console.log(JSON.stringify({cases:results.length,framesPerCase:420,maxGripError:Math.max(...results.map(r=>r.maxError)),lifecycle:12,maxPoseDelta,out}));
 }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
