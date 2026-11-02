@@ -10,6 +10,7 @@ import {BonePose} from './bone-pose.mjs';
 import {AnimationSprings} from './animation-springs.mjs';
 import {motionProfiles} from './motion-profiles.mjs';
 import {PoseInertia} from './pose-inertia.mjs';
+import {advanceStridePlan} from './locomotion-gait.mjs';
 
 export const chassisNames=['vector','patch','bastion','spectre','glitch','forge'];
 export const transitionNames=['start','brake','pivot_left','pivot_right','pivot_back_left','pivot_back_right','land_hard','crouch_enter','weapon_ready'];
@@ -35,7 +36,7 @@ function trimRestTracks(model,clip){
  });return clip;
 }
 // Models and textures are shared; every actor owns an independent cloned rig.
-export function createCharacters(art,{weapons=null}={}){
+export function createCharacters(art,{weapons=null,heroes=null}={}){
  const templates=[],weaponTemplates=new Map(),teamMaterials=[0x69efff,0xffae67].map(color=>new THREE.MeshBasicMaterial({color,toneMapped:false})),badgeGeometry=new THREE.BoxGeometry(.09,.025,.035);
  const stamp=document.createElement('canvas');stamp.width=stamp.height=64;const ctx=stamp.getContext('2d'),gradient=ctx.createRadialGradient(32,32,5,32,32,32);gradient.addColorStop(0,'rgba(0,0,0,.5)');gradient.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);const shadowTexture=new THREE.CanvasTexture(stamp),shadowMaterial=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false}),shadowGeometry=new THREE.PlaneGeometry(43,36);
  async function preload(progress=()=>{}){
@@ -125,7 +126,7 @@ export function createCharacters(art,{weapons=null}={}){
   const mixer=new THREE.AnimationMixer(model),actions=new Map();
   function action(name,layer='full'){
    const key=layer+':'+name;if(actions.has(key))return actions.get(key);
-   const original=source.clips[name];const clip=layer==='transition'?source.transitions[name]:layer==='full'?original:new THREE.AnimationClip(key,original.duration,original.tracks.filter(t=>lower.test(boneName(t))===(layer==='lower')));
+   const original=source.clips[name];const clip=layer==='transition'?source.transitions[name]:layer==='full'?original:new THREE.AnimationClip(key,original.duration,original.tracks.filter(t=>lower.test(boneName(t))===(layer==='lower')&&!(firstPerson&&layer==='lower'&&!/^(root|hips)$/.test(boneName(t)))));
    const a=mixer.clipAction(clip);actions.set(key,a);return a;
   }
   let base=null,upper=null,full=null,upperUntil=0,fullUntil=0,lastLife=null,lastAlive=null,lastAir=false,lastReload=0,lastWeapon=weapon,deadAt=0,lastNow=0,lastPhase=null,reloadDuration=0,prop=null,propUntil=0,gaitPhase=0,hitAt=-Infinity,hitForce=0;
@@ -134,9 +135,14 @@ export function createCharacters(art,{weapons=null}={}){
   function transitionTo(name,now){
    if(transition)transition.fadeOut(.06);transition=action(name,'transition');transition.reset().setLoop(THREE.LoopOnce,1).setEffectiveWeight(.55);transition.clampWhenFinished=true;transition.play();transitionUntil=now+source.clips[name].duration*1000;transitionKind=name;
   }
-  const hybrid=!firstPerson&&!legacyLocomotion,signals=new AnimationMotion(),blend=new LocomotionBlend(locomotionClips.map(name=>source.clips[name].duration));
+  const continuous=!legacyLocomotion,hybrid=continuous&&!firstPerson,signals=new AnimationMotion(),blend=new LocomotionBlend(locomotionClips.map(name=>source.clips[name].duration));
   const feet=hybrid?new FootIK(rig,model,bones,source.feet,profile):null;
-  const lowerActions=hybrid?locomotionClips.map(name=>action(name,'lower')):[];
+  let viewStride=null;
+  if(firstPerson&&continuous){
+   rig.updateMatrixWorld(true);const a=bones['thigh.L'].getWorldPosition(new THREE.Vector3()),b=bones['shin.L'].getWorldPosition(new THREE.Vector3()),c=bones['foot.L'].getWorldPosition(new THREE.Vector3());
+   viewStride={legLength:a.distanceTo(b)+b.distanceTo(c),footWidth:source.feet.L.home.distanceTo(source.feet.R.home)*model.scale.x,supportTravel:25,cycleDuration:.7,duty:.3};
+  }
+  const lowerActions=continuous?locomotionClips.map(name=>action(name,'lower')):[];
   // The glTF root converts Blender's Z-up bone space into scene Y-up.
   const yawWarp=new THREE.Quaternion(),counterWarp=new THREE.Quaternion(),bodyEuler=new THREE.Euler();
   let gun=null,magazine=null,pump=null,triggerGrip=null,supportGrip=null,pumpAt=-Infinity;const gunAnchor=new THREE.Group();model.add(gunAnchor);
@@ -196,7 +202,7 @@ export function createCharacters(art,{weapons=null}={}){
     if(state.phase==='finished'||state.phase==='round_end'){
      const name=reduced?'idle':state.winner===p.team?'victory':'defeat';full=swap(full,action(name),true,.25);base?.fadeOut(.15);upper?.fadeOut(.15);fullUntil=Infinity;
     }else if(full&&now>=fullUntil){full.fadeOut(.16);full=null;base?.reset().fadeIn(.16).play();if(!firstPerson&&base)base.time=gaitPhase*base.getClip().duration;upper?.reset().fadeIn(.16).play();}
-    if(!full){if(!hybrid){base=swap(base,action(motion,'lower'));base.setEffectiveTimeScale(speed>12&&!air?THREE.MathUtils.clamp(speed/(motion==='run'?250:145),.6,1.6):1);}
+    if(!full){if(!continuous){base=swap(base,action(motion,'lower'));base.setEffectiveTimeScale(speed>12&&!air?THREE.MathUtils.clamp(speed/(motion==='run'?250:145),.6,1.6):1);}
      if(p.reload>0&&!lastReload){reloadDuration=Math.max(reloadDuration,p.reload,weapons?.[p.weapon]?.reload||0);if(upper!==action('reload','upper'))trigger('reload',now,p.reload/64);}
      if(!p.reload&&lastReload&&upper===action('reload','upper'))upperUntil=now;
      if(state.objective?.actor===slot&&state.objective.progress>0){if(upper!==action('interact','upper'))upper=swap(upper,action('interact','upper'));upperUntil=now+100;}
@@ -204,7 +210,7 @@ export function createCharacters(art,{weapons=null}={}){
     }
    }
    lastReload=p.reload||0;lastAlive=p.alive;lastNow=now;
-   const motionSignals=signals.update(p,dt,state.config?.map??0);
+   const runSpeed=(heroes?.[hero]?.speed||250)*(weapons?.[p.weapon]?.mobility??1),motionSignals=signals.update(p,dt,state.config?.map??0,runSpeed);
    if(motionSignals.reset||full||!p.alive||reduced){transition?.stop();transition=null;transitionKind=null;pivotAngle=0;}
    else{
     pivotAngle+=motionSignals.yawDelta;
@@ -218,8 +224,8 @@ export function createCharacters(art,{weapons=null}={}){
    }
    lastCrouch=!!p.crouch;lastScoped=!!p.scoped;
    if(transition&&now>=transitionUntil){transition.fadeOut(.06);transition=null;transitionKind=null;}
-   if(hybrid){
-    const cycleDuration=feet.plan(motionSignals,dt);
+   if(continuous){
+    const cycleDuration=feet?feet.plan(motionSignals,dt):advanceStridePlan(viewStride,motionSignals,dt);
     blend.update(motionSignals,dt,{active:p.alive&&!full,reduced,phase:motionSignals.reset?gaitPhase:blend.phase,cycleDuration});
     for(let i=0;i<lowerActions.length;i++){const a=lowerActions[i],weight=blend.weights[i]*blend.gain;a.enabled=weight>1e-6;if(a.enabled)a.play();a.paused=true;a.time=blend.times[i];a.setEffectiveWeight(weight);}
     base=action(blend.dominant,'lower');gaitPhase=blend.phase;
@@ -237,13 +243,13 @@ export function createCharacters(art,{weapons=null}={}){
     counterWarp.copy(bones.hips.quaternion).invert().multiply(warpRestore.hips);bones.spine.quaternion.premultiply(counterWarp);
    }
    if(p.alive&&!full&&!reduced){bones.hips.position.z+=springs.landing.value[0];bones.spine.rotation.x+=springs.lean.value[0]*.7;bones.spine.rotation.y+=springs.lean.value[1]*.6;bones.chest.rotation.x-=springs.recoil.value[0];}
-   const inertialTag=(full?.getClip().name||(hybrid?(motionSignals.grounded?'ground':'air'):base?.getClip().name)||'idle')+'/'+(upper?.getClip().name||'idle');
+   const inertialTag=(full?.getClip().name||(continuous?(motionSignals.grounded?'ground':'air'):base?.getClip().name)||'idle')+'/'+(upper?.getClip().name||'idle');
    inertia.apply(inertialTag,dt,{enabled:p.alive&&!full&&!reduced&&!motionSignals.reset,immediate:now-fireAt<100||now-hitAt<320});
    if(p.alive&&!full){warpRestore.hips.copy(bones.hips.quaternion);bones.hips.rotation.x=THREE.MathUtils.clamp(bones.hips.rotation.x,-.25,.25);bones.hips.rotation.y=THREE.MathUtils.clamp(bones.hips.rotation.y,-.25,.25);bones.hips.rotation.z=THREE.MathUtils.clamp(bones.hips.rotation.z,-.85,.85);counterWarp.copy(bones.hips.quaternion).invert().multiply(warpRestore.hips);bones.spine.quaternion.premultiply(counterWarp);}
    const transitionDrop=transitionKind&&source.compression[transitionKind]?Math.max(0,-source.compression[transitionKind].evaluate(transition.time)[2]*.55):0;
    feet?.apply(motionSignals,blend,dt,{active:p.alive&&!full,reduced,compression:Math.min(motionSignals.crouch?1.5:5,(Math.max(0,-springs.landing.value[0])+transitionDrop)*model.scale.x)});
    if(firstPerson&&p.alive&&!reduced){
-    const phase=base?.time/(base?.getClip().duration||1)*Math.PI*2,moving=THREE.MathUtils.clamp(motionSignals.speed/250,0,1),sway=profile.sway*(p.reload?.25:1);
+    const phase=(continuous?blend.phase:base?.time/(base?.getClip().duration||1))*Math.PI*2,moving=THREE.MathUtils.clamp(motionSignals.speed/motionSignals.runSpeed,0,1),sway=profile.sway*(p.reload?.25:1);
     model.position.x+=springs.sway.value[0]+Math.sin(phase)*moving*.007*sway;
     model.position.y+=Math.cos(phase*2)*moving*.003*sway-springs.ready.value[0]*.023;
     model.position.z+=springs.recoil.value[2]+springs.ready.value[0]*.012;model.rotation.x+=springs.recoil.value[0]*.35+springs.ready.value[0]*.045+springs.sway.value[1];model.rotation.z+=Math.sin(phase)*moving*.008*sway+springs.sway.value[2];
@@ -286,7 +292,7 @@ export function createCharacters(art,{weapons=null}={}){
   }
   function dispose(){prop?.traverse(o=>o.geometry?.dispose());mixer.stopAllAction();mixer.uncacheRoot(model);if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)o.geometry.dispose();});rig.removeFromParent();}
   let armTriangles=0;if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)armTriangles+=(o.geometry.index?.count||0)/3;});
-  return {rig,model,bones,mixer,hero,slot,armTriangles,animation:{signals:signals.output,blend,hybrid,feet,springs,inertia,contacts,profile,get transition(){return transitionKind;},get action(){return {upper:upper?.getClip().name,full:full?.getClip().name,reloadPhase:upper?.getClip().name==='upper:reload'?upper.time/source.clips.reload.duration:null};}},invalidate(reason='visibility'){pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);springs.reset();inertia.reset();lastLife=null;lastAlive=null;},setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
+  return {rig,model,bones,mixer,hero,slot,armTriangles,animation:{signals:signals.output,blend,hybrid,feet,stride:feet||viewStride,springs,inertia,contacts,profile,get transition(){return transitionKind;},get action(){return {upper:upper?.getClip().name,full:full?.getClip().name,reloadPhase:upper?.getClip().name==='upper:reload'?upper.time/source.clips.reload.duration:null};}},invalidate(reason='visibility'){pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);springs.reset();inertia.reset();lastLife=null;lastAlive=null;},setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
  }
  function dispose(){const geometries=new Set(),materials=new Set(),textures=new Set();for(const t of templates)t.model.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});for(const gun of weaponTemplates.values())gun.traverse(o=>{if(o.geometry)geometries.add(o.geometry)});badgeGeometry.dispose();teamMaterials.forEach(m=>m.dispose());shadowGeometry.dispose();shadowMaterial.dispose();shadowTexture.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}
  return {preload,actor,dispose,weaponModel:kind=>weaponTemplates.get(kind)?.clone(true)};

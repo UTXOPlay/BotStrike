@@ -15,7 +15,7 @@ const scene=new THREE.Scene();scene.background=new THREE.Color('#101c29');
 scene.add(new THREE.HemisphereLight(0xd0edff,0x5a6173,2));
 for(const [x,y,z,color]of [[-200,300,-300,0xd5ecff],[250,150,100,0xffbb88]]){const light=new THREE.DirectionalLight(color,3);light.position.set(x,y,z);scene.add(light);}
 const floor=new THREE.GridHelper(10000,200,0x537080,0x233747);scene.add(floor);
-const camera=new THREE.PerspectiveCamera(45,1,.5,10000),art=createArt(renderer,{mobile}),characters=createCharacters(art,{weapons:spec.weapons}),baselineCharacters=createBaseline(art);scene.add(camera);
+const camera=new THREE.PerspectiveCamera(45,1,.5,10000),art=createArt(renderer,{mobile}),characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes}),baselineCharacters=createBaseline(art);scene.add(camera);
 const modes=['baseline','candidate'],actors={},vector=new THREE.Vector3();
 const debugGroup=new THREE.Group();scene.add(debugGroup);
 const markers=Array.from({length:20},()=>{
@@ -25,7 +25,7 @@ const markers=Array.from({length:20},()=>{
 });
 const velocityArrow=new THREE.ArrowHelper(new THREE.Vector3(0,0,-1),new THREE.Vector3(),35,0x5bceff),facingArrow=new THREE.ArrowHelper(new THREE.Vector3(0,0,-1),new THREE.Vector3(),25,0xffcc77);debugGroup.add(velocityArrow,facingArrow);
 const controls=Object.fromEntries(['mode','scenario','hero','weapon','view','count','fps','reduced','diagnostics'].map(id=>[id,document.querySelector('#'+id)]));
-for(const value of scenarios)controls.scenario.add(new Option(value,value));
+for(const value of scenarios)controls.scenario.add(new Option(value,value));controls.scenario.value='walk_run';
 spec.heroes.forEach((hero,i)=>controls.hero.add(new Option(hero.name,String(i))));
 spec.weapons.forEach((weapon,i)=>controls.weapon.add(new Option(weapon.name,String(i))));controls.weapon.value='2';
 let playing=false,time=0,current,trailX=0,trailZ=0,frameIntervals=[];
@@ -47,10 +47,13 @@ function reset(config){
 }
 let contacts=[],maxDrift=0,lastDebug=null,contactStats=[];
 function step(dt,{check=false}={}){
- const next=time+dt,m=motionFrame(current.scenario,next);trailX+=m.velocity[0]*dt;trailZ+=m.velocity[2]*dt;
+ const next=time+dt,m=motionFrame(current.scenario,next),nativeGait=current.scenario==='walk_run';
+ const firstRunSpeed=spec.heroes[current.hero??0].speed*(spec.weapons[current.weapon].mobility??1);
+ if(nativeGait)m.velocity=m.velocity.map(v=>v*firstRunSpeed/250);
+ trailX+=m.velocity[0]*dt;trailZ+=m.velocity[2]*dt;
  const state={phase:'live',config:{map:m.map},objective:{}};let finite=true,unchanged=true;
  const active=actors[current.mode].slice(0,current.count);
- const players=active.map(a=>({slot:a.slot,team:a.slot<5?0:1,hero:a.hero,weapon:current.weapon,position:[(current.count===1?0:a.slot%5-2)*80+trailX+m.offset,m.y,(current.count===1?0:Math.floor(a.slot/5))*90+trailZ],velocity:m.velocity,yaw:m.yaw,pitch:a.labFirstPerson?0:.25*Math.sin(next),life:m.life,alive:m.alive,crouch:m.crouch,reload:current.scenario==='reload'&&next>=2?Math.max(0,Math.ceil(spec.weapons[current.weapon].reload-(next-2)*64)):m.reload}));
+ const players=active.map(a=>{const ratio=nativeGait?spec.heroes[a.hero].speed*(spec.weapons[current.weapon].mobility??1)/firstRunSpeed:1;return {slot:a.slot,team:a.slot<5?0:1,hero:a.hero,weapon:current.weapon,position:[(current.count===1?0:a.slot%5-2)*80+trailX*ratio+m.offset,m.y,(current.count===1?0:Math.floor(a.slot/5))*90+trailZ*ratio],velocity:nativeGait?m.velocity.map(v=>v*ratio):m.velocity,yaw:m.yaw,pitch:a.labFirstPerson?0:.25*Math.sin(next),life:m.life,alive:m.alive,crouch:m.crouch,reload:current.scenario==='reload'&&next>=2?Math.max(0,Math.ceil(spec.weapons[current.weapon].reload-(next-2)*64)):m.reload};});
  const before=check?players.map(p=>JSON.stringify(p)):null;
  const started=performance.now();
  for(let i=0;i<active.length;i++){
@@ -106,7 +109,7 @@ function step(dt,{check=false}={}){
   const drift=contacts[0][side]?vector.distanceTo(contacts[0][side]):0;maxDrift=Math.max(maxDrift,drift);
   feet[side]={estimated:stance?'stance':'swing',state:contact?.status||'estimated',reason:contact?.reason,contactError:contact?.error,position:vector.toArray(),drift};
  }
- lastDebug={time,mode:current.mode,solvedFeet:Boolean(first.animation?.feet),velocity:m.velocity,facing:m.yaw,phase,weights:Object.fromEntries(lower.map(a=>[a.getClip().name,a.getEffectiveWeight()])),feet,orientation:first.animation?.blend.orientation||0,stride:first.animation?.blend.cadenceScale||1,reset:first.animation?.signals.reset,contactStats,springs:first.animation?Object.fromEntries(['lean','landing','ready','recoil','sway'].map(k=>[k,[...first.animation.springs[k].value]])):null,inertia:first.animation?.inertia.maxAngle};
+ lastDebug={time,mode:current.mode,solvedFeet:Boolean(first.animation?.feet),velocity:m.velocity,facing:m.yaw,phase,gait:first.animation?{runSpeed:first.animation.signals.runSpeed,speedFraction:first.animation.signals.speedFraction,runAmount:first.animation.signals.runAmount,cycleDuration:first.animation.stride?.cycleDuration}:null,weights:Object.fromEntries(lower.map(a=>[a.getClip().name,a.getEffectiveWeight()])),feet,orientation:first.animation?.blend.orientation||0,stride:first.animation?.blend.cadenceScale||1,reset:first.animation?.signals.reset,contactStats,springs:first.animation?Object.fromEntries(['lean','landing','ready','recoil','sway'].map(k=>[k,[...first.animation.springs[k].value]])):null,inertia:first.animation?.inertia.maxAngle};
  return {cpu,finite,unchanged};
 }
 function draw(){
@@ -116,7 +119,7 @@ function draw(){
  else{const offset={front:[-35,25,-150],side:[150,25,0],back:[0,25,150],feet:[-35,18,-65]}[current.view]||[-250,190,-470];camera.position.copy(focus).add(new THREE.Vector3(...offset));camera.lookAt(focus);}
  renderer.render(scene,camera);
  if(!current.diagnostics){hud.textContent=`${current.mode} · ${current.scenario} · ${time.toFixed(2)} s · diagnostics off`;return;}
- const d=lastDebug;if(d)hud.textContent=`${d.mode} · ${current.scenario} · ${time.toFixed(2)} s\nvelocity ${d.velocity.map(v=>v.toFixed(1)).join(' / ')} · facing ${d.facing.toFixed(2)} rad\nphase ${d.phase.toFixed(3)} · pelvis ${d.orientation.toFixed(3)} · cadence ${d.stride.toFixed(2)}\n${Object.entries(d.weights).map(([k,v])=>`${k.replace('lower:','')} ${v.toFixed(2)}`).join(' | ')}\n${d.solvedFeet?'SOLVED':'ESTIMATED'} feet: L ${d.feet.L.state}, R ${d.feet.R.state}\npost-skinning sole error max ${Math.max(...contactStats.map(s=>s.maxError)).toFixed(3)} world units\n${current.count} rigs · ${renderer.info.render.calls} draw calls · reset ${d.reset||'none'}\n${d.springs?Object.entries(d.springs).map(([name,v])=>name+' '+v.map(x=>x.toFixed(3)).join('/')).join(' · '):''}\npose inertia ${(d.inertia||0).toFixed(3)} rad · anchors green / soles white / error orange`;
+ const d=lastDebug;if(d)hud.textContent=`${d.mode} · ${current.scenario} · ${time.toFixed(2)} s\nvelocity ${d.velocity.map(v=>v.toFixed(1)).join(' / ')} · facing ${d.facing.toFixed(2)} rad\n${d.gait?'visual run '+(d.gait.runAmount*100).toFixed(0)+'% · speed '+(d.gait.speedFraction*100).toFixed(0)+'% of '+d.gait.runSpeed.toFixed(1)+'\n':''}phase ${d.phase.toFixed(3)} · pelvis ${d.orientation.toFixed(3)} · cadence ${d.stride.toFixed(2)}\n${Object.entries(d.weights).map(([k,v])=>`${k.replace('lower:','')} ${v.toFixed(2)}`).join(' | ')}\n${d.solvedFeet?'SOLVED':'ESTIMATED'} feet: L ${d.feet.L.state}, R ${d.feet.R.state}\npost-skinning sole error max ${Math.max(...contactStats.map(s=>s.maxError)).toFixed(3)} world units\n${current.count} rigs · ${renderer.info.render.calls} draw calls · reset ${d.reset||'none'}\n${d.springs?Object.entries(d.springs).map(([name,v])=>name+' '+v.map(x=>x.toFixed(3)).join('/')).join(' · '):''}\npose inertia ${(d.inertia||0).toFixed(3)} rad · anchors green / soles white / error orange`;
 }
 function percentile(values,p){return [...values].sort((a,b)=>a-b)[Math.min(values.length-1,Math.floor(values.length*p))]||0;}
 function run(config={}){
@@ -152,7 +155,7 @@ window.motionLabReady=(async()=>{
     contacts[side]={...c,position:hand.toArray(),actualError:target?hand.distanceTo(target.getWorldPosition(new THREE.Vector3())):null};
    }
    const bones=[...new Set(Object.values(a.bones))];
-   return {contacts,action:a.animation?.action,transition:a.animation?.transition,reset:a.animation?.signals.reset,feet:a.animation?.feet?.feet.map(f=>({side:f.side,status:f.status,reason:f.reason,feasible:f.feasible,plantId:f.plantId,error:f.error,bend:f.solver.result.bend})),springs:a.animation?Object.fromEntries(['lean','recoil','landing','ready','sway'].map(k=>[k,[...a.animation.springs[k].value]])):null,finite:bones.every(b=>[...b.position,...b.quaternion,...b.scale].every(Number.isFinite)&&Math.abs(b.quaternion.length()-1)<.001),pose:bones.flatMap(b=>[...b.position,...b.quaternion]),modelPose:[...a.model.position,...a.model.quaternion]};
+   return {contacts,action:a.animation?.action,transition:a.animation?.transition,reset:a.animation?.signals.reset,gait:a.animation?{runSpeed:a.animation.signals.runSpeed,speedFraction:a.animation.signals.speedFraction,runAmount:a.animation.signals.runAmount,phase:a.animation.blend.phase,weights:[...a.animation.blend.weights],cycleDuration:a.animation.stride?.cycleDuration,duty:a.animation.stride?.duty}:null,feet:a.animation?.feet?.feet.map(f=>({side:f.side,status:f.status,reason:f.reason,scheduled:f.wasStance,feasible:f.feasible,plantId:f.plantId,error:f.error,bend:f.solver.result.bend})),springs:a.animation?Object.fromEntries(['lean','recoil','landing','ready','sway'].map(k=>[k,[...a.animation.springs[k].value]])):null,finite:bones.every(b=>[...b.position,...b.quaternion,...b.scale].every(Number.isFinite)&&Math.abs(b.quaternion.length()-1)<.001),pose:bones.flatMap(b=>[...b.position,...b.quaternion]),modelPose:[...a.model.position,...a.model.quaternion]};
   },
   matrixWork(config={}){
    // Structural work count, not a timing benchmark. Restore shared prototypes

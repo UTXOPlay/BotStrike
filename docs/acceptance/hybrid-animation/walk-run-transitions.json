@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "date": "2026-11-02",
+  "sourceParent": "534f9a6f22efa49d66c366d7c92588bc8adf5a49",
+  "scope": "Presentation-only normalized walk/run mapping and continuous first-person cadence; not deployed.",
+  "rulesAndInputChanges": false,
+  "clientSha256": {
+    "games/botstrike/client/aim-assist.mjs": "f6448da1f629bf13c7a8661f335eee9fb9d0020f1e0c49a7b8aa938e92549bcb",
+    "games/botstrike/client/animation-motion.mjs": "1b1c2ed026622c6cb5c9568bddfa4c3d47bba73e94e0507cdbce491507f932d1",
+    "games/botstrike/client/animation-springs.mjs": "7542a6b46841240a19d5f4eca432142d88f96ce8dde4f81b9eddd33ba7b9ac68",
+    "games/botstrike/client/art-direction.mjs": "f06a70a1b0834732aaa6178979566d46e567817c84ed05d70605088fdfda6d3d",
+    "games/botstrike/client/audio.mjs": "a85c448eb3589ff2a90734032c0150f980950e56ac53c3a2c0ca66d5525a2f03",
+    "games/botstrike/client/bone-pose.mjs": "7982ad8d8566f916c10aed494f5753fc828c90e715a56e0249ac8d3db22f5c78",
+    "games/botstrike/client/characters.mjs": "6dd96013103ef9cea1bba688ebc0f2bddd4b069232a5114085b9071cb388748b",
+    "games/botstrike/client/dialogs.mjs": "4c1a37076d55277355f52065aa0a804119d03abc6f3ed077198fd9246b8342f0",
+    "games/botstrike/client/feedback.mjs": "fc7aea5ca6049778816e39bf58985907ef175e1aad83db1a3bfa3d38d883b4de",
+    "games/botstrike/client/foot-ik.mjs": "edd6954f397afdbaed359e29a76ec3d21406fe5027cdcd9eceaaecad3d83751a",
+    "games/botstrike/client/footstep-sound.mjs": "f900db1aa994a134f99a080159e67c1039abf949dff0f3e4a8309d74da7e8ff3",
+    "games/botstrike/client/gamepad.mjs": "a6078d07954790d9046dc75adf979d40fe8dfb50f42c3ce309d55398665b059e",
+    "games/botstrike/client/geometry.mjs": "9773d6d87e029c85384f6611b8852baea2a947f2fdf30c95f7fa8d02035225e3",
+    "games/botstrike/client/impact-sound.mjs": "ec4444c05803964829dbf3a01f85ab039285e32c7cf02b64511228bc7f891c28",
+    "games/botstrike/client/locomotion-blend.mjs": "deab8e6dc682398e14ac7794499c75e39e10b0d87bfddbcb590fa0c617f215cd",
+    "games/botstrike/client/locomotion-gait.mjs": "0e6e72b346e0b62226c1b8ea26ab5915756fa3cbceef58ab6b9e14930f61b683",
+    "games/botstrike/client/main.mjs": "d46c8fa53972b0ddf180fed6ee360d4cf0dc9ae3821c4bc7419f3729019c2a19",
+    "games/botstrike/client/motion-profiles.mjs": "79fb1883393c31abbd2a066baaca24bdfeadb90039232284ab1791b738a3a3cd",
+    "games/botstrike/client/motion.mjs": "5a61ae82fa5250a1724bfbdacaad6f7a4bba90fc1613361f05c3b9b8ee7a5063",
+    "games/botstrike/client/pose-inertia.mjs": "2d9b553d0080a2385163877208b430dca6b4a71498a324deea1debba5a5ee549",
+    "games/botstrike/client/post-match.mjs": "24a613ec42f1145efe5f375a61650d1b66f5a824bd6e7577f20b99fe0a2898db",
+    "games/botstrike/client/prediction.mjs": "4673f70088efd69a1b6c28bf226e9aa1b339e675340a3ff9dc308ff3f64a7de0",
+    "games/botstrike/client/preferences.mjs": "a9e9fb6b9be0bfdd5df57c1d9d38cd6b19cc48b29ae0b5751e5885fc48ecf42f",
+    "games/botstrike/client/scene.mjs": "c16e76966f821ef651b89b6dca7953f10a31415814101e9a38ee9a77225f36a0",
+    "games/botstrike/client/session-startup.mjs": "77d6a9c5ec63c020809e71ae9cb84996aea3059e9a3648512dbf251294fd206c",
+    "games/botstrike/client/shot-sound.mjs": "63410bbca5371180d5ff9c11e048a5eab481b881b2ced334ca4c06122f69ea6d",
+    "games/botstrike/client/shot-trail.mjs": "25fd9960876919d804aeccc07441eb72e8b3f1a475ad455cf6eda28cdbde8c5c",
+    "games/botstrike/client/snapshots.mjs": "83a381114e4bb348fa26f283a08f7c16b201f6f5bffc90ef9219a6536c72f5f2",
+    "games/botstrike/client/team-signals.mjs": "a0fa7289318dfc741ae355dd31271da030f5b4c1e7f8d4684d61376ffe8cc583",
+    "games/botstrike/client/two-bone-ik.mjs": "1c10cd63e39743c1e94e427823173e4e0f208b0a20b419d3a65748c43530c4a3",
+    "games/botstrike/web/app.js": "6517c9f9f9bc26e96190580789c48531a7eea63966ee04099205a24de334ad34"
+  },
+  "tests": {
+    "javascript": 91,
+    "host": 4,
+    "build": "passed",
+    "gaitMatrix": {
+      "cases": 144,
+      "frames": 60480,
+      "maxPhaseDelta": 0,
+      "maxGripError": 4.895607988854663e-13
+    },
+    "directionalFeet": {
+      "cases": 96,
+      "frames": 17280,
+      "minFeasibleScheduled": 1.0,
+      "maxLiftWalking": 1.4348280141728236,
+      "maxLiftRunning": 3.909783829554026,
+      "maxContactError": 1.3746121366683364e-13,
+      "maxSoleHeightInStance": 0.11019251577653265,
+      "weapons": [
+        "ION-5 (mobility 1.0)",
+        "KRAKEN-90 (mobility 0.82)"
+      ]
+    },
+    "fixtureMatrix": {
+      "cases": 36,
+      "rigs": 10,
+      "minFeasibleScheduled": 0.9693593314763231,
+      "maxPostSkinningSoleError": 7.015212128518772e-13
+    },
+    "composition": {
+      "cases": 144,
+      "framesPerCase": 420,
+      "lifecycleCases": 12
+    },
+    "stability": {
+      "jitterReducedFixtures": 18,
+      "lifecycleCycles": 1200,
+      "lifecycleFrames": 28800
+    },
+    "previousFootRegressions": 18,
+    "groupHitRecovery": "passed",
+    "actualGame": "Passed on physical GPU: six required sizes, native acknowledged movement/skill, Shift hold/release changes native speed between 55% and full run, and touch firing+aim. First concurrent software-browser attempt failed when the human died during resizing and hid the buy button; retained separately. A separate test observation race read the WebSocket capture before its callback; the check now waits for the sent walk/release sequences before asserting native speed."
+  },
+  "hardware": {
+    "baseline": "original main 0c2c5f9 runtime/assets",
+    "secondsPerPass": 15,
+    "passes": 4,
+    "renderer": "ANGLE (Intel, Mesa Intel(R) Iris(R) Xe Graphics (RPL-P), OpenGL ES 3.2)",
+    "animationCpuP95Ms": {
+      "baseline": 1.2000000029802322,
+      "candidate": 2.1000000089406967
+    },
+    "rafP95Ms": {
+      "baseline": 35.80000000000291,
+      "candidate": 25
+    },
+    "hostContention": {
+      "cpuBusyThresholdPercent": 70,
+      "fractionAboveThreshold": 0.16666666666666666,
+      "flagged": true,
+      "note": "Aggregate host load includes this benchmark. A contention flag requires review; it neither proves isolation nor overrides a failed budget."
+    },
+    "interpretation": "Contended short run, not stable hardware acceptance. Candidate CPU exceeds 1 ms. Do not replace the prior 20.3 ms pacing reference with the inflated short-run baseline-derived limit. Android data, end-to-end latency and sustained performance remain open."
+  },
+  "humanReview": "Prior accepted walking defects were checked on an earlier build; new walk/run transitions have numeric and fixed-step visual evidence, not new human acceptance.",
+  "files": {
+    "walk-run-matrix.json.gz": {
+      "sha256": "d0ddf418b05753df36003de55e0f7a815c9074a604dea94ba485dfbc030b00e1",
+      "uncompressedSha256": "119238b258deb1a6392eeef3215cb2e0c20ca1a65f365eec51e72b87b5dd2968"
+    },
+    "walk-run-fixtures.json.gz": {
+      "sha256": "b5ab920d53c921b4411b2f856ff3e1a0fc631aaab5f7bc3224d231f539af18d3",
+      "uncompressedSha256": "4b52f4b6d83fb09097de5dd70ca83083f4fbd22676bf534d4253d8af37a090d8"
+    },
+    "walk-run-stability.json.gz": {
+      "sha256": "1fbecc5129a0c0bebf3ad34df4542409b2ba5e32319d2816f56dbd601145da49",
+      "uncompressedSha256": "d8eb0bf352a443e047c3da64680133d3938e46f59f8cd33a8376d3218049ce74"
+    },
+    "walk-run-composition.json.gz": {
+      "sha256": "5570dd2981d266a3851513474af798aec7a322e33dfd41909dfc85b0805b93a7",
+      "uncompressedSha256": "c11eb33e33f1864b97ebefdc7e58abeb746093e221932a408cf348fe42b78fc5"
+    },
+    "walk-run-feet.json.gz": {
+      "sha256": "6a2a124b6ffde7d0ca5c935f0ac9f5aa159d9a93c3e4ec81c1fd6edf60a79311",
+      "uncompressedSha256": "b03563e18fe7dea7aced303c87568f5207dad1db2adfa03ea35c1dfd6702b5a4"
+    },
+    "walk-run-hardware-contended.json.gz": {
+      "sha256": "a22efcdba81140e37cb36fa802f3192e40fdd6a2df310e1a0e6035b23b0bf816",
+      "uncompressedSha256": "953fa7f068b1dd0079a74b779ff0dce7f5fca5e6a398c871642f19a2006cd47e"
+    },
+    "walk-run-group.json.gz": {
+      "sha256": "43e3788c34004bff058ce22a14f49b1f383a6c4ce524662b4aea5cb4e150c531",
+      "uncompressedSha256": "6e3c74d3bedf9e86f427a73d5e4186d3e963c2567db710f990a61aae6fc51dc3"
+    },
+    "walk-run-group-gait.json.gz": {
+      "sha256": "3f490f1527fed7c074404d3f7a4f2574610ef31add565760c8e597ca751c7df7",
+      "uncompressedSha256": "55558fcc9b6794887c58eff40c57324ba463b6fd9a8d3958622943433e28468e"
+    },
+    "walk-run-group-jitter.json.gz": {
+      "sha256": "4d57191e29a8ae1c334be346e8e6f5fff96183ab8c9b2a48bfea9677ae8cf4c7",
+      "uncompressedSha256": "f87850391273a8dfa877472a4f382e12df5cd65a85d9b3b3f6083d071042231d"
+    },
+    "walk-run-game-browser-failed.txt": {
+      "sha256": "437fb6a67c32f9985a502ec5ec5348e67abcd5a69f82c25d032bae9146c102d7"
+    },
+    "walk-run-game-browser-passed.txt": {
+      "sha256": "47e0144d5c8b76f9c939dbd9edb7f85d76dc1d6dde6e945b2b9a02cb852eaeb7"
+    },
+    "walk-run-controls-capture-race.txt": {
+      "sha256": "764bff36bf1ea4d7c19061a12cf6ea60ca15cb8deef3f5c90facd2b5407de107"
+    }
+  }
+}

@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {AnimationMotion} from '../games/botstrike/client/animation-motion.mjs';
 import {LocomotionBlend,locomotionTargets} from '../games/botstrike/client/locomotion-blend.mjs';
+import {advanceStridePlan,calculateRunAmount} from '../games/botstrike/client/locomotion-gait.mjs';
+import spec from '../botstrike/spec.json' with {type:'json'};
 
 const near=(a,b,tolerance=1e-10)=>assert.ok(Math.abs(a-b)<tolerance,`${a} != ${b}`);
 const motion=(forward,side=0)=>({forward,side,speed:Math.hypot(forward,side),grounded:true,rising:false,crouch:false,reset:null});
@@ -71,5 +73,31 @@ test('gradual start and stop cross hysteresis at 30, 60 and 120 fps',()=>{
    const m=signals.update(p,1/fps);starts+=Number(m.starting);stops+=Number(m.stopping);
   }
   assert.equal(starts,1,`${fps} fps start`);assert.equal(stops,1,`${fps} fps stop`);
+ }
+});
+
+test('walk/run style follows each native hero/weapon speed range',()=>{
+ for(const hero of spec.heroes)for(const weapon of spec.weapons){
+  const maximum=hero.speed*weapon.mobility;
+  near(calculateRunAmount(maximum*.55,maximum),0);
+  near(calculateRunAmount(maximum,maximum),1);
+  near(calculateRunAmount(maximum,maximum,false,true),0);
+  near(calculateRunAmount(maximum,maximum,true,false),0);
+  const signals=new AnimationMotion(),p={life:1,alive:true,position:[0,0,0],velocity:[0,0,-maximum*.55],yaw:0},before=structuredClone(p);
+  const m=signals.update(p,1/60,0,maximum);near(m.runAmount,0);near(m.runSpeed,maximum);assert.deepEqual(p,before);
+  p.velocity[2]=-maximum;near(signals.update(p,1/60,0,maximum).runAmount,1);signals.clear();near(signals.output.runAmount,0);
+ }
+});
+
+test('first/third-person stride plans retain one clock through walk/run changes',()=>{
+ for(const fps of [30,60,120]){
+  const a={legLength:28,footWidth:23,supportTravel:25,cycleDuration:.7},b={...a},x=new LocomotionBlend(),y=new LocomotionBlend();
+  for(let frame=0;frame<fps*4;frame++){
+   const ratio=frame<fps?.55:frame<fps*2?1:frame<fps*3?.55:.75+.01*Math.sin(frame*1.7),m={...motion(305*ratio),runSpeed:305,reset:frame===0?'initial':null};
+   const ca=advanceStridePlan(a,m,1/fps),cb=advanceStridePlan(b,m,1/fps),previous=x.phase;
+   x.update(m,1/fps,{cycleDuration:ca});y.update(m,1/fps,{cycleDuration:cb});
+   near(x.phase,y.phase);near(ca,cb);near(((x.phase-previous+1)%1),1/fps/ca,1e-9);
+   assert.ok(ca>=.26&&ca<=1.25);assert.ok(x.weights.every(v=>v>=0&&v<=1));near(x.weights.reduce((n,v)=>n+v,0),1);
+  }
  }
 });

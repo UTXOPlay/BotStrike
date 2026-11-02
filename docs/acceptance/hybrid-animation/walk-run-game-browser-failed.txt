@@ -1,0 +1,20 @@
+desktop initialized
+mobile initialized
+desktop 1920 1080 passed
+desktop 2560 1080 passed
+browser failure context { playing: 'false', status: 'Connected · 5 ms' } {"sent":[{"seq":3008,"viewTick":2829,"x":0,"y":0,"yaw":-0.7878203218452823,"pitch":-0.07639138393576178,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":3009,"viewTick":2829,"x":0,"y":0,"yaw":-0.7878203218452823,"pitch":-0.07639138393576178,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":3010,"viewTick":2829,"x":0,"y":0,"yaw":-0.7878203218452823,"pitch":-0.07639138393576178,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0}],"native":[{"seq":3008,"alive":false,"yaw":-0.78782,"skill":139},{"seq":3009,"alive":false,"yaw":-0.78782,"skill":139}]}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"viewport":[2560,1440],"selector":"#buy-open","r":{"x":0,"y":0,"width":0,"height":0}}
+    at file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-browser.mjs:23:56 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.1

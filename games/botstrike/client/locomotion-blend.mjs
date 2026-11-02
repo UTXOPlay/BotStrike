@@ -1,14 +1,15 @@
+import {runningAmount} from './locomotion-gait.mjs';
 export const locomotionClips=['idle','walk','run','backpedal','strafe_left','strafe_right','crouch','crouch_walk','jump','fall'];
 const clamp=(value,low,high)=>Math.max(low,Math.min(high,value));
 const smooth=(low,high,value)=>{const t=clamp((value-low)/(high-low),0,1);return t*t*(3-2*t);};
 const moving=[1,2,3,4,5,7];
-const referenceSpeed=[0,145,250,145,145,145,0,145,0,0];
+const referenceFraction=[0,.55,1,.55,.55,.55,0,.45,0,0];
 const duration=[3,1,.66,1.1,1,1,2,1.2,.5,1];
 
 export function locomotionTargets(motion,out=new Float64Array(locomotionClips.length)){
  out.fill(0);
  if(!motion.grounded){out[motion.rising?8:9]=1;return out;}
- const amount=smooth(0,24,motion.speed),run=smooth(145,245,motion.speed);
+ const amount=smooth(0,24,motion.speed),run=runningAmount(motion);
  if(motion.crouch){out[6]=1-amount;out[7]=amount;return out;}
  const total=Math.abs(motion.forward)+Math.abs(motion.side);
  const forward=total?Math.max(0,motion.forward)/total:0,back=total?Math.max(0,-motion.forward)/total:0;
@@ -33,7 +34,8 @@ export class LocomotionBlend{
   let sum=0,travel=0,reference=0,cycle=0,largest=-1;
   for(let i=0;i<this.weights.length;i++){sum+=this.weights[i];if(this.weights[i]>largest){largest=this.weights[i];this.dominant=locomotionClips[i];}}
   for(let i=0;i<this.weights.length;i++)this.weights[i]/=sum;
-  for(const i of moving){travel+=this.weights[i];reference+=this.weights[i]*referenceSpeed[i];cycle+=this.weights[i]*this.durations[i];}
+  const runSpeed=Number.isFinite(motion.runSpeed)&&motion.runSpeed>0?motion.runSpeed:250;
+  for(const i of moving){travel+=this.weights[i];reference+=this.weights[i]*referenceFraction[i]*runSpeed;cycle+=this.weights[i]*this.durations[i];}
   this.cadenceScale=travel>1e-5?clamp(motion.speed/(reference/travel),.6,1.6):1;
   if(Number.isFinite(cycleDuration)&&cycleDuration>0&&travel>1e-5)this.cadenceScale=(cycle/travel)/clamp(cycleDuration,.26,1.25);
   if(active&&motion.grounded&&motion.speed>1&&travel>1e-5)this.phase=(this.phase+seconds*this.cadenceScale/(cycle/travel))%1;

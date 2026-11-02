@@ -1,3 +1,4 @@
+import {runningAmount} from './locomotion-gait.mjs';
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 
 // Exact critically damped solution for a piecewise-constant target. The state
@@ -42,7 +43,7 @@ export class AnimationSprings{
   this.lean.step(this.leanTarget,dt,this.profile.bodyHz,.20);
   this.recoil.step(this.zero,dt,this.profile.recoilHz,.06);
   this.landing.step(this.zeroOne,dt,this.profile.bodyHz,.12);
-  this.readyTarget[0]=motion.scoped||firing||reloading||!motion.grounded?0:clamp((motion.speed-170)/100,0,1);
+  this.readyTarget[0]=motion.scoped||firing||reloading||!motion.grounded?0:runningAmount(motion);
   this.ready.step(this.readyTarget,dt,this.profile.bodyHz,1);
   this.swayTarget[0]=-clamp((motion.turnRate||0)*.002,-.018,.018)*this.profile.sway;
   this.swayTarget[1]=clamp((motion.pitchRate||0)*.0015,-.012,.012)*this.profile.sway;
