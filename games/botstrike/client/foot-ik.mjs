@@ -1,6 +1,7 @@
 import {Vector3,Quaternion} from 'three';
 import {TwoBoneIK} from './two-bone-ik.mjs';
 import {advanceStridePlan,runningAmount,crouchAmount} from './locomotion-gait.mjs';
+import {FootRecovery} from './foot-recovery.mjs';
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 const sides=['L','R'];
@@ -51,6 +52,7 @@ function makeFoot(model,bones,side,calibration){
   samples:calibration.samples.map(p=>({...p,mesh:model.getObjectByName(p.meshName)})),
   toes:calibration.toes.map(p=>({...p,mesh:model.getObjectByName(p.meshName)})),heels:calibration.heels.map(p=>({...p,mesh:model.getObjectByName(p.meshName)})),
   anchor:new Vector3(),goal:new Vector3(),desired:new Vector3(),ankle:new Vector3(),sole:new Vector3(),homeWorld:new Vector3(),rotation:new Quaternion(),flat:new Quaternion(),anchorRig:new Quaternion(),
+  previous:new Vector3(),velocity:new Vector3(),targetVelocity:new Vector3(),unconstrained:new Vector3(),recovery:new FootRecovery(),
   status:'inactive',reason:'initial',locked:false,feasible:false,ready:false,wasStance:false,released:false,cooldown:0,error:0,bend:0,reach:0,phase:0,plantId:0};
 }
 
@@ -61,15 +63,15 @@ export class FootIK{
   this.footWidth=this.feet[0].home.distanceTo(this.feet[1].home);
   this.hipWidth=Math.abs(calibration.R.hipX-calibration.L.hipX)*model.scale.x;
   this.laneCenter=(calibration.R.hipX+calibration.L.hipX)*.5*model.scale.x;
-  for(const name of ['travel','pole','offset','hip','knee','ankle','scale','next'])this[name]=new Vector3();
+  for(const name of ['travel','previousTravel','travelRate','stepVelocity','nativeVelocity','previousRoot','rootStep','pole','offset','hip','knee','ankle','scale','next'])this[name]=new Vector3();
   this.rigRotation=new Quaternion();this.flatRotation=new Quaternion();this.parentRotation=new Quaternion();this.yawRotation=new Quaternion();
   this.up=new Vector3(0,1,0);this.cycleDuration=.7;this.duty=.3;this.supportTravel=25;this.drop=0;
   rig.updateMatrixWorld(true);bones['thigh.L'].getWorldPosition(this.hip);bones['shin.L'].getWorldPosition(this.knee);bones['foot.L'].getWorldPosition(this.ankle);
   this.legLength=this.hip.distanceTo(this.knee)+this.knee.distanceTo(this.ankle);this.clear('initial');
  }
  clear(reason='reset'){
-  this.drop=0;this.pelvisReady=false;
-  for(const f of this.feet){f.status='inactive';f.reason=reason;f.locked=f.feasible=f.ready=f.wasStance=f.released=false;f.cooldown=0;f.error=f.bend=0;f.plantId=0;}
+  this.drop=0;this.pelvisReady=false;this.stepReady=false;this.speedEnvelope=this.runEnvelope=this.continuityTime=0;this.wasMoving=null;
+  for(const f of this.feet){f.status='inactive';f.reason=reason;f.locked=f.feasible=f.ready=f.wasStance=f.released=f.recoverPending=f.adjusted=f.tracking=false;f.cooldown=0;f.error=f.bend=0;f.plantId=0;f.velocity.set(0,0,0);f.recovery.clear();}
  }
  plan(motion,dt){
   advanceStridePlan(this,motion,dt);
@@ -80,7 +82,7 @@ export class FootIK{
   for(const f of this.feet){const x=this.laneCenter+(f.side==='L'?-1:1)*width*.5;f.home.x+=(x-f.home.x)*(motion.reset?1:-Math.expm1(-Math.max(0,dt)/.09));}
   return this.cycleDuration;
  }
- release(foot,reason){foot.locked=foot.feasible=false;foot.released=true;foot.cooldown=.08;foot.reason=reason;foot.status='released';}
+ release(foot,reason){if(!foot.released)foot.recoverPending=true;foot.locked=foot.feasible=false;foot.released=true;foot.cooldown=.08;foot.reason=reason;foot.status='released';}
  neededDrop(foot,goal,rotation,compression){
   this.hip.setFromMatrixPosition(foot.hip.matrixWorld);this.offset.copy(foot.offset).multiply(this.scale).applyQuaternion(rotation);this.ankle.copy(goal).sub(this.offset);
   const dx=this.hip.x-this.ankle.x,dz=this.hip.z-this.ankle.z,reach=this.legLength*.995,horizontal=dx*dx+dz*dz;
@@ -91,14 +93,30 @@ export class FootIK{
   if(!active||!motion.grounded){this.clear(!motion.grounded?'air':motion.reset||'full-body');return;}
   if(motion.reset)this.clear(motion.reset);
   const seconds=Number.isFinite(dt)?clamp(dt,0,.1):0,moving=motion.speed>5;
+  this.speedEnvelope=Math.max(motion.speed,this.speedEnvelope*Math.exp(-seconds/.10));
+  this.runEnvelope=Math.max(runningAmount(motion),this.runEnvelope*Math.exp(-seconds/.10));
+  const interrupted=this.wasMoving!==null&&moving!==this.wasMoving;
+  this.continuityTime=(interrupted||motion.reversing) ? .25 : Math.max(0,this.continuityTime-seconds);
+  this.wasMoving=moving;
   // Only the skeleton needs an animation refresh here. Weapon render meshes
   // are independent siblings and receive their final matrices at render time.
   this.model.updateWorldMatrix(true,false);this.bones.root.parent.updateWorldMatrix(false,true,true);this.rig.getWorldQuaternion(this.rigRotation);this.model.getWorldScale(this.scale);
-  this.travel.set(motion.side,0,-motion.forward);if(moving)this.travel.normalize().applyQuaternion(this.rigRotation);else this.travel.set(0,0,0);
+  this.nativeVelocity.set(motion.side,0,-motion.forward).applyQuaternion(this.rigRotation);
+  this.previousTravel.copy(this.travel);
+  this.rootStep.setFromMatrixPosition(this.rig.matrixWorld);
+  if(!this.stepReady){this.previousRoot.copy(this.rootStep);this.stepVelocity.copy(this.nativeVelocity);}else this.stepVelocity.lerp(this.nativeVelocity,-Math.expm1(-seconds/.10));
+  this.rootStep.sub(this.previousRoot);this.previousRoot.setFromMatrixPosition(this.rig.matrixWorld);
+  this.stepReady=true;
+  // Short reversals should shrink and redirect a step, rather than flipping a
+  // full-length swing across the body. Native position/aim remain immediate.
+  this.travel.copy(this.stepVelocity).multiplyScalar(moving?1/Math.max(12,motion.speed,this.stepVelocity.length()):0);
+  this.travelRate.copy(this.travel).sub(this.previousTravel).multiplyScalar(seconds>0?1/seconds:0);
   this.pole.set(0,0,-1).applyQuaternion(this.rigRotation);
   // Prepare both world-space foot targets before adjusting the pelvis.
+  let recovering=false;
   for(let i=0;i<this.feet.length;i++){
-   const f=this.feet[i],phase=(blend.phase+i*.5)%1,stance=!moving||phase<this.duty;
+   const f=this.feet[i],phase=(blend.phase+i*.5)%1,stance=!moving||phase<this.duty,boundary=stance!==f.wasStance,held=f.locked;
+   f.previous.copy(f.sole);
    f.cooldown=Math.max(0,f.cooldown-seconds);
    // A standing character has no next swing boundary. Replant after a short
    // recovery instead of leaving both feet permanently released after a pivot.
@@ -111,14 +129,19 @@ export class FootIK{
    f.flat.copy(this.flatRotation);
    if(!stance){f.released=false;f.wasStance=false;f.locked=false;f.status='swing';f.reason=null;}
    if(stance&&!f.wasStance&&!f.released){
+    f.adjusted=false;
     const progress=moving?phase/this.duty:.5;
     f.anchor.copy(f.homeWorld).addScaledVector(this.travel,moving?this.supportTravel*(.5-progress):0);f.anchor.y=0;
+    // Finish a stop at the outgoing sole, not at the neutral bind-pose home.
+    if(!moving&&f.ready){f.anchor.copy(f.sole);f.anchor.y=0;}
     f.rotation.copy(this.flatRotation);f.anchorRig.copy(this.rigRotation);f.locked=true;f.status='stance';f.reason=null;
     f.plantId++;
    }
    f.wasStance=stance;
+   if(!moving&&interrupted&&f.ready&&!held){f.anchor.copy(f.sole);f.anchor.y=0;f.anchorRig.copy(this.rigRotation);f.released=false;f.reason=null;}
+   if((interrupted||motion.reversing)&&stance)f.adjusted=true;
    if(f.locked&&f.anchorRig.angleTo(this.rigRotation)>.75)this.release(f,'pivot');
-   if(f.locked){f.desired.copy(f.anchor);f.goal.copy(f.anchor);}
+   if(stance&&!f.released){f.desired.copy(f.anchor);f.targetVelocity.set(0,0,0);}
    else{
     const u=stance?clamp(phase/this.duty,0,1):clamp((phase-this.duty)/(1-this.duty),0,1),u2=u*u,u3=u2*u;
     // Hermite endpoint velocity cancels root travel at lift-off/touch-down.
@@ -127,24 +150,51 @@ export class FootIK{
     f.desired.copy(f.homeWorld).addScaledVector(this.travel,clamp(travel,-.65,.65)*this.supportTravel);
     const standingLift=1.25+2.25*runningAmount(motion),lift=standingLift+(.65+.45*smooth((motion.speed-40)/90)-standingLift)*crouchAmount(motion);
     f.desired.y=stance?0:Math.sin(Math.PI*u)**2*lift*this.profile.lift*(reduced?.65:1);
-    if(!f.ready||!f.released)f.goal.copy(f.desired);else f.goal.lerp(f.desired,-Math.expm1(-seconds/.035));
+    const derivative=travel<=-.65||travel>=.65?0:stance?-1:6*u*(1-u)+(6*u2-6*u+1)*tangent;
+    f.targetVelocity.copy(this.nativeVelocity).addScaledVector(this.travel,derivative*this.supportTravel/(this.cycleDuration*(stance?this.duty:1-this.duty))).addScaledVector(this.travelRate,clamp(travel,-.65,.65)*this.supportTravel);
+    f.targetVelocity.y=stance?0:Math.sin(2*Math.PI*u)*Math.PI*lift*this.profile.lift*(reduced?.65:1)/(this.cycleDuration*(1-this.duty));
     if(!f.ready)f.rotation.copy(this.flatRotation);else f.rotation.slerp(this.flatRotation,-Math.expm1(-seconds/.045));
    }
+   // A retained anchor can differ from the nominal gait path after a reversal.
+   // Bridge that later lift too; ordinary uninterrupted cycles keep their
+   // authored target path without an unnecessary recovery or pelvis drop.
+   const retainSupport=held&&stance,bridgeBoundary=boundary&&(f.adjusted||f.recovery.active);
+   if(f.ready&&(interrupted&&!retainSupport||f.recoverPending||bridgeBoundary))f.recovery.begin(f.sole,f.velocity,f.desired,f.targetVelocity,seconds,.05);
+   if(!stance)f.adjusted=false;
+   f.recoverPending=false;
+   f.goal.copy(f.desired);f.recovery.apply(f.goal,seconds);
+   // Bound a redirected step in body-relative space. A 64 Hz snapshot can
+   // move the root between render samples; that displacement is preserved in
+   // full. Only the additional cosmetic foot excursion has a speed budget.
+   const tracking=f.tracking;f.tracking=false;
+   if(f.ready&&(!retainSupport||f.recovery.active)&&(this.continuityTime>0||f.recovery.active||tracking)){
+    this.next.copy(f.goal).sub(f.previous).sub(this.rootStep);
+    const limit=((2.25-.75*this.runEnvelope)*this.speedEnvelope+80)*seconds,distance=this.next.length();
+    if(distance>limit){f.goal.copy(f.previous).add(this.rootStep).addScaledVector(this.next,limit/distance);f.tracking=true;}
+   }
+   f.goal.y=Math.max(0,f.goal.y);
+   f.unconstrained.copy(f.goal);
+   f.recovery.sampleVelocity(f.targetVelocity,f.velocity);if(f.goal.y===0)f.velocity.y=Math.max(0,f.velocity.y);
+   if(stance&&!f.released){f.locked=!f.recovery.active&&!f.tracking;f.status=f.locked?'stance':'settling';}
+   recovering||=f.recovery.active||f.tracking;
   }
+  // Extra reach during a handoff keeps a near-limit outgoing sole reachable
+  // while the body braking pose changes. Steady locomotion keeps its old bound.
+  const dropLimit=this.continuityTime>0||recovering?8:7;
   let required=0,anticipated=0;
   for(const f of this.feet){
-   if(f.locked){
+   if(f.wasStance&&!f.released||this.continuityTime>0||f.recovery.active||f.tracking){
     const needed=this.neededDrop(f,f.goal,f.rotation,compression);
-    if(needed>7)this.release(f,'unreachable');else required=Math.max(required,needed);
+    if(needed>dropLimit)this.release(f,'unreachable');else required=Math.max(required,needed);
    }else if(moving&&!f.wasStance){
     const u=clamp((f.phase-this.duty)/(1-this.duty),0,1);
-    if(u>.75){this.next.copy(f.homeWorld).addScaledVector(this.travel,this.supportTravel*.5);const needed=this.neededDrop(f,this.next,f.flat,compression);if(needed<=7)anticipated=Math.max(anticipated,needed*smooth((u-.75)/.25));}
+    if(u>.75){this.next.copy(f.homeWorld).addScaledVector(this.travel,this.supportTravel*.5);const needed=this.neededDrop(f,this.next,f.flat,compression);if(needed<=dropLimit)anticipated=Math.max(anticipated,needed*smooth((u-.75)/.25));}
    }
   }
   // Only actual support reach may force the pelvis down. Anticipation prepares
   // the next plant; recovery retains the source pose instead of flattening it
   // to a permanently crouched worst-case stride height.
-  const target=clamp(Math.max(required,anticipated),0,7),recovery=motion.speed>180?.10:.04;
+  const target=clamp(Math.max(required,anticipated),0,dropLimit),recovery=motion.speed>180?.10:.04;
   this.drop=this.pelvisReady?Math.max(required,this.drop+(target-this.drop)*-Math.expm1(-seconds/recovery)):target;this.pelvisReady=true;
   this.bones.hips.position.z-=this.drop/this.scale.z;this.bones.hips.updateWorldMatrix(false,true);
   for(const f of this.feet){
@@ -162,7 +212,13 @@ export class FootIK{
    if(f.locked&&!solved.reachable)this.release(f,'joint-limit');
    this.parentRotation.setFromRotationMatrix(f.solver.rotationMatrix.extractRotation(f.bone.parent.matrixWorld)).normalize();f.bone.quaternion.copy(this.parentRotation.invert().multiply(f.rotation)).normalize();f.bone.updateWorldMatrix(false,true);
    f.sole.copy(f.offset).applyMatrix4(f.bone.matrixWorld);
-   f.feasible=f.locked&&solved.reachable;f.error=f.locked?f.sole.distanceTo(f.anchor):0;f.bend=solved.bend;f.reach=solved.requested/this.legLength;f.ready=true;
+   f.feasible=f.locked&&solved.reachable;f.error=f.locked?f.sole.distanceTo(f.anchor):0;f.bend=solved.bend;f.reach=solved.requested/this.legLength;
+   // Snapshots arrive on a native tick clock. Estimate the outgoing velocity
+   // in root-relative space, then restore native velocity; otherwise duplicate
+   // snapshots followed by a tick can amplify recovery momentum at 120 Hz.
+   if(f.feasible||!f.ready)f.velocity.set(0,0,0);
+   else if(seconds>0&&(f.tracking||f.goal.distanceToSquared(f.unconstrained)>.0001))f.velocity.copy(f.sole).sub(f.previous).sub(this.rootStep).multiplyScalar(1/seconds).add(this.nativeVelocity);
+   f.ready=true;
   }
  }
 }

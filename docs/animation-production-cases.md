@@ -18,7 +18,7 @@ Our first step is to remove repeated transform work. The current experiment upda
 
 Ubisoft La Forge's [DReCon article](https://www.ubisoft.com/en-us/studio/laforge/news/VjEIwquaIyEZZSw5RZI0V/drecon-datadriven-responsive-control-of-physicsbased-characters) includes For Honor Motion Matching examples and describes trajectory, facing and foot-continuity constraints. Its physics/learning controller is research, which is not claimed as a shipped For Honor feature here.
 
-Those constraints help evaluate our existing clips. A larger search system needs suitable motion data and runtime measurements; 34 authored clips do not establish that adopting Motion Matching would improve this game. Gait review remains necessary.
+Those constraints help evaluate our existing clips. A larger search system needs suitable motion data and runtime measurements; 37 authored clips do not establish that adopting Motion Matching would improve this game. Gait review remains necessary.
 
 ## VALORANT: preserve readable action beats and test perceived speed
 
