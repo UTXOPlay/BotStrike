@@ -41,7 +41,7 @@ function reset(config){
  controls.mode.value=current.mode;controls.scenario.value=current.scenario;controls.fps.value=String(current.fps);controls.reduced.checked=current.reduced;
  controls.hero.value=current.hero===null?'mixed':String(current.hero);controls.weapon.value=String(current.weapon);controls.view.value=current.view;controls.count.value=String(current.count);controls.diagnostics.checked=current.diagnostics;
  for(const mode of modes)actors[mode]=actors[mode].map(a=>{const hero=current.hero??a.slot%6,firstPerson=current.view==='first-person'&&a.slot===0;if(mode==='baseline'||a.hero!==hero||a.labFirstPerson!==firstPerson){a.dispose();return makeActor(mode,a.slot,hero,current.weapon,firstPerson);}return a;});
- for(const mode of modes)for(const a of actors[mode]){a.invalidate?.();a.rig.visible=mode===current.mode&&a.slot<current.count;}
+ for(const mode of modes)for(const a of actors[mode]){a.invalidate?.('room');a.rig.visible=mode===current.mode&&a.slot<current.count;}
  contacts=Array.from({length:10},()=>({L:null,R:null}));maxDrift=0;lastDebug=null;
  contactStats=Array.from({length:10},()=>({scheduled:0,feasible:0,maxError:0,maxSoleHeight:0,maxSoleDrift:0,maxAnchorDrift:0,releases:{},previous:{}}));
 }

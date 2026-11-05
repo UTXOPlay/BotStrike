@@ -11,7 +11,7 @@ import {AnimationSprings} from './animation-springs.mjs';
 import {motionProfiles} from './motion-profiles.mjs';
 import {PoseInertia} from './pose-inertia.mjs';
 import {advanceStridePlan} from './locomotion-gait.mjs';
-import {DeathPresentation} from './death-presentation.mjs';
+import {DeathPresentation,deathClipName} from './death-presentation.mjs';
 
 export const chassisNames=['vector','patch','bastion','spectre','glitch','forge'];
 export const transitionNames=['start','brake','pivot_left','pivot_right','pivot_back_left','pivot_back_right','land_hard','crouch_enter','weapon_ready'];
@@ -182,10 +182,18 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    const seconds=duration||source.clips[name].duration;next.setEffectiveTimeScale(source.clips[name].duration/Math.max(.1,seconds));upperUntil=now+seconds*1000;
    if(name==='reload'){reloadDuration=Math.max(reloadDuration,Math.round(seconds*64),weapons?.[lastWeapon]?.reload||0);next.time=source.clips.reload.duration*Math.max(0,1-seconds*64/reloadDuration);next.setEffectiveTimeScale(source.clips.reload.duration/(reloadDuration/64));}
   }
+  function playDeath(name){
+   // A corpse has one full-body performance. Leaving idle/upper crossfades
+   // alive makes reconstruction depend on which path created the corpse.
+   mixer.stopAllAction();base=upper=null;upperUntil=0;
+   full=swap(null,action(name),false,0);full.paused=true;fullUntil=Infinity;
+  }
   function update(p,state,now,dt,{reduced=false}={}){
-   const justDied=!p.alive&&lastAlive===true&&lastLife===p.life;
+   const map=state.config.map;
+   if(corpse.active&&(corpse.life!==p.life||corpse.map!==map))corpse.reset();
+   const justDied=!p.alive&&lastAlive===true&&lastLife===p.life&&signals.map===map;
    // Capture the actual outgoing pose, including the solved crouch/feet, once.
-   if(justDied)corpse.begin(p,now,{fromPose:true,yaw:lastRenderYaw,vertical:signals.vy});
+   if(justDied)corpse.begin(p,now,{fromPose:true,yaw:lastRenderYaw,vertical:signals.vy,clip:deathClipName(slot,p.life,p.crouch||signals.output.crouchAmount>.05),map});
    // Undo last frame's procedural pose before reset, crossfades or mixer sampling.
    restorePose();
    if(lastNow&&now-lastNow>250)signals.clear('gap');
@@ -194,8 +202,8 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    if(p.weapon!==lastWeapon){equip(p.weapon);if(p.alive)trigger('equip',now,.4);}
    if(!p.alive){
     pendingEvents.length=0;
-    if(justDied){deadAt=now;const crouched=p.crouch||signals.output.crouchAmount>.05,name=['death_back','death_left','death_right'][(slot+(p.life||0))%3]+(crouched?'_crouch':'');full=swap(full,action(name),false,.07);base?.fadeOut(.07);upper?.fadeOut(.07);fullUntil=Infinity;}
-    if(!corpse.active){corpse.begin(p,now,{settled:true});deadAt=now;const name='death_back'+(p.crouch?'_crouch':'');full=swap(null,action(name),false,0);full.time=source.clips[name].duration;full.paused=true;fullUntil=Infinity;}
+    if(justDied){deadAt=now;playDeath(corpse.clip);}
+    if(!corpse.active){const name=deathClipName(slot,p.life,p.crouch);corpse.begin(p,now,{settled:true,clip:name,map});deadAt=now;playDeath(name);}
    }else{
     if(!lastAlive){reset(p,now,'respawn');full=swap(null,action('respawn'),false,.1);base.fadeOut(.1);upper.fadeOut(.1);fullUntil=now+850;}
     if(pendingEvents.length){const events=pendingEvents.splice(0);for(const e of events)if(e.life===null||e.life===p.life)trigger(e.name,e.now,e.duration,e.value,p.life,true);}
@@ -215,7 +223,6 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    }
    lastReload=p.reload||0;lastAlive=p.alive;lastNow=now;
    const runSpeed=(heroes?.[hero]?.speed||250)*(weapons?.[p.weapon]?.mobility??1),motionSignals=signals.update(p,dt,state.config?.map??0,runSpeed);
-   if(!p.alive&&motionSignals.reset&&motionSignals.reset!=='death'){corpse.begin(p,now,{settled:true});full.time=full.getClip().duration;full.paused=true;deadAt=now;}
    if(motionSignals.reset||full||!p.alive||reduced){transition?.stop();transition=null;transitionKind=null;pivotAngle=0;}
    else{
     pivotAngle+=motionSignals.yawDelta;
@@ -235,6 +242,7 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
     for(let i=0;i<lowerActions.length;i++){const a=lowerActions[i],weight=blend.weights[i]*blend.gain;a.enabled=weight>1e-6;if(a.enabled)a.play();a.paused=true;a.time=blend.times[i];a.setEffectiveWeight(weight);}
     base=action(blend.dominant,'lower');gaitPhase=blend.phase;
    }
+   if(!p.alive&&full){full.time=corpse.settled?full.getClip().duration:THREE.MathUtils.clamp((now-corpse.started)/1000,0,full.getClip().duration);full.paused=true;}
    if(upper)upper.paused=reduced&&upper===action('idle','upper');mixer.update(Math.min(.1,Math.max(0,dt)));pose.capture();
    springs.update(motionSignals,dt,{active:p.alive&&!full,reduced,firing:now-fireAt<180,reloading:p.reload>0});
    // Apply this frame's feedback after discontinuity cleanup, so a new life's
@@ -254,7 +262,7 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    if(p.alive&&!full){warpRestore.hips.copy(bones.hips.quaternion);bones.hips.rotation.x=THREE.MathUtils.clamp(bones.hips.rotation.x,-.25,.25);bones.hips.rotation.y=THREE.MathUtils.clamp(bones.hips.rotation.y,-.25,.25);bones.hips.rotation.z=THREE.MathUtils.clamp(bones.hips.rotation.z,-.85,.85);counterWarp.copy(bones.hips.quaternion).invert().multiply(warpRestore.hips);bones.spine.quaternion.premultiply(counterWarp);}
    const transitionDrop=transitionKind&&source.compression[transitionKind]?Math.max(0,-source.compression[transitionKind].evaluate(transition.time)[2]*.55):0;
    feet?.apply(motionSignals,blend,dt,{active:p.alive&&!full,reduced,compression:Math.min(5-3.5*motionSignals.crouchAmount,(Math.max(0,-springs.landing.value[0])+transitionDrop)*model.scale.x)});
-   if(!p.alive)corpse.apply(now,model,rig,{reduced});
+   if(!p.alive)corpse.apply(now,model,rig,{reduced,originY:p.position[1]});
    if(firstPerson&&p.alive&&!reduced){
     const phase=(continuous?blend.phase:base?.time/(base?.getClip().duration||1))*Math.PI*2,moving=THREE.MathUtils.clamp(motionSignals.speed/motionSignals.runSpeed,0,1),sway=profile.sway*(p.reload?.25:1);
     model.position.x+=springs.sway.value[0]+Math.sin(phase)*moving*.007*sway;
@@ -298,9 +306,16 @@ export function createCharacters(art,{weapons=null,heroes=null}={}){
    gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;if(p.alive)lastRenderYaw=rig.rotation.y;
    return {deadAt,motion:rig.userData.motion};
   }
+  function invalidate(reason='visibility'){
+   const retainCorpse=lastAlive===false&&corpse.active&&['visibility','gap','correction'].includes(reason);
+   pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);springs.reset();inertia.reset();
+   // A visibility return is still the same death. Room/life/map changes are
+   // distinct lifecycles and must never inherit another corpse's descriptor.
+   if(!retainCorpse){corpse.reset();lastLife=null;lastAlive=null;}
+  }
   function dispose(){prop?.traverse(o=>o.geometry?.dispose());mixer.stopAllAction();mixer.uncacheRoot(model);if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)o.geometry.dispose();});rig.removeFromParent();}
   let armTriangles=0;if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)armTriangles+=(o.geometry.index?.count||0)/3;});
-  return {rig,model,bones,mixer,hero,slot,armTriangles,animation:{signals:signals.output,blend,hybrid,feet,stride:feet||viewStride,springs,inertia,contacts,profile,get transition(){return transitionKind;},get action(){return {upper:upper?.getClip().name,full:full?.getClip().name,reloadPhase:upper?.getClip().name==='upper:reload'?upper.time/source.clips.reload.duration:null};}},invalidate(reason='visibility'){pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);springs.reset();inertia.reset();corpse.reset();lastLife=null;lastAlive=null;},setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
+  return {rig,model,bones,mixer,hero,slot,armTriangles,animation:{signals:signals.output,blend,hybrid,feet,stride:feet||viewStride,springs,inertia,contacts,profile,get transition(){return transitionKind;},get action(){return {upper:upper?.getClip().name,full:full?.getClip().name,reloadPhase:upper?.getClip().name==='upper:reload'?upper.time/source.clips.reload.duration:null};}},invalidate,setAlly(ally){for(const badge of badges)badge.material=teamMaterials[ally?0:1];},get weapon(){return lastWeapon;},update,trigger,dispose};
  }
  function dispose(){const geometries=new Set(),materials=new Set(),textures=new Set();for(const t of templates)t.model.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});for(const gun of weaponTemplates.values())gun.traverse(o=>{if(o.geometry)geometries.add(o.geometry)});badgeGeometry.dispose();teamMaterials.forEach(m=>m.dispose());shadowGeometry.dispose();shadowMaterial.dispose();shadowTexture.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}
  return {preload,actor,dispose,weaponModel:kind=>weaponTemplates.get(kind)?.clone(true)};

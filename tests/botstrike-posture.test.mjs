@@ -38,3 +38,17 @@ test('a dead or full-body reset cannot reactivate the lower locomotion layer',()
  for(let i=0;i<20;i++)b.update(motion,1/60,{active:false});assert.equal(b.gain,0);
  b.update(motion,1/60,{active:true});assert.ok(b.gain>0&&b.gain<1);
 });
+
+test('a corrected native corpse origin retains the same cosmetic fall height',()=>{
+ const hips=new Bone(),rig=new Group(),model=new Group();rig.add(model);model.add(hips);
+ const p={life:2,position:[0,35,0],yaw:.8},before=structuredClone(p),corpse=new DeathPresentation({hips});
+ corpse.begin(p,100,{vertical:-100,clip:'death_right',map:0});
+ for(const now of [200,1100]){
+  const expected=Math.max(0,35-100*(now-100)/1000-300*((now-100)/1000)**2);
+  for(const originY of [35,10,0]){
+   rig.position.y=originY;model.position.y=0;corpse.apply(now,model,rig,{originY});
+   assert.ok(Math.abs(rig.position.y+model.position.y-expected)<1e-10);
+  }
+ }
+ assert.deepEqual(p,before);
+});
