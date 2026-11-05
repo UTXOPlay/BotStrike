@@ -26,7 +26,7 @@ export class LocomotionBlend{
  update(motion,dt,{active=true,reduced=false,phase=this.phase,cycleDuration=null}={}){
   const seconds=Number.isFinite(dt)?clamp(dt,0,.1):0;
   locomotionTargets(motion,this.targets);
-  if(!this.ready||motion.reset){this.clear(phase);this.weights.set(this.targets);this.ready=true;if(!active)this.gain=0;}
+  if(!this.ready||motion.reset&&!motion.flightContinuity){this.clear(phase);this.weights.set(this.targets);this.ready=true;if(!active)this.gain=0;}
   else{
    const blend=-Math.expm1(-seconds/.07);
    for(let i=0;i<this.weights.length;i++)this.weights[i]+=(this.targets[i]-this.weights[i])*blend;
@@ -42,8 +42,10 @@ export class LocomotionBlend{
   this.idleTime+=seconds;
   const airKind=motion.grounded?null:motion.rising?'jump':'fall';
   if(airKind!==this.airKind){this.airKind=airKind;this.airTime=0;}else this.airTime+=seconds;
+  if(!motion.grounded&&!motion.rising&&Number.isFinite(motion.fallTime))this.airTime=motion.fallTime;
   for(let i=0;i<this.times.length;i++)this.times[i]=moving.includes(i)?this.phase*this.durations[i]:i<8?this.idleTime%this.durations[i]:Math.min(this.airTime,this.durations[i]);
-  if(!motion.grounded&&motion.rising&&Number.isFinite(motion.riseProgress))this.times[8]=clamp(motion.riseProgress,0,1)*this.durations[8];
+  // Keep the jump endpoint while its weight fades into fall after the apex.
+  if(!motion.grounded&&Number.isFinite(motion.riseProgress))this.times[8]=clamp(motion.riseProgress,0,1)*this.durations[8];
   // Fade to zero at pure lateral travel, where the forward/backward convention
   // changes, so circling never flips the pelvis by 180 degrees.
   const total=Math.abs(motion.forward)+Math.abs(motion.side);

@@ -7,9 +7,9 @@ import {DeathPresentation} from '../games/botstrike/client/death-presentation.mj
 
 test('feet stay airborne until actual ground contact and landing fires once',()=>{
  const a=new AnimationMotion(),p={life:1,alive:true,position:[0,0,0],velocity:[0,0,0],yaw:0};a.update(p,1/60);
- p.position[1]=.5;p.velocity[1]=210;let r=a.update(p,1/60);assert.ok(!r.grounded&&r.takeoff);assert.equal(r.riseProgress,0);
- p.velocity[1]=105;p.position[1]=30;r=a.update(p,1/60);assert.ok(Math.abs(r.riseProgress-.5)<1e-12);
- const b=new LocomotionBlend();b.update(r,1/60);assert.equal(b.times[8],b.durations[8]*.5);
+ p.position[1]=3.291015625;p.velocity[1]=210.625;let r=a.update(p,1/64);assert.ok(!r.grounded&&r.takeoff);assert.equal(r.riseProgress,0);
+ p.velocity[1]=107.5;p.position[1]=29.82421875;r=a.update(p,1/64);assert.ok(Math.abs(r.riseProgress-.48961424332344217)<1e-12);
+ const b=new LocomotionBlend();b.update(r,1/64);assert.equal(b.times[8],b.durations[8]*r.riseProgress);
  p.position[1]=.5;p.velocity[1]=-210;r=a.update(p,1/60);assert.ok(!r.grounded&&!r.landed,'low descending feet must not lock early');
  p.position[1]=0;p.velocity[1]=0;r=a.update(p,1/60);assert.ok(r.grounded&&r.landed);assert.equal(r.landingSpeed,210);
  assert.equal(a.update(p,1/60).landed,false);

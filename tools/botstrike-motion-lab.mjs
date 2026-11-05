@@ -35,6 +35,7 @@ function makeActor(mode,slot,hero,weapon,firstPerson){
  const actor=(mode==='baseline'?baselineCharacters:characters).actor(slot,hero,weapon,{firstPerson});actor.labFirstPerson=firstPerson;
  if(firstPerson){actor.rig.scale.setScalar(.8);camera.add(actor.rig);}else scene.add(actor.rig);return actor;
 }
+function sampleWorld(actor){actor.rig.parent.updateWorldMatrix(true,false);actor.rig.updateMatrixWorld(true);}
 function reset(config){
  current={mode:'candidate',scenario:'circle',fps:60,count:10,reduced:false,hero:null,weapon:2,view:'lineup',diagnostics:true,...config};time=trailX=trailZ=0;
  if(current.view!=='lineup')current.count=1;
@@ -156,8 +157,8 @@ window.motionLabReady=(async()=>{
    const a=actors[current.mode][0];if(invalidate)a.invalidate?.(invalidate);
    if(a.labFirstPerson){a.rig.position.set(0,-49.8,-10);a.rig.rotation.y=0;}else{a.rig.position.fromArray(player.position);a.rig.rotation.y=player.yaw;}
    for(const event of events)a.trigger(event.name,now,event.duration,event.value,event.life??player.life);
-   a.update(player,state,now,dt,{reduced:current.reduced});time=now/1000;scene.updateMatrixWorld(true);
-   if(a.labFirstPerson){a.rig.position.y+=13.6*(a.animation?.signals.crouchAmount??Number(player.crouch));scene.updateMatrixWorld(true);}
+   a.update(player,state,now,dt,{reduced:current.reduced});time=now/1000;sampleWorld(a);
+   if(a.labFirstPerson){a.rig.position.y+=13.6*(a.animation?.signals.crouchAmount??Number(player.crouch));sampleWorld(a);}
    const contacts={};
    for(const side of ['L','R']){
     const c=a.animation?.contacts[side],hand=a.bones['hand.'+side].getWorldPosition(new THREE.Vector3());

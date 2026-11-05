@@ -8,8 +8,8 @@ An implementation, an automated check, a rendered comparison and a human/device
 acceptance are different evidence. A row remains open until its own gate passes.
 
 The [strict-audit follow-up](animation-audit-follow-up.md) qualifies the earlier
-passes: F01–F03 now have verified automated corrections. Living jump
-reconstruction, walking support coverage and human functional acceptance
+passes: F01–F04 now have verified automated corrections. Walking support
+coverage and human functional acceptance
 remain open. Dedicated performance optimization/physical profiling are deferred
 under the [maintainer-approved advisory policy](acceptance/hybrid-animation/performance-policy.json). Audit IDs and this ledger's IDs differ.
 
@@ -23,7 +23,7 @@ under the [maintainer-approved advisory policy](acceptance/hybrid-animation/perf
 | F01 | Calibrated stance/swing and flat-ground sole targets | Actual mesh sole samples and contact-state traces | Pass numerically: six mesh calibrations, eighteen original walk/run/crouch cases and 96 native-speed directional gait cases; source/stride review images retained |
 | F02 | Constrained two-bone leg IK, no overextension or unstable knee flips | Solver property checks plus actual six rigs | Pass: 1,000 transformed solver targets plus all six real rigs, fixed lengths and finite normalized transforms |
 | F03 | World-space support-foot locking, feasible contact error <= 2 native units | Independent post-skinning sole error and anchor drift, meaningful contact coverage | Scheduled-contact error passes; meaningful quiet-walk support coverage remains open under audit F05. Feasible/scheduled percentages alone do not measure missing support intervals |
-| F04 | Release on air, death, respawn, map/room, visibility, gap, correction, abrupt pivot and unreachable target | Explicit lifecycle/reach cases; no stale anchors on re-entry | Release/reset safety passes, including twelve rerun view/chassis cases; audit F02 now passes 168 corpse reconstruction cases and 1,200 repeated visibility returns. Living jump reconstruction remains open under audit F04; the earlier general 1,200-cycle evidence checks finite/stale state rather than flight identity |
+| F04 | Release on air, death, respawn, map/room, visibility, gap, correction, abrupt pivot and unreachable target | Explicit lifecycle/reach cases; no stale anchors on re-entry | Release/reset safety passes. Audit F02 covers 168 corpse cases and 1,200 returns; audit F04 adds 2,880 same-time airborne invalidations, 576 longer gaps, 144 first observations and 72 lifecycle cases using real native snapshots. Full body/hand pose, blend and current clip clocks are checked; unseen input histories remain qualified |
 | S01 | Critically damped additive inertia and outgoing-pose transition recovery | 30/60/120 and jitter traces, bounded offsets, settling and repeated resets | Pass numerically: exact-spring 30/60/120 checks, twenty-four jitter/reduced fixtures, bounded outgoing-pose inertia and repeated resets |
 | S02 | Distinct visual profiles for all six chassis | Profile definitions and identical-input comparison | Implemented: six frozen visual profiles; same-input all-six walking and transition sheets; human acceptance open |
 | C01 | Continuous chest/head aim with upper/lower composition | Aim and root invariants at extreme pitch/yaw and locomotion | Pass numerically: composed extreme yaw/pitch and unchanged root/player state; see composition traces |

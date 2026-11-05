@@ -35,7 +35,7 @@ export class AnimationSprings{
   this.ready.clear();
  }
  update(motion,dt,{active=true,reduced=false,firing=false,reloading=false}={}){
-  if(motion.reset||!active||reduced){this.reset();return this;}
+  if((motion.reset&&!motion.flightContinuity)||!active||reduced){this.reset();return this;}
   if(motion.landed){this.landing.value[0]=-Math.min(.085,(motion.landingSpeed||0)*.0003)*this.profile.land;this.landing.velocity[0]=-.12;}
   this.leanTarget[0]=(-clamp((motion.accelerationForward||0)/3000,-1,1)*.10-(motion.grounded?clamp(motion.speed/250,0,1)*.035:0))*this.profile.lean;
   this.leanTarget[1]=clamp((motion.accelerationSide||0)/3000,-1,1)*.075*this.profile.lean;

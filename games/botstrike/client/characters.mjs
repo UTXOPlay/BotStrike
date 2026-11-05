@@ -234,8 +234,8 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
     }
    }
    lastReload=p.reload||0;lastAlive=p.alive;lastNow=now;
-   const runSpeed=(heroes?.[hero]?.speed||250)*(weapons?.[p.weapon]?.mobility??1),motionSignals=signals.update(p,dt,state.config?.map??0,runSpeed);
-   if(motionSignals.reset||full||!p.alive||reduced){transition?.stop();transition=null;transitionKind=null;pivotAngle=0;}
+   const runSpeed=(heroes?.[hero]?.speed||250)*(weapons?.[p.weapon]?.mobility??1),motionSignals=signals.update(p,dt,state.config?.map??0,runSpeed,now,state.tick);
+   if((motionSignals.reset&&!motionSignals.flightContinuity)||full||!p.alive||reduced){transition?.stop();transition=null;transitionKind=null;pivotAngle=0;}
    else{
     pivotAngle+=motionSignals.yawDelta;
     if(motionSignals.landed&&motionSignals.landingSpeed>140)transitionTo('land_hard',now);
@@ -270,7 +270,7 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
    if(p.alive&&!full&&!reduced){bones.hips.position.z+=springs.landing.value[0];bones.spine.rotation.x+=springs.lean.value[0]*.7;bones.spine.rotation.y+=springs.lean.value[1]*.6;bones.chest.rotation.x-=springs.recoil.value[0];}
    if(p.alive&&!full){bones.spine.rotation.x+=motionSignals.crouchAmount*.14;bones.chest.rotation.x-=motionSignals.crouchAmount*.07;}
    const inertialTag=(full?.getClip().name||(continuous?(motionSignals.grounded?'ground':'air'):base?.getClip().name)||'idle')+'/'+(upper?.getClip().name||'idle');
-   inertia.apply(inertialTag,dt,{enabled:p.alive&&!full&&!reduced&&!motionSignals.reset,immediate:now-fireAt<100||now-hitAt<320});
+   inertia.apply(inertialTag,dt,{enabled:p.alive&&!full&&!reduced&&(!motionSignals.reset||motionSignals.flightContinuity),immediate:now-fireAt<100||now-hitAt<320});
    if(p.alive&&!full){warpRestore.hips.copy(bones.hips.quaternion);bones.hips.rotation.x=THREE.MathUtils.clamp(bones.hips.rotation.x,-.25,.25);bones.hips.rotation.y=THREE.MathUtils.clamp(bones.hips.rotation.y,-.25,.25);bones.hips.rotation.z=THREE.MathUtils.clamp(bones.hips.rotation.z,-.85,.85);counterWarp.copy(bones.hips.quaternion).invert().multiply(warpRestore.hips);bones.spine.quaternion.premultiply(counterWarp);}
    const transitionDrop=transitionKind&&source.compression[transitionKind]?Math.max(0,-source.compression[transitionKind].evaluate(transition.time)[2]*.55):0;
    feet?.apply(motionSignals,blend,dt,{active:p.alive&&!full,reduced,compression:Math.min(5-3.5*motionSignals.crouchAmount,(Math.max(0,-springs.landing.value[0])+transitionDrop)*model.scale.x)});
@@ -352,10 +352,12 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
   }
   function invalidate(reason='visibility'){
    const retainCorpse=lastAlive===false&&corpse.active&&['visibility','gap','correction'].includes(reason);
-   pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);springs.reset();inertia.reset();
-   // A visibility return is still the same death. Room/life/map changes are
-   // distinct lifecycles and must never inherit another corpse's descriptor.
-   if(!retainCorpse){corpse.reset();lastLife=null;lastAlive=null;}
+   const retainFlight=signals.flight&&['visibility','gap','correction'].includes(reason);
+   pendingEvents.length=0;fireImpulses=0;signals.clear(reason);feet?.clear(reason);if(!retainFlight){springs.reset();inertia.reset();}
+   // Retain an observed death or candidate flight on a visibility return. The
+   // next flight sample validates life/map, elapsed time and vertical velocity.
+   if(!retainCorpse)corpse.reset();
+   if(!retainCorpse&&!retainFlight){lastLife=null;lastAlive=null;}
   }
   function dispose(){prop?.traverse(o=>o.geometry?.dispose());mixer.stopAllAction();mixer.uncacheRoot(model);if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)o.geometry.dispose();});rig.removeFromParent();}
   let armTriangles=0;if(firstPerson)model.traverse(o=>{if(o.isSkinnedMesh)armTriangles+=(o.geometry.index?.count||0)/3;});

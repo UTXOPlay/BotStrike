@@ -1,5 +1,6 @@
 // Render-only signals. Never write to player state or use these values as input.
 import {calculateRunAmount} from './locomotion-gait.mjs';
+import {flightPhase,continuesFlight} from './flight-phase.mjs';
 const clamp=(value,low,high)=>Math.max(low,Math.min(high,value));
 export const wrapAngle=angle=>Math.atan2(Math.sin(angle),Math.cos(angle));
 export const isGrounded=player=>player.position[1]<=.001&&player.velocity[1]<=0;
@@ -7,12 +8,14 @@ export const isGrounded=player=>player.position[1]<=.001&&player.velocity[1]<=0;
 export class AnimationMotion{
  constructor(){this.clear();}
  clear(reason='initial'){
+  if(!['visibility','gap','correction'].includes(reason)){this.flight=null;this.time=0;}
   this.ready=false;this.resetReason=reason;this.map=null;this.life=null;this.alive=true;
-  this.x=this.y=this.z=this.yaw=this.pitch=0;this.vx=this.vy=this.vz=0;this.speed=0;this.grounded=true;this.moving=false;this.launchSpeed=0;
-  this.output??={};Object.assign(this.output,{forward:0,side:0,speed:0,runSpeed:250,speedFraction:0,runAmount:0,acceleration:0,accelerationForward:0,accelerationSide:0,turnRate:0,pitchRate:0,yawDelta:0,grounded:true,rising:false,riseProgress:0,takeoff:false,crouch:false,crouchAmount:0,scoped:false,starting:false,stopping:false,reversing:false,landed:false,landingSpeed:0,reset:reason});
+  this.x=this.y=this.z=this.yaw=this.pitch=0;this.vx=this.vy=this.vz=0;this.speed=0;this.grounded=true;this.moving=false;
+  this.output??={};Object.assign(this.output,{forward:0,side:0,speed:0,runSpeed:250,speedFraction:0,runAmount:0,acceleration:0,accelerationForward:0,accelerationSide:0,turnRate:0,pitchRate:0,yawDelta:0,grounded:true,rising:false,riseProgress:0,fallTime:0,flightContinuity:false,takeoff:false,crouch:false,crouchAmount:0,scoped:false,starting:false,stopping:false,reversing:false,landed:false,landingSpeed:0,reset:reason});
  }
- update(player,dt,map=0,runSpeed=250){
+ update(player,dt,map=0,runSpeed=250,now=null,tick=null){
   const seconds=Number.isFinite(dt)?clamp(dt,0,.1):0;
+  const time=Number.isFinite(now)?now:(this.time||0)+(Number.isFinite(dt)?Math.max(0,dt)*1000:0);this.time=time;
   const [x,y,z]=player.position,[vx,vy,vz]=player.velocity;
   const speed=Math.hypot(vx,vz),distance=Math.hypot(x-this.x,y-this.y,z-this.z),alive=player.alive!==false;
   const reason=!this.ready?this.resetReason:this.life!==player.life?'life':this.map!==map?'map':this.alive!==alive?(alive?'respawn':'death'):dt>.25?'gap':distance>120+speed*seconds?'correction':null;
@@ -20,10 +23,13 @@ export class AnimationMotion{
   out.forward=-vx*Math.sin(player.yaw)-vz*Math.cos(player.yaw);
   out.side=vx*Math.cos(player.yaw)-vz*Math.sin(player.yaw);
   out.speed=speed;out.grounded=isGrounded(player);out.rising=vy>0;out.crouch=!!player.crouch;out.scoped=!!player.scoped;out.reset=reason;
-  out.crouchAmount=reason?Number(out.crouch):out.crouchAmount+(Number(out.crouch)-out.crouchAmount)*-Math.expm1(-seconds/.07);
+  out.flightContinuity=!!(reason&&['visibility','gap','correction'].includes(reason)&&!out.grounded&&continuesFlight(this.flight,player,map,time,tick));
+  const crouchFrom=out.flightContinuity?this.flight.crouchAmount:out.crouchAmount;
+  out.crouchAmount=reason&&!out.flightContinuity?Number(out.crouch):crouchFrom+(Number(out.crouch)-crouchFrom)*-Math.expm1(-seconds/.07);
   out.takeoff=!reason&&this.grounded&&!out.grounded&&out.rising;
-  if(reason||out.takeoff)this.launchSpeed=Math.max(1,vy);
-  out.riseProgress=clamp(1-Math.max(0,vy)/this.launchSpeed,0,1);
+  Object.assign(out,flightPhase(vy));
+  const unchanged=this.flight?.life===player.life&&this.flight?.map===map&&this.flight?.vertical===vy&&(!Number.isInteger(tick)||tick===this.flight.tick);
+  this.flight=alive&&!out.grounded?{life:player.life,map,vertical:vy,tick,seenAt:unchanged?this.flight.seenAt:time,crouchAmount:out.crouchAmount}:null;
   out.runSpeed=Number.isFinite(runSpeed)&&runSpeed>0?runSpeed:250;out.speedFraction=speed/out.runSpeed;
   out.runAmount=calculateRunAmount(speed,out.runSpeed,out.crouch,out.scoped);
   const ax=!reason&&seconds>0?clamp((vx-this.vx)/seconds,-3000,3000):0,az=!reason&&seconds>0?clamp((vz-this.vz)/seconds,-3000,3000):0;

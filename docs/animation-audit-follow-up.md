@@ -9,7 +9,7 @@ are recorded separately.
 | F01: stop/restart foot discontinuity | Automated correction verified; human review and deployment pending |
 | F02: reconstructed corpse changes pose | Automated correction verified; human review and deployment pending |
 | F03: corpse intersects existing cover | Automated correction verified; human review and deployment pending |
-| F04: airborne reconstruction restarts jump progress | Open |
+| F04: airborne reconstruction restarts jump progress | Automated correction verified; human review and deployment pending |
 | F05: quiet lateral walking lacks meaningful support coverage | Open |
 | F06: CPU budget and sustained desktop/Android acceptance | Dedicated optimization/profiling deferred by maintainer; timing references advisory |
 
@@ -142,7 +142,7 @@ MOTION_REFERENCE_WORKTREE=/path/to/reference-checkout node tools/capture-botstri
 
 The capture checks the reference revision and rejects tracked modifications.
 Its [manifest](assets/botstrike/continuity/capture.json) records both lab bundles
-and model hashes. F04–F05 and broader human functional acceptance remain open. F06 performance optimization and physical profiling are deferred under the advisory policy below.
+and model hashes. F05 and broader human functional acceptance remain open. F06 performance optimization and physical profiling are deferred under the advisory policy below.
 
 ## F02: preserve the same death across visibility returns
 
@@ -217,9 +217,9 @@ The correction passes 100 JavaScript tests and the production build, plus 48
 existing collapse/interruption cases, six airborne deaths, 96 posture cases,
 144 combat-composition cases, 12 lifecycle cases, 48 ten-character locomotion
 fixtures including reduced motion/six lab sizes, and the 24-case F01 native-rate
-smoke check. These are software-rendered correctness results. They do not close
-the separate cover-collision work below, airborne living-character reconstruction (F04), artistic
-acceptance or hardware budgets.
+smoke check. These are software-rendered corpse-identity results. The independent
+F03/F04 checks below cover map clearance and living flight reconstruction.
+Artistic acceptance and hardware profiling remain separate.
 
 ```sh
 node tests/botstrike-death-reconstruction-browser.mjs
@@ -318,6 +318,90 @@ outside this correction. Broader human visual review remains open.
 node --test tests/botstrike-corpse-clearance.test.mjs
 node tests/botstrike-corpse-clearance-browser.mjs
 MOTION_REFERENCE_WORKTREE=/path/to/unchanged-aba5778 node tools/capture-botstrike-corpse-clearance.mjs
+```
+
+## F04: resume the observed flight
+
+At native jump tick 12, upward speed has fallen to 107.5 units/s. The old
+visibility reset treated that current speed as a new launch speed, so animation
+progress returned to zero. It also discarded the crouch fraction, blend weights
+and active body transition. Fixing the clock alone still left a pose change.
+
+The jump clock now reads the unchanged native flight: launch speed 220,
+gravity 600 and 64 ticks/s. The first emitted rising speed is 210.625, after
+gravity is applied. At tick 12 the corresponding animation fraction is
+0.4896142433, including on a first observation. During descent the jump clip
+holds its endpoint while fading out, and the fall clock follows downward speed.
+The native engine generates the test snapshots; this is not a replacement
+browser simulation or a change to the native jump.
+
+For an observed same-life flight, a visibility/gap/correction return preserves
+the crouch fraction, lower blend, body transition and bounded procedural state.
+Contacts still release and movement derivatives reset. The next snapshot must
+match the stored life/map and native tick/vertical-velocity progression before
+that history is used. A landing and new jump, even with the same upward speed,
+discard the old history. Repeated rendering of one held packet retains its
+native tick. Tickless lab samples use a bounded time/velocity fallback.
+
+```mermaid
+flowchart LR
+    S[Native tick and vertical velocity] --> P[Select the jump or fall phase]
+    H[Observed flight history] --> V[Validate life, map and flight progression]
+    S --> V
+    V -->|Same flight| K[Keep the outgoing blend and posture]
+    V -->|New episode| C[Clear old history]
+    K --> R[Render the current snapshot]
+    C --> R
+    P --> R
+```
+
+The [raw paired evidence](acceptance/hybrid-animation/audit-f04-flight.json.gz)
+uses native-engine output for all six chassis, both views, still/moving/crouch
+entry/release/fire states, 30/60/120 Hz rendering and irregular intervals.
+There are 2,880 same-time invalidations, 576 longer-gap cases, 144 first
+observations and 72 room/map/life/landing/new-flight cases. Each same-time
+reason in a chain is compared against the original outgoing pose. Unit tests
+also exercise the three reasons separately.
+
+| Check | PR revision `5f6d3c7` | Correction |
+| --- | ---: | ---: |
+| Same-time cases exceeding 0.25 units at checked body joints | 2,172 / 2,880 | 0 / 2,880 |
+| Same-time cases exceeding 0.25 units at either hand | 1,629 / 2,880 | 0 / 2,880 |
+| Longer-gap cases with incorrect clip clocks | 576 / 576 | 0 / 576 |
+| First observations with incorrect clip clocks | 144 / 144 | 0 / 144 |
+
+The maximum corrected body/hand residuals are 4.25 × 10⁻¹¹ and
+4.52 × 10⁻¹¹ units. All bone rotations/translations, recoil, blend weights,
+crouch fraction, air-contact release, finite transforms and unchanged player
+objects are checked too. These are numerical bounds, not mathematical-zero or
+human-quality claims.
+
+The collector refreshes the sampled actor and its parents, including attached
+skin bind inverses. Both revisions use this collector. Forty-eight comparisons
+per revision against the original full-scene refresh have zero world/bind matrix
+difference. This reduces unnecessary test work on the shared laptop; it is not
+a production performance result.
+
+Paired [BASTION jump](assets/botstrike/flight-reconstruction/bastion-jump.mp4)
+and [VECTOR first-person air crouch](assets/botstrike/flight-reconstruction/vector-air-crouch.mp4)
+hold the same native snapshot through a visibility return. Models, camera and
+native input are identical in both panes. The correction also passes 110
+JavaScript tests and the production build. Human review remains open.
+
+Valve's [public Source SDK 2013 animation state](https://github.com/ValveSoftware/source-sdk-2013/blob/e1f1fd42271805072f052051c26c21caa2c87b04/src/game/shared/Multiplayer/multiplayer_animstate.cpp#L270)
+starts jump state from a jump event and clears state on spawn. We apply that
+lifecycle distinction; our phase references and tick validation belong to
+BotStrike. This source is not CS:GO/CS2's proprietary animation graph.
+Packet interpolation, prediction and native physics retain their existing
+behavior. A first sighting supplies the current clip phase; missing earlier
+crouch/fire/reload history cannot be recovered from that snapshot. Long-gap
+checks therefore establish the current clock and reset safety, not identical
+poses for unseen intermediate input histories.
+
+```sh
+node --test tests/botstrike-flight-phase.test.mjs
+node tests/botstrike-flight-reconstruction-browser.mjs
+MOTION_REFERENCE_WORKTREE=/path/to/unchanged-5f6d3c7 node tools/capture-botstrike-flight-reconstruction.mjs
 ```
 
 ## Performance policy for the remaining work
