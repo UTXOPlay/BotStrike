@@ -97,7 +97,20 @@ test('first/third-person stride plans retain one clock through walk/run changes'
    const ca=advanceStridePlan(a,m,1/fps),cb=advanceStridePlan(b,m,1/fps),previous=x.phase;
    x.update(m,1/fps,{cycleDuration:ca});y.update(m,1/fps,{cycleDuration:cb});
    near(x.phase,y.phase);near(ca,cb);near(((x.phase-previous+1)%1),1/fps/ca,1e-9);
-   assert.ok(ca>=.26&&ca<=1.25);assert.ok(x.weights.every(v=>v>=0&&v<=1));near(x.weights.reduce((n,v)=>n+v,0),1);
+   assert.ok(ca>=.18&&ca<=1.25);assert.ok(x.weights.every(v=>v>=0&&v<=1));near(x.weights.reduce((n,v)=>n+v,0),1);
   }
+ }
+});
+
+
+test('small analog steps match root distance during support rather than retaining a full stride',()=>{
+ for(const speed of [6,12,25,55,100,167.75]){
+  const plan={legLength:28,footWidth:24,supportTravel:25,cycleDuration:.7};
+  const m={...motion(speed),runSpeed:305,reset:'initial'};
+  advanceStridePlan(plan,m,1/60);
+  assert.ok(plan.duty>.5,'quiet movement must keep overlapping scheduled support');
+  near(plan.supportTravel,speed*plan.cycleDuration*plan.duty);
+  assert.ok(plan.supportTravel<=plan.travelGoal+1e-10,'the clock must fit the available step');
+  if(speed<25)assert.ok(plan.supportTravel<17,'slow analog input must shorten the step');
  }
 });

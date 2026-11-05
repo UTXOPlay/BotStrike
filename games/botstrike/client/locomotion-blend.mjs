@@ -37,7 +37,7 @@ export class LocomotionBlend{
   const runSpeed=Number.isFinite(motion.runSpeed)&&motion.runSpeed>0?motion.runSpeed:250;
   for(const i of moving){travel+=this.weights[i];reference+=this.weights[i]*referenceFraction[i]*runSpeed;cycle+=this.weights[i]*this.durations[i];}
   this.cadenceScale=travel>1e-5?clamp(motion.speed/(reference/travel),.6,1.6):1;
-  if(Number.isFinite(cycleDuration)&&cycleDuration>0&&travel>1e-5)this.cadenceScale=(cycle/travel)/clamp(cycleDuration,.26,1.25);
+  if(Number.isFinite(cycleDuration)&&cycleDuration>0&&travel>1e-5)this.cadenceScale=(cycle/travel)/clamp(cycleDuration,.18,1.25);
   if(active&&motion.grounded&&motion.speed>1&&travel>1e-5)this.phase=(this.phase+seconds*this.cadenceScale/(cycle/travel))%1;
   this.idleTime+=seconds;
   const airKind=motion.grounded?null:motion.rising?'jump':'fall';

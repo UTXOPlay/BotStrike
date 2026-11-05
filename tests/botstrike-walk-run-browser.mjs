@@ -30,7 +30,7 @@ try{
    },{hero,weapon,firstPerson,runSpeed:spec.heroes[hero].speed*(spec.weapons[weapon].mobility??1)});
    assert.ok(result.finite&&result.unchanged&&result.maxGripError<=2,JSON.stringify({...result,phases:undefined}));
    for(const r of result.settled){
-    assert.equal(r.runSpeed,result.runSpeed);assert.ok(r.cycleDuration>=.26&&r.cycleDuration<=1.25);
+    assert.equal(r.runSpeed,result.runSpeed);assert.ok(r.cycleDuration>=.18&&r.cycleDuration<=1.25);
     if(r.stage===2){assert.equal(r.runAmount,1);assert.ok(r.weights[2]>.999&&r.ready>.99,JSON.stringify(r));}
     if([0,3,4,5,6].includes(r.stage)){assert.equal(r.runAmount,0);assert.ok(r.weights[2]<.001&&r.ready<.01,JSON.stringify(r));}
     if([0,3,4].includes(r.stage))assert.ok(r.weights[1]>.999,JSON.stringify(r));

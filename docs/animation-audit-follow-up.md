@@ -10,7 +10,7 @@ are recorded separately.
 | F02: reconstructed corpse changes pose | Automated correction verified; human review and deployment pending |
 | F03: corpse intersects existing cover | Automated correction verified; human review and deployment pending |
 | F04: airborne reconstruction restarts jump progress | Automated correction verified; human review and deployment pending |
-| F05: quiet lateral walking lacks meaningful support coverage | Open |
+| F05: quiet lateral walking lacks meaningful support coverage | Automated correction verified; human review and deployment pending |
 | F06: CPU budget and sustained desktop/Android acceptance | Dedicated optimization/profiling deferred by maintainer; timing references advisory |
 
 The audit IDs above are separate from the requirement IDs in the
@@ -142,7 +142,7 @@ MOTION_REFERENCE_WORKTREE=/path/to/reference-checkout node tools/capture-botstri
 
 The capture checks the reference revision and rejects tracked modifications.
 Its [manifest](assets/botstrike/continuity/capture.json) records both lab bundles
-and model hashes. F05 and broader human functional acceptance remain open. F06 performance optimization and physical profiling are deferred under the advisory policy below.
+and model hashes. F05 is covered by the later correction below; broader human functional acceptance remains open. F06 performance optimization and physical profiling are deferred under the advisory policy below.
 
 ## F02: preserve the same death across visibility returns
 
@@ -402,6 +402,123 @@ poses for unseen intermediate input histories.
 node --test tests/botstrike-flight-phase.test.mjs
 node tests/botstrike-flight-reconstruction-browser.mjs
 MOTION_REFERENCE_WORKTREE=/path/to/unchanged-5f6d3c7 node tools/capture-botstrike-flight-reconstruction.mjs
+```
+
+## F05: keep walking support through the whole stride
+
+A successful planted-foot solve did not mean the whole walk was supported.
+The old planner shortened lateral contact time to fit a minimum 260 ms cycle.
+For several chassis that left a gap between one foot lifting and the other
+planting. The scheduled contacts could all pass while neither foot was locked.
+These were contact gaps, not evidence of a large visible hover.
+
+The correction plans foot spacing, contact time and playback together. Quiet
+walking keeps 52% of each cycle in support per foot; crouching uses 54%, giving
+a short overlap. A short lateral step can use a shorter cycle instead of losing
+that overlap. The six native quiet-walk lateral cycles are approximately
+183–269 ms. Running retains its intentional flight intervals. These are
+BotStrike tuning values, not human cadence targets or commercial-game timings.
+
+The planned support distance now equals movement speed × cycle time × contact
+fraction. Small analog input therefore takes a shorter step, including when
+the cycle reaches its maximum duration. Upright lateral travel is shortened to
+leave reach for the boot lanes; crouching has more reach at its lower hip
+height. Measured boot width after toe-axis correction, half-cycle lateral
+travel and a native 64 Hz snapshot-step allowance determine the walking lanes.
+The existing bounded pelvis correction and constrained leg solver still enforce
+reach. Forward foot shape and lift retain their regression gates.
+
+```mermaid
+flowchart LR
+    N[Native speed and movement direction] --> P[Plan stride distance and cycle together]
+    G[Measured legs and corrected boot width] --> P
+    P --> W[Walking: overlap the support intervals]
+    P --> R[Running: allow intentional flight]
+    W --> L[Place separated foot lanes]
+    L --> K[Constrained legs and bounded pelvis correction]
+    R --> K
+    O[Outgoing solved foot] --> H[Bridge a style or speed change]
+    H --> K
+    K --> M[Measure actual skinned support and slip]
+```
+
+Run/walk, scope, crouch and large analog-speed changes also redirect the
+outgoing feet through the existing finite recovery. They retain reachable
+support and bridge a later lift. Switching a style at zero elapsed time must
+not replace a swing with a distant nominal target.
+
+[Paired evidence](acceptance/hybrid-animation/audit-f05-support.json.gz) compares
+unchanged `d216ec9` with this correction using identical instrumentation and
+gates. The matrix has **420 fixtures**, including **372 walking/crouching/scoped/
+analog fixtures** and **48 running contrasts**:
+
+- All six chassis and eight directions at their native quiet/crouch/run speeds.
+- Held 64 Hz root snapshots with 30/60/120 Hz and irregular render sampling.
+- All twelve weapon mobility values in layered coverage, slow analog input,
+  and 72 run/walk, scope and crouch changes.
+- Actual CPU-skinned sole landmarks, scheduled versus feasible contacts,
+  unsupported time, double support, complete stance durations and planted slip.
+- Independent zero-time style changes and a bounded initial settling interval.
+
+| Check | PR revision `d216ec9` | Correction |
+| --- | ---: | ---: |
+| Walking-family fixtures with unsupported steady samples | 67 / 372 | 0 / 372 |
+| Maximum unsupported share of measured time | 28.18% | 0% |
+| Fixtures below the sampled sole-lane clearance gate | 270 / 372 | 0 / 372 |
+| Zero-time style probes exceeding 0.25 units | 58 / 72 | 0 / 72 |
+| Maximum zero-time style sole displacement | 13.586238 units | 1.22 × 10⁻¹³ units |
+
+The corrected minimum sampled sole-lane separation is **0.365800 units**;
+maximum planted skin error and per-frame drift are **4.11 × 10⁻¹³** and
+**4.17 × 10⁻¹³ units**. Maximum steady pelvis correction is **6.536721 units**,
+under the unchanged 7-unit bound. The longest initial wait for support after a
+style change is **91.67 ms**, under its 250 ms limit. These are measured numerical
+residuals, not mathematical-zero claims. Coarse render sampling can miss the
+brief double-support overlap; actual no-support time is checked independently.
+
+The steady-state support gate requires a reachable lock, independent skinned
+landmark error below 0.02 units and calibrated sole height within 0.5 units of
+the floor. Drift of an already planted sole must stay below 0.02 units; sampled
+left/right sole lanes must retain 0.25 units of separation. The first second is
+warm-up, and style-change fixtures measure steady support 0.5 seconds after the
+change. Initial settling is reported separately and must find support within
+0.25 seconds. Near-floor **unlocked** movement is recorded separately: a low
+swing is allowed to move and is not reported as planted-foot slip.
+
+Paired [GLITCH quiet side-step](assets/botstrike/walking-support/glitch-quiet-side.mp4)
+and [FORGE crouch side-step](assets/botstrike/walking-support/forge-crouch-side.mp4)
+show the same snapshots and cameras. Their manifests bind separate runtime
+bundles and identical assets. These fixed-step clips and conservative sampled
+sole-lane checks do not establish full-mesh self-collision, slope adaptation,
+artistic quality or physical-device performance. Living steps do not perform
+obstacle-aware foot placement; lane opening near walls and the fast side-shuffle
+cadence remain part of human clipping/gait review. Human visual acceptance remains
+open; dedicated performance work remains deferred.
+
+The final correction passes **111 JavaScript tests and the production build**,
+all **360** interruption cases, **144** synchronized-view cases across 60,480
+frames and **96** directional contact cases. Combat composition (144 cases and
+12 lifecycle fixtures), posture (48 collapses, six air deaths and 96 posture
+cases), F04 flight reconstruction (3,672 cases), F02 corpse reconstruction
+(168 cases plus 1,200 returns), F03 clearance smoke (1,020 settled cases and
+48 falls) and 48 ten-rig locomotion/reduced-motion fixtures also pass. The latter
+retain the six lab viewport/backing checks. These regressions and their raw
+reports are included in the evidence archive; they do not replace final
+actual-game input/replay/release checks or human acceptance.
+
+Epic's production-engine [stride-warping documentation](https://dev.epicgames.com/documentation/unreal-engine/pose-warping-in-unreal-engine)
+connects movement speed with foot spacing, and its
+[solver API](https://dev.epicgames.com/documentation/unreal-engine/API/Plugins/AnimationWarpingRuntime/FAnimNode_StrideWarping)
+provides leg-extension limits and pelvis pull-down control. We apply that
+coupled-planning principle to BotStrike's procedural feet and shared view clock.
+This is an engine technique reference, not a claim to reproduce a shipped
+game's proprietary animation graph or visual quality.
+
+```sh
+node tests/botstrike-walking-support-browser.mjs
+node tests/botstrike-foot-continuity-browser.mjs
+node tests/botstrike-walk-run-browser.mjs
+MOTION_REFERENCE_WORKTREE=/path/to/unchanged-d216ec9 node tools/capture-botstrike-walking-support.mjs
 ```
 
 ## Performance policy for the remaining work

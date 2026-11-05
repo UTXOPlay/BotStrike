@@ -15,14 +15,19 @@ export function runningAmount(motion){
 }
 export function crouchAmount(motion){return Number.isFinite(motion.crouchAmount)?clamp(motion.crouchAmount,0,1):Number(!!motion.crouch);}
 export function advanceStridePlan(plan,motion,dt){
- const seconds=Number.isFinite(dt)?Math.max(0,dt):0,lateral=motion.speed>1?Math.abs(motion.side)/motion.speed:0,crouch=crouchAmount(motion);
- plan.travelGoal=Math.min(plan.legLength*(.90-.20*crouch),lateral>.001?plan.footWidth*.72/lateral:Infinity);
- if(motion.reset)plan.supportTravel=plan.travelGoal;else plan.supportTravel+=(plan.travelGoal-plan.supportTravel)*-Math.expm1(-seconds/.06);
- const standingDuty=.52+(.25-.52)*runningAmount(motion),styleDuty=standingDuty+(.50-standingDuty)*crouch;
- // Lateral steps have less room. Bound support duration so the minimum cycle
- // time cannot make a planted foot travel beyond its planned reach.
- plan.duty=Math.min(styleDuty,plan.supportTravel/(Math.max(12,motion.speed)*.26));
- const goal=clamp(plan.supportTravel/(Math.max(12,motion.speed)*plan.duty),.26,1.25);
+ const seconds=Number.isFinite(dt)?Math.max(0,dt):0,lateral=motion.speed>1?Math.abs(motion.side)/motion.speed:0,crouch=crouchAmount(motion),run=runningAmount(motion);
+ // Walking keeps overlapping support. Shorten the cycle to fit the available
+ // step instead of silently turning a side-step into a gait with aerial gaps.
+ plan.travelGoal=Math.min(plan.legLength*(.90-.32*lateral*(1-run)*(1-crouch)-.20*crouch),lateral>.001?plan.footWidth*(.74-.02*run)/lateral:Infinity);
+ if(motion.reset||!Number.isFinite(plan.travelLimit))plan.travelLimit=plan.travelGoal;else plan.travelLimit+=(plan.travelGoal-plan.travelLimit)*-Math.expm1(-seconds/.06);
+ const standingDuty=.52+(.25-.52)*run,styleDuty=standingDuty+(.54-standingDuty)*crouch;
+ const minimum=.18+.08*run,speed=Math.max(1,motion.speed);
+ plan.duty=Math.min(styleDuty,plan.travelLimit/(speed*minimum));
+ const limit=plan.travelLimit/(speed*plan.duty),goal=clamp(limit,minimum,1.25);
  if(motion.reset)plan.cycleDuration=goal;else plan.cycleDuration+=(goal-plan.cycleDuration)*-Math.expm1(-seconds/.06);
+ plan.cycleDuration=Math.min(plan.cycleDuration,Math.max(minimum,limit));
+ // Placement and playback must describe the same distance travelled while a
+ // foot is planted, including small analog speeds and the maximum cycle cap.
+ plan.supportTravel=speed*plan.cycleDuration*plan.duty;
  return plan.cycleDuration;
 }
