@@ -11,7 +11,7 @@ are recorded separately.
 | F03: corpse intersects existing cover | Open |
 | F04: airborne reconstruction restarts jump progress | Open |
 | F05: quiet lateral walking lacks meaningful support coverage | Open |
-| F06: CPU budget and sustained desktop/Android acceptance | Open |
+| F06: CPU budget and sustained desktop/Android acceptance | Dedicated optimization/profiling deferred by maintainer; timing references advisory |
 
 The audit IDs above are separate from the requirement IDs in the
 [completion ledger](hybrid-animation-requirements.md).
@@ -142,7 +142,7 @@ MOTION_REFERENCE_WORKTREE=/path/to/reference-checkout node tools/capture-botstri
 
 The capture checks the reference revision and rejects tracked modifications.
 Its [manifest](assets/botstrike/continuity/capture.json) records both lab bundles
-and model hashes. F03–F06 and broader human/device acceptance remain open.
+and model hashes. F03–F05 and broader human functional acceptance remain open. F06 performance optimization and physical profiling are deferred under the advisory policy below.
 
 ## F02: preserve the same death across visibility returns
 
@@ -226,3 +226,27 @@ node tests/botstrike-death-reconstruction-browser.mjs
 node tests/botstrike-posture-browser.mjs
 node --test tests/botstrike-posture.test.mjs
 ```
+
+## Performance policy for the remaining work
+
+On November 5, the maintainer clarified that this shared laptop also runs Cargo
+builds and that dedicated performance optimization will happen later. The
+[current policy](acceptance/hybrid-animation/performance-policy.json) therefore
+makes tight animation CPU and frame-time targets **advisory for this PR**.
+
+The old 1/2 ms desktop/mobile CPU targets and matched frame references stay in
+reports as diagnostic comparisons. Their historical values and pass/fail results
+are not rewritten. New reports explicitly record advisory enforcement and that
+these timing results do not block acceptance. Cargo contention is a reason to
+qualify a measurement, not evidence that an optimization succeeded.
+
+Continuity, contact, pose identity, finite transforms, native/replay/profile
+binding, input/resize requirements and bounded backing/work remain enforced.
+Reproducible game-induced crashes, persistent freezes or runaway work still
+need correction. Human functional/visual review is separate from the deferred
+performance measurements.
+
+The later performance pass can profile significance/update rates, repeat
+sustained matched A/B runs on a quiet host, measure a named Android device's
+thermal behavior and investigate end-to-end input latency. F06 is deferred,
+not reported as fixed or as a performance pass.

@@ -1,5 +1,6 @@
 // Physical-device measurements use real RAF pacing, with debug skin sampling off.
 // These timings do not measure display scanout or end-to-end input latency.
+import performancePolicy from '../docs/acceptance/hybrid-animation/performance-policy.json' with {type:'json'};
 const percentile=(values,p)=>{
  const sorted=[...values].sort((a,b)=>a-b);
  return sorted[Math.min(sorted.length-1,Math.floor(sorted.length*p))]||0;
@@ -40,10 +41,10 @@ export function installHardwareBenchmark(lab,options){
     return [mode,{rafMs:summary(selected.flatMap(r=>r.intervals)),animationCpuMs:summary(selected.flatMap(r=>r.actorCpu)),frameCpuMs:summary(selected.flatMap(r=>r.frameCpu))}];
    }));
    const software=/swiftshader|llvmpipe|software/i.test(device.renderer),mobile=/Android|iPhone|iPad/i.test(device.userAgent);
-   const animationP95LimitMs=mobile?2:1,frameP95LimitMs=Math.max(aggregate.baseline.rafMs.p95*1.1,aggregate.baseline.rafMs.p95+2);
-   lastReport={schema:1,started,finished:new Date().toISOString(),device,software,assetManifest,config:{...config,count:10,view:'lineup',diagnostics:false},seconds,warmup,rounds,runs,aggregate,inputDispatchToNextRaf:inputSamples,budget:{animationP95LimitMs,frameP95LimitMs,animationPass:aggregate.candidate.animationCpuMs.p95<=animationP95LimitMs,framePass:aggregate.candidate.rafMs.p95<=frameP95LimitMs},limitations:['RAF and CPU timings are browser observations; GPU completion, display scanout and end-to-end input latency are not measured.','Physical phone identity, thermal state and human control response require reviewer confirmation.']};
+   const reference=performancePolicy.referenceTargets,animationP95LimitMs=reference.animationCpuP95Ms[mobile?'mobile':'desktop'],frameP95LimitMs=Math.max(aggregate.baseline.rafMs.p95*reference.frameP95.baselineMultiplier,aggregate.baseline.rafMs.p95+reference.frameP95.baselineAllowanceMs);
+   lastReport={schema:1,started,finished:new Date().toISOString(),device,software,assetManifest,config:{...config,count:10,view:'lineup',diagnostics:false},seconds,warmup,rounds,runs,aggregate,inputDispatchToNextRaf:inputSamples,performancePolicy,budget:{enforcement:performancePolicy.enforcement,blocksAcceptance:performancePolicy.blocksAcceptance,label:reference.label,animationP95LimitMs,frameP95LimitMs,animationPass:aggregate.candidate.animationCpuMs.p95<=animationP95LimitMs,framePass:aggregate.candidate.rafMs.p95<=frameP95LimitMs},limitations:['RAF and CPU timings are browser observations; GPU completion, display scanout and end-to-end input latency are not measured.','Physical phone identity, thermal state and human control response require reviewer confirmation.','Dedicated performance acceptance is deferred; legacy target comparisons are advisory for this PR.']};
    download.disabled=false;
-   status.textContent=`Finished. Animation p95: ${aggregate.candidate.animationCpuMs.p95.toFixed(2)} ms; frame interval p95: ${aggregate.candidate.rafMs.p95.toFixed(2)} ms. ${software?'Software renderer; hardware gate remains open.':'Download the device measurements.'}`;
+   status.textContent=`Finished. Animation p95: ${aggregate.candidate.animationCpuMs.p95.toFixed(2)} ms; frame interval p95: ${aggregate.candidate.rafMs.p95.toFixed(2)} ms. Targets are advisory for this PR. ${software?'Software-rendered diagnostic only.':'Download the device measurements.'}`;
    try{const response=await fetch('./measurements',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lastReport)});if(response.ok)lastReport.saved=await response.json();}catch{}
    return lastReport;
   }catch(error){status.textContent=error.message;throw error;}

@@ -9,8 +9,9 @@ acceptance are different evidence. A row remains open until its own gate passes.
 
 The [strict-audit follow-up](animation-audit-follow-up.md) qualifies the earlier
 passes: F01 and F02 now have verified automated corrections. Cover interaction, living
-jump reconstruction, walking support coverage and current hardware/human
-acceptance remain open. Audit IDs and this ledger's IDs differ.
+jump reconstruction, walking support coverage and human functional acceptance
+remain open. Dedicated performance optimization/physical profiling are deferred
+under the [maintainer-approved advisory policy](acceptance/hybrid-animation/performance-policy.json). Audit IDs and this ledger's IDs differ.
 
 | ID | Requirement | Authoritative evidence required | Current status |
 | --- | --- | --- | --- |
@@ -36,12 +37,14 @@ acceptance remain open. Audit IDs and this ledger's IDs differ.
 | T01 | All eight required gameplay-like sequences across all six chassis and ten visible rigs | Full fixture matrix at 30/60/120 and jitter, plus real native-state playback | Pass automated fixtures: eight required sequences plus walk/run and three posture sequences × 30/60/120 + jitter/reduced = 48, ten rigs spanning six chassis; actual native-state browser test |
 | T02 | No accumulated offsets, NaNs, unreachable locked feet or excessive joint twists | Long runs, repeated life/map/room/visibility resets and finite/bounds checks | Pass: 144 composition cases, 28,800 lifecycle frames / 1,200 cycles, finite/bend/wrist/repeatable-pose checks |
 | T03 | Reduced motion preserves essential pose/contact and disables optional motion | Full matrix with reduced motion; visual and numeric evidence | Pass numerical matrix: all twelve scenarios with jitter + reduced motion; optional offsets cleared, essential aim/contact retained; human review open |
-| H01 | Ten-rig baseline on representative physical desktop and mobile hardware | Exported device/GPU/CPU, frame pacing, animation CPU, input/interaction timing and thermal-duration evidence | Open: archived physical Intel desktop runs cover earlier builds; the current correction needs matched sustained measurements, and Android Chrome device/model/thermal evidence remains missing |
-| H02 | Explicit animation CPU budget and no material frame/input regression | Budgets derived from those device baselines and matched A/B runs | Open: desktop/mobile animation CPU p95 budgets remain 1/2 ms. The archived posture short run measured 1.1 ms CPU p95 (fails 1 ms) and 21.5 ms RAF p95 (passes its matched 22.66 ms short-run gate). The older long-run frame gate was a separate 20.3 ms reference. Current source needs sustained matched desktop/mobile measurement; software-rendered fixture timings do not close this gate |
+| H01 | Ten-rig baseline on representative physical desktop and mobile hardware | Exported device/GPU/CPU, frame pacing, animation CPU, input/interaction timing and thermal-duration evidence | Deferred by maintainer: dedicated quiet-host desktop and named-Android thermal measurements belong to the later performance pass. Current timing is diagnostic on the shared laptop with Cargo builds; functional mobile checks and human quality review remain separate |
+| H02 | Explicit animation CPU budget and no material frame/input regression | Budgets derived from those device baselines and matched A/B runs | Advisory for this PR: legacy desktop/mobile 1/2 ms CPU and matched frame references are diagnostic, not merge blockers. Dedicated optimization is deferred. Historical target results remain unchanged; an advisory result is not a performance pass. Reproducible game-induced freezes/crashes and unbounded work still require correction |
 | H03 | Human quality/playtest acceptance | Recorded review of knee/weapon clipping, continuity and perceived control responsiveness | Partial human acceptance: after two failed reviews, the user reports the listed toe-out, high rear-foot lift and knee-popping issues are no longer present; broader clipping/control-feel review remains open |
 
-Completion requires evidence for every row, with open external acceptance kept
-visible rather than inferred from software-rendered test passes.
+Current animation acceptance requires evidence for the non-deferred rows.
+H01/H02 are recorded for the later performance pass under the advisory policy;
+they do not block this PR. Open functional/human acceptance stays visible rather
+than being inferred from software-rendered test passes.
 
 The walk/run follow-up was included in runtime `989a634` and has its own [comparison](walk-run-transitions.md) and [evidence record](acceptance/hybrid-animation/walk-run-transitions.json). Earlier human gait acceptance is scoped to the previously reviewed build; the new transitions still need human playtesting.
 

@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "effectiveDate": "2026-11-05",
+  "enforcement": "advisory",
+  "blocksAcceptance": false,
+  "decision": "Maintainer deferred dedicated performance optimization while animation correctness is repaired.",
+  "environment": "Shared development laptop with concurrent Cargo builds; contended timings are diagnostic.",
+  "referenceTargets": {
+    "label": "Legacy diagnostic references, not current merge gates",
+    "animationCpuP95Ms": {"desktop": 1, "mobile": 2},
+    "frameP95": {"baselineMultiplier": 1.1, "baselineAllowanceMs": 2}
+  },
+  "requiredChecks": [
+    "Animation continuity, contact, pose identity and finite-transform checks remain enforced.",
+    "Native rules, replay/profile binding, input mapping and viewport requirements remain enforced.",
+    "Backing resolution and work/state growth remain bounded.",
+    "Reproducible game-induced crashes, persistent freezes and runaway work still require correction."
+  ],
+  "deferredWork": [
+    "Dedicated significance/update-rate and animation CPU optimization",
+    "Sustained matched desktop measurements on an otherwise quiet host",
+    "Named physical Android device and thermal measurements",
+    "End-to-end input latency measurement"
+  ],
+  "limitations": [
+    "An advisory result is not a performance pass.",
+    "Keep historical timings and their original target results unchanged.",
+    "Software rendering and shared-host timings do not establish physical-device performance."
+  ]
+}
