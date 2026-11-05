@@ -1,0 +1,1148 @@
+{
+  "forge-source-poses.json": [
+    {
+      "clip": "start",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.009063873159328197,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "start",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.0057506955016909805,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "start",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.005874426494719979,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "brake",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0032911671345652975,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "brake",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0029531425394917453,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "brake",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0029473334692490805,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005015326019820559,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0007199032444360209,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0012303962091968768,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.004544896285506795,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0002482113878146397,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0007511918729189437,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.003610258125764366,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0011554144174245745,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.002256188294851136,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.003153597907175315,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0016068556115333282,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0019360613888405737,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.125,
+      "lowestVertex": -0.0003308160360461079,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.25,
+      "lowestVertex": 0.0022628102043934376,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.375,
+      "lowestVertex": 0.002107967162779857,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0065916081571906725,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0034047065493112566,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.004806457330173663,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.004100792746693976,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.004222878950370129,
+      "calls": 5,
+      "triangles": 39123
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.004527912933432271,
+      "calls": 5,
+      "triangles": 39123
+    }
+  ],
+  "glitch-source-poses.json": [
+    {
+      "clip": "start",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.008314473283037593,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "start",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.005184310806155314,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "start",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.005074613941746258,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "brake",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0025365063147866785,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "brake",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.003025563440873784,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "brake",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.002827115777002816,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0039467910446719535,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0011132238464589272,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.00155792017729324,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0037665940982569875,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0007691559436113771,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0011774897193493027,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.003046951773115328,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0014463574513343402,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0022030400234444684,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.0029564694935507903,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0017711731845808446,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0018857371996769054,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.125,
+      "lowestVertex": -0.001162577888613851,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.25,
+      "lowestVertex": 0.0017429841516898013,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.375,
+      "lowestVertex": 0.0016981755677980864,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005922095793678623,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.003555882598679578,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0045487053509458,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.0023689774659415557,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.0024910636696177085,
+      "calls": 4,
+      "triangles": 32900
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.0027960976526798503,
+      "calls": 4,
+      "triangles": 32900
+    }
+  ],
+  "spectre-source-poses.json": [
+    {
+      "clip": "start",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.004814453500056967,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "start",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.005483865833495149,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "start",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.004696409420093115,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "brake",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.00541092997067742,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "brake",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.003180071983503986,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "brake",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.00313336845802698,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.004946979488071747,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0015201495585658725,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.002671623770442416,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005432781002695144,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0022377301780159356,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0033486735204576006,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.0027219939075612196,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0023767253885023203,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.002557456789063689,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.00420713149567347,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0017291722032524194,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.004030058366930125,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.125,
+      "lowestVertex": 0.0003248716811567944,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.25,
+      "lowestVertex": 0.0026667044183496763,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.375,
+      "lowestVertex": 0.002052294697452284,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.003856838010951989,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.003151451626109577,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.004610841636711913,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.00561626065747348,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.005738346861149633,
+      "calls": 5,
+      "triangles": 40052
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.006043380844211774,
+      "calls": 5,
+      "triangles": 40052
+    }
+  ],
+  "bastion-source-poses.json": [
+    {
+      "clip": "start",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.013649639210823935,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "start",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.006573187977360069,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "start",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.0073322251466794025,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "brake",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0027397041489515828,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "brake",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0024089501504435187,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "brake",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.002628991504166577,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.00504638331572041,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.1500244140625,
+      "lowestVertex": -0.0005615666960972696,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.22503662109375,
+      "lowestVertex": -0.00022574221394854044,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005340105185265728,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0016247011227129363,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0012041582688013391,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.0030545869524568406,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0014800031645075332,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0013387871893801861,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.00347013285106032,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.00018869437318197457,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0025134713794200056,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.125,
+      "lowestVertex": -0.0016709645479960802,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.25,
+      "lowestVertex": 0.0013268125854638073,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.375,
+      "lowestVertex": 0.0015066527704104952,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0095043575678472,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.003529861633983382,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.005475380458168293,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.002812612642029852,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.0028126285332060047,
+      "calls": 3,
+      "triangles": 35326
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.0028124867350181465,
+      "calls": 3,
+      "triangles": 35326
+    }
+  ],
+  "patch-source-poses.json": [
+    {
+      "clip": "start",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.006765672102132313,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "start",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.005344281338274616,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "start",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.004995912784675774,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "brake",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.003932487355231166,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "brake",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.003299658663572862,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "brake",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0033411957993884998,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0047661157043289645,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.001962187505729865,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.003290002256963978,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005098933197966485,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0035339010867704995,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.004369197001091413,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.0029003377788732743,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.0030411470559957784,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0014895475845165887,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.003315446505498424,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.002118217236970893,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0018134158954511426,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.125,
+      "lowestVertex": -0.0007094382279308141,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.25,
+      "lowestVertex": 0.0021063819161025563,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.375,
+      "lowestVertex": 0.0018827285599696936,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005223326421360391,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0034156576091862317,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.004793948254391313,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.005231640366661391,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.005231656257837544,
+      "calls": 5,
+      "triangles": 40981
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.005231514459649686,
+      "calls": 5,
+      "triangles": 40981
+    }
+  ],
+  "vector-source-poses.json": [
+    {
+      "clip": "start",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.004935125541758061,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "start",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.00581464695431828,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "start",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.00559379040099953,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "brake",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.0046825947328317736,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "brake",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0028631429698194183,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "brake",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.002874360336229252,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.00529925674848457,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.001824127657517119,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_left",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.004346691597963678,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005423732323553197,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0016631072161342464,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_right",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.0042281945012035485,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.002957904663453588,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.001850741525965531,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_back_left",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0018605361631826751,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.10833740234375,
+      "lowestVertex": 0.0031032068312957725,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.2166748046875,
+      "lowestVertex": 0.002049361548433215,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "pivot_back_right",
+      "time": 0.32501220703125,
+      "lowestVertex": 0.0017648416003308923,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.125,
+      "lowestVertex": 0.000290586960129638,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.25,
+      "lowestVertex": 0.0029325627527904373,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "land_hard",
+      "time": 0.375,
+      "lowestVertex": 0.0022456214768525554,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.07501220703125,
+      "lowestVertex": 0.005001195280605434,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.1500244140625,
+      "lowestVertex": 0.0033636859023465013,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "crouch_enter",
+      "time": 0.22503662109375,
+      "lowestVertex": 0.00512106402216014,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.058319091796875,
+      "lowestVertex": 0.005424823387183867,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.11663818359375,
+      "lowestVertex": 0.00573001505961002,
+      "calls": 4,
+      "triangles": 31426
+    },
+    {
+      "clip": "weapon_ready",
+      "time": 0.174957275390625,
+      "lowestVertex": 0.005668838105172162,
+      "calls": 4,
+      "triangles": 31426
+    }
+  ]
+}

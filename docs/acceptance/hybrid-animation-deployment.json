@@ -1,0 +1,169 @@
+{
+  "verifiedAt": "2026-11-02T02:55:29.982Z",
+  "url": "https://store.utxoplay.io/games/botstrike/",
+  "sourceCommit": "f952afdddd8d2f98425ac08826925ccbe47c4387",
+  "authorization": "User explicitly requested push and deployment on 2026-11-02; this does not close the remaining artistic/device gates.",
+  "commit": "f952afd",
+  "image": "myelin-botstrike:hybrid-f952afd",
+  "imageId": "sha256:c98aabc6a1dff58148e4918625996f3eb858bca17c07cc2163e48b970864e0de",
+  "healthy": true,
+  "activeRoomsAtSwitch": 0,
+  "dataBackup": "/data/utxoplay/releases/20261102-botstrike-hybrid-f952afd/botstrike-data-before.tar.gz",
+  "compose": "/data/utxoplay/releases/20261102-botstrike-hybrid-f952afd/game.compose.json",
+  "rollbackCompose": "/data/utxoplay/releases/20261102-botstrike-hybrid-f952afd/rollback.compose.json",
+  "protectedFilesIdentical": 28,
+  "otherChangedContainers": [],
+  "metrics": {
+    "ok": true,
+    "draining": false,
+    "rooms": {},
+    "publicWaitingHumans": 0,
+    "publicRunningHumans": 0,
+    "publicBotSeats": 0,
+    "publicQueueWaitMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "socketRttMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicSocketRttMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "socketJitterMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicSocketJitterMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "reconnectDelayMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicReconnectDelayMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "diskAvailableBytes": 66019360768,
+    "retentionDays": 30,
+    "failedRooms": 0,
+    "sealingJobs": 0,
+    "lastSealMs": 0,
+    "sealingFailures": 0,
+    "verifiedMatches": 0,
+    "publicVerifiedMatches": 0,
+    "expiredReplays": 0,
+    "recordingErrors": 0,
+    "reconnections": 0,
+    "publicReconnects": 0,
+    "publicQueueRequests": 0,
+    "publicQueueJoins": 0,
+    "publicQueueAbandons": 0,
+    "publicLateJoins": 0,
+    "publicMatchesStarted": 0,
+    "publicHumanSeatsAtStart": 0,
+    "publicBotSeatsAtStart": 0
+  },
+  "nativeProfile": "642acc7500efb2635dfa6aca1603b31a6624f3101ccdf5f6986da75c22419cf9",
+  "runtimeChange": "Browser-only overlay on the exact prior production image; native/current and historical verifiers, backend, packages, secrets and game data mount preserved.",
+  "stage": {
+    "browserFilesMatched": 67,
+    "protectedFilesMatched": 28,
+    "native": {
+      "ticks": 18168,
+      "score": [
+        50,
+        28
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "fullGameBrowser": {
+      "passed": true,
+      "viewports": [
+        [
+          1920,
+          1080
+        ],
+        [
+          2560,
+          1080
+        ],
+        [
+          2560,
+          1440
+        ],
+        [
+          3840,
+          2160
+        ],
+        [
+          390,
+          844
+        ],
+        [
+          844,
+          390
+        ]
+      ],
+      "nativeMovementSkillAcknowledged": true,
+      "touchFireAndAim": true,
+      "portraitGate": true
+    },
+    "setupCorrections": [
+      "The isolated native test initially used a 512MB tmpfs below the unchanged 2GB free-space reserve; rerun with a separate disposable disk-backed test directory passed.",
+      "Staging runs on the internal Docker network; browser access used SSH forwarding to its private container address. Explicit disposable guest setup was enabled for the full-game check."
+    ]
+  },
+  "public": {
+    "assetFiles": 66,
+    "allHashesMatch": true,
+    "storeLauncher": {
+      "desktop": true,
+      "mobile": true,
+      "allSixSizes": true,
+      "failedModuleRetry": true,
+      "portraitLandscape": true,
+      "fullscreenExitBlocksInput": true,
+      "fullscreenReentryPreservesIframeSandboxAndMatch": true
+    },
+    "otherChangedContainers": []
+  },
+  "desktopPerformance": {
+    "evidence": "hybrid-animation/desktop-f952afd.json.gz",
+    "animationCpuP95Ms": 1,
+    "animationBudgetPass": true,
+    "rafP95Ms": 21.3,
+    "rafBudgetLimitMs": 20.3,
+    "frameBudgetPass": false,
+    "hostAggregateContentionFlag": false
+  },
+  "openAcceptance": [
+    "Desktop frame pacing budget remains unmet",
+    "Physical Android model, performance and thermal-duration evidence missing",
+    "Latest gait/clipping/control-feel human re-review pending"
+  ],
+  "notes": [
+    "PR #2 remains draft; deployment was explicitly authorized separately.",
+    "Staging is isolated from production data. The failed and successful measurement records remain available.",
+    "Myelin provides off-chain exact-profile host replay, not CKB settlement."
+  ]
+}

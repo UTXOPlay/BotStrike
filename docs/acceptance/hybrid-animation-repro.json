@@ -1,0 +1,42 @@
+{
+  "blender": "5.2.2 LTS",
+  "characters": [
+    {
+      "hero": "vector",
+      "before": "0b221569f3a26ae79160bec641d697639c49fdf25129db94d9ac7026861688ff",
+      "after": "0b221569f3a26ae79160bec641d697639c49fdf25129db94d9ac7026861688ff",
+      "runtimeBytesIdentical": true
+    },
+    {
+      "hero": "patch",
+      "before": "05ced39b085b37c5e447997c29c44b7d0e311f2e12c22095b38cda97a781a8be",
+      "after": "05ced39b085b37c5e447997c29c44b7d0e311f2e12c22095b38cda97a781a8be",
+      "runtimeBytesIdentical": true
+    },
+    {
+      "hero": "bastion",
+      "before": "183011c12bba64998a011a86d833005a740803f177fc1d27e41ef06e6d338b12",
+      "after": "183011c12bba64998a011a86d833005a740803f177fc1d27e41ef06e6d338b12",
+      "runtimeBytesIdentical": true
+    },
+    {
+      "hero": "spectre",
+      "before": "9c7494dd78cea824f79c815b2254294af1259499bcb0ebb5e0db8d5b1c8114cc",
+      "after": "9c7494dd78cea824f79c815b2254294af1259499bcb0ebb5e0db8d5b1c8114cc",
+      "runtimeBytesIdentical": true
+    },
+    {
+      "hero": "glitch",
+      "before": "d29aa3c635b16fb7dc12b5805ad22cb41037368dd8d6f4c44a4d4882578417a4",
+      "after": "d29aa3c635b16fb7dc12b5805ad22cb41037368dd8d6f4c44a4d4882578417a4",
+      "runtimeBytesIdentical": true
+    },
+    {
+      "hero": "forge",
+      "before": "59714d51b58bf74d48f671d4ddcff9d11814bdb9d01f8358170e1b3161eaf781",
+      "after": "59714d51b58bf74d48f671d4ddcff9d11814bdb9d01f8358170e1b3161eaf781",
+      "runtimeBytesIdentical": true
+    }
+  ],
+  "sourceSerialization": "Runtime GLB bytes are reproducible. Blender source serialization is not claimed byte-identical."
+}

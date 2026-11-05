@@ -1,0 +1,14 @@
+Store initialized mobile
+Release input failure context {"errors":[],"sent":[{"seq":204,"viewTick":355,"x":0,"y":0,"yaw":0.08999999999999989,"pitch":0.0375,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":205,"viewTick":355,"x":0,"y":0,"yaw":0.08999999999999989,"pitch":0.0375,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":206,"viewTick":355,"x":0,"y":0,"yaw":0.08999999999999989,"pitch":0.0375,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0}],"ui":{"playing":"false","hidden":false,"focus":true,"status":"Connected · 197 ms","fatal":""}}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+cdpSession.send: Protocol error (Input.dispatchTouchEvent): Must send a TouchStart first to start a new touch.
+    at verifyHeldRotation (/home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-release-input.mjs:61:56)
+    at async file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-store-launch.mjs:31:39 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v22.23.1

@@ -1,0 +1,5 @@
+Store initialized mobile
+Store iframe simultaneous touch movement, aim and fire reached native authority
+Mobile fullscreen exit {"levels":["IFRAME","DIV"],"fullscreen":null,"coarse":true,"displayFullscreen":false,"entryHidden":true,"inert":false}
+WebGL-only later-frame rendering verified {"distinctQuantizedColors":387,"opaqueSamples":11553,"backing":[633,292],"drawCalls":61,"contextLost":false}
+Mobile launcher failure/retry and gameplay passed

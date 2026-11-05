@@ -1,0 +1,4123 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "0c2c5f91712e69661b4cd2cc9326f21b58375208",
+  "scope": "Full hybrid-animation proposal phases 0–3; one draft PR",
+  "status": "Functional and asset checks passed; desktop frame pacing, physical Android and human gait acceptance remain open",
+  "sourceSha256": {
+    "games/botstrike/client/animation-motion.mjs": "e72470f0f26a48e1138ebe684ac9345526e412e3ccff808a744d3ac081dead7a",
+    "games/botstrike/client/locomotion-blend.mjs": "657da4509c47c7d876a74ba12ae601368e94486309529ecebfd07701e870a8d5",
+    "games/botstrike/client/characters.mjs": "16091b91b4cf0c3a4092488e9f13c484ad7534c07b04ee1efb97665cacbba493",
+    "games/botstrike/client/scene.mjs": "9c2ef9bf9d35f0c86874865ad7a907c28ae372697f28e0171887cdc8f2a15caf",
+    "games/botstrike/client/foot-ik.mjs": "a7165a36d2ee7d372b2de9a0cf206865cea987588acb4f8e4055ed4e5ccfc9a9",
+    "games/botstrike/client/two-bone-ik.mjs": "1c10cd63e39743c1e94e427823173e4e0f208b0a20b419d3a65748c43530c4a3",
+    "games/botstrike/client/animation-springs.mjs": "b89918f6f3f6cabc998fd19a7f675a7b107ab627fa03114af3aab149834a13d1",
+    "games/botstrike/client/pose-inertia.mjs": "2d9b553d0080a2385163877208b430dca6b4a71498a324deea1debba5a5ee549",
+    "games/botstrike/client/bone-pose.mjs": "7982ad8d8566f916c10aed494f5753fc828c90e715a56e0249ac8d3db22f5c78",
+    "games/botstrike/client/motion-profiles.mjs": "79fb1883393c31abbd2a066baaca24bdfeadb90039232284ab1791b738a3a3cd",
+    "games/botstrike/web/app.js": "e39cf4321e270526b69ad42aa3ae9758a0568186a1c5c9419f095c78214c8082"
+  },
+  "checks": {
+    "javascript": {
+      "passed": 89,
+      "failed": 0,
+      "skipped": 0
+    },
+    "host": {
+      "passed": 4,
+      "failed": 0
+    },
+    "build": "Passed; lab, frozen baseline and review harnesses excluded from dist",
+    "motion": {
+      "fixtures": 32,
+      "sequences": 8,
+      "rigs": 10,
+      "chassis": 6,
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "jitterAndReduced": true,
+      "allFiniteAndReadOnly": true
+    },
+    "contacts": {
+      "maxIndependentSoleError": 7.015212128518772e-13,
+      "maxSoleHeight": 0.1101925157766187,
+      "maxSoleDrift": 6.893884843043216e-13,
+      "maxAnchorDrift": 0,
+      "minimumFeasibleToScheduled": 0.967032967032967,
+      "errorLimitNativeUnits": 2
+    },
+    "composition": {
+      "cases": 144,
+      "framesPerCase": 420,
+      "views": 2,
+      "weapons": 12,
+      "chassis": 6,
+      "includesAirborneReload": true,
+      "maxIndependentGripError": 8.903074960742904e-14,
+      "maxWristRadians": 1.1,
+      "lifecycleCases": 12
+    },
+    "stability": {
+      "jitterReducedFixtures": 16,
+      "cycles": 1200,
+      "frames": 28800,
+      "maxRepeatPoseError": 0,
+      "maxBendRadians": 1.4706766729169924
+    },
+    "gait": "Steady and jittered actual-mesh contact, independent phase, preserved body weight transfer, jump/fall, hit/fire/reduced/recovery passed",
+    "actualGame": {
+      "passed": true,
+      "hardwareBrowser": "Google Chrome 155, headful Intel Iris Xe",
+      "viewports": [
+        [
+          1920,
+          1080
+        ],
+        [
+          2560,
+          1080
+        ],
+        [
+          2560,
+          1440
+        ],
+        [
+          3840,
+          2160
+        ],
+        [
+          390,
+          844
+        ],
+        [
+          844,
+          390
+        ]
+      ],
+      "checks": [
+        "native private joining",
+        "exact acknowledged input sequence",
+        "movement and skill",
+        "visible scene and HUD in bounds",
+        "portrait gate and held-input stop",
+        "touch movement and simultaneous firing/aim"
+      ]
+    },
+    "native": {
+      "ticks": 20477,
+      "score": [
+        50,
+        44
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "ruleBoundary": "No diff to native simulation/spec/service, input/preferences/prediction or exact application profile. Shared Store fullscreen policy and opaque sandbox unchanged.",
+    "assets": {
+      "characters": 6,
+      "bonesPerRig": 19,
+      "clipsPerRig": 34,
+      "newTransitionsPerRig": 9,
+      "sourcePoseRenders": 162,
+      "decodedGeometryAndSkinAttributesIdentical": true,
+      "glbReexportsByteIdentical": true,
+      "blender": "5.2.2 LTS",
+      "licenses": "Unchanged Sotudios CC BY 4.0 provenance and attribution"
+    }
+  },
+  "gaitReview": {
+    "status": "User reports the listed gait issues are no longer present; broader artistic/control-feel acceptance remains open",
+    "history": [
+      {
+        "result": "failed",
+        "feedback": "步态是不是有点外八字，然后走路脚走向后抬太高"
+      },
+      {
+        "result": "failed",
+        "feedback": "有点恼火 外八字还是很明显 你去参考一下别人怎么做的"
+      },
+      {
+        "result": "passed-scoped-gait-recheck",
+        "feedbackEnglish": "The user reports the listed toe-out, high rear-foot lift and knee-popping issues are no longer present.",
+        "scope": "Gait issues only; phone identity, physical performance, weapon clipping and perceived responsiveness are not inferred from this answer."
+      }
+    ],
+    "corrections": [
+      "Use actual toe/heel vertex landmarks instead of sole PCA",
+      "Set forward lanes from visible hip width instead of wide bind pose",
+      "Separate walk/run clearance and shorten unreachable swing horizontally",
+      "Adjust pelvis from actual support reach, anticipate contact, recover toward authored motion"
+    ],
+    "referenceSources": [
+      "https://threejs.org/examples/webgl_animation_skinning_blending.html",
+      "https://dev.epicgames.com/documentation/en-us/unreal-engine/pose-warping-in-unreal-engine"
+    ],
+    "selfReview": {
+      "frames": 144,
+      "chassis": 6,
+      "views": [
+        "front",
+        "side",
+        "feet"
+      ],
+      "note": "Rendered continuous samples inspected by the agent; not human playtest acceptance"
+    },
+    "measurements": "hybrid-animation/foot-gaits.json",
+    "maxToeYawRadians": 0.01431006787200662,
+    "maxWalkingLaneToHipWidth": 1.2525228182297103,
+    "maxWalkingClearance": 1.4339168541813745,
+    "maxMeanWalkingPelvisDrop": 2.4406183298429642
+  },
+  "hardware": {
+    "desktop": {
+      "status": "Animation CPU budget passed; frame interval budget failed. Do not close H01/H02/H03.",
+      "device": {
+        "renderer": "ANGLE (Intel, Mesa Intel(R) Iris(R) Xe Graphics (RPL-P), OpenGL ES 3.2)",
+        "vendor": "Google Inc. (Intel)",
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "cores": 20,
+        "memoryGB": 32,
+        "viewport": [
+          1920,
+          1080
+        ],
+        "backing": [
+          1920,
+          1080
+        ],
+        "dpr": 1
+      },
+      "software": false,
+      "secondsPerPass": 90,
+      "rounds": 2,
+      "aggregate": {
+        "baseline": {
+          "rafMs": {
+            "samples": 12355,
+            "p50": 16.69999999999709,
+            "p95": 18.30000000000291,
+            "p99": 18.5,
+            "max": 50
+          },
+          "animationCpuMs": {
+            "samples": 12355,
+            "p50": 0.29999999701976776,
+            "p95": 0.5,
+            "p99": 0.6000000089406967,
+            "max": 1.2000000029802322
+          },
+          "frameCpuMs": {
+            "samples": 12355,
+            "p50": 1.2999999970197678,
+            "p95": 2,
+            "p99": 2.5,
+            "max": 10.899999991059303
+          }
+        },
+        "candidate": {
+          "rafMs": {
+            "samples": 9936,
+            "p50": 18.300000000046566,
+            "p95": 21.29999999998836,
+            "p99": 21.70000000001164,
+            "max": 50
+          },
+          "animationCpuMs": {
+            "samples": 9936,
+            "p50": 0.7000000029802322,
+            "p95": 1,
+            "p99": 1.2000000029802322,
+            "max": 2.4000000059604645
+          },
+          "frameCpuMs": {
+            "samples": 9936,
+            "p50": 1.699999988079071,
+            "p95": 2.5,
+            "p99": 2.7999999970197678,
+            "max": 4
+          }
+        }
+      },
+      "budget": {
+        "animationP95LimitMs": 1,
+        "frameP95LimitMs": 20.30000000000291,
+        "animationPass": true,
+        "framePass": false
+      },
+      "host": {
+        "cpu": "13th Gen Intel(R) Core(TM) i9-13900H",
+        "logicalCores": 20,
+        "platform": "linux",
+        "browser": "155.0.8059.84",
+        "thermalBefore": [
+          {
+            "type": "acpitz",
+            "celsius": 27.8
+          },
+          {
+            "type": "SEN0",
+            "celsius": 95.05
+          },
+          {
+            "type": "SEN6",
+            "celsius": 34.35
+          },
+          {
+            "type": "SEN8",
+            "celsius": 75.85
+          },
+          {
+            "type": "SEND",
+            "celsius": 29.55
+          },
+          {
+            "type": "SENE",
+            "celsius": 47.95
+          },
+          {
+            "type": "SENF",
+            "celsius": 48.35
+          },
+          {
+            "type": "SENI",
+            "celsius": 56.05
+          },
+          {
+            "type": "SENJ",
+            "celsius": 56.55
+          },
+          {
+            "type": "SENN",
+            "celsius": 45.85
+          },
+          {
+            "type": "SENO",
+            "celsius": 46.15
+          },
+          {
+            "type": "SENP",
+            "celsius": 48.65
+          },
+          {
+            "type": "INT3400 Thermal",
+            "celsius": 20
+          },
+          {
+            "type": "SENQ",
+            "celsius": 39.65
+          },
+          {
+            "type": "x86_pkg_temp",
+            "celsius": 92
+          },
+          {
+            "type": "iwlwifi_1",
+            "celsius": 37
+          },
+          {
+            "type": "SEN1",
+            "celsius": 68.65
+          },
+          {
+            "type": "TCPU",
+            "celsius": 92.05
+          },
+          {
+            "type": "TCPU_PCI",
+            "celsius": 92
+          },
+          {
+            "type": "SEN2",
+            "celsius": 44.45
+          },
+          {
+            "type": "SEN3",
+            "celsius": 62.25
+          },
+          {
+            "type": "SEN4",
+            "celsius": 68.35
+          },
+          {
+            "type": "SEN5",
+            "celsius": 40.65
+          }
+        ],
+        "thermalAfter": [
+          {
+            "type": "acpitz",
+            "celsius": 27.8
+          },
+          {
+            "type": "SEN0",
+            "celsius": 95.05
+          },
+          {
+            "type": "SEN6",
+            "celsius": 35.65
+          },
+          {
+            "type": "SEN8",
+            "celsius": 72.55
+          },
+          {
+            "type": "SEND",
+            "celsius": 30.95
+          },
+          {
+            "type": "SENE",
+            "celsius": 46.75
+          },
+          {
+            "type": "SENF",
+            "celsius": 47.05
+          },
+          {
+            "type": "SENI",
+            "celsius": 52.65
+          },
+          {
+            "type": "SENJ",
+            "celsius": 53.55
+          },
+          {
+            "type": "SENN",
+            "celsius": 45.75
+          },
+          {
+            "type": "SENO",
+            "celsius": 46.05
+          },
+          {
+            "type": "SENP",
+            "celsius": 48.15
+          },
+          {
+            "type": "INT3400 Thermal",
+            "celsius": 20
+          },
+          {
+            "type": "SENQ",
+            "celsius": 40.65
+          },
+          {
+            "type": "x86_pkg_temp",
+            "celsius": 95
+          },
+          {
+            "type": "iwlwifi_1",
+            "celsius": 38
+          },
+          {
+            "type": "SEN1",
+            "celsius": 66.45
+          },
+          {
+            "type": "TCPU",
+            "celsius": 95.05
+          },
+          {
+            "type": "TCPU_PCI",
+            "celsius": 95
+          },
+          {
+            "type": "SEN2",
+            "celsius": 45.25
+          },
+          {
+            "type": "SEN3",
+            "celsius": 61.55
+          },
+          {
+            "type": "SEN4",
+            "celsius": 63.85
+          },
+          {
+            "type": "SEN5",
+            "celsius": 42.25
+          }
+        ],
+        "load": [
+          {
+            "time": "2026-11-02T02:38:48.635Z",
+            "cpuBusyPercent": 28.18319073980876,
+            "loadAverage": [
+              48.91,
+              22.76,
+              10.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:49.636Z",
+            "cpuBusyPercent": 26.249999999999996,
+            "loadAverage": [
+              48.91,
+              22.76,
+              10.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:50.636Z",
+            "cpuBusyPercent": 23.088455772113946,
+            "loadAverage": [
+              48.91,
+              22.76,
+              10.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:51.637Z",
+            "cpuBusyPercent": 29.64623816641754,
+            "loadAverage": [
+              48.91,
+              22.76,
+              10.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:52.638Z",
+            "cpuBusyPercent": 28.427925665494726,
+            "loadAverage": [
+              48.91,
+              22.76,
+              10.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:53.638Z",
+            "cpuBusyPercent": 23.69597615499255,
+            "loadAverage": [
+              45.48,
+              22.48,
+              10.46
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:54.639Z",
+            "cpuBusyPercent": 43.27689243027888,
+            "loadAverage": [
+              45.48,
+              22.48,
+              10.46
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:55.640Z",
+            "cpuBusyPercent": 25.76135796305542,
+            "loadAverage": [
+              45.48,
+              22.48,
+              10.46
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:56.640Z",
+            "cpuBusyPercent": 27.213930348258707,
+            "loadAverage": [
+              45.48,
+              22.48,
+              10.46
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:57.640Z",
+            "cpuBusyPercent": 11.994002998500752,
+            "loadAverage": [
+              45.48,
+              22.48,
+              10.46
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:58.640Z",
+            "cpuBusyPercent": 14.150473343298453,
+            "loadAverage": [
+              41.99,
+              22.14,
+              10.41
+            ]
+          },
+          {
+            "time": "2026-11-02T02:38:59.642Z",
+            "cpuBusyPercent": 47.49620637329287,
+            "loadAverage": [
+              41.99,
+              22.14,
+              10.41
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:00.643Z",
+            "cpuBusyPercent": 10.871743486973951,
+            "loadAverage": [
+              41.99,
+              22.14,
+              10.41
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:01.643Z",
+            "cpuBusyPercent": 11.000497760079641,
+            "loadAverage": [
+              41.99,
+              22.14,
+              10.41
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:02.645Z",
+            "cpuBusyPercent": 10.389610389610393,
+            "loadAverage": [
+              41.99,
+              22.14,
+              10.41
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:03.646Z",
+            "cpuBusyPercent": 10.205102551275635,
+            "loadAverage": [
+              38.71,
+              21.79,
+              10.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:04.645Z",
+            "cpuBusyPercent": 10.657370517928289,
+            "loadAverage": [
+              38.71,
+              21.79,
+              10.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:05.646Z",
+            "cpuBusyPercent": 13.330004992511235,
+            "loadAverage": [
+              38.71,
+              21.79,
+              10.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:06.647Z",
+            "cpuBusyPercent": 11.255627813906955,
+            "loadAverage": [
+              38.71,
+              21.79,
+              10.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:07.647Z",
+            "cpuBusyPercent": 10.71428571428571,
+            "loadAverage": [
+              38.71,
+              21.79,
+              10.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:08.648Z",
+            "cpuBusyPercent": 9.709709709709713,
+            "loadAverage": [
+              35.69,
+              21.45,
+              10.31
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:09.648Z",
+            "cpuBusyPercent": 10.763888888888884,
+            "loadAverage": [
+              35.69,
+              21.45,
+              10.31
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:10.648Z",
+            "cpuBusyPercent": 10.465698547821734,
+            "loadAverage": [
+              35.69,
+              21.45,
+              10.31
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:11.648Z",
+            "cpuBusyPercent": 9.910358565737054,
+            "loadAverage": [
+              35.69,
+              21.45,
+              10.31
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:12.648Z",
+            "cpuBusyPercent": 9.514271407110664,
+            "loadAverage": [
+              35.69,
+              21.45,
+              10.31
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:13.649Z",
+            "cpuBusyPercent": 10.403185664509706,
+            "loadAverage": [
+              32.91,
+              21.11,
+              10.26
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:14.649Z",
+            "cpuBusyPercent": 12.549800796812749,
+            "loadAverage": [
+              32.91,
+              21.11,
+              10.26
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:15.649Z",
+            "cpuBusyPercent": 11.709018435475837,
+            "loadAverage": [
+              32.91,
+              21.11,
+              10.26
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:16.649Z",
+            "cpuBusyPercent": 12.531203195207185,
+            "loadAverage": [
+              32.91,
+              21.11,
+              10.26
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:17.649Z",
+            "cpuBusyPercent": 9.262948207171318,
+            "loadAverage": [
+              32.91,
+              21.11,
+              10.26
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:18.650Z",
+            "cpuBusyPercent": 13.37325349301397,
+            "loadAverage": [
+              30.44,
+              20.79,
+              10.22
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:19.649Z",
+            "cpuBusyPercent": 15.593561368209253,
+            "loadAverage": [
+              30.44,
+              20.79,
+              10.22
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:20.649Z",
+            "cpuBusyPercent": 11.477045908183637,
+            "loadAverage": [
+              30.44,
+              20.79,
+              10.22
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:21.649Z",
+            "cpuBusyPercent": 12.887112887112885,
+            "loadAverage": [
+              30.44,
+              20.79,
+              10.22
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:22.649Z",
+            "cpuBusyPercent": 12.581128307538691,
+            "loadAverage": [
+              30.44,
+              20.79,
+              10.22
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:23.649Z",
+            "cpuBusyPercent": 9.30930930930931,
+            "loadAverage": [
+              28.08,
+              20.46,
+              10.17
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:24.650Z",
+            "cpuBusyPercent": 9.421734795613157,
+            "loadAverage": [
+              28.08,
+              20.46,
+              10.17
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:25.650Z",
+            "cpuBusyPercent": 8.804402201100547,
+            "loadAverage": [
+              28.08,
+              20.46,
+              10.17
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:26.650Z",
+            "cpuBusyPercent": 8.628428927680797,
+            "loadAverage": [
+              28.08,
+              20.46,
+              10.17
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:27.650Z",
+            "cpuBusyPercent": 8.71306960440661,
+            "loadAverage": [
+              28.08,
+              20.46,
+              10.17
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:28.650Z",
+            "cpuBusyPercent": 9.616342800199307,
+            "loadAverage": [
+              25.91,
+              20.14,
+              10.12
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:29.651Z",
+            "cpuBusyPercent": 8.704352176088047,
+            "loadAverage": [
+              25.91,
+              20.14,
+              10.12
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:30.651Z",
+            "cpuBusyPercent": 8.836744882675983,
+            "loadAverage": [
+              25.91,
+              20.14,
+              10.12
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:31.651Z",
+            "cpuBusyPercent": 8.945527236381812,
+            "loadAverage": [
+              25.91,
+              20.14,
+              10.12
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:32.652Z",
+            "cpuBusyPercent": 9.964947421131697,
+            "loadAverage": [
+              25.91,
+              20.14,
+              10.12
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:33.652Z",
+            "cpuBusyPercent": 8.295852073963017,
+            "loadAverage": [
+              23.92,
+              19.82,
+              10.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:34.652Z",
+            "cpuBusyPercent": 9.704852426213106,
+            "loadAverage": [
+              23.92,
+              19.82,
+              10.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:35.652Z",
+            "cpuBusyPercent": 8.46693386773547,
+            "loadAverage": [
+              23.92,
+              19.82,
+              10.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:36.653Z",
+            "cpuBusyPercent": 9.999999999999998,
+            "loadAverage": [
+              23.92,
+              19.82,
+              10.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:37.653Z",
+            "cpuBusyPercent": 8.882235528942118,
+            "loadAverage": [
+              23.92,
+              19.82,
+              10.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:38.653Z",
+            "cpuBusyPercent": 8.680381334671349,
+            "loadAverage": [
+              22.16,
+              19.52,
+              10.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:39.654Z",
+            "cpuBusyPercent": 9.022556390977442,
+            "loadAverage": [
+              22.16,
+              19.52,
+              10.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:40.654Z",
+            "cpuBusyPercent": 8.504252126063028,
+            "loadAverage": [
+              22.16,
+              19.52,
+              10.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:41.654Z",
+            "cpuBusyPercent": 9.209209209209213,
+            "loadAverage": [
+              22.16,
+              19.52,
+              10.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:42.654Z",
+            "cpuBusyPercent": 8.090452261306535,
+            "loadAverage": [
+              22.16,
+              19.52,
+              10.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:43.654Z",
+            "cpuBusyPercent": 8.658658658658657,
+            "loadAverage": [
+              20.79,
+              19.28,
+              10
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:44.654Z",
+            "cpuBusyPercent": 8.863294942413624,
+            "loadAverage": [
+              20.79,
+              19.28,
+              10
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:45.654Z",
+            "cpuBusyPercent": 8.266533066132265,
+            "loadAverage": [
+              20.79,
+              19.28,
+              10
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:46.655Z",
+            "cpuBusyPercent": 8.43734398402396,
+            "loadAverage": [
+              20.79,
+              19.28,
+              10
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:47.655Z",
+            "cpuBusyPercent": 8.66533864541833,
+            "loadAverage": [
+              20.79,
+              19.28,
+              10
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:48.656Z",
+            "cpuBusyPercent": 8.358358358358354,
+            "loadAverage": [
+              19.28,
+              19,
+              9.96
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:49.656Z",
+            "cpuBusyPercent": 8.283433133732531,
+            "loadAverage": [
+              19.28,
+              19,
+              9.96
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:50.657Z",
+            "cpuBusyPercent": 8.325024925224323,
+            "loadAverage": [
+              19.28,
+              19,
+              9.96
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:51.657Z",
+            "cpuBusyPercent": 8.166332665330668,
+            "loadAverage": [
+              19.28,
+              19,
+              9.96
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:52.658Z",
+            "cpuBusyPercent": 8.782435129740518,
+            "loadAverage": [
+              19.28,
+              19,
+              9.96
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:53.658Z",
+            "cpuBusyPercent": 8.175473579262215,
+            "loadAverage": [
+              17.9,
+              18.71,
+              9.91
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:54.658Z",
+            "cpuBusyPercent": 11.066799601196408,
+            "loadAverage": [
+              17.9,
+              18.71,
+              9.91
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:55.658Z",
+            "cpuBusyPercent": 12.556053811659195,
+            "loadAverage": [
+              17.9,
+              18.71,
+              9.91
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:56.659Z",
+            "cpuBusyPercent": 10.591745400298358,
+            "loadAverage": [
+              17.9,
+              18.71,
+              9.91
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:57.659Z",
+            "cpuBusyPercent": 8.565737051792832,
+            "loadAverage": [
+              17.9,
+              18.71,
+              9.91
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:58.659Z",
+            "cpuBusyPercent": 9.245377311344328,
+            "loadAverage": [
+              16.62,
+              18.44,
+              9.87
+            ]
+          },
+          {
+            "time": "2026-11-02T02:39:59.659Z",
+            "cpuBusyPercent": 9.154577288644317,
+            "loadAverage": [
+              16.62,
+              18.44,
+              9.87
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:00.659Z",
+            "cpuBusyPercent": 8.582834331337331,
+            "loadAverage": [
+              16.62,
+              18.44,
+              9.87
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:01.659Z",
+            "cpuBusyPercent": 8.137793310034947,
+            "loadAverage": [
+              16.62,
+              18.44,
+              9.87
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:02.659Z",
+            "cpuBusyPercent": 8.183632734530944,
+            "loadAverage": [
+              16.62,
+              18.44,
+              9.87
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:03.660Z",
+            "cpuBusyPercent": 8.715139442231079,
+            "loadAverage": [
+              15.45,
+              18.16,
+              9.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:04.660Z",
+            "cpuBusyPercent": 9.440559440559436,
+            "loadAverage": [
+              15.45,
+              18.16,
+              9.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:05.660Z",
+            "cpuBusyPercent": 17.100000000000005,
+            "loadAverage": [
+              15.45,
+              18.16,
+              9.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:06.660Z",
+            "cpuBusyPercent": 11.5,
+            "loadAverage": [
+              15.45,
+              18.16,
+              9.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:07.660Z",
+            "cpuBusyPercent": 27.83042394014963,
+            "loadAverage": [
+              15.45,
+              18.16,
+              9.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:08.660Z",
+            "cpuBusyPercent": 12.974051896207584,
+            "loadAverage": [
+              14.37,
+              17.89,
+              9.78
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:09.661Z",
+            "cpuBusyPercent": 8.832335329341312,
+            "loadAverage": [
+              14.37,
+              17.89,
+              9.78
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:10.661Z",
+            "cpuBusyPercent": 11.12219451371571,
+            "loadAverage": [
+              14.37,
+              17.89,
+              9.78
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:11.661Z",
+            "cpuBusyPercent": 12.326043737574555,
+            "loadAverage": [
+              14.37,
+              17.89,
+              9.78
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:12.661Z",
+            "cpuBusyPercent": 15.697091273821462,
+            "loadAverage": [
+              14.37,
+              17.89,
+              9.78
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:13.662Z",
+            "cpuBusyPercent": 12.729985082048733,
+            "loadAverage": [
+              13.54,
+              17.66,
+              9.75
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:14.662Z",
+            "cpuBusyPercent": 11.10557768924303,
+            "loadAverage": [
+              13.54,
+              17.66,
+              9.75
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:15.662Z",
+            "cpuBusyPercent": 9.509509509509506,
+            "loadAverage": [
+              13.54,
+              17.66,
+              9.75
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:16.662Z",
+            "cpuBusyPercent": 12.605879422022925,
+            "loadAverage": [
+              13.54,
+              17.66,
+              9.75
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:17.663Z",
+            "cpuBusyPercent": 11.571072319201992,
+            "loadAverage": [
+              13.54,
+              17.66,
+              9.75
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:18.663Z",
+            "cpuBusyPercent": 11.12219451371571,
+            "loadAverage": [
+              12.86,
+              17.45,
+              9.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:19.663Z",
+            "cpuBusyPercent": 9.19940328194928,
+            "loadAverage": [
+              12.86,
+              17.45,
+              9.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:20.663Z",
+            "cpuBusyPercent": 8.982035928143716,
+            "loadAverage": [
+              12.86,
+              17.45,
+              9.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:21.663Z",
+            "cpuBusyPercent": 12.412761714855435,
+            "loadAverage": [
+              12.86,
+              17.45,
+              9.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:22.663Z",
+            "cpuBusyPercent": 12.174348697394787,
+            "loadAverage": [
+              12.86,
+              17.45,
+              9.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:23.663Z",
+            "cpuBusyPercent": 9.19940328194928,
+            "loadAverage": [
+              12.07,
+              17.21,
+              9.69
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:24.664Z",
+            "cpuBusyPercent": 8.678304239401491,
+            "loadAverage": [
+              12.07,
+              17.21,
+              9.69
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:25.664Z",
+            "cpuBusyPercent": 9.84507746126937,
+            "loadAverage": [
+              12.07,
+              17.21,
+              9.69
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:26.664Z",
+            "cpuBusyPercent": 8.558558558558559,
+            "loadAverage": [
+              12.07,
+              17.21,
+              9.69
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:27.665Z",
+            "cpuBusyPercent": 9.036445332001996,
+            "loadAverage": [
+              12.07,
+              17.21,
+              9.69
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:28.665Z",
+            "cpuBusyPercent": 8.814741035856578,
+            "loadAverage": [
+              11.34,
+              16.98,
+              9.65
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:29.665Z",
+            "cpuBusyPercent": 9.240759240759244,
+            "loadAverage": [
+              11.34,
+              16.98,
+              9.65
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:30.665Z",
+            "cpuBusyPercent": 8.337493759360958,
+            "loadAverage": [
+              11.34,
+              16.98,
+              9.65
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:31.665Z",
+            "cpuBusyPercent": 8.56713426853707,
+            "loadAverage": [
+              11.34,
+              16.98,
+              9.65
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:32.665Z",
+            "cpuBusyPercent": 8.868958644743397,
+            "loadAverage": [
+              11.34,
+              16.98,
+              9.65
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:33.665Z",
+            "cpuBusyPercent": 13.021868787276347,
+            "loadAverage": [
+              10.59,
+              16.73,
+              9.61
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:34.665Z",
+            "cpuBusyPercent": 10.960960960960964,
+            "loadAverage": [
+              10.59,
+              16.73,
+              9.61
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:35.665Z",
+            "cpuBusyPercent": 12.58706467661691,
+            "loadAverage": [
+              10.59,
+              16.73,
+              9.61
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:36.665Z",
+            "cpuBusyPercent": 11.455727863931964,
+            "loadAverage": [
+              10.59,
+              16.73,
+              9.61
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:37.665Z",
+            "cpuBusyPercent": 12.662013958125629,
+            "loadAverage": [
+              10.59,
+              16.73,
+              9.61
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:38.665Z",
+            "cpuBusyPercent": 8.895552223888059,
+            "loadAverage": [
+              9.91,
+              16.48,
+              9.57
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:39.665Z",
+            "cpuBusyPercent": 8.959681433549028,
+            "loadAverage": [
+              9.91,
+              16.48,
+              9.57
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:40.666Z",
+            "cpuBusyPercent": 8.32497492477432,
+            "loadAverage": [
+              9.91,
+              16.48,
+              9.57
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:41.666Z",
+            "cpuBusyPercent": 8.695652173913048,
+            "loadAverage": [
+              9.91,
+              16.48,
+              9.57
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:42.666Z",
+            "cpuBusyPercent": 8.845577211394307,
+            "loadAverage": [
+              9.91,
+              16.48,
+              9.57
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:43.666Z",
+            "cpuBusyPercent": 9.022931206380857,
+            "loadAverage": [
+              9.27,
+              16.24,
+              9.53
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:44.666Z",
+            "cpuBusyPercent": 8.604302151075538,
+            "loadAverage": [
+              9.27,
+              16.24,
+              9.53
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:45.666Z",
+            "cpuBusyPercent": 12.755356253114103,
+            "loadAverage": [
+              9.27,
+              16.24,
+              9.53
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:46.667Z",
+            "cpuBusyPercent": 13.270377733598405,
+            "loadAverage": [
+              9.27,
+              16.24,
+              9.53
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:47.668Z",
+            "cpuBusyPercent": 9.090909090909093,
+            "loadAverage": [
+              9.27,
+              16.24,
+              9.53
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:48.668Z",
+            "cpuBusyPercent": 20.2191235059761,
+            "loadAverage": [
+              8.77,
+              16.02,
+              9.5
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:49.668Z",
+            "cpuBusyPercent": 12.083540527100944,
+            "loadAverage": [
+              8.77,
+              16.02,
+              9.5
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:50.669Z",
+            "cpuBusyPercent": 9.925187032418947,
+            "loadAverage": [
+              8.77,
+              16.02,
+              9.5
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:51.670Z",
+            "cpuBusyPercent": 9.122632103688932,
+            "loadAverage": [
+              8.77,
+              16.02,
+              9.5
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:52.670Z",
+            "cpuBusyPercent": 10.368893320039884,
+            "loadAverage": [
+              8.77,
+              16.02,
+              9.5
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:53.670Z",
+            "cpuBusyPercent": 10.020040080160319,
+            "loadAverage": [
+              8.15,
+              15.77,
+              9.45
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:54.670Z",
+            "cpuBusyPercent": 9.326683291770577,
+            "loadAverage": [
+              8.15,
+              15.77,
+              9.45
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:55.670Z",
+            "cpuBusyPercent": 11.348929815828768,
+            "loadAverage": [
+              8.15,
+              15.77,
+              9.45
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:56.671Z",
+            "cpuBusyPercent": 9.195402298850574,
+            "loadAverage": [
+              8.15,
+              15.77,
+              9.45
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:57.671Z",
+            "cpuBusyPercent": 10.578842315369263,
+            "loadAverage": [
+              8.15,
+              15.77,
+              9.45
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:58.671Z",
+            "cpuBusyPercent": 10.229540918163671,
+            "loadAverage": [
+              7.57,
+              15.53,
+              9.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:40:59.671Z",
+            "cpuBusyPercent": 12.62475049900199,
+            "loadAverage": [
+              7.57,
+              15.53,
+              9.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:00.671Z",
+            "cpuBusyPercent": 10.922693266832917,
+            "loadAverage": [
+              7.57,
+              15.53,
+              9.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:01.671Z",
+            "cpuBusyPercent": 10.034947578632048,
+            "loadAverage": [
+              7.57,
+              15.53,
+              9.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:02.672Z",
+            "cpuBusyPercent": 12.649402390438247,
+            "loadAverage": [
+              7.57,
+              15.53,
+              9.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:03.672Z",
+            "cpuBusyPercent": 8.05,
+            "loadAverage": [
+              7.21,
+              15.32,
+              9.37
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:04.673Z",
+            "cpuBusyPercent": 10.547263681592046,
+            "loadAverage": [
+              7.21,
+              15.32,
+              9.37
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:05.673Z",
+            "cpuBusyPercent": 15.760598503740653,
+            "loadAverage": [
+              7.21,
+              15.32,
+              9.37
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:06.673Z",
+            "cpuBusyPercent": 10.368893320039884,
+            "loadAverage": [
+              7.21,
+              15.32,
+              9.37
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:07.673Z",
+            "cpuBusyPercent": 11.826347305389218,
+            "loadAverage": [
+              7.21,
+              15.32,
+              9.37
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:08.673Z",
+            "cpuBusyPercent": 9.84507746126937,
+            "loadAverage": [
+              6.79,
+              15.1,
+              9.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:09.674Z",
+            "cpuBusyPercent": 9.294234592445328,
+            "loadAverage": [
+              6.79,
+              15.1,
+              9.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:10.674Z",
+            "cpuBusyPercent": 9.18674698795181,
+            "loadAverage": [
+              6.79,
+              15.1,
+              9.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:11.675Z",
+            "cpuBusyPercent": 25.512756378189096,
+            "loadAverage": [
+              6.79,
+              15.1,
+              9.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:12.675Z",
+            "cpuBusyPercent": 29.596412556053806,
+            "loadAverage": [
+              6.79,
+              15.1,
+              9.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:13.676Z",
+            "cpuBusyPercent": 17.040358744394624,
+            "loadAverage": [
+              6.33,
+              14.86,
+              9.29
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:14.677Z",
+            "cpuBusyPercent": 14.606181455633106,
+            "loadAverage": [
+              6.33,
+              14.86,
+              9.29
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:15.677Z",
+            "cpuBusyPercent": 15.522388059701498,
+            "loadAverage": [
+              6.33,
+              14.86,
+              9.29
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:16.677Z",
+            "cpuBusyPercent": 14.164164164164161,
+            "loadAverage": [
+              6.33,
+              14.86,
+              9.29
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:17.678Z",
+            "cpuBusyPercent": 11.747137879542057,
+            "loadAverage": [
+              6.33,
+              14.86,
+              9.29
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:18.678Z",
+            "cpuBusyPercent": 9.081836327345306,
+            "loadAverage": [
+              5.9,
+              14.63,
+              9.24
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:19.678Z",
+            "cpuBusyPercent": 13.060817547357928,
+            "loadAverage": [
+              5.9,
+              14.63,
+              9.24
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:20.678Z",
+            "cpuBusyPercent": 8.11216825237857,
+            "loadAverage": [
+              5.9,
+              14.63,
+              9.24
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:21.678Z",
+            "cpuBusyPercent": 10.06979062811565,
+            "loadAverage": [
+              5.9,
+              14.63,
+              9.24
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:22.678Z",
+            "cpuBusyPercent": 11.908320876930745,
+            "loadAverage": [
+              5.9,
+              14.63,
+              9.24
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:23.678Z",
+            "cpuBusyPercent": 8.478802992518709,
+            "loadAverage": [
+              5.51,
+              14.41,
+              9.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:24.678Z",
+            "cpuBusyPercent": 7.653826913456729,
+            "loadAverage": [
+              5.51,
+              14.41,
+              9.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:25.679Z",
+            "cpuBusyPercent": 8.004002001000499,
+            "loadAverage": [
+              5.51,
+              14.41,
+              9.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:26.680Z",
+            "cpuBusyPercent": 8.170426065162905,
+            "loadAverage": [
+              5.51,
+              14.41,
+              9.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:27.680Z",
+            "cpuBusyPercent": 12.36959761549925,
+            "loadAverage": [
+              5.51,
+              14.41,
+              9.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:28.680Z",
+            "cpuBusyPercent": 10.379241516966065,
+            "loadAverage": [
+              5.15,
+              14.18,
+              9.15
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:29.680Z",
+            "cpuBusyPercent": 8.867735470941884,
+            "loadAverage": [
+              5.15,
+              14.18,
+              9.15
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:30.681Z",
+            "cpuBusyPercent": 9.240759240759244,
+            "loadAverage": [
+              5.15,
+              14.18,
+              9.15
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:31.681Z",
+            "cpuBusyPercent": 8.337493759360958,
+            "loadAverage": [
+              5.15,
+              14.18,
+              9.15
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:32.681Z",
+            "cpuBusyPercent": 8.637044433349972,
+            "loadAverage": [
+              5.15,
+              14.18,
+              9.15
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:33.682Z",
+            "cpuBusyPercent": 11.000497760079641,
+            "loadAverage": [
+              4.89,
+              13.98,
+              9.11
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:34.682Z",
+            "cpuBusyPercent": 9.36404606910366,
+            "loadAverage": [
+              4.89,
+              13.98,
+              9.11
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:35.683Z",
+            "cpuBusyPercent": 9.004975124378111,
+            "loadAverage": [
+              4.89,
+              13.98,
+              9.11
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:36.683Z",
+            "cpuBusyPercent": 8.850000000000001,
+            "loadAverage": [
+              4.89,
+              13.98,
+              9.11
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:37.683Z",
+            "cpuBusyPercent": 8.745627186406802,
+            "loadAverage": [
+              4.89,
+              13.98,
+              9.11
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:38.684Z",
+            "cpuBusyPercent": 9.571286141575275,
+            "loadAverage": [
+              4.58,
+              13.77,
+              9.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:39.684Z",
+            "cpuBusyPercent": 9.756097560975608,
+            "loadAverage": [
+              4.58,
+              13.77,
+              9.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:40.684Z",
+            "cpuBusyPercent": 8.345827086456769,
+            "loadAverage": [
+              4.58,
+              13.77,
+              9.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:41.684Z",
+            "cpuBusyPercent": 7.350000000000001,
+            "loadAverage": [
+              4.58,
+              13.77,
+              9.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:42.685Z",
+            "cpuBusyPercent": 7.692307692307687,
+            "loadAverage": [
+              4.58,
+              13.77,
+              9.07
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:43.685Z",
+            "cpuBusyPercent": 9.19940328194928,
+            "loadAverage": [
+              4.29,
+              13.55,
+              9.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:44.685Z",
+            "cpuBusyPercent": 8.120300751879695,
+            "loadAverage": [
+              4.29,
+              13.55,
+              9.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:45.685Z",
+            "cpuBusyPercent": 9.457441513190645,
+            "loadAverage": [
+              4.29,
+              13.55,
+              9.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:46.686Z",
+            "cpuBusyPercent": 12.761714855433704,
+            "loadAverage": [
+              4.29,
+              13.55,
+              9.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:47.686Z",
+            "cpuBusyPercent": 26.68004012036108,
+            "loadAverage": [
+              4.29,
+              13.55,
+              9.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:48.686Z",
+            "cpuBusyPercent": 10.33966033966034,
+            "loadAverage": [
+              4.19,
+              13.38,
+              8.99
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:49.686Z",
+            "cpuBusyPercent": 8.43734398402396,
+            "loadAverage": [
+              4.19,
+              13.38,
+              8.99
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:50.686Z",
+            "cpuBusyPercent": 8.08786819770344,
+            "loadAverage": [
+              4.19,
+              13.38,
+              8.99
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:51.686Z",
+            "cpuBusyPercent": 7.98801797304044,
+            "loadAverage": [
+              4.19,
+              13.38,
+              8.99
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:52.686Z",
+            "cpuBusyPercent": 9.154577288644317,
+            "loadAverage": [
+              4.19,
+              13.38,
+              8.99
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:53.686Z",
+            "cpuBusyPercent": 8.262817322050775,
+            "loadAverage": [
+              4.02,
+              13.19,
+              8.95
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:54.687Z",
+            "cpuBusyPercent": 8.632734530938125,
+            "loadAverage": [
+              4.02,
+              13.19,
+              8.95
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:55.687Z",
+            "cpuBusyPercent": 9.630738522954097,
+            "loadAverage": [
+              4.02,
+              13.19,
+              8.95
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:56.687Z",
+            "cpuBusyPercent": 10.360360360360366,
+            "loadAverage": [
+              4.02,
+              13.19,
+              8.95
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:57.687Z",
+            "cpuBusyPercent": 8.715139442231079,
+            "loadAverage": [
+              4.02,
+              13.19,
+              8.95
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:58.688Z",
+            "cpuBusyPercent": 8.964143426294823,
+            "loadAverage": [
+              3.93,
+              13.02,
+              8.92
+            ]
+          },
+          {
+            "time": "2026-11-02T02:41:59.688Z",
+            "cpuBusyPercent": 8.595702148925533,
+            "loadAverage": [
+              3.93,
+              13.02,
+              8.92
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:00.688Z",
+            "cpuBusyPercent": 8.991008991008986,
+            "loadAverage": [
+              3.93,
+              13.02,
+              8.92
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:01.688Z",
+            "cpuBusyPercent": 9.167912306925762,
+            "loadAverage": [
+              3.93,
+              13.02,
+              8.92
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:02.688Z",
+            "cpuBusyPercent": 8.81763527054108,
+            "loadAverage": [
+              3.93,
+              13.02,
+              8.92
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:03.688Z",
+            "cpuBusyPercent": 9.78532201697454,
+            "loadAverage": [
+              3.94,
+              12.87,
+              8.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:04.688Z",
+            "cpuBusyPercent": 10.97256857855362,
+            "loadAverage": [
+              3.94,
+              12.87,
+              8.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:05.688Z",
+            "cpuBusyPercent": 9.635546679980035,
+            "loadAverage": [
+              3.94,
+              12.87,
+              8.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:06.688Z",
+            "cpuBusyPercent": 10.34825870646766,
+            "loadAverage": [
+              3.94,
+              12.87,
+              8.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:07.688Z",
+            "cpuBusyPercent": 9.354677338669337,
+            "loadAverage": [
+              3.94,
+              12.87,
+              8.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:08.688Z",
+            "cpuBusyPercent": 11.066799601196408,
+            "loadAverage": [
+              3.78,
+              12.69,
+              8.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:09.688Z",
+            "cpuBusyPercent": 11.679920477137173,
+            "loadAverage": [
+              3.78,
+              12.69,
+              8.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:10.688Z",
+            "cpuBusyPercent": 10.094952523738133,
+            "loadAverage": [
+              3.78,
+              12.69,
+              8.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:11.688Z",
+            "cpuBusyPercent": 9.236145781328009,
+            "loadAverage": [
+              3.78,
+              12.69,
+              8.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:12.688Z",
+            "cpuBusyPercent": 10.17874875868917,
+            "loadAverage": [
+              3.78,
+              12.69,
+              8.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:13.688Z",
+            "cpuBusyPercent": 9.33599600599101,
+            "loadAverage": [
+              3.56,
+              12.49,
+              8.82
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:14.688Z",
+            "cpuBusyPercent": 8.179551122194518,
+            "loadAverage": [
+              3.56,
+              12.49,
+              8.82
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:15.689Z",
+            "cpuBusyPercent": 8.06209313970957,
+            "loadAverage": [
+              3.56,
+              12.49,
+              8.82
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:16.689Z",
+            "cpuBusyPercent": 8.466135458167335,
+            "loadAverage": [
+              3.56,
+              12.49,
+              8.82
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:17.689Z",
+            "cpuBusyPercent": 8.312468703054588,
+            "loadAverage": [
+              3.56,
+              12.49,
+              8.82
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:18.689Z",
+            "cpuBusyPercent": 8.532934131736525,
+            "loadAverage": [
+              3.36,
+              12.3,
+              8.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:19.689Z",
+            "cpuBusyPercent": 8.21643286573146,
+            "loadAverage": [
+              3.36,
+              12.3,
+              8.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:20.690Z",
+            "cpuBusyPercent": 8.628428927680797,
+            "loadAverage": [
+              3.36,
+              12.3,
+              8.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:21.690Z",
+            "cpuBusyPercent": 8.395802098950522,
+            "loadAverage": [
+              3.36,
+              12.3,
+              8.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:22.690Z",
+            "cpuBusyPercent": 8.582834331337331,
+            "loadAverage": [
+              3.36,
+              12.3,
+              8.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:23.690Z",
+            "cpuBusyPercent": 8.250000000000002,
+            "loadAverage": [
+              3.17,
+              12.12,
+              8.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:24.691Z",
+            "cpuBusyPercent": 8.67397806580259,
+            "loadAverage": [
+              3.17,
+              12.12,
+              8.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:25.691Z",
+            "cpuBusyPercent": 8.195902048975512,
+            "loadAverage": [
+              3.17,
+              12.12,
+              8.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:26.691Z",
+            "cpuBusyPercent": 9.654827413706856,
+            "loadAverage": [
+              3.17,
+              12.12,
+              8.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:27.691Z",
+            "cpuBusyPercent": 9.485771342985528,
+            "loadAverage": [
+              3.17,
+              12.12,
+              8.73
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:28.692Z",
+            "cpuBusyPercent": 9.611553784860561,
+            "loadAverage": [
+              3.07,
+              11.95,
+              8.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:29.692Z",
+            "cpuBusyPercent": 8.863294942413624,
+            "loadAverage": [
+              3.07,
+              11.95,
+              8.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:30.692Z",
+            "cpuBusyPercent": 9.775561097256858,
+            "loadAverage": [
+              3.07,
+              11.95,
+              8.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:31.693Z",
+            "cpuBusyPercent": 9.0727816550349,
+            "loadAverage": [
+              3.07,
+              11.95,
+              8.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:32.694Z",
+            "cpuBusyPercent": 11.111111111111116,
+            "loadAverage": [
+              3.07,
+              11.95,
+              8.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:33.694Z",
+            "cpuBusyPercent": 9.685471792311528,
+            "loadAverage": [
+              2.99,
+              11.78,
+              8.66
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:34.694Z",
+            "cpuBusyPercent": 10.264075734927758,
+            "loadAverage": [
+              2.99,
+              11.78,
+              8.66
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:35.694Z",
+            "cpuBusyPercent": 13.089267803410232,
+            "loadAverage": [
+              2.99,
+              11.78,
+              8.66
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:36.695Z",
+            "cpuBusyPercent": 10.059760956175301,
+            "loadAverage": [
+              2.99,
+              11.78,
+              8.66
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:37.695Z",
+            "cpuBusyPercent": 10.13479780329506,
+            "loadAverage": [
+              2.99,
+              11.78,
+              8.66
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:38.695Z",
+            "cpuBusyPercent": 11.338661338661337,
+            "loadAverage": [
+              2.83,
+              11.6,
+              8.62
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:39.695Z",
+            "cpuBusyPercent": 10.671342685370744,
+            "loadAverage": [
+              2.83,
+              11.6,
+              8.62
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:40.695Z",
+            "cpuBusyPercent": 12.431626056688216,
+            "loadAverage": [
+              2.83,
+              11.6,
+              8.62
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:41.695Z",
+            "cpuBusyPercent": 10.77694235588973,
+            "loadAverage": [
+              2.83,
+              11.6,
+              8.62
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:42.696Z",
+            "cpuBusyPercent": 14.800000000000002,
+            "loadAverage": [
+              2.83,
+              11.6,
+              8.62
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:43.696Z",
+            "cpuBusyPercent": 10.210210210210214,
+            "loadAverage": [
+              2.68,
+              11.43,
+              8.58
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:44.696Z",
+            "cpuBusyPercent": 18.898809523809522,
+            "loadAverage": [
+              2.68,
+              11.43,
+              8.58
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:45.696Z",
+            "cpuBusyPercent": 9.880239520958078,
+            "loadAverage": [
+              2.68,
+              11.43,
+              8.58
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:46.696Z",
+            "cpuBusyPercent": 11.07784431137725,
+            "loadAverage": [
+              2.68,
+              11.43,
+              8.58
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:47.696Z",
+            "cpuBusyPercent": 21.536144578313255,
+            "loadAverage": [
+              2.68,
+              11.43,
+              8.58
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:48.696Z",
+            "cpuBusyPercent": 10.499999999999998,
+            "loadAverage": [
+              2.79,
+              11.3,
+              8.55
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:49.696Z",
+            "cpuBusyPercent": 9.395302348825584,
+            "loadAverage": [
+              2.79,
+              11.3,
+              8.55
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:50.696Z",
+            "cpuBusyPercent": 10.03996003996004,
+            "loadAverage": [
+              2.79,
+              11.3,
+              8.55
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:51.697Z",
+            "cpuBusyPercent": 9.240759240759244,
+            "loadAverage": [
+              2.79,
+              11.3,
+              8.55
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:52.697Z",
+            "cpuBusyPercent": 10.258964143426297,
+            "loadAverage": [
+              2.79,
+              11.3,
+              8.55
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:53.697Z",
+            "cpuBusyPercent": 12.283308568598317,
+            "loadAverage": [
+              2.72,
+              11.15,
+              8.52
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:54.697Z",
+            "cpuBusyPercent": 11.03344982526211,
+            "loadAverage": [
+              2.72,
+              11.15,
+              8.52
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:55.697Z",
+            "cpuBusyPercent": 11.653386454183268,
+            "loadAverage": [
+              2.72,
+              11.15,
+              8.52
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:56.697Z",
+            "cpuBusyPercent": 10.97256857855362,
+            "loadAverage": [
+              2.72,
+              11.15,
+              8.52
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:57.697Z",
+            "cpuBusyPercent": 8.941058941058944,
+            "loadAverage": [
+              2.72,
+              11.15,
+              8.52
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:58.697Z",
+            "cpuBusyPercent": 9.276807980049872,
+            "loadAverage": [
+              2.59,
+              10.98,
+              8.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:42:59.697Z",
+            "cpuBusyPercent": 8.895552223888059,
+            "loadAverage": [
+              2.59,
+              10.98,
+              8.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:00.697Z",
+            "cpuBusyPercent": 9.054527263631817,
+            "loadAverage": [
+              2.59,
+              10.98,
+              8.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:01.697Z",
+            "cpuBusyPercent": 9.13173652694611,
+            "loadAverage": [
+              2.59,
+              10.98,
+              8.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:02.698Z",
+            "cpuBusyPercent": 9.186220668996503,
+            "loadAverage": [
+              2.59,
+              10.98,
+              8.48
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:03.699Z",
+            "cpuBusyPercent": 9.050223769269017,
+            "loadAverage": [
+              2.46,
+              10.81,
+              8.44
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:04.699Z",
+            "cpuBusyPercent": 8.904452226113058,
+            "loadAverage": [
+              2.46,
+              10.81,
+              8.44
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:05.700Z",
+            "cpuBusyPercent": 9.452736318407961,
+            "loadAverage": [
+              2.46,
+              10.81,
+              8.44
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:06.700Z",
+            "cpuBusyPercent": 9.412350597609564,
+            "loadAverage": [
+              2.46,
+              10.81,
+              8.44
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:07.700Z",
+            "cpuBusyPercent": 8.982035928143716,
+            "loadAverage": [
+              2.46,
+              10.81,
+              8.44
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:08.700Z",
+            "cpuBusyPercent": 9.159159159159158,
+            "loadAverage": [
+              2.34,
+              10.65,
+              8.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:09.700Z",
+            "cpuBusyPercent": 9.086370444333502,
+            "loadAverage": [
+              2.34,
+              10.65,
+              8.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:10.701Z",
+            "cpuBusyPercent": 8.608608608608604,
+            "loadAverage": [
+              2.34,
+              10.65,
+              8.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:11.701Z",
+            "cpuBusyPercent": 11.632551173240135,
+            "loadAverage": [
+              2.34,
+              10.65,
+              8.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:12.702Z",
+            "cpuBusyPercent": 12.31380337636544,
+            "loadAverage": [
+              2.34,
+              10.65,
+              8.4
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:13.702Z",
+            "cpuBusyPercent": 11.755952380952383,
+            "loadAverage": [
+              2.23,
+              10.49,
+              8.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:14.702Z",
+            "cpuBusyPercent": 10.773067331670827,
+            "loadAverage": [
+              2.23,
+              10.49,
+              8.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:15.702Z",
+            "cpuBusyPercent": 9.67581047381546,
+            "loadAverage": [
+              2.23,
+              10.49,
+              8.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:16.702Z",
+            "cpuBusyPercent": 9.759759759759756,
+            "loadAverage": [
+              2.23,
+              10.49,
+              8.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:17.702Z",
+            "cpuBusyPercent": 10.63618290258449,
+            "loadAverage": [
+              2.23,
+              10.49,
+              8.36
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:18.702Z",
+            "cpuBusyPercent": 8.717434869739481,
+            "loadAverage": [
+              2.37,
+              10.38,
+              8.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:19.702Z",
+            "cpuBusyPercent": 9.39363817097415,
+            "loadAverage": [
+              2.37,
+              10.38,
+              8.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:20.702Z",
+            "cpuBusyPercent": 9.345327336331833,
+            "loadAverage": [
+              2.37,
+              10.38,
+              8.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:21.702Z",
+            "cpuBusyPercent": 9.313970956434648,
+            "loadAverage": [
+              2.37,
+              10.38,
+              8.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:22.703Z",
+            "cpuBusyPercent": 9.104477611940299,
+            "loadAverage": [
+              2.37,
+              10.38,
+              8.33
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:23.703Z",
+            "cpuBusyPercent": 8.850000000000001,
+            "loadAverage": [
+              2.43,
+              10.26,
+              8.3
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:24.704Z",
+            "cpuBusyPercent": 9.516691579471848,
+            "loadAverage": [
+              2.43,
+              10.26,
+              8.3
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:25.704Z",
+            "cpuBusyPercent": 9.354677338669337,
+            "loadAverage": [
+              2.43,
+              10.26,
+              8.3
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:26.704Z",
+            "cpuBusyPercent": 9.756097560975608,
+            "loadAverage": [
+              2.43,
+              10.26,
+              8.3
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:27.704Z",
+            "cpuBusyPercent": 11.427145708582831,
+            "loadAverage": [
+              2.43,
+              10.26,
+              8.3
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:28.704Z",
+            "cpuBusyPercent": 13.233830845771145,
+            "loadAverage": [
+              2.47,
+              10.14,
+              8.27
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:29.704Z",
+            "cpuBusyPercent": 12.282446544007952,
+            "loadAverage": [
+              2.47,
+              10.14,
+              8.27
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:30.704Z",
+            "cpuBusyPercent": 10.550000000000004,
+            "loadAverage": [
+              2.47,
+              10.14,
+              8.27
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:31.705Z",
+            "cpuBusyPercent": 10.144206862257587,
+            "loadAverage": [
+              2.47,
+              10.14,
+              8.27
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:32.705Z",
+            "cpuBusyPercent": 8.354177088544269,
+            "loadAverage": [
+              2.47,
+              10.14,
+              8.27
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:33.705Z",
+            "cpuBusyPercent": 8.22942643391521,
+            "loadAverage": [
+              2.35,
+              9.99,
+              8.23
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:34.705Z",
+            "cpuBusyPercent": 23.004462072384733,
+            "loadAverage": [
+              2.35,
+              9.99,
+              8.23
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:35.706Z",
+            "cpuBusyPercent": 24.390243902439025,
+            "loadAverage": [
+              2.35,
+              9.99,
+              8.23
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:36.706Z",
+            "cpuBusyPercent": 19.223107569721122,
+            "loadAverage": [
+              2.35,
+              9.99,
+              8.23
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:37.707Z",
+            "cpuBusyPercent": 12.935323383084574,
+            "loadAverage": [
+              2.35,
+              9.99,
+              8.23
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:38.707Z",
+            "cpuBusyPercent": 24.438902743142144,
+            "loadAverage": [
+              2.33,
+              9.85,
+              8.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:39.707Z",
+            "cpuBusyPercent": 10.928143712574844,
+            "loadAverage": [
+              2.33,
+              9.85,
+              8.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:40.707Z",
+            "cpuBusyPercent": 13.92910634048926,
+            "loadAverage": [
+              2.33,
+              9.85,
+              8.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:41.707Z",
+            "cpuBusyPercent": 12.095569935291195,
+            "loadAverage": [
+              2.33,
+              9.85,
+              8.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:42.707Z",
+            "cpuBusyPercent": 12.156078039019514,
+            "loadAverage": [
+              2.33,
+              9.85,
+              8.2
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:43.707Z",
+            "cpuBusyPercent": 9.805873568939772,
+            "loadAverage": [
+              2.22,
+              9.71,
+              8.16
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:44.708Z",
+            "cpuBusyPercent": 9.313970956434648,
+            "loadAverage": [
+              2.22,
+              9.71,
+              8.16
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:45.708Z",
+            "cpuBusyPercent": 9.385921118322516,
+            "loadAverage": [
+              2.22,
+              9.71,
+              8.16
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:46.709Z",
+            "cpuBusyPercent": 11.022443890274314,
+            "loadAverage": [
+              2.22,
+              9.71,
+              8.16
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:47.710Z",
+            "cpuBusyPercent": 10.81215744892875,
+            "loadAverage": [
+              2.22,
+              9.71,
+              8.16
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:48.710Z",
+            "cpuBusyPercent": 9.464196294441663,
+            "loadAverage": [
+              2.28,
+              9.59,
+              8.13
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:49.710Z",
+            "cpuBusyPercent": 9.27218344965105,
+            "loadAverage": [
+              2.28,
+              9.59,
+              8.13
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:50.710Z",
+            "cpuBusyPercent": 9.050000000000002,
+            "loadAverage": [
+              2.28,
+              9.59,
+              8.13
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:51.710Z",
+            "cpuBusyPercent": 9.254627313656826,
+            "loadAverage": [
+              2.28,
+              9.59,
+              8.13
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:52.710Z",
+            "cpuBusyPercent": 10.324189526184535,
+            "loadAverage": [
+              2.28,
+              9.59,
+              8.13
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:53.711Z",
+            "cpuBusyPercent": 10.465698547821734,
+            "loadAverage": [
+              2.26,
+              9.47,
+              8.1
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:54.711Z",
+            "cpuBusyPercent": 12.23776223776224,
+            "loadAverage": [
+              2.26,
+              9.47,
+              8.1
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:55.711Z",
+            "cpuBusyPercent": 10.873882820258196,
+            "loadAverage": [
+              2.26,
+              9.47,
+              8.1
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:56.711Z",
+            "cpuBusyPercent": 8.090452261306535,
+            "loadAverage": [
+              2.26,
+              9.47,
+              8.1
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:57.711Z",
+            "cpuBusyPercent": 8.058058058058059,
+            "loadAverage": [
+              2.26,
+              9.47,
+              8.1
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:58.711Z",
+            "cpuBusyPercent": 7.468671679197991,
+            "loadAverage": [
+              2.16,
+              9.33,
+              8.06
+            ]
+          },
+          {
+            "time": "2026-11-02T02:43:59.712Z",
+            "cpuBusyPercent": 8.650000000000002,
+            "loadAverage": [
+              2.16,
+              9.33,
+              8.06
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:00.712Z",
+            "cpuBusyPercent": 8.304152076038019,
+            "loadAverage": [
+              2.16,
+              9.33,
+              8.06
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:01.712Z",
+            "cpuBusyPercent": 8.580030105368785,
+            "loadAverage": [
+              2.16,
+              9.33,
+              8.06
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:02.712Z",
+            "cpuBusyPercent": 8.676028084252764,
+            "loadAverage": [
+              2.16,
+              9.33,
+              8.06
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:03.712Z",
+            "cpuBusyPercent": 10.024937655860345,
+            "loadAverage": [
+              2.14,
+              9.2,
+              8.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:04.712Z",
+            "cpuBusyPercent": 9.19080919080919,
+            "loadAverage": [
+              2.14,
+              9.2,
+              8.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:05.712Z",
+            "cpuBusyPercent": 8.632734530938125,
+            "loadAverage": [
+              2.14,
+              9.2,
+              8.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:06.712Z",
+            "cpuBusyPercent": 8.554277138569288,
+            "loadAverage": [
+              2.14,
+              9.2,
+              8.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:07.712Z",
+            "cpuBusyPercent": 9.304652326163076,
+            "loadAverage": [
+              2.14,
+              9.2,
+              8.03
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:08.712Z",
+            "cpuBusyPercent": 9.909909909909908,
+            "loadAverage": [
+              2.21,
+              9.1,
+              8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:09.712Z",
+            "cpuBusyPercent": 9.009009009009006,
+            "loadAverage": [
+              2.21,
+              9.1,
+              8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:10.712Z",
+            "cpuBusyPercent": 9.820538384845467,
+            "loadAverage": [
+              2.21,
+              9.1,
+              8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:11.712Z",
+            "cpuBusyPercent": 9.294234592445328,
+            "loadAverage": [
+              2.21,
+              9.1,
+              8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:12.713Z",
+            "cpuBusyPercent": 8.266533066132265,
+            "loadAverage": [
+              2.21,
+              9.1,
+              8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:13.712Z",
+            "cpuBusyPercent": 9.072681704260654,
+            "loadAverage": [
+              2.2,
+              8.98,
+              7.97
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:14.713Z",
+            "cpuBusyPercent": 9.516691579471848,
+            "loadAverage": [
+              2.2,
+              8.98,
+              7.97
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:15.713Z",
+            "cpuBusyPercent": 9.795102448775616,
+            "loadAverage": [
+              2.2,
+              8.98,
+              7.97
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:16.713Z",
+            "cpuBusyPercent": 8.967935871743482,
+            "loadAverage": [
+              2.2,
+              8.98,
+              7.97
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:17.713Z",
+            "cpuBusyPercent": 10.33449825262107,
+            "loadAverage": [
+              2.2,
+              8.98,
+              7.97
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:18.713Z",
+            "cpuBusyPercent": 9.276807980049872,
+            "loadAverage": [
+              2.18,
+              8.87,
+              7.94
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:19.713Z",
+            "cpuBusyPercent": 8.667334669338677,
+            "loadAverage": [
+              2.18,
+              8.87,
+              7.94
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:20.713Z",
+            "cpuBusyPercent": 9.145427286356822,
+            "loadAverage": [
+              2.18,
+              8.87,
+              7.94
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:21.713Z",
+            "cpuBusyPercent": 9.099999999999998,
+            "loadAverage": [
+              2.18,
+              8.87,
+              7.94
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:22.713Z",
+            "cpuBusyPercent": 9.31738913801694,
+            "loadAverage": [
+              2.18,
+              8.87,
+              7.94
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:23.713Z",
+            "cpuBusyPercent": 9.696668324216805,
+            "loadAverage": [
+              2.09,
+              8.74,
+              7.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:24.713Z",
+            "cpuBusyPercent": 9.290709290709287,
+            "loadAverage": [
+              2.09,
+              8.74,
+              7.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:25.712Z",
+            "cpuBusyPercent": 10.298507462686569,
+            "loadAverage": [
+              2.09,
+              8.74,
+              7.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:26.713Z",
+            "cpuBusyPercent": 9.985022466300553,
+            "loadAverage": [
+              2.09,
+              8.74,
+              7.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:27.713Z",
+            "cpuBusyPercent": 9.765819631290483,
+            "loadAverage": [
+              2.09,
+              8.74,
+              7.9
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:28.713Z",
+            "cpuBusyPercent": 8.850000000000001,
+            "loadAverage": [
+              2,
+              8.61,
+              7.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:29.713Z",
+            "cpuBusyPercent": 9.900497512437811,
+            "loadAverage": [
+              2,
+              8.61,
+              7.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:30.712Z",
+            "cpuBusyPercent": 9.791252485089464,
+            "loadAverage": [
+              2,
+              8.61,
+              7.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:31.713Z",
+            "cpuBusyPercent": 8.932135728542912,
+            "loadAverage": [
+              2,
+              8.61,
+              7.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:32.713Z",
+            "cpuBusyPercent": 9.587680079483363,
+            "loadAverage": [
+              2,
+              8.61,
+              7.86
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:33.714Z",
+            "cpuBusyPercent": 9.476309226932667,
+            "loadAverage": [
+              1.92,
+              8.48,
+              7.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:34.713Z",
+            "cpuBusyPercent": 9.909909909909908,
+            "loadAverage": [
+              1.92,
+              8.48,
+              7.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:35.714Z",
+            "cpuBusyPercent": 10.861983059292479,
+            "loadAverage": [
+              1.92,
+              8.48,
+              7.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:36.714Z",
+            "cpuBusyPercent": 10.928961748633881,
+            "loadAverage": [
+              1.92,
+              8.48,
+              7.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:37.714Z",
+            "cpuBusyPercent": 12.075848303393212,
+            "loadAverage": [
+              1.92,
+              8.48,
+              7.83
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:38.714Z",
+            "cpuBusyPercent": 10.989557434112385,
+            "loadAverage": [
+              2.08,
+              8.41,
+              7.8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:39.714Z",
+            "cpuBusyPercent": 10.189810189810188,
+            "loadAverage": [
+              2.08,
+              8.41,
+              7.8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:40.714Z",
+            "cpuBusyPercent": 9.267563527653211,
+            "loadAverage": [
+              2.08,
+              8.41,
+              7.8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:41.715Z",
+            "cpuBusyPercent": 9.340659340659341,
+            "loadAverage": [
+              2.08,
+              8.41,
+              7.8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:42.715Z",
+            "cpuBusyPercent": 8.80880880880881,
+            "loadAverage": [
+              2.08,
+              8.41,
+              7.8
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:43.716Z",
+            "cpuBusyPercent": 9.611553784860561,
+            "loadAverage": [
+              2,
+              8.28,
+              7.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:44.716Z",
+            "cpuBusyPercent": 9.835247129306046,
+            "loadAverage": [
+              2,
+              8.28,
+              7.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:45.716Z",
+            "cpuBusyPercent": 9.435846230654022,
+            "loadAverage": [
+              2,
+              8.28,
+              7.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:46.716Z",
+            "cpuBusyPercent": 10.029940119760482,
+            "loadAverage": [
+              2,
+              8.28,
+              7.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:47.716Z",
+            "cpuBusyPercent": 9.395302348825584,
+            "loadAverage": [
+              2,
+              8.28,
+              7.77
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:48.716Z",
+            "cpuBusyPercent": 8.791208791208794,
+            "loadAverage": [
+              2,
+              8.18,
+              7.74
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:49.716Z",
+            "cpuBusyPercent": 9.696668324216805,
+            "loadAverage": [
+              2,
+              8.18,
+              7.74
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:50.717Z",
+            "cpuBusyPercent": 9.149676777722526,
+            "loadAverage": [
+              2,
+              8.18,
+              7.74
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:51.717Z",
+            "cpuBusyPercent": 8.958958958958963,
+            "loadAverage": [
+              2,
+              8.18,
+              7.74
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:52.717Z",
+            "cpuBusyPercent": 9.022931206380857,
+            "loadAverage": [
+              2,
+              8.18,
+              7.74
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:53.717Z",
+            "cpuBusyPercent": 16.89930209371885,
+            "loadAverage": [
+              1.92,
+              8.06,
+              7.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:54.716Z",
+            "cpuBusyPercent": 9.426433915211973,
+            "loadAverage": [
+              1.92,
+              8.06,
+              7.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:55.717Z",
+            "cpuBusyPercent": 8.574277168494515,
+            "loadAverage": [
+              1.92,
+              8.06,
+              7.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:56.717Z",
+            "cpuBusyPercent": 9.177057356608476,
+            "loadAverage": [
+              1.92,
+              8.06,
+              7.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:57.717Z",
+            "cpuBusyPercent": 9.33599600599101,
+            "loadAverage": [
+              1.92,
+              8.06,
+              7.7
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:58.717Z",
+            "cpuBusyPercent": 10.059760956175301,
+            "loadAverage": [
+              1.93,
+              7.96,
+              7.67
+            ]
+          },
+          {
+            "time": "2026-11-02T02:44:59.717Z",
+            "cpuBusyPercent": 9.964947421131697,
+            "loadAverage": [
+              1.93,
+              7.96,
+              7.67
+            ]
+          }
+        ],
+        "contention": {
+          "cpuBusyThresholdPercent": 70,
+          "fractionAboveThreshold": 0,
+          "flagged": false,
+          "note": "Aggregate host load includes this benchmark. A contention flag requires review; it neither proves isolation nor overrides a failed budget."
+        }
+      },
+      "evidence": "hybrid-animation/desktop-f952afd.json.gz"
+    },
+    "android": {
+      "status": "Open; user confirmed Android Chrome but model and physical measurements have not been received"
+    },
+    "budget": {
+      "desktopAnimationP95Ms": 1,
+      "mobileAnimationP95Ms": 2,
+      "frameP95Rule": "candidate <= max(baseline * 1.1, baseline + 2ms)"
+    },
+    "limitations": [
+      "Synthetic ten-rig lab is not full-match performance",
+      "Browser CPU and RAF observations do not measure GPU completion or end-to-end input latency",
+      "Physical mobile thermal state and human control response require acceptance"
+    ],
+    "desktopPrevious": {
+      "status": "Observed budgets failed; host contention makes attribution inconclusive; quiet-host rerun required",
+      "software": false,
+      "device": {
+        "renderer": "ANGLE (Intel, Mesa Intel(R) Iris(R) Xe Graphics (RPL-P), OpenGL ES 3.2)",
+        "vendor": "Google Inc. (Intel)",
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "cores": 20,
+        "memoryGB": 32,
+        "viewport": [
+          1920,
+          1080
+        ],
+        "backing": [
+          1920,
+          1080
+        ],
+        "dpr": 1
+      },
+      "host": {
+        "cpu": "13th Gen Intel(R) Core(TM) i9-13900H",
+        "logicalCores": 20,
+        "platform": "linux",
+        "browser": "155.0.8059.84",
+        "thermalBefore": [
+          {
+            "type": "acpitz",
+            "celsius": 27.8
+          },
+          {
+            "type": "SEN0",
+            "celsius": 83.05
+          },
+          {
+            "type": "SEN6",
+            "celsius": 29.95
+          },
+          {
+            "type": "SEN8",
+            "celsius": 67.65
+          },
+          {
+            "type": "SEND",
+            "celsius": 25.75
+          },
+          {
+            "type": "SENE",
+            "celsius": 41.75
+          },
+          {
+            "type": "SENF",
+            "celsius": 42.15
+          },
+          {
+            "type": "SENI",
+            "celsius": 47.55
+          },
+          {
+            "type": "SENJ",
+            "celsius": 47.75
+          },
+          {
+            "type": "SENN",
+            "celsius": 41.25
+          },
+          {
+            "type": "SENO",
+            "celsius": 41.65
+          },
+          {
+            "type": "SENP",
+            "celsius": 43.85
+          },
+          {
+            "type": "INT3400 Thermal",
+            "celsius": 20
+          },
+          {
+            "type": "SENQ",
+            "celsius": 35.75
+          },
+          {
+            "type": "x86_pkg_temp",
+            "celsius": 95
+          },
+          {
+            "type": "iwlwifi_1",
+            "celsius": 38
+          },
+          {
+            "type": "SEN1",
+            "celsius": 59.95
+          },
+          {
+            "type": "TCPU",
+            "celsius": 95.05
+          },
+          {
+            "type": "TCPU_PCI",
+            "celsius": 95
+          },
+          {
+            "type": "SEN2",
+            "celsius": 39.05
+          },
+          {
+            "type": "SEN3",
+            "celsius": 59.15
+          },
+          {
+            "type": "SEN4",
+            "celsius": 58.45
+          },
+          {
+            "type": "SEN5",
+            "celsius": 38.25
+          }
+        ],
+        "thermalAfter": [
+          {
+            "type": "acpitz",
+            "celsius": 27.8
+          },
+          {
+            "type": "SEN0",
+            "celsius": 85.05
+          },
+          {
+            "type": "SEN6",
+            "celsius": 30.35
+          },
+          {
+            "type": "SEN8",
+            "celsius": 76.35
+          },
+          {
+            "type": "SEND",
+            "celsius": 25.85
+          },
+          {
+            "type": "SENE",
+            "celsius": 42.45
+          },
+          {
+            "type": "SENF",
+            "celsius": 42.95
+          },
+          {
+            "type": "SENI",
+            "celsius": 48.05
+          },
+          {
+            "type": "SENJ",
+            "celsius": 48.25
+          },
+          {
+            "type": "SENN",
+            "celsius": 41.55
+          },
+          {
+            "type": "SENO",
+            "celsius": 42.15
+          },
+          {
+            "type": "SENP",
+            "celsius": 44.35
+          },
+          {
+            "type": "INT3400 Thermal",
+            "celsius": 20
+          },
+          {
+            "type": "SENQ",
+            "celsius": 35.75
+          },
+          {
+            "type": "x86_pkg_temp",
+            "celsius": 84
+          },
+          {
+            "type": "iwlwifi_1",
+            "celsius": 37
+          },
+          {
+            "type": "SEN1",
+            "celsius": 67.65
+          },
+          {
+            "type": "TCPU",
+            "celsius": 83.05
+          },
+          {
+            "type": "TCPU_PCI",
+            "celsius": 83
+          },
+          {
+            "type": "SEN2",
+            "celsius": 39.95
+          },
+          {
+            "type": "SEN3",
+            "celsius": 62.05
+          },
+          {
+            "type": "SEN4",
+            "celsius": 61.35
+          },
+          {
+            "type": "SEN5",
+            "celsius": 38.65
+          }
+        ]
+      },
+      "secondsPerPass": 90,
+      "rounds": 2,
+      "aggregate": {
+        "baseline": {
+          "rafMs": {
+            "samples": 18807,
+            "p50": 8.30000000000291,
+            "p95": 8.5,
+            "p99": 41.600000000034925,
+            "max": 91.5
+          },
+          "animationCpuMs": {
+            "samples": 18807,
+            "p50": 0.29999999701976776,
+            "p95": 0.5999999940395355,
+            "p99": 1.1000000089406967,
+            "max": 14.699999988079071
+          },
+          "frameCpuMs": {
+            "samples": 18807,
+            "p50": 1.2999999970197678,
+            "p95": 4.800000011920929,
+            "p99": 13.5,
+            "max": 36.20000000298023
+          }
+        },
+        "candidate": {
+          "rafMs": {
+            "samples": 17465,
+            "p50": 8.300000000017462,
+            "p95": 16.79999999998836,
+            "p99": 41.60000000000582,
+            "max": 258.4000000000233
+          },
+          "animationCpuMs": {
+            "samples": 17465,
+            "p50": 0.7999999970197678,
+            "p95": 1.8999999910593033,
+            "p99": 2.8999999910593033,
+            "max": 40.5
+          },
+          "frameCpuMs": {
+            "samples": 17465,
+            "p50": 2.0999999940395355,
+            "p95": 7,
+            "p99": 16.5,
+            "max": 56.099999994039536
+          }
+        }
+      },
+      "budget": {
+        "animationP95LimitMs": 1,
+        "frameP95LimitMs": 10.5,
+        "animationPass": false,
+        "framePass": false
+      },
+      "evidence": "hybrid-animation/desktop-contended.json.gz",
+      "contentionEvidence": {
+        "observation": "Immediately after the run, a separate artifact_checke process was consuming about 1730% CPU on the 20-logical-core host; subsequent samples remained above 1600%. This was not a continuous load trace during the run.",
+        "loadAverageAfter": [
+          23.01,
+          13.33,
+          8.16
+        ],
+        "baselineFirstRafP95": 8.400000000008731,
+        "baselineLastRafP95": 33.399999999965075,
+        "interpretation": "The baseline also deteriorated within the run. Retain the failed measurements; do not attribute the whole change to animation or close the gate. The driver now records host load in future runs."
+      }
+    }
+  },
+  "evidence": {
+    "rigFixtures": "hybrid-animation/rig-fixtures.json.gz",
+    "composition": "hybrid-animation/composition.json.gz",
+    "stability": "hybrid-animation/stability.json.gz",
+    "walkFrames": "hybrid-animation/walk-review.json.gz",
+    "sourcePoses": "hybrid-animation/source-poses.json",
+    "assetClips": "hybrid-character-clips.json",
+    "assetReproduction": "hybrid-animation-repro.json",
+    "recordings": "../assets/botstrike/locomotion/",
+    "gaitReview": "../assets/botstrike/walk-review/"
+  },
+  "openAcceptance": [
+    "Physical Android model, matched A/B animation CPU and frame pacing, thermal duration",
+    "Desktop frame interval p95 remains above budget (21.3ms observed, 20.3ms limit); animation CPU p95 meets 1ms budget",
+    "Broader human weapon-clipping, transition and control-feel review; listed gait issues passed user recheck"
+  ],
+  "followupWork": "hybrid-animation/weapon-transform-work.json",
+  "candidateCommit": "f952afdddd8d2f98425ac08826925ccbe47c4387",
+  "evidenceScope": "Original integration/production measurements describe f952afd; the later transform-work candidate has its own source fingerprint and evidence in followupWork."
+}

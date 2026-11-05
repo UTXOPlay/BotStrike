@@ -1,0 +1,709 @@
+{
+  "commit": "646ec4c84245b345c7df22adf2e068a3a700a453",
+  "image": "myelin-botstrike:hybrid-646ec4c",
+  "imageId": "sha256:875910df5c0c2fa0e0e22acb0e3eaca48b499620b008e650ee77acd833afefa7",
+  "healthy": true,
+  "activeRoomsAtSwitch": 0,
+  "dataBackup": "/data/utxoplay/releases/20261105-botstrike-audit-646ec4c/botstrike-data-before.tar.gz",
+  "compose": "/data/utxoplay/releases/20261105-botstrike-audit-646ec4c/game.compose.json",
+  "rollbackCompose": "/data/utxoplay/releases/20261105-botstrike-audit-646ec4c/rollback.compose.json",
+  "protectedFilesIdentical": 28,
+  "otherChangedContainers": [],
+  "metrics": {
+    "ok": true,
+    "draining": false,
+    "rooms": {},
+    "publicWaitingHumans": 0,
+    "publicRunningHumans": 0,
+    "publicBotSeats": 0,
+    "publicQueueWaitMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "socketRttMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicSocketRttMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "socketJitterMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicSocketJitterMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "reconnectDelayMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "publicReconnectDelayMs": {
+      "samples": 0,
+      "p50": null,
+      "p95": null
+    },
+    "diskAvailableBytes": 65223249920,
+    "retentionDays": 30,
+    "failedRooms": 0,
+    "sealingJobs": 0,
+    "lastSealMs": 0,
+    "sealingFailures": 0,
+    "verifiedMatches": 0,
+    "publicVerifiedMatches": 0,
+    "expiredReplays": 0,
+    "recordingErrors": 0,
+    "reconnections": 0,
+    "publicReconnects": 0,
+    "publicQueueRequests": 0,
+    "publicQueueJoins": 0,
+    "publicQueueAbandons": 0,
+    "publicLateJoins": 0,
+    "publicMatchesStarted": 0,
+    "publicHumanSeatsAtStart": 0,
+    "publicBotSeatsAtStart": 0
+  },
+  "verifiedAt": "2026-11-05T08:25:41.675Z",
+  "url": "https://store.utxoplay.io/games/botstrike/",
+  "sourceCommit": "646ec4c84245b345c7df22adf2e068a3a700a453",
+  "authorization": "Earlier explicit push/deploy requests remain in force. This release does not close human visual/control-feel acceptance or authorize changing native rules.",
+  "browserDiff": {
+    "changed": [
+      "dist/botstrike/app.js"
+    ],
+    "added": [],
+    "removed": []
+  },
+  "server": {
+    "verifiedAt": "2026-11-05T07:40:25.534175+00:00",
+    "healthy": true,
+    "imageId": "sha256:875910df5c0c2fa0e0e22acb0e3eaca48b499620b008e650ee77acd833afefa7",
+    "sameImageAsStage": true,
+    "protectedFilesIdentical": 28,
+    "browserFilesVerified": 67,
+    "privateConfigEquality": {
+      "Entrypoint": true,
+      "Cmd": true,
+      "User": true,
+      "WorkingDir": true,
+      "Healthcheck": true,
+      "Env": true
+    },
+    "environmentOrderIgnored": true,
+    "resourceEquality": {
+      "Memory": true,
+      "MemorySwap": true,
+      "NanoCpus": true,
+      "CpuQuota": true,
+      "CpuPeriod": true,
+      "PidsLimit": true,
+      "ReadonlyRootfs": true,
+      "RestartPolicy": true,
+      "SecurityOpt": true,
+      "CapDrop": true
+    },
+    "baseImageLayerPrefixVerified": true,
+    "baseLayers": 19,
+    "candidateLayers": 20,
+    "dataMountsUnchanged": true,
+    "backup": {
+      "bytes": 7886445,
+      "sha256": "23e4d034764448b89afa37389a43dc208894dd78d4955798c9549ea05f42ae1a",
+      "readable": true,
+      "members": 1163
+    }
+  },
+  "stagingCleanup": {
+    "checkedAt": "2026-11-05T08:04:47.052685+00:00",
+    "stageRemoved": true,
+    "productionHealthy": true,
+    "productionImage": "myelin-botstrike:hybrid-646ec4c",
+    "productionImageId": "sha256:875910df5c0c2fa0e0e22acb0e3eaca48b499620b008e650ee77acd833afefa7"
+  },
+  "protectedSha256": {
+    "/app/release/botstrike-engine": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+    "/app/release/legacy/arsenal-v2/botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+    "/app/release/legacy/arsenal-v2/myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84",
+    "/app/release/legacy/network-v3/botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+    "/app/release/legacy/network-v3/myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d",
+    "/app/release/legacy/readability-v5/botstrike-engine": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+    "/app/release/legacy/readability-v5/myelin-botstrike": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30",
+    "/app/release/legacy/tactics-v4/botstrike-engine": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+    "/app/release/legacy/tactics-v4/myelin-botstrike": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7",
+    "/app/release/myelin-botstrike": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575",
+    "/app/release/verifiers.json": "d58f8cca0fc50c6c6c2d30ad958c8793e6b568726d58fb7b0c70cbeece1f25c5",
+    "/app/host/server.mjs": "a4ec3a267275a67272588188689cc0d28a15c5cb6af46c1b89fde583c6d3466b",
+    "/app/host/server.test.mjs": "67d0782a754585652e9283414dbfd0c7954fd249e9a98e4d76d78ec85abf7d68",
+    "/app/host/socket-proxy.mjs": "3f7fd99774e86475e3207f21121c41b67d867db87e384218e2b253fb48e3525e",
+    "/app/host/start.mjs": "0195146491e31167198e8dd1d6ab376173c90c17fcc5fd3c7ffeb1df33022817",
+    "/app/host/static.mjs": "c2dd5ce6e8e905e3c45752922ac3d4ae0552de6d24c0003436b57c52402ae223",
+    "/app/botstrike-service/career.mjs": "36ca7341860765362bdd66b32b844f30a5bde2fab83e35124e8151a903492bdd",
+    "/app/botstrike-service/feedback.mjs": "a3a48f16aef4619df2a570dc68a42d294c830e4741be12d184f806469d482e4d",
+    "/app/botstrike-service/io.mjs": "229d8fbccfce9cda41cf8d222244af8b19b4b73b3bfcec1e615f3aa30ae7c649",
+    "/app/botstrike-service/retention.mjs": "c43d500b9bd2d4f64c13ac6d594d344890dd520eabe82529aa39e08acb898237",
+    "/app/botstrike-service/seal-worker.mjs": "9e3179ee7a57bc500f5c3bb917b146fcba524c318f8f46bdfe0b76746b176b40",
+    "/app/botstrike-service/server.mjs": "da4629ad31f75960b8fa26d535a694481049488ba336ffe0566fd6c2473f13e8",
+    "/app/botstrike-service/visibility.mjs": "4536f9ca68bdef6942fb80003114787176c06410083f0cafdf822799e2a2bb5d",
+    "/app/botstrike/spec.json": "615050e165dfd9a04c856cb602c9ab281625d84ccea9936895d08e6831723b73",
+    "/app/game-host.json": "4fdbed1d35dadfcdabe497390a7529e551c38f418218e9cd0d455a9f24fe0c88",
+    "/app/package.json": "a744adcbad65d0d71e7e3f89249d39ac405c82cb4f50c60ae67162049542cb49",
+    "/app/package-lock.json": "2c4da59105733fc13bfca903e1ce6213b2729eb89e7d70ad2f419abe3c257feb",
+    "/app/tools/verify-export.mjs": "4fa4373bd53063715208324a698e6301703c01751e152fb630b2885d5e519786"
+  },
+  "browserManifest": {
+    "sourceCommit": "646ec4c84245b345c7df22adf2e068a3a700a453",
+    "sha256": {
+      "dist/botstrike/_shared/favicon.svg": "1cd23ca0b9e25e2d9bcb872332518e2970cadebb1e8239046c05d950261152e0",
+      "dist/botstrike/_shared/fonts.css": "d5ae846e3c36985175a02054bc70abb5df8aca3cfba822a6371975a82776fdb1",
+      "dist/botstrike/_shared/licenses/lucide.txt": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc",
+      "dist/botstrike/app.js": "37814c33c5d929854fd9b2644552eb732b6b20b93237d79cde39bdf588238aaa",
+      "dist/botstrike/art/equipment-0.webp": "b4ed063a5c722ef5763250b349fd8c5241949c7c93f0ec5336fc2427287d0047",
+      "dist/botstrike/art/equipment-1.webp": "a181e6fe1a49b88ad410d8be10ad56f1aad165b4c3b2353899fb24776aa4f018",
+      "dist/botstrike/art/equipment-10.webp": "06fe3d22adc4e5469abfb4f0a7cdb14becc48b9f192a38a2a5e31eb2fa0443af",
+      "dist/botstrike/art/equipment-11.webp": "c01b4c1b71b172880898c12a07bc044cb7784c0e310ea5d3049fd795dac84c88",
+      "dist/botstrike/art/equipment-2.webp": "c851fde83db1f218ae9861e45cc3cbf5f33ce99f38d11fa317e8cae68a07c422",
+      "dist/botstrike/art/equipment-3.webp": "db2f01cc43811254e1fa15588831173cecd5f2a237fed3d6ab66998f0c33bf5c",
+      "dist/botstrike/art/equipment-4.webp": "4766eb6f268905fc5c275786c79cf7b7fd3593fd3f459f5437599d6b295395d2",
+      "dist/botstrike/art/equipment-5.webp": "e43bbe58469b0988ac4b028d7f8353f483d35238b7daeb7dad9023483f65eb95",
+      "dist/botstrike/art/equipment-6.webp": "c6884f002c4d4dbdbe6176d92d52795ba95b73557328d5da843f2308f5a1822e",
+      "dist/botstrike/art/equipment-7.webp": "9604c5821b99a0e400870e33b730b49ae93c55e81ed5cdc44db108d7e7dce775",
+      "dist/botstrike/art/equipment-8.webp": "2543397ad773257abe520dc970f0b9cb7ccae61769b0dbd78c16c14595822e9f",
+      "dist/botstrike/art/equipment-9.webp": "3a40ae4890cf3c4583a6e506fc1366e41d63d3c0e37c7183711d6b48a5251727",
+      "dist/botstrike/art/hero-0.webp": "599d4be14c37ac3e961d07e064ccf15643d5ed971fce2569ae55a739e53ba43c",
+      "dist/botstrike/art/hero-1.webp": "77914de4d8452fa610237f781ec619501a050f1a5d867681e5f457d6a537839c",
+      "dist/botstrike/art/hero-2.webp": "9ba3ebd15d2159785a81f45c85bd497494c257dcf8e05221e3dbc4f110956ca1",
+      "dist/botstrike/art/hero-3.webp": "ad51bf615e09d9243ef3b3e19e4486b6ddf7952b59af647542fead10067dc175",
+      "dist/botstrike/art/hero-4.webp": "db6c77d3dbaab372203982a3bb8a4a053109d7de40094232dc80273c2f76bf4c",
+      "dist/botstrike/art/hero-5.webp": "187960ec52d9dec29e770bfd2b086ac128a773499455fe6bce4d6f06d7701280",
+      "dist/botstrike/art/keyart.webp": "798f342e9a4642ad2ac29d183b62a9969fbc670249165ac370878fde377499b5",
+      "dist/botstrike/art/map-0.webp": "de8b8728287aed435bde85301439110c2613883f2bedf8e8c2216a4a98ca1ea3",
+      "dist/botstrike/art/map-1.webp": "40f26a9a906f59e10ecf0440585be8ce1c863a68a6c4d8432ae1c76f3c8ac135",
+      "dist/botstrike/art/map-2.webp": "564990332fccd6bc5a7972a9d061adc419f29678ec6b23e14a3509e99900d0be",
+      "dist/botstrike/art/weapon-0.webp": "11ac4e95143524f0b4d71a36ac86800300b6ec2d61347b08ebcc244840c84805",
+      "dist/botstrike/art/weapon-1.webp": "aca76845cba1e7fadf76872b2387429c3fecd20c95dda840c32bc8b3c41f0a1b",
+      "dist/botstrike/art/weapon-10.webp": "21a0605d3b715d108d70fb0226825aedd156976badbcaf90fd10b1d83127f6e8",
+      "dist/botstrike/art/weapon-11.webp": "9a4d03387313124db877856472a16960bbacbd1d3dc3732fd63eac247161d672",
+      "dist/botstrike/art/weapon-2.webp": "54ee99fcdf92a83594992f62f82d931ea11be40e2cc7a77e0550df31265dc4b4",
+      "dist/botstrike/art/weapon-3.webp": "a067222d5792b0b38cbeb8d05f9f4039ed63fbd7cd3f99776c7cec85775028a3",
+      "dist/botstrike/art/weapon-4.webp": "93897f1bf48462f11068fa276b8b0dfc57ad3fe2a6db6dcd47823b1940154561",
+      "dist/botstrike/art/weapon-5.webp": "ddb068f1993580598501c64e3da0693bb065015c588c9b75f8cbaa940b407cda",
+      "dist/botstrike/art/weapon-6.webp": "da3f6273f4440861f9b7d145f1ccd23e295c75fe4c56624ae75dc748da4d7b2f",
+      "dist/botstrike/art/weapon-7.webp": "7bab1a288a7f0f8a637a7196d7c6bb0ac2120a3d9bfe02c0c0be9e10dd1d8e1d",
+      "dist/botstrike/art/weapon-8.webp": "78eaa7492148e8f19f4cbc8ca43262f0c61dc528c983fae0e846c5d603938fbb",
+      "dist/botstrike/art/weapon-9.webp": "ba4241b46884b4da673d787e755011043f2cb52d7b8102c7a1d2a15782122bc8",
+      "dist/botstrike/immersive.js": "bea0753075de47ec1fb1144d4e45620d8ec32a60d8ee6750e5f9ab5aa4372cc5",
+      "dist/botstrike/index.html": "0dfc401c0fc75c15a4dd121834679b05d9dc179441f76754fe70c37b848fe4f3",
+      "dist/botstrike/models/bastion.glb": "3db7a4fa1ce7cdae914854ca74268ff24bfe0a693f596a2130fe19a326b83515",
+      "dist/botstrike/models/forge.glb": "87e08a6c0084fa639eaf52200a441dfdb66e10b527514e5f75cd42670c4ec910",
+      "dist/botstrike/models/glitch.glb": "7393085068cf455bb1a04f2e76804d63d8a33d6870c0a2b3dab98f1ed6924336",
+      "dist/botstrike/models/patch.glb": "1c5aa2608304f7ae98cf3d07abe7d05160da46716d186aa4d0040b88f422e3f5",
+      "dist/botstrike/models/spectre.glb": "e756bb935673ccdc15d74399dcaa381865115b17646f1d0fabdc30874e260d87",
+      "dist/botstrike/models/textures/bastion-0-e5830fe3548e.webp": "e5830fe3548ebf39e46fd47020a713d8f3ef7ed56f67d7e26814eba41826dfcd",
+      "dist/botstrike/models/textures/bastion-1-4b759774fc29.webp": "4b759774fc29c9b9832e8896ecefe034f23bbfe5fea7739e3100ae36bf8d7254",
+      "dist/botstrike/models/textures/bastion-2-1053022f7a5d.webp": "1053022f7a5df39dd3acec20b545d7252e60de708d20f7b30e28edf28ac3d596",
+      "dist/botstrike/models/textures/forge-0-8a674e42a64e.webp": "8a674e42a64ef53d4d194b9faa291b3d7a455c1e34a0281c0eca0ab590e35cab",
+      "dist/botstrike/models/textures/forge-1-00ab5250b694.webp": "00ab5250b694d679c2dc95682faf13a7cf169e91bc51c4d01ca720198ca668a7",
+      "dist/botstrike/models/textures/forge-2-6fdccd1d2807.webp": "6fdccd1d2807e639df0a73dbb0813a22879d9348d36ba860a6a4b3331663660c",
+      "dist/botstrike/models/textures/glitch-0-e4da2e253cde.webp": "e4da2e253cde20ab234c09829334f9f00f5a676ae7699bc60dd52b1bbbf77fcb",
+      "dist/botstrike/models/textures/glitch-1-3860ff8a8316.webp": "3860ff8a83164668cda5fbd1696688b2ce227ea5fe52bcb0c1d39fae105641e8",
+      "dist/botstrike/models/textures/glitch-2-7c8850b3dcee.webp": "7c8850b3dcee22fd76c647143d5e769d1d54f7ca867dd4f286c2d1ff91c79b3b",
+      "dist/botstrike/models/textures/patch-0-f1528d198c7d.webp": "f1528d198c7dc059ff8f18e638b5e2758cfdf4cad2440ad86c42ab37e4ace3e6",
+      "dist/botstrike/models/textures/patch-1-0e1cede2f849.webp": "0e1cede2f84973f5b5207a37d253ed4011d0b2731dfbeccd688b7c3e29b28ec2",
+      "dist/botstrike/models/textures/patch-2-0c6f5925cc12.webp": "0c6f5925cc121d193949bdff3c56a43b50515b8274ad3e069a3eb2fd76b18d22",
+      "dist/botstrike/models/textures/spectre-0-808ef4d2c0b4.webp": "808ef4d2c0b45aa7676043b51a50ac01842eec1cd2c49694f355431d75124661",
+      "dist/botstrike/models/textures/spectre-1-8b81ddfdeba7.webp": "8b81ddfdeba7abac63c5295ae29a0f7354705c3e405054113674790b185e2e4e",
+      "dist/botstrike/models/textures/spectre-2-a03d9623f3ec.webp": "a03d9623f3ecbbee9f6ee77c669b451fd85d5db1417fe7dfb142fd028eba9211",
+      "dist/botstrike/models/textures/vector-0-f9aa51043c3f.webp": "f9aa51043c3fddf4ca8fba4c6957ab881de75249ec07a3885d3894194f288397",
+      "dist/botstrike/models/textures/vector-1-340c045158c6.webp": "340c045158c64493550c6888f816c5b82cd9078362870fa91616a91f75125e85",
+      "dist/botstrike/models/textures/vector-2-7ed334676905.webp": "7ed334676905fbfb4098097c41776ae7b02e630a1f017843d9d5b39fbcfc7f7d",
+      "dist/botstrike/models/vector.glb": "483b89368b171c8dc219ddea4e58c5498ba7069f8248ff5d3939e5085c71ba47",
+      "dist/botstrike/spec.json": "615050e165dfd9a04c856cb602c9ab281625d84ccea9936895d08e6831723b73",
+      "dist/botstrike/startup.js": "461640afc2392d6fa104f7628018cb4a2d69e70cb6d991bf4e92d2f577d75db0",
+      "dist/botstrike/style.css": "337e2f3f027cce4a9ccd680fd4dc8fb66c5429beb88b58c2943ba856585d1fec"
+    }
+  },
+  "stage": {
+    "native": {
+      "data": "/qa-tmp/botstrike-flow-tMrHsj",
+      "ticks": 22930,
+      "score": [
+        50,
+        38
+      ],
+      "players": 10,
+      "privateJoin": true,
+      "publicMatchmaking": true,
+      "reconnect": true,
+      "balancedTeams": true,
+      "humanInput": true,
+      "respawns": true,
+      "signedReplay": true,
+      "tamperRejected": true
+    },
+    "historical": [
+      {
+        "name": "arsenal-v2",
+        "verified": true,
+        "verifier": "arsenal-v2"
+      },
+      {
+        "name": "network-v3",
+        "verified": true,
+        "verifier": "network-v3"
+      },
+      {
+        "name": "tactics-v4",
+        "verified": true,
+        "verifier": "tactics-v4"
+      },
+      {
+        "name": "readability-v5",
+        "verified": true,
+        "verifier": "readability-v5"
+      }
+    ],
+    "qa": {
+      "sourceCommit": "646ec4c84245b345c7df22adf2e068a3a700a453",
+      "signedReplay": true,
+      "tamperRejected": true,
+      "browser": true,
+      "native": {
+        "data": "/qa-tmp/botstrike-flow-tMrHsj",
+        "ticks": 22930,
+        "score": [
+          50,
+          38
+        ],
+        "players": 10,
+        "privateJoin": true,
+        "publicMatchmaking": true,
+        "reconnect": true,
+        "balancedTeams": true,
+        "humanInput": true,
+        "respawns": true,
+        "signedReplay": true,
+        "tamperRejected": true
+      },
+      "historical": [
+        {
+          "name": "arsenal-v2",
+          "verified": true,
+          "verifier": "arsenal-v2"
+        },
+        {
+          "name": "network-v3",
+          "verified": true,
+          "verifier": "network-v3"
+        },
+        {
+          "name": "tactics-v4",
+          "verified": true,
+          "verifier": "tactics-v4"
+        },
+        {
+          "name": "readability-v5",
+          "verified": true,
+          "verifier": "readability-v5"
+        }
+      ],
+      "publicParentCandidatePreview": true,
+      "previewUsesLocalAssetOverride": true,
+      "productionAcceptancePending": true,
+      "stage": {
+        "healthy": true,
+        "protectedFilesIdentical": 28,
+        "browserFilesVerified": 67,
+        "metrics": {
+          "ok": true,
+          "draining": false,
+          "rooms": {},
+          "publicWaitingHumans": 0,
+          "publicRunningHumans": 0,
+          "publicBotSeats": 0,
+          "publicQueueWaitMs": {
+            "samples": 0,
+            "p50": null,
+            "p95": null
+          },
+          "socketRttMs": {
+            "samples": 0,
+            "p50": null,
+            "p95": null
+          },
+          "publicSocketRttMs": {
+            "samples": 0,
+            "p50": null,
+            "p95": null
+          },
+          "socketJitterMs": {
+            "samples": 0,
+            "p50": null,
+            "p95": null
+          },
+          "publicSocketJitterMs": {
+            "samples": 0,
+            "p50": null,
+            "p95": null
+          },
+          "reconnectDelayMs": {
+            "samples": 0,
+            "p50": null,
+            "p95": null
+          },
+          "publicReconnectDelayMs": {
+            "samples": 0,
+            "p50": null,
+            "p95": null
+          },
+          "diskAvailableBytes": 65266659328,
+          "retentionDays": 30,
+          "failedRooms": 0,
+          "sealingJobs": 0,
+          "lastSealMs": 0,
+          "sealingFailures": 0,
+          "verifiedMatches": 0,
+          "publicVerifiedMatches": 0,
+          "expiredReplays": 0,
+          "recordingErrors": 0,
+          "reconnections": 0,
+          "publicReconnects": 0,
+          "publicQueueRequests": 0,
+          "publicQueueJoins": 0,
+          "publicQueueAbandons": 0,
+          "publicLateJoins": 0,
+          "publicMatchesStarted": 0,
+          "publicHumanSeatsAtStart": 0,
+          "publicBotSeatsAtStart": 0
+        }
+      },
+      "logsSha256": {
+        "stage-native.log": "f14d696f39f423e34bfca4068d34f7fea3be3a9509a6624ded3bc2f795ccbc34",
+        "stage-browser.log": "21518ef4404eea2cde0cf049d54160790f4cf2a0e1bc901db20f3ddc6286f86c",
+        "store-preview.log": "ae9b2949c3e0b7fbe635b92d291ecd3ab9396dde7d620f25b1179e9c7be50218"
+      }
+    },
+    "qaSnapshotMeaning": "Pre-switch guard; its productionAcceptancePending field describes that earlier stage, not the final public checks."
+  },
+  "publicChecks": {
+    "laterFrameWebGLMethod": "Four successive RAF callbacks read the WebGL buffer before presentation, sample every 16 pixels, quantize RGB channels by 8 and count distinct colors. Assert non-lost context, positive draw calls and more than eight colors; this excludes DOM HUD colors.",
+    "laterFrameWebGL": {
+      "distinctQuantizedColors": 387,
+      "opaqueSamples": 11553,
+      "backing": [
+        633,
+        292
+      ],
+      "drawCalls": 61,
+      "contextLost": false
+    },
+    "normalApp": {
+      "checkedAt": "2026-11-05T08:16:57.342Z",
+      "url": "https://store.utxoplay.io/games/botstrike/app.js",
+      "status": 200,
+      "sha256": "37814c33c5d929854fd9b2644552eb732b6b20b93237d79cde39bdf588238aaa",
+      "bytes": 889425,
+      "cacheControl": "no-cache",
+      "age": null,
+      "etag": "W/\"d9251-1a1aa810a90\"",
+      "matchesCommittedBrowser": true
+    },
+    "assetFiles": 66,
+    "allAssetHashesMatch": true,
+    "storeLauncherDesktop": true,
+    "mobileFailureRetry": true,
+    "viewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "nativeMoveCrouchJump": true,
+    "simultaneousTouchMoveAimFire": true,
+    "fullscreenExitGatesInput": true,
+    "reentryPreservesIframeSandboxAndMatch": true,
+    "desktopMapping": [
+      {
+        "kind": "desktop-move-aim",
+        "inputMode": "controlled-dom-deltas",
+        "roomId": "1ccb2931dad29435e5ee6e86",
+        "devicePixelRatio": 0.5,
+        "viewport": [
+          1920,
+          1080
+        ],
+        "canvas": {
+          "css": [
+            1920,
+            1080
+          ],
+          "backing": [
+            1440,
+            810
+          ]
+        },
+        "deliveredDeltas": [
+          24,
+          8
+        ],
+        "expected": [
+          2.0075,
+          1.48
+        ],
+        "native": [
+          2.0075,
+          1.48
+        ],
+        "nativeVelocity": [
+          -276.37598818717845,
+          0,
+          129.00121376778046
+        ],
+        "acknowledgedSequence": 106
+      },
+      {
+        "kind": "desktop-move-aim",
+        "inputMode": "controlled-dom-deltas",
+        "roomId": "1ccb2931dad29435e5ee6e86",
+        "devicePixelRatio": 0.5,
+        "viewport": [
+          2560,
+          1080
+        ],
+        "canvas": {
+          "css": [
+            2560,
+            1080
+          ],
+          "backing": [
+            1920,
+            810
+          ]
+        },
+        "deliveredDeltas": [
+          24,
+          8
+        ],
+        "expected": [
+          -2.813185307179587,
+          1.48
+        ],
+        "native": [
+          -2.813185,
+          1.48
+        ],
+        "nativeVelocity": [
+          98.37353828108445,
+          0,
+          288.6999254694397
+        ],
+        "acknowledgedSequence": 205
+      },
+      {
+        "kind": "desktop-move-aim",
+        "inputMode": "controlled-dom-deltas",
+        "roomId": "1ccb2931dad29435e5ee6e86",
+        "devicePixelRatio": 0.5,
+        "viewport": [
+          2560,
+          1440
+        ],
+        "canvas": {
+          "css": [
+            2560,
+            1440
+          ],
+          "backing": [
+            1920,
+            1080
+          ]
+        },
+        "deliveredDeltas": [
+          24,
+          8
+        ],
+        "expected": [
+          -1.800685307179587,
+          1.48
+        ],
+        "native": [
+          -1.800685,
+          1.48
+        ],
+        "nativeVelocity": [
+          0,
+          0,
+          0
+        ],
+        "acknowledgedSequence": 302
+      },
+      {
+        "kind": "desktop-move-aim",
+        "inputMode": "controlled-dom-deltas",
+        "roomId": "1ccb2931dad29435e5ee6e86",
+        "devicePixelRatio": 0.5,
+        "viewport": [
+          3840,
+          2160
+        ],
+        "canvas": {
+          "css": [
+            3840,
+            2160
+          ],
+          "backing": [
+            2560,
+            1440
+          ]
+        },
+        "deliveredDeltas": [
+          24,
+          8
+        ],
+        "expected": [
+          0.8118146928204129,
+          1.48
+        ],
+        "native": [
+          0.811815,
+          1.48
+        ],
+        "nativeVelocity": [
+          -221.2889132088032,
+          0,
+          -209.89572861510732
+        ],
+        "acknowledgedSequence": 380
+      }
+    ],
+    "rotation": [
+      {
+        "kind": "portrait-releases-held-touch",
+        "viewport": [
+          390,
+          844
+        ],
+        "roomPreserved": true,
+        "nativeTickBefore": 120,
+        "nativeTickAfter": 136,
+        "freshReleasedPackets": 3
+      }
+    ]
+  },
+  "testsSha256": {
+    "tests/botstrike-store-launch.mjs": "fee8ddbeb342842e8c06020c2adef88b58e8392a5430958cde7bbbf9081d7b34",
+    "tests/botstrike-release-input.mjs": "4574890679beaa941559817eec57fa4bb8ad81a37e3e38826386b808e09642bb",
+    "tests/botstrike-browser-room.mjs": "0d74bfd9d8ea65c02a0e4dfe07dd71db5d3cdeb3007d16c692b6d3ce70a5c1e9",
+    "tests/mobile-viewport.mjs": "75fe53558cc117238c1ff187c170eb64281dd7c599e8516cbaa97b8b241c7c48",
+    "tests/botstrike-native-flow.mjs": "ca9d8bdd9e126f16649d60db3cf0dd87561aebd1be0c97258ea720b713b2bb0e",
+    "tests/botstrike-browser.mjs": "cb48b89b645c15ae7757d53d29503cd60b2635f71fef4216103daebd4156ed62",
+    "games/botstrike/client/post-match.mjs": "24a613ec42f1145efe5f375a61650d1b66f5a824bd6e7577f20b99fe0a2898db"
+  },
+  "evidenceSha256": {
+    "audit-release-stage-native.txt": "f14d696f39f423e34bfca4068d34f7fea3be3a9509a6624ded3bc2f795ccbc34",
+    "audit-release-stage-browser.txt": "21518ef4404eea2cde0cf049d54160790f4cf2a0e1bc901db20f3ddc6286f86c",
+    "audit-release-store-preview.txt": "ae9b2949c3e0b7fbe635b92d291ecd3ab9396dde7d620f25b1179e9c7be50218",
+    "audit-release-public-desktop.txt": "261e9d762937f9d6f470bfabf64a85eb008cd79ccafc7679a7a496d6f598e637",
+    "audit-release-public-mobile.txt": "6582e5289cd0a3668fc79d50cc4f956a823cbde7830ca4da86decb1087688350",
+    "audit-release-public-assets.json.gz": "bf2a25bec8616db65bbe010dfaacf7484278b6f7e235480e056e044d4c739d92",
+    "audit-release-pointer-probe-failed.txt": "1d04931aa2489fdfc84774e999ddd688ae37f4fb06d2269aa7e1219455843503",
+    "audit-release-cleanup-selector-failed.txt": "cc305cead4b57c24936538a2d053c237af3d01de10d3bef971ce5d54818016df",
+    "audit-release-socket-interrupted.txt.gz": "29281d25e1d835f99b954c870933e6e56ba666c80b71576621970e0fee7bb07c",
+    "audit-release-full-backing-interrupted.txt.gz": "fc815fc82bf74e37a045960d4e6fb13071369994bcd556fe0a33e2f6896e29b4",
+    "audit-release-pointer-warp-failed.txt": "6aff9c47085c3d2ba22d8afa92f77d6fb852134eff77df837d4c631ac4a9422d",
+    "audit-release-rotation-window-failed.txt": "dcfda2265498b31acff7777206de632d2b37f17aa2cfdce37ff289f9b66e86d7",
+    "audit-release-touch-session-failed.txt": "8a46e23bdac7d880ab7b2c867f5ac36f128770e887c10aeb584377231155f49a",
+    "audit-release-blocked-travel-failed.txt": "00108914257cfcc2b4e397151fe21dbec005e230407a27af8a72e016916d6af7",
+    "audit-release-cross-room-sequence-failed.txt": "264b81a9e0ae301654673a7e4e4dd9c67b9dfa87978112898aa76047d5effa1a",
+    "audit-release-render-check.txt": "8925f057d2e008208737aeb98b5df636f8627a339f30e3d45eb44c988cbd218f"
+  },
+  "rawEvidenceSha256": {
+    "audit-release-socket-interrupted.txt.gz": "33fd73255dab3803ccd1b65d19cfe1deeca35b0e2037cfcf19729da65f14fd6f",
+    "audit-release-full-backing-interrupted.txt.gz": "6f69b338ee7b57bcfe543e9a02327b3f469fb91f4ea2a3512ada8136c8b7ea96"
+  },
+  "compressedLogMeaning": "Gzip preserves original terminal bytes, including trailing spaces; rawEvidenceSha256 hashes the decompressed bytes.",
+  "performancePolicy": {
+    "schema": 1,
+    "effectiveDate": "2026-11-05",
+    "enforcement": "advisory",
+    "blocksAcceptance": false,
+    "decision": "Maintainer deferred dedicated performance optimization while animation correctness is repaired.",
+    "environment": "Shared development laptop with concurrent Cargo builds; contended timings are diagnostic.",
+    "referenceTargets": {
+      "label": "Legacy diagnostic references, not current merge gates",
+      "animationCpuP95Ms": {
+        "desktop": 1,
+        "mobile": 2
+      },
+      "frameP95": {
+        "baselineMultiplier": 1.1,
+        "baselineAllowanceMs": 2
+      }
+    },
+    "requiredChecks": [
+      "Animation continuity, contact, pose identity and finite-transform checks remain enforced.",
+      "Native rules, replay/profile binding, input mapping and viewport requirements remain enforced.",
+      "Backing resolution and work/state growth remain bounded.",
+      "Reproducible game-induced crashes, persistent freezes and runaway work still require correction."
+    ],
+    "deferredWork": [
+      "Dedicated significance/update-rate and animation CPU optimization",
+      "Sustained matched desktop measurements on an otherwise quiet host",
+      "Named physical Android device and thermal measurements",
+      "End-to-end input latency measurement"
+    ],
+    "limitations": [
+      "An advisory result is not a performance pass.",
+      "Keep historical timings and their original target results unchanged.",
+      "Software rendering and shared-host timings do not establish physical-device performance."
+    ]
+  },
+  "humanReview": {
+    "accepted": false,
+    "latestMaintainerReply": "I can review later",
+    "scope": "Latest gait/posture/death, weapon and armor clipping, cadence/lane opening and perceived responsiveness."
+  },
+  "limits": [
+    "A separate later-frame WebGL readback confirms a nonblank canvas; an early screenshot captured HUD before scene presentation.",
+    "Public checks use automated Chromium/software rendering, not physical phone FPS or thermal evidence.",
+    "Desktop input records explicitly identify browser mouse versus controlled DOM-delta mode; controlled deltas do not verify OS touchpad/palm rejection.",
+    "Full-backing software live checks were interrupted by socket closures; desktop mapping uses the explicitly recorded lower DPR at unchanged CSS viewport sizes. The failed records remain separate from subsequent successful runs.",
+    "One final live check was interrupted by a socket closure; the failed record remains separate from subsequent successful runs."
+  ],
+  "setupCorrections": [
+    "Stage Docker port publication did not bind on this host; the SSH forward uses the verified private container address.",
+    "The initial pointer probe received no relative deltas; explicit DOM fixtures are disclosed in inputMode when needed.",
+    "Cleanup initially selected the Store main frame by URL; it now requires the game child frame and cleans test rooms even after failures.",
+    "Environment equality compares key/value maps, since Docker may reorder identical entries.",
+    "Portrait measurement starts after the gate, excluding older in-flight packets; touch cleanup reuses the original CDP session.",
+    "Reused guest sessions can include earlier rooms with repeated sequence numbers; mapping now binds packets to the current room and sequence.",
+    "The coordinate-mapping gate matches held movement packets and native acknowledgement; it does not require free root travel when a map boundary legitimately blocks movement."
+  ]
+}

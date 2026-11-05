@@ -1,0 +1,17 @@
+Store iframe move/crouch/jump reached native authority
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: the browser must deliver both look axes
+    at verifyDesktopMapping (file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-release-input.mjs:29:11)
+    at async file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-store-launch.mjs:24:39 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.1

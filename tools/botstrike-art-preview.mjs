@@ -13,7 +13,7 @@ window.renderHero=async(hero,width=720,height=900,weapon=2)=>{
  clear();const renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});renderer.setSize(width,height,false);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
  const scene=new THREE.Scene();scene.background=new THREE.Color('#0b1721');scene.add(new THREE.HemisphereLight(0xb7d7ef,0x11141e,1.0));const key=new THREE.DirectionalLight(0xc1e6ff,3.4);key.position.set(-60,120,-80);scene.add(key);const fill=new THREE.DirectionalLight(0xffaf75,2.6);fill.position.set(100,90,40);scene.add(fill);const edge=new THREE.DirectionalLight(0x48ddff,2);edge.position.set(-70,60,70);scene.add(edge);
  const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment(),env=pmrem.fromScene(room,.05);scene.environment=env.texture;scene.environmentIntensity=.7;room.dispose();pmrem.dispose();
- const art=createArt(renderer),characters=createCharacters(art);await characters.preload();const bot=characters.actor(0,hero,weapon);const player={slot:0,team:0,life:1,hero,weapon,position:[0,0,0],velocity:[0,0,0],yaw:0,pitch:0,alive:true};bot.update(player,{phase:'live'},0,.01);scene.add(bot.rig);bot.rig.rotation.y=-.25;const floor=new THREE.Mesh(new THREE.CylinderGeometry(40,44,3,64),art.m.black);floor.position.y=-3;scene.add(floor);const trim=new THREE.Mesh(new THREE.TorusGeometry(41,.35,6,64),art.glow[hero]);trim.rotation.x=Math.PI/2;trim.position.y=-1.3;scene.add(trim);
+ const art=createArt(renderer),characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes});await characters.preload();const bot=characters.actor(0,hero,weapon);const player={slot:0,team:0,life:1,hero,weapon,position:[0,0,0],velocity:[0,0,0],yaw:0,pitch:0,alive:true};bot.update(player,{phase:'live'},0,.01);scene.add(bot.rig);bot.rig.rotation.y=-.25;const floor=new THREE.Mesh(new THREE.CylinderGeometry(40,44,3,64),art.m.black);floor.position.y=-3;scene.add(floor);const trim=new THREE.Mesh(new THREE.TorusGeometry(41,.35,6,64),art.glow[hero]);trim.rotation.x=Math.PI/2;trim.position.y=-1.3;scene.add(trim);
  const camera=new THREE.PerspectiveCamera(32,width/height,.1,2000);camera.position.set(-105,73,-190);camera.lookAt(0,43,0);renderer.render(scene,camera);showroom={scene,renderer,art,env,characters,character:bot,camera,player,time:1000,state:{phase:'live',objective:{}}};return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures};
 };
 window.renderMap=(map,width=1920,height=1080)=>{clear();world=createWorld(canvas,spec);world.setMap(map);world.resize();world.renderer.setSize(width,height,false);world.camera.aspect=width/height;world.camera.updateProjectionMatrix();world.scene.traverse(n=>{if(n.name.startsWith('hero-'))n.visible=false});const e=spec.maps[map].extent;world.camera.position.set(-e*.82,420,e*.82);world.camera.lookAt(e*.12,30,-e*.25);world.renderer.render(world.scene,world.camera);return{calls:world.renderer.info.render.calls,triangles:world.renderer.info.render.triangles,geometries:world.renderer.info.memory.geometries,textures:world.renderer.info.memory.textures};};
@@ -21,10 +21,11 @@ window.renderLineup=async(sameHero=false)=>{clear();world=createWorld(canvas,spe
 window.probeRunGroup=(jitter=false)=>{
  const bots=world.scene.children.filter(node=>node.name.startsWith('hero-')&&Number(node.name.split('slot-')[1])<6).sort((a,b)=>Number(a.name.split('slot-')[1])-Number(b.name.split('slot-')[1]));
  const state={tick:1,config:{map:0,mode:'deathmatch'},phase:'live',utilities:[],events:[],objective:{},players:Array.from({length:10},(_,slot)=>({slot,hero:0,team:slot<5?0:1,life:1,weapon:2,alive:true,hidden:slot>=6,position:[(slot-2.5)*62,0,950+slot%2*9],velocity:[0,0,-250],yaw:0,pitch:0}))};
- const samples=bots.map(()=>({root:[],hip:[],motion:[],ground:[]}));let now=1000;
+ const samples=bots.map(()=>({root:[],hip:[],motion:[],ground:[]}));let now=1000,travel=0;
  const vertex=new THREE.Vector3();
  for(let frame=0;frame<75;frame++){
   const dt=jitter?[.012,.026,.009,.022,.014][frame%5]:1/60;now+=dt*1000;
+  travel+=250*dt;for(const p of state.players)p.position[2]-=250*dt;
   state.tick++;world.frame(state,0,now,dt,{active:false});world.scene.updateMatrixWorld(true);
   if(frame<15)continue;
   bots.forEach((bot,i)=>{
@@ -34,7 +35,7 @@ window.probeRunGroup=(jitter=false)=>{
    if(i===0){let lowest=Infinity;bot.traverse(o=>{if(!o.isSkinnedMesh)return;for(let j=0;j<o.geometry.attributes.position.count;j++){o.getVertexPosition(j,vertex);vertex.applyMatrix4(o.matrixWorld);lowest=Math.min(lowest,vertex.y);}});samples[i].ground.push(lowest);}
   });
  }
- world.camera.position.set(-60,100,600);world.camera.lookAt(0,40,950);world.camera.fov=45;world.camera.updateProjectionMatrix();world.renderer.render(world.scene,world.camera);
+ world.camera.position.set(-60,100,600-travel);world.camera.lookAt(0,40,950-travel);world.camera.fov=45;world.camera.updateProjectionMatrix();world.renderer.render(world.scene,world.camera);
  return samples;
 };
 window.checkMapResources=()=>{world.setMap(0);world.renderer.render(world.scene,world.camera);const before={...world.renderer.info.memory};for(let i=0;i<9;i++){world.setMap(i%3);world.renderer.render(world.scene,world.camera)}world.setMap(0);world.renderer.render(world.scene,world.camera);return{before,after:{...world.renderer.info.memory}}};

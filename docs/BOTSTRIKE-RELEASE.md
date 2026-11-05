@@ -73,3 +73,74 @@ The portable Rust 1.97.1 engine and adapter use the new `botstrike-2050-salvage-
 Validation includes 77 JavaScript tests, four host tests, 33 native rule tests, native input and six required viewport checks, and real public Store desktop/mobile launch. Mobile checks cover failed-module retry, landscape rotation, fullscreen exit input gating, and re-entry with the same iframe, sandbox and match. Public two-tab checks reproduce both a live controller handoff and recovery after controller closure. Browser evidence uses software rendering; an additional concurrent candidate run failed under roughly ten-second observed client RTT, and is not counted as a performance pass.
 
 Compose: `/data/utxoplay/releases/20261101-botstrike-salvage-pr1/game.compose.json`. The same directory retains `rollback.compose.json`, `botstrike-data-before.tar.gz`, native/legacy validation logs and `rollout.json`. Rollout drained to zero active rooms, stopped only BotStrike for a coherent data backup, retained all runtime/session secrets and the data volume, and changed no other container IDs. See [acceptance evidence](acceptance/salvage-pr1.json).
+
+
+## Hybrid animation — 2026-11-02
+
+The user explicitly requested push and deployment of branch commit `f952afd` while the remaining performance/device/artistic gates stay open. The signed implementation is pushed in PR #2. Production now runs `myelin-botstrike:hybrid-f952afd`, built by overlaying only `dist` on the exact previous production image. PR #2 remains draft; deployment is not a claim that all animation acceptance gates passed.
+
+The isolated image passed 67 browser-file hashes, equality of 28 protected runtime/backend files, a complete 18,168-tick native match, signed export verification and tamper rejection. Its real browser check passed native movement/skill acknowledgement, simultaneous touch fire/aim, portrait gating and all six required sizes. Production drained to zero active/waiting/sealing rooms before a stopped-writer backup. The native salvage-v1 profile and all historical verifier bytes, secrets and persistent data mount were retained. Store and other container IDs stayed unchanged during the switch.
+
+Public acceptance passed all 66 non-HTML asset hashes and the actual Store card/loader/iframe flow on desktop and mobile, all six sizes, failed-module retry, landscape/portrait handling, fullscreen-exit input gating and re-entry with the same iframe, sandbox and match. These are browser checks, not physical Android acceptance.
+
+The final six-minute desktop A/B report records animation CPU p95 of 1.0 ms against a 1 ms budget. RAF p95 is 21.3 ms, exceeding its matched 20.3 ms limit; that gate remains failed. Physical Android measurements and the latest human gait review remain open. The earlier contended-host failure is retained as separate evidence.
+
+Release/Compose: `/data/utxoplay/releases/20261102-botstrike-hybrid-f952afd/game.compose.json`. Rollback Compose and `botstrike-data-before.tar.gz` are in the same directory. Roll back the image/configuration against the current data; no schema or rule migration was introduced. See [deployment evidence](acceptance/hybrid-animation-deployment.json) and the [completion ledger](hybrid-animation-requirements.md).
+
+## Animation audit corrections — 2026-11-05
+
+Browser source `646ec4c84245b345c7df22adf2e068a3a700a453` is deployed as
+`myelin-botstrike:hybrid-646ec4c`. F01–F05 correct interrupted steps, corpse
+reconstruction/cover clearance, jump reconstruction and whole-stride walking
+support. Human visual/control-feel acceptance remains open: the maintainer's
+latest response was “I can review later.” PR #2 remains a draft.
+
+Only `dist/botstrike/app.js` differs from the previous production browser tree.
+All 67 container browser files and 66 public non-HTML assets match the committed
+build. The image retains the previous 19 base layers, the same 28 protected
+runtime/backend/verifier files, environment values, resource limits and game
+data mount. No other container changed during the switch. No native binary was
+rebuilt, and the exact salvage-v1 profile and all four historical pairs remain
+unchanged. The isolated candidate completed a 22,930-tick match, verified its
+signed export, rejected tampering and verified all four historical profiles.
+
+The actual Store checks cover loader completion, a failed mobile module/retry,
+six required sizes, bounded backing, native movement/crouch/jump and simultaneous
+touch movement/aim/fire. Extended input checks compare declared DOM mouse
+deltas with outgoing packets and acknowledged native yaw/pitch at all four
+desktop sizes while a real keyboard key is held. These controlled deltas do not
+prove OS mouse/touchpad delivery or palm-rejection behavior. The extended
+desktop mapping run uses DPR 0.5 to reduce software raster work on the contended
+laptop, with all CSS viewport dimensions unchanged. Full-backing stage/layout
+checks remain separate, and full-backing socket-interrupted runs are retained. Portrait rotation
+is checked while touch movement/fire are held: fresh neutral input reaches the
+server, the same match continues, and landscape resumes. Fullscreen exit/re-entry
+preserves the iframe, opaque sandbox and running match. A later-frame,
+WebGL-only pixel readback confirms a nonblank scene independently of HUD
+colors (387 quantized colors, 61 draw calls); the initial play screenshot was
+taken before scene presentation.
+
+```sh
+# Reuse a private disposable guest state; do not commit or print its cookies.
+FUNCTIONAL_DPR=0.5 VERIFY_INPUT_MAPPING=1 DESKTOP_ONLY=1 STORAGE_STATE=/private/session.json node tests/botstrike-store-launch.mjs
+VERIFY_INPUT_MAPPING=1 MOBILE_ONLY=1 STORAGE_STATE=/private/session.json node tests/botstrike-store-launch.mjs
+```
+
+The release record includes the failed pointer/cleanup probes and one interrupted
+socket run separately from successful checks. Cleanup targets the child game
+frame explicitly and leaves owned test rooms even if an assertion fails.
+The first stage transport attempt was corrected to forward to the private
+container address; the service remains private.
+
+Release directory:
+`/data/utxoplay/releases/20261105-botstrike-audit-646ec4c`.
+It contains `game.compose.json`, `rollback.compose.json`, the stopped-writer
+`botstrike-data-before.tar.gz`, manifests and test logs. Roll back only the
+BotStrike image/configuration against the current data; this browser-only release
+adds no schema or rules migration. The previous image remains available.
+
+Dedicated performance optimization and quiet-host/Android thermal/input-latency
+profiling are deferred under the maintainer's advisory policy. These software
+browser checks are not a physical-device performance pass. See the
+[release evidence](acceptance/hybrid-animation/audit-deployment.json) and
+[audit follow-up](animation-audit-follow-up.md).

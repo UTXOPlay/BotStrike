@@ -1,0 +1,21 @@
+desktop initialized
+mobile initialized
+browser failure context { playing: 'true', status: 'Connected · 2 ms' } {"sent":[{"seq":29,"viewTick":35,"x":0,"y":1,"yaw":0,"pitch":0,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":30,"viewTick":36,"x":0,"y":0,"yaw":0,"pitch":0,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":31,"viewTick":37,"x":0,"y":1,"yaw":0,"pitch":0,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0}],"native":[{"seq":27,"alive":true,"yaw":0,"skill":0},{"seq":31,"alive":true,"yaw":0,"skill":0}]}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: held walk input reached the native service
+    at file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-browser.mjs:23:9
+    at runNextTicks (node:internal/process/task_queues:64:5)
+    at process.processImmediate (node:internal/timers:452:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.1

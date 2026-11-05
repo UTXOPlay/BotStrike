@@ -1,0 +1,139 @@
+{
+  "date": "2026-11-02",
+  "status": "Verified work reduction; sampled poses unchanged. Physical timing acceptance remains open; this follow-up is not deployed.",
+  "referenceCommit": "c978ba4e9b88fa3fac23fdb5c5fc799354918961",
+  "referenceSourceSha256": "16091b91b4cf0c3a4092488e9f13c484ad7534c07b04ee1efb97665cacbba493",
+  "candidateSourceSha256": "2aabc13d4875ae4cec436f7b400baaac62c1bcfcf483e05b7f60d9384d54e7b7",
+  "change": "Update only the weapon/contact transforms required by IK; defer static weapon render meshes until drawing; reuse refreshed model matrices.",
+  "correctness": {
+    "cases": 144,
+    "framesPerCase": 420,
+    "sampledFrames": 1728,
+    "comparedValues": 252288,
+    "maxPoseAndHandPositionDelta": 0,
+    "maxGripError": 8.903074960742904e-14,
+    "lifecycleCases": 12,
+    "motionFixtures": 32,
+    "javascriptTests": 89,
+    "buildPassed": true,
+    "fullGameBrowser": {
+      "passed": true,
+      "viewports": [
+        [
+          1920,
+          1080
+        ],
+        [
+          2560,
+          1080
+        ],
+        [
+          2560,
+          1440
+        ],
+        [
+          3840,
+          2160
+        ],
+        [
+          390,
+          844
+        ],
+        [
+          844,
+          390
+        ]
+      ],
+      "nativeJoiningMovementSkill": true,
+      "touchFireAndAim": true,
+      "portraitGate": true
+    }
+  },
+  "work": {
+    "rigs": 10,
+    "frames": 120,
+    "scope": "Actor updates only; excludes drawing. Counts do not establish CPU/GPU timing.",
+    "before": {
+      "subtreeCalls": 79200,
+      "controlledCalls": 186360,
+      "matrixMultiplications": 241560
+    },
+    "after": {
+      "subtreeCalls": 0,
+      "controlledCalls": 187560,
+      "matrixMultiplications": 167160
+    },
+    "matrixMultiplicationReductionFraction": 0.30799801291604567
+  },
+  "timing": {
+    "secondsPerPass": 30,
+    "rounds": 2,
+    "reference": "Previous hybrid implementation c978ba4, not original main",
+    "before": {
+      "rafMs": {
+        "samples": 4430,
+        "p50": 16.599999999998545,
+        "p95": 20.5,
+        "p99": 33.29999999999927,
+        "max": 116.70000000000073
+      },
+      "animationCpuMs": {
+        "samples": 4430,
+        "p50": 0.7999999970197678,
+        "p95": 1.6000000089406967,
+        "p99": 2.2000000029802322,
+        "max": 17.400000005960464
+      },
+      "frameCpuMs": {
+        "samples": 4430,
+        "p50": 1.9000000059604645,
+        "p95": 4.299999997019768,
+        "p99": 6.600000008940697,
+        "max": 39.599999994039536
+      }
+    },
+    "after": {
+      "rafMs": {
+        "samples": 3292,
+        "p50": 18.09999999999127,
+        "p95": 21.69999999999709,
+        "p99": 22.400000000001455,
+        "max": 24.90000000000873
+      },
+      "animationCpuMs": {
+        "samples": 3292,
+        "p50": 0.6000000089406967,
+        "p95": 1.2000000029802322,
+        "p99": 1.5999999940395355,
+        "max": 6.200000002980232
+      },
+      "frameCpuMs": {
+        "samples": 3292,
+        "p50": 1.7999999970197678,
+        "p95": 3.300000011920929,
+        "p99": 4.5,
+        "max": 11.100000008940697
+      }
+    },
+    "budget": {
+      "animationP95LimitMs": 1,
+      "frameP95LimitMs": 22.55,
+      "animationPass": false,
+      "framePass": true
+    },
+    "hostContention": {
+      "cpuBusyThresholdPercent": 70,
+      "fractionAboveThreshold": 0.015151515151515152,
+      "flagged": false,
+      "note": "Aggregate host load includes this benchmark. A contention flag requires review; it neither proves isolation nor overrides a failed budget."
+    },
+    "caveat": "Short browser observations on a shared physical laptop; do not claim a stable FPS gain or close the long-duration/Android gates. The first candidate did not improve CPU p95 and was revised; both reports are retained."
+  },
+  "evidence": {
+    "beforePoses": "weapon-work-before.json.gz",
+    "afterPoses": "weapon-work-after.json.gz",
+    "initialTiming": "weapon-work-initialTiming.json.gz",
+    "revisedTiming": "weapon-work-revisedTiming.json.gz",
+    "workCounts": "weapon-matrix-counts.json"
+  }
+}

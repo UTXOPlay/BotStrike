@@ -1,0 +1,14 @@
+Store initialized desktop
+Store iframe move/crouch/jump reached native authority
+Simultaneous move/aim and CSS-pixel mapping passed 1920 1080
+Release input failure context {"errors":[],"sent":[{"seq":202,"viewTick":2947,"x":0,"y":1,"yaw":-0.06,"pitch":-0.02,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":203,"viewTick":2995,"x":0,"y":1,"yaw":-0.06,"pitch":-0.02,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":204,"viewTick":2995,"x":0,"y":0,"yaw":-0.06,"pitch":-0.02,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0}],"ui":{"playing":"true","hidden":false,"focus":true,"lock":"arena","status":"Connected · 1585 ms","fatal":""}}
+file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-store-launch.mjs:21
+ const native=async predicate=>{const deadline=Date.now()+10000;let room;do{room=await roomState();if(room?.state&&predicate(room.state.players[room.slot],room))return room;await page.waitForTimeout(40);}while(Date.now()<deadline);throw Error('Store iframe input did not reach native state: '+JSON.stringify(room?.state?.players[room?.slot]));};
+                                                                                                                                                                                                                                             ^
+
+Error: Store iframe input did not reach native state: {"alive":true,"ammo":[12,30,30,5,8,30,60,90,18,14,24,4],"armor":0,"assists":0,"burst_remaining":0,"credits":800,"crouch":false,"damage":0,"deaths":1,"disabled":0,"effect":0,"fire_wait":0,"flash":0,"health":7,"hero":0,"item_wait":0,"items":[1,1,1,1,1,1,1,1,1,1,1,1],"kills":0,"last_seq":200,"life":2,"overclock":0,"owned":[true,true,true,true,true,true,true,true,true,true,true,true],"pitch":-0.02,"position":[-965.0977259278807,0,-1180],"protection":0,"recoil":0,"reload":0,"reserve":[84,150,90,25,40,120,180,180,90,70,120,20],"respawn":0,"revealed":0,"scoped":false,"shots":0,"skill_wait":0,"slot":0,"team":0,"velocity":[0,0,0],"weapon":2,"yaw":-0.06}
+    at native (file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-store-launch.mjs:21:238)
+    at async verifyDesktopMapping (file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-release-input.mjs:36:18)
+    at async file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-store-launch.mjs:26:39
+
+Node.js v22.23.1

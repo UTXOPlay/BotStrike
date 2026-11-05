@@ -1,0 +1,1375 @@
+{
+  "authoringSha256": "9a70247dae955445d0f856d647c684fd5a5db140f7f40f9b9c1e9148f88d92a4",
+  "characters": [
+    {
+      "name": "vector",
+      "bytes": 1067968,
+      "sha256": "0b221569f3a26ae79160bec641d697639c49fdf25129db94d9ac7026861688ff",
+      "sourceSha256": "51bea8924353a5817682c69a414b2efb9d1fa1406d0c3d896abf857fad6f798a",
+      "bones": 19,
+      "topology": [
+        {
+          "vertices": 23671,
+          "indices": 92214
+        },
+        {
+          "vertices": 800,
+          "indices": 1224
+        },
+        {
+          "vertices": 432,
+          "indices": 648
+        }
+      ],
+      "clips": [
+        {
+          "name": "backpedal",
+          "duration": 1.099609375,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "brake",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_enter",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_walk",
+          "duration": 1.2333984375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_back",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_left",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_right",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "defeat",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "equip",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fall",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fire",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "hit",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "idle",
+          "duration": 3.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "interact",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "jump",
+          "duration": 0.56689453125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land_hard",
+          "duration": 0.5,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_left",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_right",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_left",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_right",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "reload",
+          "duration": 2.232421875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "respawn",
+          "duration": 0.966796875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "run",
+          "duration": 0.7001953125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "skill",
+          "duration": 1.099609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "start",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_left",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_right",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "use_item",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "utility",
+          "duration": 0.83349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "victory",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "walk",
+          "duration": 1.033203125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "weapon_ready",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        }
+      ]
+    },
+    {
+      "name": "patch",
+      "bytes": 1394592,
+      "sha256": "05ced39b085b37c5e447997c29c44b7d0e311f2e12c22095b38cda97a781a8be",
+      "sourceSha256": "0b1b183c0eb17d7701564b6a9613f8dca22d7a51d4e56beb6753829c30887a6b",
+      "bones": 19,
+      "topology": [
+        {
+          "vertices": 36899,
+          "indices": 118971
+        },
+        {
+          "vertices": 576,
+          "indices": 876
+        },
+        {
+          "vertices": 1136,
+          "indices": 1776
+        },
+        {
+          "vertices": 704,
+          "indices": 1128
+        }
+      ],
+      "clips": [
+        {
+          "name": "backpedal",
+          "duration": 1.099609375,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "brake",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_enter",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_walk",
+          "duration": 1.2333984375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_back",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_left",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_right",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "defeat",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "equip",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fall",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fire",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "hit",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "idle",
+          "duration": 3.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "interact",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "jump",
+          "duration": 0.56689453125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land_hard",
+          "duration": 0.5,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_left",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_right",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_left",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_right",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "reload",
+          "duration": 2.232421875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "respawn",
+          "duration": 0.966796875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "run",
+          "duration": 0.7001953125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "skill",
+          "duration": 1.099609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "start",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_left",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_right",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "use_item",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "utility",
+          "duration": 0.83349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "victory",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "walk",
+          "duration": 1.033203125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "weapon_ready",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        }
+      ]
+    },
+    {
+      "name": "bastion",
+      "bytes": 1226248,
+      "sha256": "183011c12bba64998a011a86d833005a740803f177fc1d27e41ef06e6d338b12",
+      "sourceSha256": "a3ca9299cc6d7cfcf604423ea1ea83f5e38bd583a7e1ac1a3ad7ed4d592cef46",
+      "bones": 19,
+      "topology": [
+        {
+          "vertices": 30620,
+          "indices": 105450
+        },
+        {
+          "vertices": 192,
+          "indices": 336
+        }
+      ],
+      "clips": [
+        {
+          "name": "backpedal",
+          "duration": 1.099609375,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "brake",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_enter",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_walk",
+          "duration": 1.2333984375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_back",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_left",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_right",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "defeat",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "equip",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fall",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fire",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "hit",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "idle",
+          "duration": 3.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "interact",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "jump",
+          "duration": 0.56689453125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land_hard",
+          "duration": 0.5,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_left",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_right",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_left",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_right",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "reload",
+          "duration": 2.232421875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "respawn",
+          "duration": 0.966796875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "run",
+          "duration": 0.7001953125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "skill",
+          "duration": 1.099609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "start",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_left",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_right",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "use_item",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "utility",
+          "duration": 0.83349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "victory",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "walk",
+          "duration": 1.033203125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "weapon_ready",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        }
+      ]
+    },
+    {
+      "name": "spectre",
+      "bytes": 1326632,
+      "sha256": "9c7494dd78cea824f79c815b2254294af1259499bcb0ebb5e0db8d5b1c8114cc",
+      "sourceSha256": "ebe60a32bdc964c34ed89d543ee66afbbddd234c84d247a9d164b7a137e977b2",
+      "bones": 19,
+      "topology": [
+        {
+          "vertices": 34697,
+          "indices": 118092
+        },
+        {
+          "vertices": 512,
+          "indices": 840
+        },
+        {
+          "vertices": 400,
+          "indices": 708
+        },
+        {
+          "vertices": 216,
+          "indices": 324
+        }
+      ],
+      "clips": [
+        {
+          "name": "backpedal",
+          "duration": 1.099609375,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "brake",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_enter",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_walk",
+          "duration": 1.2333984375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_back",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_left",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_right",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "defeat",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "equip",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fall",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fire",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "hit",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "idle",
+          "duration": 3.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "interact",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "jump",
+          "duration": 0.56689453125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land_hard",
+          "duration": 0.5,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0.0001220703125
+        },
+        {
+          "name": "pivot_back_left",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_right",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_left",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_right",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "reload",
+          "duration": 2.232421875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "respawn",
+          "duration": 0.966796875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "run",
+          "duration": 0.7001953125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "skill",
+          "duration": 1.099609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "start",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_left",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_right",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "use_item",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "utility",
+          "duration": 0.83349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "victory",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "walk",
+          "duration": 1.033203125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "weapon_ready",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        }
+      ]
+    },
+    {
+      "name": "glitch",
+      "bytes": 1100088,
+      "sha256": "d29aa3c635b16fb7dc12b5805ad22cb41037368dd8d6f4c44a4d4882578417a4",
+      "sourceSha256": "340eea00608d074ec7d67bcd80d2e54a3fd69c8f71c980729cfe216f2186b089",
+      "bones": 19,
+      "topology": [
+        {
+          "vertices": 25013,
+          "indices": 97980
+        },
+        {
+          "vertices": 144,
+          "indices": 264
+        },
+        {
+          "vertices": 144,
+          "indices": 264
+        }
+      ],
+      "clips": [
+        {
+          "name": "backpedal",
+          "duration": 1.099609375,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "brake",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_enter",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_walk",
+          "duration": 1.2333984375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_back",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_left",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_right",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "defeat",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "equip",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fall",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fire",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "hit",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "idle",
+          "duration": 3.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "interact",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "jump",
+          "duration": 0.56689453125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land_hard",
+          "duration": 0.5,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_left",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_right",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_left",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_right",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "reload",
+          "duration": 2.232421875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "respawn",
+          "duration": 0.966796875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "run",
+          "duration": 0.7001953125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "skill",
+          "duration": 1.099609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "start",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_left",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_right",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "use_item",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "utility",
+          "duration": 0.83349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "victory",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "walk",
+          "duration": 1.033203125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "weapon_ready",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        }
+      ]
+    },
+    {
+      "name": "forge",
+      "bytes": 1349800,
+      "sha256": "59714d51b58bf74d48f671d4ddcff9d11814bdb9d01f8358170e1b3161eaf781",
+      "sourceSha256": "c0d6f1650543149eb358b551de562dfdfaa3864825bae2f37e64b2f50a5ef1b8",
+      "bones": 19,
+      "topology": [
+        {
+          "vertices": 32421,
+          "indices": 111201
+        },
+        {
+          "vertices": 896,
+          "indices": 1464
+        },
+        {
+          "vertices": 2112,
+          "indices": 3384
+        },
+        {
+          "vertices": 704,
+          "indices": 1128
+        }
+      ],
+      "clips": [
+        {
+          "name": "backpedal",
+          "duration": 1.099609375,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "brake",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_enter",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "crouch_walk",
+          "duration": 1.2333984375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_back",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_left",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "death_right",
+          "duration": 1.43359375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "defeat",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "equip",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fall",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "fire",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "hit",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "idle",
+          "duration": 3.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "interact",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "jump",
+          "duration": 0.56689453125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "land_hard",
+          "duration": 0.5,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_left",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_back_right",
+          "duration": 0.433349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_left",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "pivot_right",
+          "duration": 0.300048828125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "reload",
+          "duration": 2.232421875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "respawn",
+          "duration": 0.966796875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "run",
+          "duration": 0.7001953125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "skill",
+          "duration": 1.099609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "start",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_left",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "strafe_right",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "use_item",
+          "duration": 1.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "utility",
+          "duration": 0.83349609375,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "victory",
+          "duration": 2.033203125,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "walk",
+          "duration": 1.033203125,
+          "maxLoopError": 0.00034526698300124393,
+          "maxBodyEndpointError": 0
+        },
+        {
+          "name": "weapon_ready",
+          "duration": 0.2332763671875,
+          "maxLoopError": 0,
+          "maxBodyEndpointError": 0
+        }
+      ]
+    }
+  ]
+}

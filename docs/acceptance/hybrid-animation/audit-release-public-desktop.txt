@@ -1,0 +1,11 @@
+Store initialized desktop
+Store iframe move/crouch/jump reached native authority
+CSS mapping probe {"viewport":[1920,1080],"room":"1ccb2931dad29435e5ee6e86","before":{"seq":70,"yaw":2.0675,"pitch":1.5},"deltas":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[24,8],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"expected":[2.0075,1.48]}
+Simultaneous move/aim and CSS-pixel mapping passed 1920 1080
+CSS mapping probe {"viewport":[2560,1080],"room":"1ccb2931dad29435e5ee6e86","before":{"seq":168,"yaw":-2.753185307179587,"pitch":1.5},"deltas":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[24,8],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"expected":[-2.813185307179587,1.48]}
+Simultaneous move/aim and CSS-pixel mapping passed 2560 1080
+CSS mapping probe {"viewport":[2560,1440],"room":"1ccb2931dad29435e5ee6e86","before":{"seq":265,"yaw":-1.740685307179587,"pitch":1.5},"deltas":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[24,8],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"expected":[-1.800685307179587,1.48]}
+Simultaneous move/aim and CSS-pixel mapping passed 2560 1440
+CSS mapping probe {"viewport":[3840,2160],"room":"1ccb2931dad29435e5ee6e86","before":{"seq":347,"yaw":0.8718146928204129,"pitch":1.5},"deltas":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[24,8],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"expected":[0.8118146928204129,1.48]}
+Simultaneous move/aim and CSS-pixel mapping passed 3840 2160
+Store card → loader completion → playable desktop match passed

@@ -1,0 +1,19 @@
+Store initialized desktop
+Store iframe move/crouch/jump reached native authority
+Release input failure context {"errors":[],"sent":[{"seq":98,"viewTick":463,"x":0,"y":1,"yaw":1.345,"pitch":1.5,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":99,"viewTick":475,"x":0,"y":1,"yaw":1.345,"pitch":1.5,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":100,"viewTick":483,"x":0,"y":1,"yaw":1.345,"pitch":1.5,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0}],"ui":{"playing":"true","hidden":false,"focus":true,"lock":"arena","status":"Connected · 333 ms","fatal":""}}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: the browser must deliver both look axes
+    at verifyDesktopMapping (file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-release-input.mjs:39:11)
+    at async file:///home/arthur/.codex/worktrees/botstrike-hybrid-animation/BotStrike/tests/botstrike-store-launch.mjs:26:39 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.1

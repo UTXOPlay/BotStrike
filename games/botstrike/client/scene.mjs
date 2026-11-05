@@ -21,9 +21,9 @@ export function createWorld(canvas,spec){
  function consolidate(group){const batches=new Map();for(const m of [...group.children])if(m.isMesh){m.updateMatrix();const g=m.geometry.clone().applyMatrix4(m.matrix);if(!batches.has(m.material))batches.set(m.material,[]);batches.get(m.material).push(g);group.remove(m);m.geometry.dispose();}for(const [material,parts]of batches){const merged=new THREE.Mesh(mergeParts(parts),material);merged.castShadow=true;merged.receiveShadow=true;group.add(merged);parts.forEach(g=>g.dispose());}}
  const art=createArt(renderer,{mobile}),atmosphere=createAtmosphere(scene,2400,{mobile}),bots=[];
  const rim=new THREE.DirectionalLight(0x8ddae3,.9);rim.position.set(900,700,-1100);scene.add(rim);
- const signals=createTeamSignals(scene);const characters=createCharacters(art);let firstPerson=null;
+ const signals=createTeamSignals(scene);const characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes,maps:spec.maps});let firstPerson=null;
  function robot(slot,hero,weapon){const bot=characters.actor(slot,hero,weapon);bot.rig.name=`hero-${hero}-slot-${slot}`;scene.add(bot.rig);return bot;}
- function viewModel(player){if(firstPerson?.hero!==player.hero){firstPerson?.dispose();firstPerson=characters.actor(player.slot,player.hero,player.weapon,{firstPerson:true});firstPerson.rig.scale.setScalar(.8);camera.add(firstPerson.rig);}return firstPerson;}
+ function viewModel(player){if(firstPerson?.hero!==player.hero||firstPerson?.slot!==player.slot){firstPerson?.dispose();firstPerson=characters.actor(player.slot,player.hero,player.weapon,{firstPerson:true});firstPerson.rig.scale.setScalar(.8);camera.add(firstPerson.rig);}return firstPerson;}
  const flash=new THREE.PointLight(0x80eaff,0,160,2);flash.visible=!mobile;camera.add(flash);flash.position.set(5,-4,-30);
  let staticRoot=new THREE.Group(),mapId=-1,ratio=.75,fov=80;scene.add(staticRoot);const generatedMaterials=[];
  function disposeStatic(){staticRoot.traverse(m=>m.geometry?.dispose());scene.remove(staticRoot);for(const m of generatedMaterials){m.map?.dispose();m.dispose()}generatedMaterials.length=0;staticRoot=new THREE.Group();scene.add(staticRoot);}
@@ -46,14 +46,16 @@ export function createWorld(canvas,spec){
  scene.add(objective);let relayArmed=false;
  const markerPoint=new THREE.Vector3();
  const trails=[];for(let n=0;n<32;n++){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1,4),new THREE.MeshBasicMaterial({color:'#baf6ff',transparent:true,opacity:.6}));mesh.visible=false;scene.add(mesh);trails.push({mesh,until:0})}let trailIndex=0,shotUntil=0,recoilAt=-Infinity,impactAt=-Infinity;
- function shoot(slot,player,now){const d=new THREE.Vector3(-Math.sin(player.yaw)*Math.cos(player.pitch),Math.sin(player.pitch),-Math.cos(player.yaw)*Math.cos(player.pitch));const t=trails[trailIndex++%trails.length],origin=new THREE.Vector3(player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]),start=15,end=shotTrailEnd(origin.toArray(),d.toArray(),spec.maps[mapId]?.obstacles||[]);t.mesh.visible=end>start;if(t.mesh.visible){t.mesh.position.copy(origin).addScaledVector(d,(start+end)/2);t.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);t.mesh.scale.y=end-start;t.until=now+55;}if(slot===localSlot){shotUntil=now+40;recoilAt=now;firstPerson?.trigger('fire',now);}else bots[slot]?.trigger('fire',now);}
+ function shoot(slot,player,now){const d=new THREE.Vector3(-Math.sin(player.yaw)*Math.cos(player.pitch),Math.sin(player.pitch),-Math.cos(player.yaw)*Math.cos(player.pitch));const t=trails[trailIndex++%trails.length],origin=new THREE.Vector3(player.position[0],player.position[1]+(player.crouch?37:56),player.position[2]),start=15,end=shotTrailEnd(origin.toArray(),d.toArray(),spec.maps[mapId]?.obstacles||[]);t.mesh.visible=end>start;if(t.mesh.visible){t.mesh.position.copy(origin).addScaledVector(d,(start+end)/2);t.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);t.mesh.scale.y=end-start;t.until=now+55;}if(slot===localSlot){shotUntil=now+40;recoilAt=now;firstPerson?.trigger('fire',now,undefined,undefined,player.life);}else bots[slot]?.trigger('fire',now,undefined,undefined,player.life);}
  let localSlot=0,roomId=null,motionCursor=new FeedbackCursor();
- function accept(room){if(!room?.state)return;const now=performance.now();if(room.id!==roomId){motionCursor=new FeedbackCursor();roomId=room.id;}
+ function accept(room){if(!room?.state)return;const now=performance.now();if(room.id!==roomId){motionCursor=new FeedbackCursor();roomId=room.id;bots.forEach(bot=>bot.invalidate('room'));firstPerson?.invalidate('room');}
   for(const e of motionCursor.consume(room.feedback,room.state.tick)){
    if(room.state.tick-e.tick>32)continue;
    if(e.kind==='motion'){const p=room.state.players[e.actor];if(!p||p.hidden||p.life!==e.life)continue;
+    if(!bots[e.actor]||bots[e.actor].hero!==p.hero){bots[e.actor]?.dispose();bots[e.actor]=robot(e.actor,p.hero,p.weapon);}
+    if(e.actor===room.slot)viewModel(p);
     if(e.action==='fire'){if(e.actor!==room.slot)shoot(e.actor,p,now);}
-    else {bots[e.actor]?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value);if(e.actor===room.slot)firstPerson?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value);}
+    else {bots[e.actor]?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value,e.life);if(e.actor===room.slot)firstPerson?.trigger(e.action,now,e.action==='reload'?p.reload/64:undefined,e.value,e.life);}
     if(e.action==='hit'){sparks(p,now);if(e.actor===room.slot)impactAt=now;}
    }
   }
@@ -63,7 +65,7 @@ export function createWorld(canvas,spec){
  function sparks(player,now){sparkOrigin=[player.position[0],player.position[1]+(player.crouch?32:46),player.position[2]];sparkAt=now;}
 const positions=Array.from({length:10},()=>new THREE.Vector3());
  function frame(state,slot,now,dt,{active=false,yaw=0,pitch=0,local=null,spectator=null,reduced=false,weapon=0}={}){if(contextLost||disposed)return;localSlot=slot;if(state){const me=state.players[slot],chosen=state.players[spectator],viewing=me.alive?me:chosen?.alive&&chosen.team===me.team?chosen:state.players.find(p=>p.team===me.team&&p.alive);setMap(state.config.map);for(const p of state.players){let bot=bots[p.slot];if(!bot)continue;if(!p.hidden&&bot.hero!==p.hero){bot.dispose();bot=bots[p.slot]=robot(p.slot,p.hero,p.weapon);}
- const shown=!p.hidden&&!!p.position&&(!active||p.slot!==viewing?.slot);bot.rig.visible=shown;if(!shown)continue;
+ const shown=!p.hidden&&!!p.position&&(!active||p.slot!==viewing?.slot);if(!shown&&bot.rig.visible)bot.invalidate();bot.rig.visible=shown;if(!shown)continue;
  bot.setAlly(p.team===me.team);bot.rig.position.copy(positions[p.slot].fromArray(p.position));bot.rig.rotation.y=p.yaw;const motion=bot.update(p,state,now,dt,{reduced});if(!p.alive&&now-motion.deadAt>5000)bot.rig.visible=false;}
 
  for(let i=0;i<utilities.length;i++){const u=state.utilities[i],mesh=utilities[i];mesh.visible=!!u;if(!u)continue;mesh.position.fromArray(u.position);mesh.scale.setScalar(u.kind===2&&u.fuse===0?175:6);mesh.material.opacity=u.kind===2&&u.fuse===0?Math.min(.93,u.life/64):u.fuse===0?.12:1;mesh.material.color.set(spec.items[u.kind]?.color||'#b4c1d8');if(u.fuse===0&&u.kind===5)mesh.scale.set(450,3,450);if(u.fuse===0&&u.kind===10)mesh.scale.set(220,3,220);}
@@ -75,7 +77,7 @@ const positions=Array.from({length:10},()=>new THREE.Vector3());
  if(relayArmed!==state.objective.planted){relayArmed=state.objective.planted;relayPower.color.set(relayArmed?'#ffae71':'#50e5eb');relayPower.emissive.set(relayArmed?'#ff7b45':'#50e5eb');}
 
  if(active&&me.alive){camera.position.fromArray(local||me.position);camera.position.y+=me.crouch?37:56;camera.rotation.set(pitch,yaw,0,'YXZ');}else if(active){if(viewing){camera.position.fromArray(viewing.position);camera.position.y+=viewing.crouch?37:56;camera.rotation.set(viewing.pitch,viewing.yaw,0,'YXZ')}else{camera.position.set(0,700,900);camera.lookAt(0,0,0)}}else{const a=reduced?.6:now*.000035;camera.position.set(Math.sin(a)*spec.maps[mapId].extent*.8,400,Math.cos(a)*spec.maps[mapId].extent*.8);camera.lookAt(0,40,0)}
- if(firstPerson)firstPerson.rig.visible=false;if(active&&viewing?.alive){const arms=viewModel(viewing);arms.rig.visible=!viewing.scoped;const kick=reduced?0:Math.exp(-Math.max(0,now-recoilAt)/65),hurt=reduced?0:Math.exp(-Math.max(0,now-impactAt)/100);arms.rig.position.set(0,(viewing.crouch?-39:-56)*.8-5,-10+kick*1.2);arms.update({...viewing,pitch:0},state,now,dt,{reduced});camera.rotation.x+=kick*.009;camera.rotation.z+=hurt*.012;}
+ if(firstPerson)firstPerson.rig.visible=false;if(active&&viewing?.alive){const arms=viewModel(viewing);arms.rig.visible=!viewing.scoped;const kick=reduced?0:Math.exp(-Math.max(0,now-recoilAt)/65),hurt=reduced?0:Math.exp(-Math.max(0,now-impactAt)/100);arms.rig.position.set(0,-56*.8-5,-10+kick*1.2);arms.update({...viewing,pitch:0},state,now,dt,{reduced});arms.rig.position.y+=17*.8*arms.animation.signals.crouchAmount;camera.rotation.x+=kick*.009;camera.rotation.z+=hurt*.012;}
 
  const nextFov=viewing?.scoped&&active?scopeFov(spec.weapons[viewing.weapon]):fov;if(camera.fov!==nextFov){camera.fov=nextFov;camera.updateProjectionMatrix();}
  signals.update(state,viewing,camera,innerHeight,active,spec.maps[mapId]);
