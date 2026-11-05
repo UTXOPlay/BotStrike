@@ -1,0 +1,5 @@
+Store initialized mobile
+Portrait released held movement/fire; native match continued and resumed
+Store iframe simultaneous touch movement, aim and fire reached native authority
+Mobile fullscreen exit {"levels":["IFRAME","DIV"],"fullscreen":null,"coarse":true,"displayFullscreen":false,"entryHidden":true,"inert":false}
+Mobile launcher failure/retry and gameplay passed

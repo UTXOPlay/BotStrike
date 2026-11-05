@@ -14,7 +14,7 @@ under the [maintainer-approved advisory policy](acceptance/hybrid-animation/perf
 
 | ID | Requirement | Authoritative evidence required | Current status |
 | --- | --- | --- | --- |
-| A01 | Native position, velocity, collision, inputs, shot direction/timing, hit registration and exact replay profile unchanged | Source diff; native/browser trajectories; complete signed replay and tamper rejection | Pass: unchanged native/spec/input/profile source; 20,477-tick signed native match and tamper rejection; final browser acknowledged-input check |
+| A01 | Native position, velocity, collision, inputs, shot direction/timing, hit registration and exact replay profile unchanged | Source diff; native/browser trajectories; complete signed replay and tamper rejection | Pass: unchanged native/spec/input/profile source and production bytes; latest staged image completes a 22,930-tick signed native match, rejects tampering and verifies four historical profiles. Public browser acknowledgement and controlled CSS-delta/native mapping are recorded in audit-deployment.json |
 | A02 | Full viewport, six sizes, inverse input mapping, mobile landscape/fullscreen policy | Actual game browser/input tests, not only the lab | Pass: final actual-game six-size/input/touch/portrait checks; shared Store fullscreen policy and opaque sandbox unchanged |
 | M01 | Continuous forward/back/diagonal/lateral/crouch weights and synchronized gait phase | Property checks and all-six-chassis sequence captures | Implemented; 48 ten-rig fixtures including native-speed walk/run transitions; shared first/third-person phase across 144 hero/weapon/view cases; artistic acceptance under H03 |
 | M02 | Bounded spatial stride and orientation warping | Measured sole trajectories, leg reach and twist bounds | Implemented; calibrated cadence, bounded direction/pelvis warp and constrained reach; actual sole/lane tests |
@@ -38,7 +38,7 @@ under the [maintainer-approved advisory policy](acceptance/hybrid-animation/perf
 | T03 | Reduced motion preserves essential pose/contact and disables optional motion | Full matrix with reduced motion; visual and numeric evidence | Pass numerical matrix: all twelve scenarios with jitter + reduced motion; optional offsets cleared, essential aim/contact retained; human review open |
 | H01 | Ten-rig baseline on representative physical desktop and mobile hardware | Exported device/GPU/CPU, frame pacing, animation CPU, input/interaction timing and thermal-duration evidence | Deferred by maintainer: dedicated quiet-host desktop and named-Android thermal measurements belong to the later performance pass. Current timing is diagnostic on the shared laptop with Cargo builds; functional mobile checks and human quality review remain separate |
 | H02 | Explicit animation CPU budget and no material frame/input regression | Budgets derived from those device baselines and matched A/B runs | Advisory for this PR: legacy desktop/mobile 1/2 ms CPU and matched frame references are diagnostic, not merge blockers. Dedicated optimization is deferred. Historical target results remain unchanged; an advisory result is not a performance pass. Reproducible game-induced freezes/crashes and unbounded work still require correction |
-| H03 | Human quality/playtest acceptance | Recorded review of knee/weapon clipping, continuity and perceived control responsiveness | Partial human acceptance: after two failed reviews, the user reports the listed toe-out, high rear-foot lift and knee-popping issues are no longer present; broader clipping/control-feel review remains open |
+| H03 | Human quality/playtest acceptance | Recorded review of knee/weapon clipping, continuity and perceived control responsiveness | Partial human acceptance: after two failed reviews, the user reports the listed toe-out, high rear-foot lift and knee-popping issues are no longer present; broader clipping/control-feel review remains open. For deployed browser `646ec4c`, the maintainer replied “I can review later”; this is not acceptance |
 
 Current animation acceptance requires evidence for the non-deferred rows.
 H01/H02 are recorded for the later performance pass under the advisory policy;
@@ -55,3 +55,10 @@ including crouched variants, corners, narrow corridors and a synthetic drop
 above cover. Skin-weight hulls constrain the cosmetic model; native state stays
 unchanged. This does not add articulated ragdoll dynamics or establish human
 acceptance. See the [F03 explanation and paired clips](animation-audit-follow-up.md#f03-give-an-authored-fall-room-to-fit).
+
+The [November 5 release record](acceptance/hybrid-animation/audit-deployment.json)
+binds the F01–F05 browser rollout to its staging/native/historical checks, public
+asset hashes and Store input/fullscreen/resize checks. The deployed browser
+source is `646ec4c`; subsequent documentation/test-only commits do not change
+that runtime. Human acceptance remains open and dedicated performance work is
+deferred.

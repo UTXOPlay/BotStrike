@@ -6,11 +6,11 @@ are recorded separately.
 
 | Audit finding | Current status |
 | --- | --- |
-| F01: stop/restart foot discontinuity | Automated correction verified; human review and deployment pending |
-| F02: reconstructed corpse changes pose | Automated correction verified; human review and deployment pending |
-| F03: corpse intersects existing cover | Automated correction verified; human review and deployment pending |
-| F04: airborne reconstruction restarts jump progress | Automated correction verified; human review and deployment pending |
-| F05: quiet lateral walking lacks meaningful support coverage | Automated correction verified; human review and deployment pending |
+| F01: stop/restart foot discontinuity | Automated correction verified; deployed at `646ec4c`; human review pending |
+| F02: reconstructed corpse changes pose | Automated correction verified; deployed at `646ec4c`; human review pending |
+| F03: corpse intersects existing cover | Automated correction verified; deployed at `646ec4c`; human review pending |
+| F04: airborne reconstruction restarts jump progress | Automated correction verified; deployed at `646ec4c`; human review pending |
+| F05: quiet lateral walking lacks meaningful support coverage | Automated correction verified; deployed at `646ec4c`; human review pending |
 | F06: CPU budget and sustained desktop/Android acceptance | Dedicated optimization/profiling deferred by maintainer; timing references advisory |
 
 The audit IDs above are separate from the requirement IDs in the
@@ -544,3 +544,12 @@ The later performance pass can profile significance/update rates, repeat
 sustained matched A/B runs on a quiet host, measure a named Android device's
 thermal behavior and investigate end-to-end input latency. F06 is deferred,
 not reported as fixed or as a performance pass.
+
+## November 5 release verification
+
+F01–F05 browser corrections are deployed from `646ec4c`. The
+[release record](acceptance/hybrid-animation/audit-deployment.json) keeps staging
+native replay/tamper checks, historical verifier checks, public asset hashes and
+actual Store input/resize/fullscreen evidence separate from the fixed-step motion
+lab. The maintainer will review human quality later; PR #2 remains a draft.
+Dedicated performance work is still deferred under the advisory policy.
