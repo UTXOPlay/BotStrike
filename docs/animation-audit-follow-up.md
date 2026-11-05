@@ -8,7 +8,7 @@ are recorded separately.
 | --- | --- |
 | F01: stop/restart foot discontinuity | Automated correction verified; human review and deployment pending |
 | F02: reconstructed corpse changes pose | Automated correction verified; human review and deployment pending |
-| F03: corpse intersects existing cover | Open |
+| F03: corpse intersects existing cover | Automated correction verified; human review and deployment pending |
 | F04: airborne reconstruction restarts jump progress | Open |
 | F05: quiet lateral walking lacks meaningful support coverage | Open |
 | F06: CPU budget and sustained desktop/Android acceptance | Dedicated optimization/profiling deferred by maintainer; timing references advisory |
@@ -142,7 +142,7 @@ MOTION_REFERENCE_WORKTREE=/path/to/reference-checkout node tools/capture-botstri
 
 The capture checks the reference revision and rejects tracked modifications.
 Its [manifest](assets/botstrike/continuity/capture.json) records both lab bundles
-and model hashes. F03–F05 and broader human functional acceptance remain open. F06 performance optimization and physical profiling are deferred under the advisory policy below.
+and model hashes. F04–F05 and broader human functional acceptance remain open. F06 performance optimization and physical profiling are deferred under the advisory policy below.
 
 ## F02: preserve the same death across visibility returns
 
@@ -153,7 +153,7 @@ forced the animation to its final frame. These paths could move a settled head
 by 67.55 units even though the native character had not moved.
 
 The renderer now keeps a descriptor for the same death: life, map, chosen clip,
-visual crouch posture, frozen facing, start time and outgoing pose. A visibility
+visual crouch posture, observed rig yaw, start time and outgoing pose. A visibility
 return retains that presentation. The full-body clip samples elapsed time, so a
 400 ms gap advances to the same point as continuous observation. It does not
 restart or prematurely finish the collapse. A corpse uses one full-body action;
@@ -161,7 +161,7 @@ idle and upper-body layers cannot reappear underneath it.
 
 ```mermaid
 stateDiagram-v2
-    Alive --> ObservedDeath: Capture outgoing pose and frozen facing
+    Alive --> ObservedDeath: Capture outgoing pose and observed yaw
     ObservedDeath --> CachedDeath: Choose the per-life clip
     CachedDeath --> CachedDeath: Visibility return or frame gap
     CachedDeath --> CachedDeath: Native origin correction
@@ -218,13 +218,106 @@ existing collapse/interruption cases, six airborne deaths, 96 posture cases,
 144 combat-composition cases, 12 lifecycle cases, 48 ten-character locomotion
 fixtures including reduced motion/six lab sizes, and the 24-case F01 native-rate
 smoke check. These are software-rendered correctness results. They do not close
-cover collision (F03), airborne living-character reconstruction (F04), artistic
+the separate cover-collision work below, airborne living-character reconstruction (F04), artistic
 acceptance or hardware budgets.
 
 ```sh
 node tests/botstrike-death-reconstruction-browser.mjs
 node tests/botstrike-posture-browser.mjs
 node --test tests/botstrike-posture.test.mjs
+```
+
+## F03: give an authored fall room to fit
+
+Floor normalization could keep a corpse above the ground while its head went
+straight through cover. At the original map-0 fixture, the native origin is
+18 units outside cover. The living meshes are clear, but the back-fall puts
+thousands of referenced vertices inside the box.
+
+The renderer now reads the existing map AABBs (axis-aligned collision boxes).
+It keeps a side that the outgoing body actually clears for that death, then moves only
+the cosmetic model enough to keep its body bounds outside those faces. If a
+death starts above and horizontally over cover, that top is its support surface.
+The native root, hit rules, camera and replay remain unchanged.
+
+```mermaid
+flowchart LR
+    N[Native snapshot] --> D[Keep the same death descriptor]
+    M[Existing map collision boxes] --> P[Choose stable clearance faces]
+    D --> A[Sample the authored fall by elapsed time]
+    P --> C[Constrain the cosmetic model]
+    A --> H[Measure skin-weight hulls]
+    H --> C
+    C --> R[Render a clear body]
+```
+
+A 50-unit passage on map 0 exposed a second problem: a body lying across the
+passage cannot fit even though the standing player can. The correction steers
+the authored fall's long axis along a narrow passage over 350 ms. The turn starts
+at zero, preserving the outgoing pose, and is stored for that same death.
+The observed rig yaw remains fixed; this extra turn belongs to the cosmetic
+model. The slot/life clip selection still supplies the death variant.
+
+The bounds are derived from the actual skin weights. Vertices with identical
+weights share an affine transform, so transforming their convex hull encloses
+the posed geometry. Hulls are built once per shared geometry during loading.
+Coplanar, collinear and tiny groups retain their original points. Team badges
+are included as rigid attachments. Settled clearance is cached until its native
+origin or death descriptor changes; state and work do not grow with corpse age.
+
+This detail matters: a first prototype used loose per-joint boxes. It passed
+penetration checks but falsely rejected two larger chassis in the passage and
+could jump the model to the other side. The tighter hulls remove that false
+conflict. Clearance checks therefore also enforce a continuity limit.
+
+The paired [BASTION cover fall](assets/botstrike/corpse-clearance/bastion-cover.mp4)
+and [FORGE corridor fall](assets/botstrike/corpse-clearance/forge-corridor.mp4)
+show identical native snapshots, models, collision boxes and cameras, with
+`aba5778` on the left. They are fixed-step visual fixtures, not real-time
+performance measurements or human acceptance.
+
+The [raw evidence](acceptance/hybrid-animation/audit-f03-clearance.json.gz)
+records the full map sweep and the targeted fall trajectories. Independent
+Three.js CPU skinning counts referenced body/badge vertices inside the boxes;
+it does not use the runtime hull solver to decide penetration. The targeted
+falls also check the first frame, consecutive motion, visibility return and
+unchanged player objects. The above-cover drop is a synthetic stress fixture,
+not a claim that ordinary native jumps reach that cover height.
+
+| Check | Floor-only `aba5778` | Correction |
+| --- | ---: | ---: |
+| Settled cases with referenced vertices inside a box | 8,334 / 9,180 | 0 / 9,180 |
+| Targeted falls with penetration in a sampled mesh frame | 221 / 288 | 0 / 288 |
+
+The static sweep covers all six chassis, all 43 map obstacles, four native-valid
+face positions where space allows, three yaw values and three standing death
+variants. The 288 trajectories cover eight fixtures, all chassis, three variants
+and standing/crouched starts. Skinning is checked every six 60 Hz frames;
+model/joint continuity is checked every frame. The maximum candidate model
+translation is 2.083334 units per frame (including vertical motion), and the
+maximum joint step is 3.014652. All 288 clear outgoing poses retain their first
+model position, and visibility re-entry has zero model-translation shift.
+
+Repeated settled poses reuse independently CPU-skinned points under rigid world
+translation in the collector, with at most 32 cached poses per chassis and 68
+direct-evaluation cross-checks. Animated fall samples never use that collector
+cache. This is separate from the runtime collision hulls and settled-offset cache.
+The correction also passes 105 JavaScript tests, the production build, the
+168-case/1,200-return F02 matrix, and the existing 48 ten-character fixtures
+with reduced motion and six lab viewport sizes. Timing remains advisory.
+
+This is an authored fall with a conservative clearance response. Production
+systems such as [Unreal's physics assets](https://dev.epicgames.com/documentation/en-us/unreal-engine/physics-asset-editor-in-unreal-engine)
+use articulated bodies and constraints. We apply the separation between visual
+animation and collision geometry, but do not implement their full ragdoll system.
+Individual limbs do not drape around edges; decorative geometry without a
+native collision box, impact-driven falling and horizontal momentum remain
+outside this correction. Broader human visual review remains open.
+
+```sh
+node --test tests/botstrike-corpse-clearance.test.mjs
+node tests/botstrike-corpse-clearance-browser.mjs
+MOTION_REFERENCE_WORKTREE=/path/to/unchanged-aba5778 node tools/capture-botstrike-corpse-clearance.mjs
 ```
 
 ## Performance policy for the remaining work

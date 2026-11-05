@@ -8,8 +8,8 @@ An implementation, an automated check, a rendered comparison and a human/device
 acceptance are different evidence. A row remains open until its own gate passes.
 
 The [strict-audit follow-up](animation-audit-follow-up.md) qualifies the earlier
-passes: F01 and F02 now have verified automated corrections. Cover interaction, living
-jump reconstruction, walking support coverage and human functional acceptance
+passes: F01–F03 now have verified automated corrections. Living jump
+reconstruction, walking support coverage and human functional acceptance
 remain open. Dedicated performance optimization/physical profiling are deferred
 under the [maintainer-approved advisory policy](acceptance/hybrid-animation/performance-policy.json). Audit IDs and this ledger's IDs differ.
 
@@ -49,3 +49,10 @@ than being inferred from software-rendered test passes.
 The walk/run follow-up was included in runtime `989a634` and has its own [comparison](walk-run-transitions.md) and [evidence record](acceptance/hybrid-animation/walk-run-transitions.json). Earlier human gait acceptance is scoped to the previously reviewed build; the new transitions still need human playtesting.
 
 The [posture follow-up](posture-transitions.md) adds 48 collapse/interruption cases, six airborne deaths and 96 crouch/jump configurations, including actual-ground landing, shared first/third-person crouch timing, dead-map/visibility resets and fresh-life fire. New human review remains open.
+
+Audit F03 adds clearance against the three current maps' native collision boxes.
+Its separate evidence covers 9,180 standing settled poses and 288 targeted falls,
+including crouched variants, corners, narrow corridors and a synthetic drop
+above cover. Skin-weight hulls constrain the cosmetic model; native state stays
+unchanged. This does not add articulated ragdoll dynamics or establish human
+acceptance. See the [F03 explanation and paired clips](animation-audit-follow-up.md#f03-give-an-authored-fall-room-to-fit).

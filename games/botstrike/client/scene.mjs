@@ -21,7 +21,7 @@ export function createWorld(canvas,spec){
  function consolidate(group){const batches=new Map();for(const m of [...group.children])if(m.isMesh){m.updateMatrix();const g=m.geometry.clone().applyMatrix4(m.matrix);if(!batches.has(m.material))batches.set(m.material,[]);batches.get(m.material).push(g);group.remove(m);m.geometry.dispose();}for(const [material,parts]of batches){const merged=new THREE.Mesh(mergeParts(parts),material);merged.castShadow=true;merged.receiveShadow=true;group.add(merged);parts.forEach(g=>g.dispose());}}
  const art=createArt(renderer,{mobile}),atmosphere=createAtmosphere(scene,2400,{mobile}),bots=[];
  const rim=new THREE.DirectionalLight(0x8ddae3,.9);rim.position.set(900,700,-1100);scene.add(rim);
- const signals=createTeamSignals(scene);const characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes});let firstPerson=null;
+ const signals=createTeamSignals(scene);const characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes,maps:spec.maps});let firstPerson=null;
  function robot(slot,hero,weapon){const bot=characters.actor(slot,hero,weapon);bot.rig.name=`hero-${hero}-slot-${slot}`;scene.add(bot.rig);return bot;}
  function viewModel(player){if(firstPerson?.hero!==player.hero||firstPerson?.slot!==player.slot){firstPerson?.dispose();firstPerson=characters.actor(player.slot,player.hero,player.weapon,{firstPerson:true});firstPerson.rig.scale.setScalar(.8);camera.add(firstPerson.rig);}return firstPerson;}
  const flash=new THREE.PointLight(0x80eaff,0,160,2);flash.visible=!mobile;camera.add(flash);flash.position.set(5,-4,-30);

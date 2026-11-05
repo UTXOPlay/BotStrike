@@ -15,7 +15,7 @@ const scene=new THREE.Scene();scene.background=new THREE.Color('#101c29');
 scene.add(new THREE.HemisphereLight(0xd0edff,0x5a6173,2));
 for(const [x,y,z,color]of [[-200,300,-300,0xd5ecff],[250,150,100,0xffbb88]]){const light=new THREE.DirectionalLight(color,3);light.position.set(x,y,z);scene.add(light);}
 const floor=new THREE.GridHelper(10000,200,0x537080,0x233747);scene.add(floor);
-const camera=new THREE.PerspectiveCamera(45,1,.5,10000),art=createArt(renderer,{mobile}),characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes}),baselineCharacters=createBaseline(art);scene.add(camera);
+const camera=new THREE.PerspectiveCamera(45,1,.5,10000),art=createArt(renderer,{mobile}),characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes,maps:spec.maps}),baselineCharacters=createBaseline(art);scene.add(camera);
 const modes=['baseline','candidate'],actors={},vector=new THREE.Vector3();
 const debugGroup=new THREE.Group();scene.add(debugGroup);
 const markers=Array.from({length:20},()=>{

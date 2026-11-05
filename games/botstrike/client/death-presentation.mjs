@@ -13,7 +13,7 @@ export class DeathPresentation{
  constructor(bones){this.bones=[...new Set(Object.values(bones))];this.positions=this.bones.map(()=>new Vector3());this.rotations=this.bones.map(()=>new Quaternion());this.reset();}
  reset(){this.active=false;this.started=0;this.height=0;this.vertical=0;this.yaw=0;this.fromPose=false;this.settled=false;this.clip=null;this.life=this.map=null;}
  begin(player,now,{fromPose=false,yaw=player.yaw,vertical=0,settled=false,clip=null,map=0}={}){
-  this.active=true;this.started=now;this.height=Math.max(0,player.position[1]);this.vertical=this.height>0?clamp(vertical,-300,220):0;this.yaw=yaw;this.fromPose=fromPose;this.settled=settled;this.clip=clip;this.life=player.life;this.map=map;
+  this.serial=(this.serial||0)+1;this.active=true;this.started=now;this.height=Math.max(0,player.position[1]);this.vertical=this.height>0?clamp(vertical,-300,220):0;this.yaw=yaw;this.fromPose=fromPose;this.settled=settled;this.clip=clip;this.life=player.life;this.map=map;
   if(fromPose)for(let i=0;i<this.bones.length;i++){this.positions[i].copy(this.bones[i].position);this.rotations[i].copy(this.bones[i].quaternion);}
  }
  apply(now,model,rig,{reduced=false,originY=this.height}={}){
