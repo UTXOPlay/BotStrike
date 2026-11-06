@@ -1,0 +1,87 @@
+{
+  "compressedTrace": {
+    "path": "prior-use-touch-use-observation.json.gz",
+    "uncompressedSha256": "8b9813d1c716746561c277c9ed07611051e76f9b40d012b1ede5023d1bb06853",
+    "uncompressedBytes": 336866,
+    "compressedBytes": 6188
+  },
+  "textLogNormalization": "Strip trailing horizontal whitespace and use one final newline; originals retained in local QA artifact directories. No runtime or test-source files normalized.",
+  "textLogs": {
+    "comms.log": {
+      "sourceSha256": "509a19837b910bf9f00a9e094aef0629708e7dd047b1d81aa8b7238d7866a433",
+      "storedSha256": "509a19837b910bf9f00a9e094aef0629708e7dd047b1d81aa8b7238d7866a433"
+    },
+    "failed-runs/build-bridge-cancelled.log": {
+      "sourceSha256": "47fe24baf4312e52d8928032a5f69997ec2f854b51cf4e7d3ace0de10a401b94",
+      "storedSha256": "47fe24baf4312e52d8928032a5f69997ec2f854b51cf4e7d3ace0de10a401b94"
+    },
+    "failed-runs/e5c-mobile-entry/comms-font.log": {
+      "sourceSha256": "9e0097bbc0bf98271575cd9bcde5076e7b1cfb51907d920bacd51a212118852f",
+      "storedSha256": "9b0dbdce04704b8a8296188aa236e9a2edd7ac6594e54f3a8ce31d2de7287efa"
+    },
+    "failed-runs/e5c-mobile-entry/comms-prior-id/prior-report-association-run-output.txt": {
+      "sourceSha256": "780c87a83fb208e3690edec5c039ba03dcfef91cc5fe1e092f911d13ef2a4fc5",
+      "storedSha256": "c42c77ba007310fc4b11b14555f1b28b67b72db3bf9307c509d4491ed8f7c29c"
+    },
+    "failed-runs/e5c-mobile-entry/image-build.log": {
+      "sourceSha256": "39d6b4e7245ebc2c3c5249995febab7633bc69c6bbd247a8c1809a0b16969876",
+      "storedSha256": "482498ad1485415c3e0559df3575b5aec010913b7381ad53debba57ed8d871db"
+    },
+    "failed-runs/e5c-mobile-entry/layout.log": {
+      "sourceSha256": "9b73cf67791e03ea278b6187eeebbff7c032347d45674f190df871a6f6d0f084",
+      "storedSha256": "9b73cf67791e03ea278b6187eeebbff7c032347d45674f190df871a6f6d0f084"
+    },
+    "failed-runs/e5c-mobile-entry/practice.log": {
+      "sourceSha256": "195ace145950e27f520029c3ffa0dbf6fcfbd6e2bea049cc22c2d17773c62cf2",
+      "storedSha256": "195ace145950e27f520029c3ffa0dbf6fcfbd6e2bea049cc22c2d17773c62cf2"
+    },
+    "failed-runs/e5c-mobile-entry/tactical-touch.log": {
+      "sourceSha256": "f093f10083e5203dcb3605682bbc8f7799662c2d418c34101acd807187d82a36",
+      "storedSha256": "f093f10083e5203dcb3605682bbc8f7799662c2d418c34101acd807187d82a36"
+    },
+    "failed-runs/v2-fixtures/touch-use.log": {
+      "sourceSha256": "bb8e1589435b4afd453cf768b06720521acc7909ab3833205df91e3b0ffcd15a",
+      "storedSha256": "bb8e1589435b4afd453cf768b06720521acc7909ab3833205df91e3b0ffcd15a"
+    },
+    "failed-runs/v2-preview-origin/comms.log": {
+      "sourceSha256": "e1bcd8e0719b74958458fa6bfd9d5bcc0dc26012d7c34c11adb9ac014749722d",
+      "storedSha256": "773fdfba0053beb397bdfe8867f36e6cae77d50c3b5c14cda25bb62aa44aba7a"
+    },
+    "failed-runs/workstation-guide-header.txt": {
+      "sourceSha256": "55764c169f9d3968ebbf177e68d27e2adbdbf03c939f47bc0da895037638606d",
+      "storedSha256": "d4a71889022628c8ea8886762bc4db3ba0a42414b07fd54b6adfa4439d336cce"
+    },
+    "image-build.log": {
+      "sourceSha256": "d3814695cd985f5022a8740d3e09af9eedbb375a05cc556e41cc6626cb5d900d",
+      "storedSha256": "f5c3dfb5151800d89ac838c8d5b0bbf2851238a62dd1abab8dcb621051f570f4"
+    },
+    "layout.log": {
+      "sourceSha256": "7bc6389c5dd119c6c2b24375a222893685245f8af7a65ee753a769632b8b30e3",
+      "storedSha256": "7bc6389c5dd119c6c2b24375a222893685245f8af7a65ee753a769632b8b30e3"
+    },
+    "practice.log": {
+      "sourceSha256": "ef5e1184e5c852158c2384d962124966bf97bdb79d4ca6dcdc23797660b81eb9",
+      "storedSha256": "ef5e1184e5c852158c2384d962124966bf97bdb79d4ca6dcdc23797660b81eb9"
+    },
+    "prior-candidate-v2/comms.log": {
+      "sourceSha256": "dd727f9e8e942983a622290db27f402b84e1a9e72a15db5107f79629c5402cca",
+      "storedSha256": "dd727f9e8e942983a622290db27f402b84e1a9e72a15db5107f79629c5402cca"
+    },
+    "prior-candidate-v2/image-build.log": {
+      "sourceSha256": "a2502cdc37cc82c73aa01ac2c2bc1eb44c340a290b6b4b6cacebdbb2a1b4cfa1",
+      "storedSha256": "18efb4e693b530b7577b3f18b158a772341548ec452af7019673cb3dd4657f1a"
+    },
+    "prior-candidate-v2/practice.log": {
+      "sourceSha256": "1f3723730963ad804a45a0f29e6cf99511a2fb4c057f1e0d9965560c7a28ac55",
+      "storedSha256": "1f3723730963ad804a45a0f29e6cf99511a2fb4c057f1e0d9965560c7a28ac55"
+    },
+    "tactical-desktop.log": {
+      "sourceSha256": "d09293a3c29389c8f285f78c4fc4cd28d0a4eeb0efdafbad242f3fffed677fd4",
+      "storedSha256": "d09293a3c29389c8f285f78c4fc4cd28d0a4eeb0efdafbad242f3fffed677fd4"
+    },
+    "tactical-touch.log": {
+      "sourceSha256": "b0d93bfd847900a2f646a8a0bef771b832115f393073ba3b8cc7aacec48f10d6",
+      "storedSha256": "b0d93bfd847900a2f646a8a0bef771b832115f393073ba3b8cc7aacec48f10d6"
+    }
+  }
+}

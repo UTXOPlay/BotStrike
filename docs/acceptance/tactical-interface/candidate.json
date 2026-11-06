@@ -1,0 +1,45 @@
+{
+  "scope": "UI presentation and interaction on Tactical V5; human gameplay/hardware gates remain open",
+  "imageTag": "botstrike:interface-v5-20261107-v3",
+  "imageId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+  "baseImageId": "sha256:c1a486aad6b0c3e7c9315335c301004a90a799f1052569dfc535d161bb753842",
+  "parentCommit": "acf12bf822ea86c3d2eb68f04219503605a2d1ba",
+  "branch": "codex/botstrike-tactical-core",
+  "pullRequest": "https://github.com/UTXOPlay/BotStrike/pull/46",
+  "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+  "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+  "previewUrl": "http://127.0.0.1:19925/games/botstrike/",
+  "noWebBindMount": true,
+  "runtimeSourceSha256": {
+    "games/botstrike/client/main.mjs": "834f548d5119a608cd82e0aaa1eef41c66f81f748dc495bd2d43cffb4fd2043f",
+    "games/botstrike/client/practice.mjs": "f5b582e23bf670a970d2cb1b9c21d4755af0d2c8c4b7b074f9e1d36a3dfae3c6",
+    "games/botstrike/client/quick-communications.mjs": "34123d4958e30d5a66b565425f5400ba4dd313620d658cbc86e51fa44c7eb86a",
+    "games/botstrike/client/tactical-view.mjs": "22bd1288fdfd490458932741239586c7754bb6f6b21e3f2b34574592a3771a13",
+    "games/botstrike/client/armory-interface.mjs": "65618d7ceaa86b25165dc99955416a4d2673c3e31cd7073150226e129c54e872",
+    "games/botstrike/client/interface-layout.mjs": "60ec04c308e2eaaebf354f22837c70a39c940937b584d62e719dfaa2bacf2487",
+    "games/botstrike/client/menu-focus.mjs": "48cd271e4f239cde2881616188c424832bcb2ca9715dd5434363c30cc21230ee",
+    "games/botstrike/client/dialogs.mjs": "422cb35540df2e8c70a44c33379000d372aa01e016cf162e86b8406cc1211208",
+    "games/botstrike/web/index.html": "aaeb0c8f90d521ebcf81c94d144a494bfdece7e59e5d76080327ee827cf384f8",
+    "games/botstrike/web/style.css": "a16029275b8406a3204fa122bd18b93fe095650b0a4e742937b1a2d68b5693fe",
+    "games/botstrike/web/tactical-interface.css": "7c362e5fad18220f30bddf8fb85b78a83f00137152a65c6d8186035638921bb1",
+    "games/botstrike/web/app.js": "51031bbbe2bad4e47db6c0ed5cdafc6e82b6f6ff469dcde2b56754f5d7f82b5d"
+  },
+  "browserTesting": {
+    "automated": true,
+    "humanParticipants": 0,
+    "renderer": "Chromium SwiftShader",
+    "desktopDpr": 0.5,
+    "mobileDpr": 1,
+    "notHardwarePerformanceAcceptance": true
+  },
+  "buildVerification": {
+    "javascriptTests": 217,
+    "hostTests": 4
+  },
+  "productionDeployment": false,
+  "verificationDate": "2026-11-07",
+  "qaContainerId": "9d71827d41ec8737c7fdf83e6b0224439765992d3c3a7dcf35cf43de780da0e1",
+  "servingContainerId": "3666edb5c23ca77c6ee5a46a3a50067cb47c1aef63bb8fbd90bdede57dd632d0",
+  "servingContainer": "botstrike-interface-review-20261107",
+  "freshReviewData": true
+}

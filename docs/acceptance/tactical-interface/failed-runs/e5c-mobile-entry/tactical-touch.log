@@ -1,0 +1,39 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.tap: Timeout 60000ms exceeded.
+Call log:
+[2m  - waiting for locator('#buy-open')[22m
+[2m    - locator resolved to <button id="buy-open" title="Open armory" aria-label="Open armory">…</button>[22m
+[2m  - attempting tap action[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying tap action[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" id="comms-open" aria-expanded="false" aria-haspopup="dialog" aria-controls="comms-wheel" aria-label="Open quick communication">PING / COMMS</button> from <section id="quick-comms">…</section> subtree intercepts pointer events[22m
+[2m  - retrying tap action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" id="comms-open" aria-expanded="false" aria-haspopup="dialog" aria-controls="comms-wheel" aria-label="Open quick communication">PING / COMMS</button> from <section id="quick-comms">…</section> subtree intercepts pointer events[22m
+[2m    - retrying tap action[22m
+[2m      - waiting 100ms[22m
+[2m    54 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" id="comms-open" aria-expanded="false" aria-haspopup="dialog" aria-controls="comms-wheel" aria-label="Open quick communication">PING / COMMS</button> from <section id="quick-comms">…</section> subtree intercepts pointer events[22m
+[2m     - retrying tap action[22m
+[2m       - waiting 500ms[22m
+
+    at /home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-tactical-browser.mjs:36:44 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.1

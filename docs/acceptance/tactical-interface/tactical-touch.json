@@ -1,0 +1,185 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "readyGate": true,
+  "privateRuleset": true,
+  "keyboardDrop": false,
+  "touchDrop": true,
+  "unarmedPresentation": true,
+  "nativeRecovery": true,
+  "teamBudgetPrivate": true,
+  "results": [
+    {
+      "width": 390,
+      "height": 844,
+      "portraitRotationGate": true
+    },
+    {
+      "view": "lobby-readiness",
+      "stage": "initial",
+      "nativeConnectedPilots": 1,
+      "nativeReadyPilots": 0,
+      "room": "78a429ca4e3437d4de8c55ea",
+      "progress": {
+        "max": 10,
+        "value": 0,
+        "position": 0,
+        "label": "Ready pilots"
+      }
+    },
+    {
+      "view": "lobby-readiness",
+      "stage": "peers-ready",
+      "nativeConnectedPilots": 10,
+      "nativeReadyPilots": 9,
+      "room": "78a429ca4e3437d4de8c55ea",
+      "progress": {
+        "max": 10,
+        "value": 9,
+        "position": 0.9,
+        "label": "Ready pilots"
+      }
+    },
+    {
+      "view": "lobby-readiness",
+      "stage": "all-ready",
+      "nativeConnectedPilots": 10,
+      "nativeReadyPilots": 10,
+      "room": "78a429ca4e3437d4de8c55ea",
+      "progress": {
+        "max": 10,
+        "value": 10,
+        "position": 1,
+        "label": "Ready pilots"
+      }
+    },
+    {
+      "view": "match-entry-controls",
+      "mobile": true,
+      "controls": {
+        "buy-open": {
+          "x": 116,
+          "y": 20,
+          "width": 48,
+          "height": 44,
+          "uncovered": true,
+          "font": 9
+        },
+        "comms-open": {
+          "x": 168,
+          "y": 20,
+          "width": 110,
+          "height": 44,
+          "uncovered": true,
+          "font": 12
+        }
+      },
+      "simulatedCssInsets": {
+        "top": 20,
+        "bottom": 24,
+        "left": 32,
+        "right": 32
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "dropButton": {
+        "x": 697,
+        "y": 88,
+        "width": 100,
+        "height": 44
+      }
+    },
+    {
+      "view": "use-recovery",
+      "mobile": true,
+      "cpuThrottleRate": 8,
+      "nativeRecoveryAcknowledged": true,
+      "releaseInputObserved": true,
+      "pointerEvents": [
+        {
+          "kind": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch",
+          "at": 1793988030615.7
+        },
+        {
+          "kind": "pointerup",
+          "trusted": true,
+          "pointerType": "touch",
+          "at": 1793988030619.6
+        },
+        {
+          "kind": "lostpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "at": 1793988030619.7
+        }
+      ],
+      "inputs": [
+        {
+          "seq": 98,
+          "interact": false,
+          "observedAt": 1793988028851
+        },
+        {
+          "seq": 99,
+          "interact": false,
+          "observedAt": 1793988029120
+        },
+        {
+          "seq": 100,
+          "interact": false,
+          "observedAt": 1793988029302
+        },
+        {
+          "seq": 101,
+          "interact": false,
+          "observedAt": 1793988029695
+        },
+        {
+          "seq": 102,
+          "interact": false,
+          "observedAt": 1793988029876
+        },
+        {
+          "seq": 103,
+          "interact": false,
+          "observedAt": 1793988030206
+        },
+        {
+          "seq": 104,
+          "interact": false,
+          "observedAt": 1793988030493
+        },
+        {
+          "seq": 105,
+          "interact": true,
+          "observedAt": 1793988030620
+        },
+        {
+          "seq": 106,
+          "interact": false,
+          "observedAt": 1793988030840
+        },
+        {
+          "seq": 107,
+          "interact": false,
+          "observedAt": 1793988031072
+        },
+        {
+          "seq": 108,
+          "interact": false,
+          "observedAt": 1793988031260
+        },
+        {
+          "seq": 109,
+          "interact": false,
+          "observedAt": 1793988031706
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,24 @@
+{
+  "checksCompleted": true,
+  "viewports": 6,
+  "pageErrors": [],
+  "processExitCode": 143,
+  "cleanProcessExitConfirmed": false,
+  "terminationCause": "Unknown SIGTERM after measurements/stdout; root did not terminate this suite. No assertion failure or exception stack after passed checks.",
+  "suiteNodeStillRunning": false,
+  "ownedRoomStatuses": [
+    {
+      "id": "148072cd092e11ea4e03a8fe",
+      "status": "cancelled",
+      "mode": "practice"
+    },
+    {
+      "id": "c0bd7cfa228b99e3a9a10761",
+      "status": "cancelled",
+      "mode": "practice"
+    }
+  ],
+  "roomsExplicitlyLeftBeforeSuccessOutput": true,
+  "noRuntimeOrHarnessChangesAfterRun": true,
+  "sourceHarnessSha256": "e608de3c85bd1f4b3dd8b1659ff9eba83d249f39cb899ea1063e00713b48ecbb"
+}

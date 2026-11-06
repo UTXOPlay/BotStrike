@@ -1,0 +1,412 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(Math.abs(event.position[2]-expected[1])<1e-7)\n",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2856703228166
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 213.8937530517578,
+        "left": 25,
+        "top": 130.59375,
+        "width": 238,
+        "height": 238
+      },
+      "wheel": {
+        "x": 620,
+        "y": 231.2109375,
+        "width": 680,
+        "height": 617.578125
+      },
+      "button": {
+        "x": 272,
+        "y": 129.59375,
+        "width": 120.65625,
+        "height": 44
+      },
+      "room": "42ca401995e2d11aeb50fdc8"
+    }
+  ],
+  "errors": [],
+  "diagnostics": [
+    {
+      "wire": [
+        {
+          "type": "communication",
+          "room": "42ca401995e2d11aeb50fdc8",
+          "tick": 52,
+          "comms": {
+            "revision": 1,
+            "events": [
+              {
+                "id": "42ca401995e2d11aeb50fdc8:0:1",
+                "sender": 0,
+                "kind": "hold",
+                "position": [
+                  0,
+                  0,
+                  -514.2856703228166
+                ],
+                "callout": "mid_lane",
+                "tick": 52,
+                "remainingMs": 4999.78211
+              }
+            ],
+            "muted": []
+          }
+        },
+        {
+          "type": "communication",
+          "room": "42ca401995e2d11aeb50fdc8",
+          "tick": 332,
+          "comms": {
+            "revision": 2,
+            "events": [
+              {
+                "id": "42ca401995e2d11aeb50fdc8:0:1",
+                "sender": 0,
+                "kind": "hold",
+                "position": [
+                  0,
+                  0,
+                  -514.2856703228166
+                ],
+                "callout": "mid_lane",
+                "tick": 52,
+                "remainingMs": 625
+              },
+              {
+                "id": "42ca401995e2d11aeb50fdc8:0:2",
+                "sender": 0,
+                "kind": "hold",
+                "position": [
+                  0,
+                  0,
+                  -514.285681382665
+                ],
+                "callout": "mid_lane",
+                "tick": 332,
+                "remainingMs": 4999.759722999996
+              }
+            ],
+            "muted": []
+          }
+        }
+      ],
+      "sent": [
+        {
+          "type": "comms",
+          "kind": "hold",
+          "map": 3,
+          "life": 2,
+          "position": [
+            0,
+            0,
+            -514.2856703228166
+          ],
+          "room": "42ca401995e2d11aeb50fdc8"
+        },
+        {
+          "type": "comms",
+          "kind": "hold",
+          "map": 3,
+          "life": 2,
+          "position": [
+            0,
+            0,
+            -514.285681382665
+          ],
+          "room": "42ca401995e2d11aeb50fdc8"
+        }
+      ],
+      "inputs": [
+        {
+          "seq": 82,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 83,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 84,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 85,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 86,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 87,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 88,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 89,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 90,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 91,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 92,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 93,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 94,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 95,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 96,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 97,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 98,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 99,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 100,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 101,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 102,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 103,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 104,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 105,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 106,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 107,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 108,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 109,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 110,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 111,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 112,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 113,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 114,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 115,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 116,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 117,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 118,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 119,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 120,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 121,
+          "x": 0,
+          "y": 0,
+          "jump": false,
+          "fire": false
+        }
+      ]
+    }
+  ]
+}

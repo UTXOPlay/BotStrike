@@ -1,0 +1,157 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "softwareRendering": true,
+  "physicalPerformanceAccepted": false,
+  "noUiOrNativeStateInjection": true,
+  "preferences": {
+    "motion": false,
+    "sound": false,
+    "renderFps": 30
+  },
+  "shots": [
+    {
+      "name": "lobby-1920x1080-dpr1",
+      "path": "/tmp/botstrike-ui-final-v3-visuals/lobby-1920x1080-dpr1.png",
+      "dpr": 1,
+      "cssViewport": [
+        1920,
+        1080
+      ],
+      "canvasBacking": [
+        1440,
+        810
+      ],
+      "native": null,
+      "archivePath": "screenshots/lobby-1920x1080-dpr1.png"
+    },
+    {
+      "name": "training-1920x1080-dpr1",
+      "path": "/tmp/botstrike-ui-final-v3-visuals/training-1920x1080-dpr1.png",
+      "dpr": 1,
+      "cssViewport": [
+        1920,
+        1080
+      ],
+      "canvasBacking": [
+        1440,
+        810
+      ],
+      "native": {
+        "room": "6919cdc725a0edb38fc520e3",
+        "status": "running",
+        "mode": "practice",
+        "tick": 502,
+        "drill": 0,
+        "ownHealth": 90,
+        "ownShots": 0,
+        "ownedWeapons": 12
+      },
+      "archivePath": "screenshots/training-1920x1080-dpr1.png"
+    },
+    {
+      "name": "armory-1920x1080-dpr1",
+      "path": "/tmp/botstrike-ui-final-v3-visuals/armory-1920x1080-dpr1.png",
+      "dpr": 1,
+      "cssViewport": [
+        1920,
+        1080
+      ],
+      "canvasBacking": [
+        1440,
+        810
+      ],
+      "native": {
+        "room": "6919cdc725a0edb38fc520e3",
+        "status": "running",
+        "mode": "practice",
+        "tick": 664,
+        "drill": 0,
+        "ownHealth": 90,
+        "ownShots": 0,
+        "ownedWeapons": 12
+      },
+      "archivePath": "screenshots/armory-1920x1080-dpr1.png"
+    },
+    {
+      "name": "portrait-gate-390x844-dpr1",
+      "path": "/tmp/botstrike-ui-final-v3-visuals/portrait-gate-390x844-dpr1.png",
+      "dpr": 1,
+      "cssViewport": [
+        390,
+        844
+      ],
+      "canvasBacking": [
+        292,
+        633
+      ],
+      "native": null,
+      "archivePath": "screenshots/portrait-gate-390x844-dpr1.png"
+    },
+    {
+      "name": "lobby-844x390-dpr1",
+      "path": "/tmp/botstrike-ui-final-v3-visuals/lobby-844x390-dpr1.png",
+      "dpr": 1,
+      "cssViewport": [
+        844,
+        390
+      ],
+      "canvasBacking": [
+        633,
+        292
+      ],
+      "native": null,
+      "archivePath": "screenshots/lobby-844x390-dpr1.png"
+    },
+    {
+      "name": "training-844x390-dpr1",
+      "path": "/tmp/botstrike-ui-final-v3-visuals/training-844x390-dpr1.png",
+      "dpr": 1,
+      "cssViewport": [
+        844,
+        390
+      ],
+      "canvasBacking": [
+        633,
+        292
+      ],
+      "native": {
+        "room": "37342b58ec6e49505e25acda",
+        "status": "running",
+        "mode": "practice",
+        "tick": 174,
+        "drill": 0,
+        "ownHealth": 90,
+        "ownShots": 0,
+        "ownedWeapons": 12
+      },
+      "archivePath": "screenshots/training-844x390-dpr1.png"
+    },
+    {
+      "name": "armory-844x390-dpr1",
+      "path": "/tmp/botstrike-ui-final-v3-visuals/armory-844x390-dpr1.png",
+      "dpr": 1,
+      "cssViewport": [
+        844,
+        390
+      ],
+      "canvasBacking": [
+        633,
+        292
+      ],
+      "native": {
+        "room": "37342b58ec6e49505e25acda",
+        "status": "running",
+        "mode": "practice",
+        "tick": 258,
+        "drill": 0,
+        "ownHealth": 90,
+        "ownShots": 0,
+        "ownedWeapons": 12
+      },
+      "archivePath": "screenshots/armory-844x390-dpr1.png"
+    }
+  ],
+  "errors": [],
+  "imageId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631"
+}

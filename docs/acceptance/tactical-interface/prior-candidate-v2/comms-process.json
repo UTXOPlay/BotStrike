@@ -1,0 +1,10 @@
+{
+  "imageId": "sha256:29a483f16f3aa0f28ae337fd805332c607e911ff76e1fcd875e1e2be4618fb5e",
+  "command": "node tests/botstrike-comms-browser.mjs",
+  "cohort": "all",
+  "processExitCode": 0,
+  "checksCompleted": true,
+  "cleanProcessExitConfirmed": true,
+  "humanParticipants": 0,
+  "priorExit143": "Earlier agent wrapper returned143 after functional completion; retained separately. Direct Node rerun completed with exit0."
+}

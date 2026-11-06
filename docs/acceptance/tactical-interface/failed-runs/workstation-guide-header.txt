@@ -1,0 +1,129 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.interface
+#1 transferring dockerfile: 2.17kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 10.5s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/botstrike:comms-v5-4cb119b7
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 ...
+
+#7 [bound 1/1] FROM docker.io/library/botstrike:comms-v5-4cb119b7
+#7 DONE 0.1s
+
+#6 [internal] load build context
+#6 transferring context: 68.25MB 0.2s done
+#6 DONE 0.2s
+
+#8 [ui  1/20] WORKDIR /work
+#8 DONE 0.1s
+
+#9 [ui  2/20] COPY package.json package-lock.json ./
+#9 DONE 0.1s
+
+#10 [ui  3/20] RUN npm ci --include=dev --ignore-scripts --no-audit --no-fund
+#10 2.900
+#10 2.900 added 72 packages in 3s
+#10 DONE 3.1s
+
+#11 [ui  4/20] COPY botstrike ./botstrike
+#11 DONE 0.0s
+
+#12 [ui  5/20] COPY botstrike-myelin ./botstrike-myelin
+#12 DONE 0.0s
+
+#13 [ui  6/20] COPY botstrike-service ./botstrike-service
+#13 DONE 0.0s
+
+#14 [ui  7/20] COPY host ./host
+#14 DONE 0.0s
+
+#15 [ui  8/20] COPY shared ./shared
+#15 DONE 0.0s
+
+#16 [ui  9/20] COPY games ./games
+#16 DONE 0.1s
+
+#17 [ui 10/20] COPY assets ./assets
+#17 DONE 0.1s
+
+#18 [ui 11/20] COPY public ./public
+#18 DONE 0.0s
+
+#19 [ui 12/20] COPY game-host.json ./game-host.json
+#19 DONE 0.0s
+
+#20 [ui 13/20] COPY tools ./tools
+#20 DONE 0.0s
+
+#21 [ui 14/20] COPY tests ./tests
+#21 DONE 0.0s
+
+#22 [ui 15/20] COPY docs/acceptance/tactical-interface/binding.json ./interface-binding.json
+#22 DONE 0.0s
+
+#23 [ui 16/20] COPY docs/acceptance/arsenal-audio/gait-calibration.json ./docs/acceptance/arsenal-audio/gait-calibration.json
+#23 DONE 0.0s
+
+#24 [ui 17/20] COPY --from=bound /app/release ./release
+#24 DONE 0.1s
+
+#25 [ui 18/20] RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{modelDigest}from'./tools/damage-contract-source.mjs';const m=JSON.parse(readFileSync('interface-binding.json'));if(modelDigest()!==m.nativeModelSha256)throw Error('Native model changed');for(const[p,h]of Object.entries(m.protectedFiles)){if(p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected runtime changed: '+p)}"
+#25 DONE 0.3s
+
+#26 [ui 19/20] RUN mkdir interface-validation && (node --test --test-concurrency=4 tests/*.test.mjs > interface-validation/unit.tap || { cat interface-validation/unit.tap; exit 1; }) && (npm run test:host > interface-validation/host.tap || { cat interface-validation/host.tap; exit 1; }) && npm run build
+#26 12.26
+#26 12.26 > botstrike@1.4.2 build
+#26 12.26 > node tools/build-web.mjs
+#26 12.26
+#26 12.37 Built standalone BotStrike
+#26 DONE 12.4s
+
+#27 [ui 20/20] RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}"
+#27 0.066 file:///work/[eval1]:1
+#27 0.066 import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}
+#27 0.066                                                                                                                                                                                                                                                                                                ^
+#27 0.066
+#27 0.066 Error: Protected web contract changed: dist/botstrike/damage-contract.json
+#27 0.066     at file:///work/[eval1]:1:288
+#27 0.066     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#27 0.066     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:282:26)
+#27 0.066     at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:278:20)
+#27 0.066     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+#27 0.066
+#27 0.066 Node.js v22.23.4
+#27 ERROR: process "/bin/sh -c node --input-type=module -e \"import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}\"" did not complete successfully: exit code: 1
+------
+ > [ui 20/20] RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}":
+0.066                                                                                                                                                                                                                                                                                                ^
+0.066
+0.066 Error: Protected web contract changed: dist/botstrike/damage-contract.json
+0.066     at file:///work/[eval1]:1:288
+0.066     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+0.066     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:282:26)
+0.066     at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:278:20)
+0.066     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0.066
+0.066 Node.js v22.23.4
+------
+Dockerfile.interface:26
+--------------------
+  24 |     RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{modelDigest}from'./tools/damage-contract-source.mjs';const m=JSON.parse(readFileSync('interface-binding.json'));if(modelDigest()!==m.nativeModelSha256)throw Error('Native model changed');for(const[p,h]of Object.entries(m.protectedFiles)){if(p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected runtime changed: '+p)}"
+  25 |     RUN mkdir interface-validation && (node --test --test-concurrency=4 tests/*.test.mjs > interface-validation/unit.tap || { cat interface-validation/unit.tap; exit 1; }) && (npm run test:host > interface-validation/host.tap || { cat interface-validation/host.tap; exit 1; }) && npm run build
+  26 | >>> RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}"
+  27 |     FROM bound
+  28 |     COPY --from=ui /work/dist /app/dist
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c node --input-type=module -e \"import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}\"" did not complete successfully: exit code: 1

@@ -1,0 +1,481 @@
+{
+  "error": "TimeoutError: locator.click: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#immersive-enter')\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"primary\" id=\"immersive-enter\" aria-label=\"Enter fullscreen\" title=\"Enter fullscreen and landscape\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    112 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m        - element is not visible\u001b[22m\n\u001b[2m      - retrying click action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n",
+  "results": [
+    {
+      "view": "armory",
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "nativeOwned": 0,
+      "nativeUnowned": 1,
+      "purchaseConsequenceChecked": true,
+      "layout": {
+        "header": {
+          "x": 191,
+          "y": 21,
+          "width": 1538,
+          "height": 244.828125
+        },
+        "firstCard": {
+          "x": 213,
+          "y": 285.828125,
+          "width": 288.5,
+          "height": 305.921875
+        },
+        "tools": {
+          "x": 1417,
+          "y": 285.828125,
+          "width": 290,
+          "height": 491.78125
+        },
+        "catalogFirst": true,
+        "horizontalOverflow": false
+      },
+      "setupBox": {
+        "x": 1430,
+        "y": 377.25,
+        "width": 264,
+        "height": 44
+      }
+    },
+    {
+      "view": "training",
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "hud": {
+        "x": 24,
+        "y": 387.59375,
+        "width": 345.59375,
+        "height": 158.28125
+      },
+      "forbiddenBoxes": {
+        "#radar": {
+          "x": 24,
+          "y": 129.59375,
+          "width": 240,
+          "height": 240
+        }
+      },
+      "resetAccepted": true,
+      "reportIdentityPreserved": true,
+      "simulatedCssInsets": null
+    },
+    {
+      "view": "armory",
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "nativeOwned": 0,
+      "nativeUnowned": -1,
+      "purchaseConsequenceChecked": false,
+      "layout": {
+        "header": {
+          "x": 191,
+          "y": 21,
+          "width": 1538,
+          "height": 244.828125
+        },
+        "firstCard": {
+          "x": 213,
+          "y": 285.828125,
+          "width": 288.5,
+          "height": 305.921875
+        },
+        "tools": {
+          "x": 1417,
+          "y": 285.828125,
+          "width": 290,
+          "height": 491.78125
+        },
+        "catalogFirst": true,
+        "horizontalOverflow": false
+      },
+      "setupBox": {
+        "x": 1430,
+        "y": 377.25,
+        "width": 264,
+        "height": 44
+      }
+    },
+    {
+      "view": "training",
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "hud": {
+        "x": 24,
+        "y": 467.59375,
+        "width": 420,
+        "height": 173.375
+      },
+      "forbiddenBoxes": {
+        "#radar": {
+          "x": 24,
+          "y": 129.59375,
+          "width": 320,
+          "height": 320
+        }
+      },
+      "resetAccepted": true,
+      "reportIdentityPreserved": true,
+      "simulatedCssInsets": null
+    },
+    {
+      "view": "armory",
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "nativeOwned": 0,
+      "nativeUnowned": -1,
+      "purchaseConsequenceChecked": false,
+      "layout": {
+        "header": {
+          "x": 511,
+          "y": 21,
+          "width": 1538,
+          "height": 286.921875
+        },
+        "firstCard": {
+          "x": 533,
+          "y": 327.921875,
+          "width": 288.5,
+          "height": 398.40625
+        },
+        "tools": {
+          "x": 1737,
+          "y": 327.921875,
+          "width": 290,
+          "height": 583.25
+        },
+        "catalogFirst": true,
+        "horizontalOverflow": false
+      },
+      "setupBox": {
+        "x": 1750,
+        "y": 425.5,
+        "width": 264,
+        "height": 49
+      }
+    },
+    {
+      "view": "training",
+      "width": 2560,
+      "height": 1440,
+      "mobile": false,
+      "hud": {
+        "x": 24,
+        "y": 510.796875,
+        "width": 420,
+        "height": 177.875
+      },
+      "forbiddenBoxes": {
+        "#radar": {
+          "x": 24,
+          "y": 172.796875,
+          "width": 320,
+          "height": 320
+        }
+      },
+      "resetAccepted": true,
+      "reportIdentityPreserved": true,
+      "simulatedCssInsets": null
+    },
+    {
+      "view": "armory",
+      "width": 2560,
+      "height": 1440,
+      "mobile": false,
+      "nativeOwned": 0,
+      "nativeUnowned": -1,
+      "purchaseConsequenceChecked": false,
+      "layout": {
+        "header": {
+          "x": 511,
+          "y": 21,
+          "width": 1538,
+          "height": 294.578125
+        },
+        "firstCard": {
+          "x": 533,
+          "y": 335.578125,
+          "width": 288.5,
+          "height": 416.484375
+        },
+        "tools": {
+          "x": 1737,
+          "y": 335.578125,
+          "width": 290,
+          "height": 648
+        },
+        "catalogFirst": true,
+        "horizontalOverflow": false
+      },
+      "setupBox": {
+        "x": 1750,
+        "y": 447.578125,
+        "width": 264,
+        "height": 51
+      }
+    },
+    {
+      "view": "training",
+      "width": 3840,
+      "height": 2160,
+      "mobile": false,
+      "hud": {
+        "x": 24,
+        "y": 578,
+        "width": 420,
+        "height": 202.28125
+      },
+      "forbiddenBoxes": {
+        "#radar": {
+          "x": 24,
+          "y": 200,
+          "width": 360,
+          "height": 360
+        }
+      },
+      "resetAccepted": true,
+      "reportIdentityPreserved": true,
+      "simulatedCssInsets": null
+    },
+    {
+      "view": "armory",
+      "width": 3840,
+      "height": 2160,
+      "mobile": false,
+      "nativeOwned": 0,
+      "nativeUnowned": -1,
+      "purchaseConsequenceChecked": false,
+      "layout": {
+        "header": {
+          "x": 821,
+          "y": 132.03125,
+          "width": 2198,
+          "height": 358.984375
+        },
+        "firstCard": {
+          "x": 849,
+          "y": 519.015625,
+          "width": 411,
+          "height": 486.984375
+        },
+        "tools": {
+          "x": 2551,
+          "y": 519.015625,
+          "width": 440,
+          "height": 733.546875
+        },
+        "catalogFirst": true,
+        "horizontalOverflow": false,
+        "fonts": [
+          30,
+          28,
+          24
+        ]
+      },
+      "setupBox": {
+        "x": 2564,
+        "y": 628.015625,
+        "width": 320,
+        "height": 62
+      }
+    },
+    {
+      "view": "portrait",
+      "width": 390,
+      "height": 844,
+      "gameOwnedGate": true
+    },
+    {
+      "view": "training",
+      "width": 844,
+      "height": 390,
+      "mobile": true,
+      "hud": {
+        "x": 14,
+        "y": 66,
+        "width": 252,
+        "height": 98.1875
+      },
+      "forbiddenBoxes": {
+        "#vitals-state": {
+          "x": 200,
+          "y": 330,
+          "width": 102.59375,
+          "height": 46
+        },
+        "#touch-jump": {
+          "x": 14,
+          "y": 214,
+          "width": 48,
+          "height": 44
+        },
+        "#touch-crouch": {
+          "x": 72,
+          "y": 214,
+          "width": 48,
+          "height": 44
+        },
+        "#crosshair": {
+          "x": 422,
+          "y": 195,
+          "width": 0,
+          "height": 0
+        }
+      },
+      "resetAccepted": true,
+      "reportIdentityPreserved": true,
+      "simulatedCssInsets": null
+    },
+    {
+      "view": "armory",
+      "width": 844,
+      "height": 390,
+      "mobile": true,
+      "nativeOwned": 0,
+      "nativeUnowned": -1,
+      "purchaseConsequenceChecked": false,
+      "layout": {
+        "header": {
+          "x": 15,
+          "y": 7,
+          "width": 814,
+          "height": 175
+        },
+        "firstCard": {
+          "x": 29,
+          "y": 194,
+          "width": 255.328125,
+          "height": 233.734375
+        },
+        "tools": {
+          "x": 29,
+          "y": 1170.9375,
+          "width": 786,
+          "height": 407
+        },
+        "catalogFirst": true,
+        "horizontalOverflow": false
+      },
+      "setupBox": {
+        "x": 42,
+        "y": 171.4375,
+        "width": 229.328125,
+        "height": 44
+      }
+    },
+    {
+      "view": "training",
+      "width": 844,
+      "height": 390,
+      "mobile": true,
+      "hud": {
+        "x": 32,
+        "y": 76,
+        "width": 252,
+        "height": 98.1875
+      },
+      "forbiddenBoxes": {
+        "#vitals-state": {
+          "x": 218,
+          "y": 320,
+          "width": 102.59375,
+          "height": 46
+        },
+        "#touch-jump": {
+          "x": 32,
+          "y": 204,
+          "width": 48,
+          "height": 44
+        },
+        "#touch-crouch": {
+          "x": 90,
+          "y": 204,
+          "width": 48,
+          "height": 44
+        },
+        "#crosshair": {
+          "x": 422,
+          "y": 195,
+          "width": 0,
+          "height": 0
+        }
+      },
+      "resetAccepted": true,
+      "reportIdentityPreserved": true,
+      "simulatedCssInsets": {
+        "top": 20,
+        "bottom": 24,
+        "left": 32,
+        "right": 32
+      }
+    }
+  ],
+  "errors": [],
+  "diagnostics": [
+    {
+      "url": "http://127.0.0.1:19925/games/botstrike/",
+      "playing": "false",
+      "active": "",
+      "rects": {
+        "#practice-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "#radar": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "#vitals-state": {
+          "x": 218,
+          "y": 320,
+          "width": 102.59375,
+          "height": 46
+        },
+        "#touch-jump": {
+          "x": 32,
+          "y": 204,
+          "width": 48,
+          "height": 44
+        },
+        "#touch-crouch": {
+          "x": 90,
+          "y": 204,
+          "width": 48,
+          "height": 44
+        },
+        "#practice-panel": {
+          "x": 32,
+          "y": 244.796875,
+          "width": 780,
+          "height": 740.328125
+        },
+        "#resume": {
+          "x": 32,
+          "y": 186.796875,
+          "width": 160,
+          "height": 44
+        },
+        ".armory-header": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "#buy-items": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        }
+      }
+    }
+  ]
+}

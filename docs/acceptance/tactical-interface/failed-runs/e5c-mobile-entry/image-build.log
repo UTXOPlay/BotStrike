@@ -1,0 +1,108 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.interface
+#1 transferring dockerfile: 2.41kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 8.8s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/botstrike:comms-v5-4cb119b7
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [bound 1/1] FROM docker.io/library/botstrike:comms-v5-4cb119b7
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 68.26MB 0.2s done
+#7 DONE 0.2s
+
+#8 [ui  7/21] COPY host ./host
+#8 CACHED
+
+#9 [ui  5/21] COPY botstrike-myelin ./botstrike-myelin
+#9 CACHED
+
+#10 [ui  2/21] COPY package.json package-lock.json ./
+#10 CACHED
+
+#11 [ui  3/21] RUN npm ci --include=dev --ignore-scripts --no-audit --no-fund
+#11 CACHED
+
+#12 [ui  6/21] COPY botstrike-service ./botstrike-service
+#12 CACHED
+
+#13 [ui  4/21] COPY botstrike ./botstrike
+#13 CACHED
+
+#14 [ui  1/21] WORKDIR /work
+#14 CACHED
+
+#15 [ui  8/21] COPY shared ./shared
+#15 CACHED
+
+#6 [bound 1/1] FROM docker.io/library/botstrike:comms-v5-4cb119b7
+#6 CACHED
+
+#16 [ui  9/21] COPY games ./games
+#16 DONE 0.1s
+
+#17 [ui 10/21] COPY assets ./assets
+#17 DONE 0.1s
+
+#18 [ui 11/21] COPY public ./public
+#18 DONE 0.0s
+
+#19 [ui 12/21] COPY game-host.json ./game-host.json
+#19 DONE 0.0s
+
+#20 [ui 13/21] COPY tools ./tools
+#20 DONE 0.0s
+
+#21 [ui 14/21] COPY tests ./tests
+#21 DONE 0.0s
+
+#22 [ui 15/21] COPY docs/acceptance/tactical-interface/binding.json ./interface-binding.json
+#22 DONE 0.0s
+
+#23 [ui 16/21] COPY docs/acceptance/arsenal-audio/gait-calibration.json ./docs/acceptance/arsenal-audio/gait-calibration.json
+#23 DONE 0.0s
+
+#24 [ui 17/21] COPY --from=bound /app/release ./release
+#24 DONE 0.1s
+
+#25 [ui 18/21] COPY --from=bound /app/dist/botstrike/damage-contract.json ./games/botstrike/web/damage-contract.json
+#25 DONE 0.0s
+
+#26 [ui 19/21] RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{modelDigest}from'./tools/damage-contract-source.mjs';const m=JSON.parse(readFileSync('interface-binding.json'));if(modelDigest()!==m.nativeModelSha256)throw Error('Native model changed');for(const[p,h]of Object.entries(m.protectedFiles)){if(p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected runtime changed: '+p)}"
+#26 DONE 0.3s
+
+#27 [ui 20/21] RUN mkdir interface-validation && (node --test --test-concurrency=4 tests/*.test.mjs > interface-validation/unit.tap || { cat interface-validation/unit.tap; exit 1; }) && (npm run test:host > interface-validation/host.tap || { cat interface-validation/host.tap; exit 1; }) && npm run build
+#27 12.16
+#27 12.16 > botstrike@1.4.2 build
+#27 12.16 > node tools/build-web.mjs
+#27 12.16
+#27 12.27 Built standalone BotStrike
+#27 DONE 12.3s
+
+#28 [ui 21/21] RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}"
+#28 DONE 0.1s
+
+#29 [stage-2 1/2] COPY --from=ui /work/dist /app/dist
+#29 DONE 0.0s
+
+#30 [stage-2 2/2] COPY --from=ui /work/interface-validation /app/build-validation/interface
+#30 DONE 0.0s
+
+#31 exporting to image
+#31 exporting layers 0.0s done
+#31 writing image sha256:e5c6283f4dde3b347c4ccdd7e1b3521b8553592ee64e64573156f32244bcd4b1 done
+#31 naming to docker.io/library/botstrike:interface-v5-20261107 done
+#31 DONE 0.0s

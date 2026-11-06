@@ -1,0 +1,17 @@
+{
+  "imageId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+  "baseUrl": "http://127.0.0.1:19925",
+  "playwrightEntry": "/opt/codex-desktop/resources/cua_node/lib/node_modules/playwright/index.mjs",
+  "chromiumPath": "/home/arthur/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell",
+  "harnessSha256": {
+    "tests/botstrike-tactical-ui-browser.mjs": "2443cb6ce6116c169fb73e10fc31e044934fe7744bb0f6d31daff5217a2f15bd",
+    "tests/botstrike-comms-browser.mjs": "e608de3c85bd1f4b3dd8b1659ff9eba83d249f39cb899ea1063e00713b48ecbb",
+    "tests/botstrike-practice-browser.mjs": "5eb64b8f00617a924e689daefebd1062f710654f0814d3825c92c66369f7eb1e",
+    "tests/botstrike-tactical-browser.mjs": "e4f73dd0e02a162b9c5861b837c84d9b545aa6427c2a69de9819ce5e86deaab9",
+    "tests/botstrike-menu-focus-browser.mjs": "00a2acb06015e0d3238bd326e3b416b97363ce1b664572890077cd5a08bfd6fd",
+    "tests/mobile-viewport.mjs": "75fe53558cc117238c1ff187c170eb64281dd7c599e8516cbaa97b8b241c7c48",
+    "tests/browser-native-state.mjs": "7e3147aa553eba06f545f76fcf9beefb4c8067c0825d6d28ac02987cc226c3cd",
+    "tests/botstrike-browser-room.mjs": "9f53a5d7bf8c68ec18eb33d80743cba6d3a2601c4a89c8cbffe6600693384350"
+  },
+  "standaloneFocusFixture": "DOM-only; directly imports shared focus helper and actual dialogs; does not use a Native room or inject Native/network state"
+}

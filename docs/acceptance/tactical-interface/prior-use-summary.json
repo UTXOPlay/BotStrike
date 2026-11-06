@@ -1,0 +1,791 @@
+{
+  "diagnosticExitCode": 0,
+  "humanParticipants": 0,
+  "room": "5ae720037a6ab5ef61f276d7",
+  "events": [
+    {
+      "afterDownMs": 0,
+      "stage": "before-use",
+      "type": "pointerdown",
+      "phase": "capture",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": true,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 0.1,
+      "stage": "before-use",
+      "type": "pointerdown",
+      "phase": "bubble",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": true,
+      "buttonHasCapture": true,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 0.2,
+      "stage": "before-use",
+      "type": "gotpointercapture",
+      "phase": "capture",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": true,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 0.2,
+      "stage": "before-use",
+      "type": "gotpointercapture",
+      "phase": "bubble",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": true,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 0.2,
+      "stage": "before-use",
+      "type": "pointerup",
+      "phase": "capture",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": true,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 0.2,
+      "stage": "before-use",
+      "type": "pointerup",
+      "phase": "bubble",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": true,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 0.3,
+      "stage": "before-use",
+      "type": "lostpointercapture",
+      "phase": "capture",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": false,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 0.3,
+      "stage": "before-use",
+      "type": "lostpointercapture",
+      "phase": "bubble",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": false,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 40.4,
+      "stage": "before-use",
+      "type": "click",
+      "phase": "capture",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": false,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    },
+    {
+      "afterDownMs": 40.5,
+      "stage": "before-use",
+      "type": "click",
+      "phase": "bubble",
+      "target": {
+        "tag": "BUTTON",
+        "id": "touch-interact"
+      },
+      "pointerId": 4,
+      "pointerType": "touch",
+      "isTrusted": true,
+      "defaultPrevented": false,
+      "buttonHasCapture": false,
+      "ui": {
+        "playing": "true",
+        "gamepad": "false",
+        "documentHidden": false,
+        "gateBlocked": false,
+        "fullscreen": true,
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "buy-open"
+        },
+        "elements": {
+          "panel": {
+            "hidden": true,
+            "inert": false
+          },
+          "hud": {
+            "hidden": false,
+            "inert": false
+          },
+          "touch": {
+            "hidden": false,
+            "inert": false
+          },
+          "buy-menu": {
+            "hidden": true,
+            "inert": false
+          },
+          "scoreboard": {
+            "hidden": true,
+            "inert": false
+          },
+          "immersive-gate": {
+            "hidden": true,
+            "inert": false
+          }
+        }
+      }
+    }
+  ],
+  "allBrowserSentInputCount": 200,
+  "interactSentCount": 1,
+  "interactSequences": [
+    187
+  ],
+  "nearUseInputs": [
+    {
+      "afterDownMs": -84.1,
+      "interact": false,
+      "seq": 185,
+      "stage": "before-use",
+      "playing": "true",
+      "documentHidden": false,
+      "gateBlocked": false,
+      "elements": {
+        "panel": {
+          "hidden": true,
+          "inert": false
+        },
+        "hud": {
+          "hidden": false,
+          "inert": false
+        },
+        "touch": {
+          "hidden": false,
+          "inert": false
+        },
+        "buy-menu": {
+          "hidden": true,
+          "inert": false
+        },
+        "scoreboard": {
+          "hidden": true,
+          "inert": false
+        },
+        "immersive-gate": {
+          "hidden": true,
+          "inert": false
+        }
+      }
+    },
+    {
+      "afterDownMs": -1.5,
+      "interact": false,
+      "seq": 186,
+      "stage": "before-use",
+      "playing": "true",
+      "documentHidden": false,
+      "gateBlocked": false,
+      "elements": {
+        "panel": {
+          "hidden": true,
+          "inert": false
+        },
+        "hud": {
+          "hidden": false,
+          "inert": false
+        },
+        "touch": {
+          "hidden": false,
+          "inert": false
+        },
+        "buy-menu": {
+          "hidden": true,
+          "inert": false
+        },
+        "scoreboard": {
+          "hidden": true,
+          "inert": false
+        },
+        "immersive-gate": {
+          "hidden": true,
+          "inert": false
+        }
+      }
+    },
+    {
+      "afterDownMs": 82.4,
+      "interact": true,
+      "seq": 187,
+      "stage": "before-use",
+      "playing": "true",
+      "documentHidden": false,
+      "gateBlocked": false,
+      "elements": {
+        "panel": {
+          "hidden": true,
+          "inert": false
+        },
+        "hud": {
+          "hidden": false,
+          "inert": false
+        },
+        "touch": {
+          "hidden": false,
+          "inert": false
+        },
+        "buy-menu": {
+          "hidden": true,
+          "inert": false
+        },
+        "scoreboard": {
+          "hidden": true,
+          "inert": false
+        },
+        "immersive-gate": {
+          "hidden": true,
+          "inert": false
+        }
+      }
+    },
+    {
+      "afterDownMs": 168.2,
+      "interact": false,
+      "seq": 188,
+      "stage": "after-use",
+      "playing": "true",
+      "documentHidden": false,
+      "gateBlocked": false,
+      "elements": {
+        "panel": {
+          "hidden": true,
+          "inert": false
+        },
+        "hud": {
+          "hidden": false,
+          "inert": false
+        },
+        "touch": {
+          "hidden": false,
+          "inert": false
+        },
+        "buy-menu": {
+          "hidden": true,
+          "inert": false
+        },
+        "scoreboard": {
+          "hidden": true,
+          "inert": false
+        },
+        "immersive-gate": {
+          "hidden": true,
+          "inert": false
+        }
+      }
+    },
+    {
+      "afterDownMs": 258.9,
+      "interact": false,
+      "seq": 189,
+      "stage": "after-use",
+      "playing": "true",
+      "documentHidden": false,
+      "gateBlocked": false,
+      "elements": {
+        "panel": {
+          "hidden": true,
+          "inert": false
+        },
+        "hud": {
+          "hidden": false,
+          "inert": false
+        },
+        "touch": {
+          "hidden": false,
+          "inert": false
+        },
+        "buy-menu": {
+          "hidden": true,
+          "inert": false
+        },
+        "scoreboard": {
+          "hidden": true,
+          "inert": false
+        },
+        "immersive-gate": {
+          "hidden": true,
+          "inert": false
+        }
+      }
+    },
+    {
+      "afterDownMs": 349.2,
+      "interact": false,
+      "seq": 190,
+      "stage": "after-use",
+      "playing": "true",
+      "documentHidden": false,
+      "gateBlocked": false,
+      "elements": {
+        "panel": {
+          "hidden": true,
+          "inert": false
+        },
+        "hud": {
+          "hidden": false,
+          "inert": false
+        },
+        "touch": {
+          "hidden": false,
+          "inert": false
+        },
+        "buy-menu": {
+          "hidden": true,
+          "inert": false
+        },
+        "scoreboard": {
+          "hidden": true,
+          "inert": false
+        },
+        "immersive-gate": {
+          "hidden": true,
+          "inert": false
+        }
+      }
+    },
+    {
+      "afterDownMs": 440.1,
+      "interact": false,
+      "seq": 191,
+      "stage": "after-use",
+      "playing": "true",
+      "documentHidden": false,
+      "gateBlocked": false,
+      "elements": {
+        "panel": {
+          "hidden": true,
+          "inert": false
+        },
+        "hud": {
+          "hidden": false,
+          "inert": false
+        },
+        "touch": {
+          "hidden": false,
+          "inert": false
+        },
+        "buy-menu": {
+          "hidden": true,
+          "inert": false
+        },
+        "scoreboard": {
+          "hidden": true,
+          "inert": false
+        },
+        "immersive-gate": {
+          "hidden": true,
+          "inert": false
+        }
+      }
+    }
+  ],
+  "beforeNative": {
+    "tick": 796,
+    "phase": "live",
+    "room": "5ae720037a6ab5ef61f276d7"
+  },
+  "beforeOwned0": false,
+  "afterTapOwned0": false,
+  "finalOwned0": true,
+  "finalTick": 875,
+  "sourceEdited": false,
+  "stateInjected": false,
+  "note": "Single observational rerun passed; does not by itself reproduce or establish cause of prior failure."
+}
