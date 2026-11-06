@@ -2,7 +2,7 @@ const combatOrder=(a,b)=>b.kills-a.kills||b.assists-a.assists||b.damage-a.damage
 
 export function matchResults(room){
  const state=room?.state;
- if(!state||state.phase!=='finished'||!['sealing','finished'].includes(room.status))return null;
+ if(!state||state.config.mode==='practice'||state.phase!=='finished'||!['sealing','finished'].includes(room.status))return null;
  const self=state.players[room.slot];
  if(!self)return null;
  const ranked=[...state.players].sort(combatOrder);

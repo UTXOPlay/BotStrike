@@ -1,0 +1,9 @@
+file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/browser-native-state.mjs:10
+ throw Error('Native state wait timed out: '+JSON.stringify({room:value?.id,status:value?.status,tick:value?.state?.tick,practice:value?.state?.practice?.attempt}));
+       ^
+
+Error: Native state wait timed out: {"room":"280bd2b261165117cbd031ac","status":"running","tick":1831}
+    at waitNativeState (file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/browser-native-state.mjs:10:8)
+    at async file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-tactical-browser.mjs:47:157
+
+Node.js v22.23.1

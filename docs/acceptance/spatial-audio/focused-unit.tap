@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: remote overload preserves capacity for eight local cues and bounds pending replacements
+ok 1 - remote overload preserves capacity for eight local cues and bounds pending replacements
+  ---
+  duration_ms: 7.551747
+  type: 'test'
+  ...
+# Subtest: delayed local cues expire and a generation reset cannot replay them later
+ok 2 - delayed local cues expire and a generation reset cannot replay them later
+  ---
+  duration_ms: 0.963222
+  type: 'test'
+  ...
+# Subtest: the output ceiling is finite monotone, odd and unity below its soft knee
+ok 3 - the output ceiling is finite monotone, odd and unity below its soft knee
+  ---
+  duration_ms: 6.386277
+  type: 'test'
+  ...
+# Subtest: virtual sound normalization ignores private coordinates and clamps gain/pan
+ok 4 - virtual sound normalization ignores private coordinates and clamps gain/pan
+  ---
+  duration_ms: 3.404109
+  type: 'test'
+  ...
+# Subtest: listener boundaries share squad fallback and discard the previous-viewpoint tick
+ok 5 - listener boundaries share squad fallback and discard the previous-viewpoint tick
+  ---
+  duration_ms: 3.016122
+  type: 'test'
+  ...
+# Subtest: audio accessibility levels persist independently and do not change control bindings
+ok 6 - audio accessibility levels persist independently and do not change control bindings
+  ---
+  duration_ms: 11.634346
+  type: 'test'
+  ...
+# Subtest: baseline is frozen and all comparison blocks cover identical coarse conditions
+ok 7 - baseline is frozen and all comparison blocks cover identical coarse conditions
+  ---
+  duration_ms: 9.988954
+  type: 'test'
+  ...
+# Subtest: summaries preserve unsure/timeouts and exclude interrupted trials without claiming human observations
+ok 8 - summaries preserve unsure/timeouts and exclude interrupted trials without claiming human observations
+  ---
+  duration_ms: 0.590438
+  type: 'test'
+  ...
+# Subtest: offline listening server serves an allowlist only and never accepts reports or live game access
+ok 9 - offline listening server serves an allowlist only and never accepts reports or live game access
+  ---
+  duration_ms: 76.386876
+  type: 'test'
+  ...
+# Subtest: audible wire fields form a strict coarse allowlist under unrelated private event metadata
+ok 10 - audible wire fields form a strict coarse allowlist under unrelated private event metadata
+  ---
+  duration_ms: 9.210205
+  type: 'test'
+  ...
+# Subtest: smoke, flash and radio reveal do not alter the audible permission or reveal its owner
+ok 11 - smoke, flash and radio reveal do not alter the audible permission or reveal its owner
+  ---
+  duration_ms: 1.974466
+  type: 'test'
+  ...
+# Subtest: sound range uses three dimensions and the selected authorized living listener
+ok 12 - sound range uses three dimensions and the selected authorized living listener
+  ---
+  duration_ms: 1.408556
+  type: 'test'
+  ...
+# Subtest: native movement-derived running audibility preserves quiet crouch, low speed and airborne states
+ok 13 - native movement-derived running audibility preserves quiet crouch, low speed and airborne states
+  ---
+  duration_ms: 1.885767
+  type: 'test'
+  ...
+# Subtest: nearby steps cannot interrupt the local cadence and remain quieter
+ok 14 - nearby steps cannot interrupt the local cadence and remain quieter
+  ---
+  duration_ms: 83.208288
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 443.721677

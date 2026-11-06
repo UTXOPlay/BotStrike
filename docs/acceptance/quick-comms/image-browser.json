@@ -1,0 +1,176 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "cohort": "all",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 670,
+        "y": 325.4296875,
+        "width": 580,
+        "height": 429.140625
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 155.203125,
+        "height": 44
+      },
+      "room": "7d02cccf62360cde09ec38f1"
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 990,
+        "y": 298.6015625,
+        "width": 580,
+        "height": 482.796875
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 198.28125,
+        "height": 47
+      },
+      "room": "7d02cccf62360cde09ec38f1"
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 890,
+        "y": 444.5546875,
+        "width": 780,
+        "height": 550.890625
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 198.28125,
+        "height": 60
+      },
+      "room": "7d02cccf62360cde09ec38f1"
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 240,
+        "y": 326,
+        "left": 60,
+        "top": 200,
+        "width": 360,
+        "height": 360
+      },
+      "wheel": {
+        "x": 1530,
+        "y": 801.0390625,
+        "width": 780,
+        "height": 557.921875
+      },
+      "button": {
+        "x": 428,
+        "y": 200,
+        "width": 231.921875,
+        "height": 60
+      },
+      "room": "7d02cccf62360cde09ec38f1"
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "mobile": true,
+      "point": [
+        0,
+        0,
+        -514.2857831223565
+      ],
+      "actualPointer": {
+        "x": 52,
+        "y": 36.599998474121094,
+        "left": 14,
+        "top": 10,
+        "width": 76,
+        "height": 76
+      },
+      "wheel": {
+        "x": 132,
+        "y": 16,
+        "width": 580,
+        "height": 358
+      },
+      "button": {
+        "x": 98,
+        "y": 10,
+        "width": 121.046875,
+        "height": 44
+      },
+      "room": "ee43cbb68cfbcd508795cb06"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "portraitGate": true,
+      "instancePreserved": true
+    }
+  ],
+  "keyboard": true,
+  "controller": true,
+  "touch": true,
+  "heldInputsCleared": true,
+  "reducedMotion": true,
+  "renderFps": 30,
+  "errors": []
+}

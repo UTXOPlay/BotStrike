@@ -1,0 +1,29 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "readyGate": true,
+  "privateRuleset": true,
+  "keyboardDrop": false,
+  "touchDrop": true,
+  "unarmedPresentation": true,
+  "nativeRecovery": true,
+  "teamBudgetPrivate": true,
+  "results": [
+    {
+      "width": 390,
+      "height": 844,
+      "portraitRotationGate": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "dropButton": {
+        "x": 46,
+        "y": 175,
+        "width": 125.015625,
+        "height": 44
+      }
+    }
+  ],
+  "errors": []
+}

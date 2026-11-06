@@ -1,0 +1,298 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 4.21kB done
+#1 DONE 0.1s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 8.3s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#4 ...
+
+#5 [internal] load metadata for docker.io/library/rust:1.97.1-bookworm
+#5 DONE 8.4s
+
+#4 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#4 DONE 8.4s
+
+#6 [validation  1/23] FROM docker.io/library/node:22-bookworm-slim@sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d
+#6 DONE 0.0s
+
+#7 [native 1/7] FROM docker.io/library/rust:1.97.1-bookworm@sha256:0e2bcaef56d041a486784e54104a81aebe0da44bd03019bd70bc0401e42e4a97
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 33.46kB 0.0s done
+#8 DONE 0.0s
+
+#9 [validation  2/23] RUN apt-get update && apt-get install -y --no-install-recommends libstdc++6 zlib1g && rm -rf /var/lib/apt/lists/*
+#9 CACHED
+
+#10 [stage-2  4/15] COPY package.json package-lock.json ./
+#10 CACHED
+
+#11 [stage-2  3/15] WORKDIR /app
+#11 CACHED
+
+#12 [validation  6/23] COPY botstrike ./botstrike
+#12 CACHED
+
+#13 [validation  4/23] COPY package.json package-lock.json ./
+#13 CACHED
+
+#14 [validation  7/23] COPY botstrike-service ./botstrike-service
+#14 CACHED
+
+#15 [validation  5/23] RUN npm ci --ignore-scripts --no-audit --no-fund
+#15 CACHED
+
+#16 [validation  3/23] WORKDIR /src
+#16 CACHED
+
+#17 [stage-2  5/15] RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+#17 CACHED
+
+#18 [native 2/7] RUN apt-get update && apt-get install -y --no-install-recommends clang libclang-dev cmake pkg-config protobuf-compiler zlib1g-dev && rm -rf /var/lib/apt/lists/*
+#18 CACHED
+
+#19 [native 4/7] COPY botstrike ./botstrike
+#19 CACHED
+
+#20 [native 3/7] WORKDIR /src
+#20 CACHED
+
+#21 [native 5/7] COPY botstrike-myelin ./botstrike-myelin
+#21 CACHED
+
+#22 [validation  8/23] COPY botstrike-myelin/src/session.rs ./botstrike-myelin/src/session.rs
+#22 CACHED
+
+#23 [native 6/7] COPY scripts/build-botstrike.sh ./scripts/build-botstrike.sh
+#23 CACHED
+
+#24 [validation  9/23] COPY games ./games
+#24 DONE 0.2s
+
+#25 [native 7/7] RUN --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/usr/local/cargo/git --mount=type=cache,target=/build-target     bash scripts/build-botstrike.sh && cargo test --release --locked --manifest-path botstrike/Cargo.toml -- --test-threads=2
+#25 ...
+
+#26 [validation 10/23] COPY shared ./shared
+#26 DONE 0.1s
+
+#27 [validation 11/23] COPY public ./public
+#27 DONE 0.1s
+
+#25 [native 7/7] RUN --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/usr/local/cargo/git --mount=type=cache,target=/build-target     bash scripts/build-botstrike.sh && cargo test --release --locked --manifest-path botstrike/Cargo.toml -- --test-threads=2
+#25 0.185     Finished `release` profile [optimized] target(s) in 0.06s
+#25 ...
+
+#28 [validation 12/23] COPY host ./host
+#28 DONE 0.1s
+
+#29 [validation 13/23] COPY game-host.json ./game-host.json
+#29 DONE 0.1s
+
+#30 [validation 14/23] COPY tools ./tools
+#30 DONE 0.1s
+
+#31 [validation 15/23] COPY tests ./tests
+#31 DONE 0.1s
+
+#25 [native 7/7] RUN --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/usr/local/cargo/git --mount=type=cache,target=/build-target     bash scripts/build-botstrike.sh && cargo test --release --locked --manifest-path botstrike/Cargo.toml -- --test-threads=2
+#25 0.548    Compiling myelin-botstrike v0.1.0 (/src/botstrike-myelin)
+#25 ...
+
+#32 [validation 16/23] COPY docs/acceptance/salvage-pr1.json ./docs/acceptance/salvage-pr1.json
+#32 DONE 0.1s
+
+#33 [validation 17/23] COPY docs/acceptance/tactical-core/preview-verifiers.json ./docs/acceptance/tactical-core/preview-verifiers.json
+#33 DONE 0.0s
+
+#25 [native 7/7] RUN --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/usr/local/cargo/git --mount=type=cache,target=/build-target     bash scripts/build-botstrike.sh && cargo test --release --locked --manifest-path botstrike/Cargo.toml -- --test-threads=2
+#25 0.785 warning: field `dir` is never read
+#25 0.785    --> src/session.rs:156:5
+#25 0.785     |
+#25 0.785 151 | pub struct App {
+#25 0.785     |            --- field in this struct
+#25 0.785 ...
+#25 0.785 156 |     dir: PathBuf,
+#25 0.785     |     ^^^
+#25 0.785     |
+#25 0.785     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+#25 0.785 
+#25 0.785 warning: method `new_game` is never used
+#25 0.785    --> src/session.rs:233:12
+#25 0.785     |
+#25 0.785 158 | impl App {
+#25 0.785     | -------- method in this implementation
+#25 0.785 ...
+#25 0.785 233 |     pub fn new_game(&mut self) -> AnyResult<Value> {
+#25 0.785     |            ^^^^^^^^
+#25 0.785 
+#25 5.397 warning: `myelin-botstrike` (bin "myelin-botstrike") generated 2 warnings
+#25 5.397     Finished `release` profile [optimized] target(s) in 5.17s
+#25 5.466    Compiling botstrike-engine v1.0.0 (/src/botstrike)
+#25 16.51     Finished `release` profile [optimized] target(s) in 11.07s
+#25 16.51      Running unittests src/lib.rs (/build-target/release/deps/botstrike_engine-8fcde0d55b3db485)
+#25 16.51 
+#25 16.51 running 77 tests
+#25 16.51 test ai::tests::a_single_defuser_works_while_squad_holds_outside_the_objective ... ok
+#25 16.51 test ai::tests::dropped_relay_is_approached_within_pickup_distance ... ok
+#25 16.52 test ai::tests::fire_requires_aim_and_a_clear_friendly_line ... ok
+#25 16.52 test ai::tests::hidden_opponents_do_not_steer_navigation_and_memory_expires ... ok
+#25 16.52 test ai::tests::low_cover_uses_authored_head_corners_like_service_disclosure ... ok
+#25 16.52 test ai::tests::radio_scan_updates_memory_without_optical_targeting_and_stops_tracking_at_expiry ... ok
+#25 16.52 test ai::tests::recruit_has_forward_perception_body_aim_and_reaction_time ... ok
+#25 16.52 test ai::tests::sustained_threat_releases_skill_input_between_attempts ... ok
+#25 16.52 test ai::tests::visible_target_beats_nearer_occluded_target ... ok
+#25 16.52 test economy_tests::loss_recovery_is_capped_resets_on_win_and_is_paid_once_to_all_reserved_seats ... ok
+#25 16.52 test economy_tests::lost_attack_plant_award_and_fatal_source_rewards_are_explicit ... ok
+#25 16.52 test economy_tests::survivor_death_half_supplies_and_rejected_purchases_follow_distinct_rules ... ok
+#25 16.52 test damage_contract::tests::native_matrix_covers_pellets_bursts_shield_break_reloads_and_expiration ... ok
+#25 16.52 test hit::tests::head_box_inverse_matches_rotated_fixture_rays_at_extreme_look_angles ... ok
+#25 16.52 test hit::tests::region_boundaries_grazes_vertical_and_inside_rays_are_unambiguous ... ok
+#25 16.52 test inventory_tests::actual_pickup_obeys_objective_cover_reach_height_and_slot_order ... ok
+#25 16.52 test inventory_tests::casual_hero_switches_cannot_restore_health_armor_cooldown_or_inventory ... ok
+#25 16.52 test inventory_tests::death_releases_both_slots_exactly_once_with_bounded_unique_world_objects ... ok
+#25 16.52 test inventory_tests::full_pool_rejects_buy_and_drop_but_pickup_replacement_is_atomic ... ok
+#25 16.52 test inventory_tests::same_gun_recovery_preserves_every_untransferred_round ... ok
+#25 16.52 test inventory_tests::tactical_buy_replaces_only_primary_and_cannot_mint_free_arc ... ok
+#25 16.52 test inventory_tests::tactical_configuration_is_explicit_private_human_demolition_shape ... ok
+#25 16.52 test inventory_tests::tactical_drop_edges_life_authority_and_unarmed_controls_are_native ... ok
+#25 16.52 test movement::tests::accuracy_is_continuous_in_speed_and_worse_in_air_and_on_landing ... ok
+#25 16.52 test movement::tests::counter_strafing_stops_faster_without_instant_acceleration_or_diagonal_bonus ... ok
+#25 16.52 test practice::tests::archived_trial_keeps_original_settings_and_is_bounded ... ok
+#25 16.52 test practice::tests::downwards_shots_record_the_native_floor_impact ... ok
+#25 16.53 test practice::tests::every_drill_on_each_combat_map_resets_deterministically ... ok
+#25 16.53 test practice::tests::fixed_seed_reset_repeats_real_native_impacts_and_trial_statistics ... ok
+#25 16.53 test practice::tests::only_recorded_practice_configuration_enables_resets_and_free_supplies ... ok
+#25 16.53 test practice::tests::preview_and_exact_rethrow_follow_the_actual_live_projectile ... ok
+#25 16.53 test practice::tests::retake_requires_defuse_and_uses_round_score_for_its_outcome ... ok
+#25 16.53 test practice::tests::selected_equipment_previews_before_release_and_self_use_clears_the_trace ... ok
+#25 16.53 test practice::tests::settings_are_bounded_and_finish_is_an_explicit_unranked_session_end ... ok
+#25 16.53 test projectile::tests::corner_floor_rest_and_world_boundary_have_bounded_finite_contacts ... ok
+#25 16.53 test projectile::tests::release_modes_inherit_actual_motion_and_held_mode_changes_do_not_duplicate_items ... ok
+#25 16.53 test projectile::tests::swept_contacts_stop_tunneling_through_thin_walls_and_ceilings ... ok
+#25 16.53 test recoil::tests::all_profiles_are_finite_bounded_and_recover_to_a_fresh_first_shot ... ok
+#25 16.53 test recoil::tests::deliberate_compensation_removes_pattern_but_not_seeded_dispersion ... ok
+#25 16.53 test sight::tests::smoke_has_height_and_an_exact_open_tangent_boundary ... ok
+#25 16.53 test tests::all_maps_have_routes_between_both_spawns_and_both_sites ... ok
+#25 16.53 test tests::arsenal_economy_caps_and_live_phase_are_authoritative ... ok
+#25 16.53 test tests::bots_wait_to_react_and_coincident_eyes_never_generate_nan ... ok
+#25 16.53 test tests::bounded_rewind_hits_the_rendered_pose_but_never_a_new_life_or_through_cover ... ok
+#25 16.53 test tests::burst_finishes_after_trigger_release_and_switch_cancels_it ... ok
+#25 16.53 test tests::collision_and_normalized_movement_preserve_world_bounds ... ok
+#25 16.54 test tests::configurations_and_inputs_are_bounded ... ok
+#25 16.54 test tests::confirmed_damage_accounts_for_shield_armor_overkill_and_the_real_source ... ok
+#25 16.54 test tests::deathmatch_drops_never_exceed_the_world_budget ... ok
+#25 16.54 test tests::demolition_respawns_next_round_and_switches_sides ... ok
+#25 16.75 test inventory_tests::repeated_gift_recover_cycles_conserve_ammunition_and_native_replay_state ... ok
+#25 16.75 test tests::drops_expire_and_clear_between_rounds ... ok
+#25 16.75 test tests::fallen_gun_is_recovered_with_its_compatible_ammo ... ok
+#25 16.75 test tests::fields_and_emp_respect_team_and_expire ... ok
+#25 16.75 test tests::fire_reload_armor_and_cover_are_authoritative ... ok
+#25 16.75 test tests::gun_pickup_requires_live_human_proximity_and_unblocked_path ... ok
+#25 16.75 test tests::hero_skills_have_distinct_effects_and_cooldowns ... ok
+#25 16.75 test tests::plant_defuse_and_detonation_have_distinct_outcomes ... ok
+#25 16.75 test tests::purchases_require_buy_phase_and_real_credits ... ok
+#25 16.75 test tests::recovered_ammo_still_requires_reload_and_respects_reserve_cap ... ok
+#25 16.75 test tests::relay_action_is_interrupted_by_movement_fire_and_jump ... ok
+#25 16.75 test tests::relay_interaction_has_priority_over_a_nearby_gun ... ok
+#25 16.75 test tests::repair_power_and_coolant_have_bounded_native_effects ... ok
+#25 16.75 test tests::respawn_avoids_a_camped_spawn_and_offense_ends_protection ... ok
+#25 16.75 test tests::respawn_is_delayed_protected_and_scored ... ok
+#25 16.75 test tests::rewind_restores_head_orientation_instead_of_using_the_current_look ... ok
+#25 16.75 test tests::rewound_hit_regions_use_recorded_stance_and_report_the_nearest_region ... ok
+#25 16.75 test tests::special_rounds_apply_only_after_valid_enemy_damage ... ok
+#25 16.75 test tests::utility_inventory_is_consumed_once_and_smoke_expires ... ok
+#25 16.75 test utility_effects::tests::flash_distance_and_facing_are_monotonic_bounded_and_open_at_range ... ok
+#25 16.75 test utility_effects_tests::blast_events_record_the_world_origin_and_friendly_damage_is_zero ... ok
+#25 16.75 test utility_effects_tests::emp_is_enemy_only_protection_aware_and_cannot_shorten_disable ... ok
+#25 16.75 test utility_effects_tests::fields_are_spherical_team_specific_ignore_cover_and_expire_before_applying_at_zero ... ok
+#25 16.75 test utility_effects_tests::flash_affects_both_teams_and_protection_but_never_shortens_an_existing_flash ... ok
+#25 16.75 test utility_effects_tests::overlapping_repairs_do_not_stack_and_fragment_radius_is_open_in_three_dimensions ... ok
+#25 16.75 test utility_effects_tests::solid_cover_blocks_flash_but_smoke_is_not_a_flash_shield ... ok
+#25 20.75 test tests::deterministic_bot_matches_complete_on_every_map ... ok
+#25 20.75 
+#25 20.75 test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.24s
+#25 20.75 
+#25 20.75      Running unittests src/main.rs (/build-target/release/deps/botstrike_engine-2956c2d257e86e53)
+#25 20.76 
+#25 20.76 running 1 test
+#25 20.76 test wire_tests::tactical_flags_roundtrip_and_reserved_high_bit_is_rejected ... ok
+#25 20.76 
+#25 20.76 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#25 20.76 
+#25 20.76    Doc-tests botstrike_engine
+#25 20.88 
+#25 20.88 running 0 tests
+#25 20.88 
+#25 20.88 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#25 20.88 
+#25 DONE 21.0s
+
+#34 [validation 18/23] COPY --from=native /src/release ./release
+#34 DONE 0.0s
+
+#35 [validation 19/23] COPY release/legacy ./release/legacy
+#35 DONE 0.1s
+
+#36 [validation 20/23] RUN node tools/generate-damage-contract.mjs --engine=/src/release/botstrike-engine && node tools/verifier-manifest.mjs && npm run build
+#36 0.187 {"cases":6048,"bytes":1044367,"model":"4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49"}
+#36 0.419 
+#36 0.419 > botstrike@1.4.2 build
+#36 0.419 > node tools/build-web.mjs
+#36 0.419 
+#36 0.541 Built standalone BotStrike
+#36 DONE 0.6s
+
+#37 [validation 21/23] RUN mkdir build-validation && node --test tests/botstrike-recoil.test.mjs tests/botstrike-motion.test.mjs tests/botstrike-hit-regions.test.mjs tests/botstrike-damage-contract.test.mjs tests/botstrike-design.test.mjs tests/botstrike-prediction.test.mjs tests/botstrike-accuracy-state.test.mjs tests/botstrike-service.test.mjs tests/botstrike-practice.test.mjs tests/botstrike-sight-geometry.test.mjs tests/botstrike-projectile-contract.test.mjs tests/botstrike-input-boundary.test.mjs tests/botstrike-render-scheduling.test.mjs tests/botstrike-disclosure.test.mjs tests/botstrike-tactical.test.mjs tests/botstrike-cover-decoration.test.mjs tests/botstrike-cover-readability.test.mjs > build-validation/native-browser-contracts.tap || { cat build-validation/native-browser-contracts.tap; exit 1; }
+#37 DONE 12.7s
+
+#38 [validation 22/23] RUN npm run test:host > build-validation/host.tap || { cat build-validation/host.tap; exit 1; }
+#38 DONE 0.3s
+
+#39 [validation 23/23] RUN node tests/botstrike-native-flow.mjs > build-validation/native-flow.json && node tests/botstrike-practice-flow.mjs > build-validation/practice-flow.json && node tests/botstrike-utility-flow.mjs > build-validation/utility-flow.json && node tests/botstrike-tactical-flow.mjs > build-validation/tactical-flow.json
+#39 358.3 node:internal/deps/undici/undici:15456
+#39 358.3       Error.captureStackTrace(err);
+#39 358.3             ^
+#39 358.3 
+#39 358.3 TypeError: fetch failed
+#39 358.3     at node:internal/deps/undici/undici:15456:13
+#39 358.3     at async file:///src/tests/botstrike-tactical-flow.mjs:53:43 {
+#39 358.3   [cause]: Error: read ECONNRESET
+#39 358.3       at TCP.onStreamRead (node:internal/stream_base_commons:216:20) {
+#39 358.3     errno: -104,
+#39 358.3     code: 'ECONNRESET',
+#39 358.3     syscall: 'read'
+#39 358.3   }
+#39 358.3 }
+#39 358.3 
+#39 358.3 Node.js v22.23.4
+#39 ERROR: process "/bin/sh -c node tests/botstrike-native-flow.mjs > build-validation/native-flow.json && node tests/botstrike-practice-flow.mjs > build-validation/practice-flow.json && node tests/botstrike-utility-flow.mjs > build-validation/utility-flow.json && node tests/botstrike-tactical-flow.mjs > build-validation/tactical-flow.json" did not complete successfully: exit code: 1
+------
+ > [validation 23/23] RUN node tests/botstrike-native-flow.mjs > build-validation/native-flow.json && node tests/botstrike-practice-flow.mjs > build-validation/practice-flow.json && node tests/botstrike-utility-flow.mjs > build-validation/utility-flow.json && node tests/botstrike-tactical-flow.mjs > build-validation/tactical-flow.json:
+358.3     at async file:///src/tests/botstrike-tactical-flow.mjs:53:43 {
+358.3   [cause]: Error: read ECONNRESET
+358.3       at TCP.onStreamRead (node:internal/stream_base_commons:216:20) {
+358.3     errno: -104,
+358.3     code: 'ECONNRESET',
+358.3     syscall: 'read'
+358.3   }
+358.3 }
+358.3 
+358.3 Node.js v22.23.4
+------
+Dockerfile:41
+--------------------
+  39 |     RUN mkdir build-validation && node --test tests/botstrike-recoil.test.mjs tests/botstrike-motion.test.mjs tests/botstrike-hit-regions.test.mjs tests/botstrike-damage-contract.test.mjs tests/botstrike-design.test.mjs tests/botstrike-prediction.test.mjs tests/botstrike-accuracy-state.test.mjs tests/botstrike-service.test.mjs tests/botstrike-practice.test.mjs tests/botstrike-sight-geometry.test.mjs tests/botstrike-projectile-contract.test.mjs tests/botstrike-input-boundary.test.mjs tests/botstrike-render-scheduling.test.mjs tests/botstrike-disclosure.test.mjs tests/botstrike-tactical.test.mjs tests/botstrike-cover-decoration.test.mjs tests/botstrike-cover-readability.test.mjs > build-validation/native-browser-contracts.tap || { cat build-validation/native-browser-contracts.tap; exit 1; }
+  40 |     RUN npm run test:host > build-validation/host.tap || { cat build-validation/host.tap; exit 1; }
+  41 | >>> RUN node tests/botstrike-native-flow.mjs > build-validation/native-flow.json && node tests/botstrike-practice-flow.mjs > build-validation/practice-flow.json && node tests/botstrike-utility-flow.mjs > build-validation/utility-flow.json && node tests/botstrike-tactical-flow.mjs > build-validation/tactical-flow.json
+  42 |     
+  43 |     FROM ${NODE_IMAGE}
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c node tests/botstrike-native-flow.mjs > build-validation/native-flow.json && node tests/botstrike-practice-flow.mjs > build-validation/practice-flow.json && node tests/botstrike-utility-flow.mjs > build-validation/utility-flow.json && node tests/botstrike-tactical-flow.mjs > build-validation/tactical-flow.json" did not complete successfully: exit code: 1

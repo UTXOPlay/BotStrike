@@ -41,10 +41,12 @@ pub fn case(
         Config {
             map: 0,
             mode: "deathmatch".into(),
+            ruleset: Default::default(),
             heroes,
             bots: [false; 10],
             difficulty: 1,
             seed: 2050,
+            practice: None,
         },
         &r,
     )?;

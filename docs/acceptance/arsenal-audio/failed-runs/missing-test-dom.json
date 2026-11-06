@@ -1,0 +1,663 @@
+{
+  "error": "Error: page.evaluate: TypeError: Cannot read properties of null (reading 'textContent')\n    at text (http://127.0.0.1:43709/audit.js:2821:14)\n    at Object.accept (http://127.0.0.1:43709/audit.js:2945:5)\n    at Module.feedbackEventAudit (http://127.0.0.1:43709/audit.js:5112:14)\n    at eval (eval at evaluate (:290:30), <anonymous>:1:39)\n    at async <anonymous>:316:30",
+  "stage": {
+    "task": "realtime",
+    "phase": "second-resume",
+    "state": "suspended"
+  },
+  "measurements": [
+    {
+      "mode": "baseline",
+      "rate": 44100,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 8.800000000745058,
+      "channels": [
+        {
+          "peak": 6.23841667175293,
+          "rms": 0.2593611213995182,
+          "clipped": 833,
+          "onset": 0.1
+        },
+        {
+          "peak": 6.23841667175293,
+          "rms": 0.2593611213995182,
+          "clipped": 833,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 4834.975314989167,
+      "sourceCount": 32,
+      "essentialSamples": 0,
+      "bufferBytes": 377508,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 44100,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 7.600000001490116,
+      "channels": [
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14151104399613454,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14151104399613454,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 2826.9296405911446,
+      "sourceCount": 26,
+      "essentialSamples": 2,
+      "bufferBytes": 774416,
+      "before": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 26,
+        "remote": 24,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 26,
+        "buffers": 24,
+        "bufferBytes": 774416,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 774416,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 9.600000001490116,
+      "channels": [
+        {
+          "peak": 6.432135581970215,
+          "rms": 0.2618640414209371,
+          "clipped": 920,
+          "onset": 0.1
+        },
+        {
+          "peak": 6.432135581970215,
+          "rms": 0.2618640414209371,
+          "clipped": 920,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 1764.3846818083734,
+      "sourceCount": 32,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 7.800000000745058,
+      "channels": [
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14211045477445552,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14211045477445552,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 1921.9169892072678,
+      "sourceCount": 26,
+      "essentialSamples": 2,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 26,
+        "remote": 24,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 26,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.5,
+      "channels": [
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.13701263498719,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.5,
+      "channels": [
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.13701263498719,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.8999999985098839,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 2,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 229.5,
+      "channels": [
+        {
+          "peak": 0.20325922966003418,
+          "rms": 0.012500189911311525,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        },
+        {
+          "peak": 0.20325922966003418,
+          "rms": 0.012500189911311525,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        }
+      ],
+      "waveProbe": 54.44738417863846,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "hrtfNodes": 1
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 2.300000000745058,
+      "channels": [
+        {
+          "peak": 0.19239836931228638,
+          "rms": 0.011230632366441262,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        },
+        {
+          "peak": 0.19239836931228638,
+          "rms": 0.011230632366441262,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        }
+      ],
+      "waveProbe": 56.52453690767288,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "hrtfNodes": 1
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": true,
+      "renderMs": 1.8999999985098839,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": "mono",
+      "renderMs": 1.699999999254942,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 0,
+        "monoStarted": 1,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 0,
+        "monoStarted": 1,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    }
+  ],
+  "errors": []
+}

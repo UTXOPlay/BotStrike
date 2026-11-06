@@ -1,0 +1,957 @@
+
+> botstrike@1.4.2 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: precision feedback distinguishes moving, landing and recoil from a steady first shot
+ok 1 - precision feedback distinguishes moving, landing and recoil from a steady first shot
+  ---
+  duration_ms: 4.91932
+  type: 'test'
+  ...
+# Subtest: six licensed rigs retain topology, finite normalized clips and neutral transition endpoints
+ok 2 - six licensed rigs retain topology, finite normalized clips and neutral transition endpoints
+  ---
+  duration_ms: 1696.944356
+  type: 'test'
+  ...
+# Subtest: two-bone IK reaches targets without changing segment lengths under world transforms
+ok 3 - two-bone IK reaches targets without changing segment lengths under world transforms
+  ---
+  duration_ms: 89.044866
+  type: 'test'
+  ...
+# Subtest: IK clamps unreachable and singular targets without extending or flipping a limb
+ok 4 - IK clamps unreachable and singular targets without extending or flipping a limb
+  ---
+  duration_ms: 1.209568
+  type: 'test'
+  ...
+# Subtest: a shared pose baseline restores every procedural translation and rotation
+ok 5 - a shared pose baseline restores every procedural translation and rotation
+  ---
+  duration_ms: 7.620915
+  type: 'test'
+  ...
+# Subtest: critical springs retain velocity, settle, and match across frame subdivisions
+ok 6 - critical springs retain velocity, settle, and match across frame subdivisions
+  ---
+  duration_ms: 1.515673
+  type: 'test'
+  ...
+# Subtest: six cosmetic profiles are distinct and optional inertia clears under reduced motion
+ok 7 - six cosmetic profiles are distinct and optional inertia clears under reduced motion
+  ---
+  duration_ms: 2.025436
+  type: 'test'
+  ...
+# Subtest: pose inertia preserves bounded outgoing motion and clears for immediate combat/reset
+ok 8 - pose inertia preserves bounded outgoing motion and clears for immediate combat/reset
+  ---
+  duration_ms: 37.995318
+  type: 'test'
+  ...
+# Subtest: buy time reserves a human seat until its pilot connects
+ok 9 - buy time reserves a human seat until its pilot connects
+  ---
+  duration_ms: 238.1442
+  type: 'test'
+  ...
+# Subtest: a waiting lobby can be claimed and started while its controller remains open
+ok 10 - a waiting lobby can be claimed and started while its controller remains open
+  ---
+  duration_ms: 207.146383
+  type: 'test'
+  ...
+# Subtest: a waiting lobby can be claimed and left while its controller remains open
+ok 11 - a waiting lobby can be claimed and left while its controller remains open
+  ---
+  duration_ms: 64.825334
+  type: 'test'
+  ...
+# Subtest: a waiting lobby can be claimed and started after its controller closes
+ok 12 - a waiting lobby can be claimed and started after its controller closes
+  ---
+  duration_ms: 77.705443
+  type: 'test'
+  ...
+# Subtest: a waiting lobby can be claimed and left after its controller closes
+ok 13 - a waiting lobby can be claimed and left after its controller closes
+  ---
+  duration_ms: 50.041441
+  type: 'test'
+  ...
+# Subtest: only the claimed tab controls a seat and takeover releases held input
+ok 14 - only the claimed tab controls a seat and takeover releases held input
+  ---
+  duration_ms: 251.568539
+  type: 'test'
+  ...
+# Subtest: proxy encloses independently skinned referenced vertices through bind, root and joint transforms
+ok 15 - proxy encloses independently skinned referenced vertices through bind, root and joint transforms
+  ---
+  duration_ms: 21.093747
+  type: 'test'
+  ...
+# Subtest: fixed wall faces clear a corner and keep a body resting on top of cover
+ok 16 - fixed wall faces clear a corner and keep a body resting on top of cover
+  ---
+  duration_ms: 3.742967
+  type: 'test'
+  ...
+# Subtest: a narrow corridor selects a longitudinal fall and impossible width uses a finite escape
+ok 17 - a narrow corridor selects a longitudinal fall and impossible width uses a finite escape
+  ---
+  duration_ms: 1.210857
+  type: 'test'
+  ...
+# Subtest: shared-weight hulls cover curved skins and retain safe coplanar and collinear groups
+ok 18 - shared-weight hulls cover curved skins and retain safe coplanar and collinear groups
+  ---
+  duration_ms: 45.968527
+  type: 'test'
+  ...
+# Subtest: a clear outgoing corner pose keeps its separating side without an initial shove
+ok 19 - a clear outgoing corner pose keeps its separating side without an initial shove
+  ---
+  duration_ms: 10.942112
+  type: 'test'
+  ...
+# Subtest: cover audit selects the scenery floor rather than the earlier objective prop
+ok 20 - cover audit selects the scenery floor rather than the earlier objective prop
+  ---
+  duration_ms: 27.79261
+  type: 'test'
+  ...
+# Subtest: published damage guide is bound to the current native sources and complete for the selected controls
+ok 21 - published damage guide is bound to the current native sources and complete for the selected controls
+  ---
+  duration_ms: 27.787381
+  type: 'test'
+  ...
+# Subtest: native generated data explains an instant ideal pellet kill, burst timing, reload and EMP shield break
+ok 22 - native generated data explains an instant ideal pellet kill, burst timing, reload and EMP shield break
+  ---
+  duration_ms: 15.945188
+  type: 'test'
+  ...
+# Subtest: damage explanations distinguish equipment and splash from the equipped gun
+ok 23 - damage explanations distinguish equipment and splash from the equipped gun
+  ---
+  duration_ms: 0.413524
+  type: 'test'
+  ...
+# Subtest: controls avoid browser modifiers, swap conflicts and preserve validated preferences
+ok 24 - controls avoid browser modifiers, swap conflicts and preserve validated preferences
+  ---
+  duration_ms: 7.9437
+  type: 'test'
+  ...
+# Subtest: reticle follows native spread multipliers without modifying aim
+ok 25 - reticle follows native spread multipliers without modifying aim
+  ---
+  duration_ms: 0.945362
+  type: 'test'
+  ...
+# Subtest: sound discloses coarse direction and loudness, never hidden coordinates or distant shots
+ok 26 - sound discloses coarse direction and loudness, never hidden coordinates or distant shots
+  ---
+  duration_ms: 3.17226
+  type: 'test'
+  ...
+# Subtest: footsteps respect walk/crouch and reload/landing only occur on transitions
+ok 27 - footsteps respect walk/crouch and reload/landing only occur on transitions
+  ---
+  duration_ms: 1.738253
+  type: 'test'
+  ...
+# Subtest: events survive skipped snapshots but repeated state responses never play them twice
+ok 28 - events survive skipped snapshots but repeated state responses never play them twice
+  ---
+  duration_ms: 1.731274
+  type: 'test'
+  ...
+# Subtest: career excludes AI takeover, commits once, recovers and survives recording expiration
+ok 29 - career excludes AI takeover, commits once, recovers and survives recording expiration
+  ---
+  duration_ms: 54.083049
+  type: 'test'
+  ...
+# Subtest: spectator disclosure follows a living teammate and refuses an enemy viewpoint
+ok 30 - spectator disclosure follows a living teammate and refuses an enemy viewpoint
+  ---
+  duration_ms: 5.33565
+  type: 'test'
+  ...
+# Subtest: Colemak labels match physical inputs and custom keys survive layout changes
+ok 31 - Colemak labels match physical inputs and custom keys survive layout changes
+  ---
+  duration_ms: 0.676498
+  type: 'test'
+  ...
+# Subtest: visible motion is life-bound and corpses still respect walls and smoke
+ok 32 - visible motion is life-bound and corpses still respect walls and smoke
+  ---
+  duration_ms: 2.492868
+  type: 'test'
+  ...
+# Subtest: public snapshots never bypass event entitlement with raw native events
+ok 33 - public snapshots never bypass event entitlement with raw native events
+  ---
+  duration_ms: 6.857934
+  type: 'test'
+  ...
+# Subtest: confirmed damage accounting goes only to the attacker and victim, including global kills
+ok 34 - confirmed damage accounting goes only to the attacker and victim, including global kills
+  ---
+  duration_ms: 6.853593
+  type: 'test'
+  ...
+# Subtest: hidden enemy projectiles are absent; visible objects never identify their owner or inherited velocity
+ok 35 - hidden enemy projectiles are absent; visible objects never identify their owner or inherited velocity
+  ---
+  duration_ms: 11.942409
+  type: 'test'
+  ...
+# Subtest: deployed smoke uses its visible volume, including near edges and the inside
+ok 36 - deployed smoke uses its visible volume, including near edges and the inside
+  ---
+  duration_ms: 0.882202
+  type: 'test'
+  ...
+# Subtest: objective hides carrier, actor, progress and dropped location until legitimately disclosed
+ok 37 - objective hides carrier, actor, progress and dropped location until legitimately disclosed
+  ---
+  duration_ms: 4.003468
+  type: 'test'
+  ...
+# Subtest: plant announcement remains global without revealing the hidden planter
+ok 38 - plant announcement remains global without revealing the hidden planter
+  ---
+  duration_ms: 0.924039
+  type: 'test'
+  ...
+# Subtest: snapshot and animation feedback share authored head visibility samples
+ok 39 - snapshot and animation feedback share authored head visibility samples
+  ---
+  duration_ms: 1.23677
+  type: 'test'
+  ...
+# Subtest: dead seats follow living squad views and cannot use enemy or dead views, including revealed targets
+ok 40 - dead seats follow living squad views and cannot use enemy or dead views, including revealed targets
+  ---
+  duration_ms: 1.047082
+  type: 'test'
+  ...
+# Subtest: radio reveal exposes location without optical pose, motion, IFF, assistance or objective interactions
+ok 41 - radio reveal exposes location without optical pose, motion, IFF, assistance or objective interactions
+  ---
+  duration_ms: 1.968398
+  type: 'test'
+  ...
+# Subtest: world audio and personal damage point to impact rather than hidden owner and never disclose the precise origin
+ok 42 - world audio and personal damage point to impact rather than hidden owner and never disclose the precise origin
+  ---
+  duration_ms: 1.158753
+  type: 'test'
+  ...
+# Subtest: flash is equally opaque in reduced motion and follows the authorized living spectator
+ok 43 - flash is equally opaque in reduced motion and follows the authorized living spectator
+  ---
+  duration_ms: 1.296503
+  type: 'test'
+  ...
+# Subtest: native ascent snapshots have the same phase when first observed at any render rate
+ok 44 - native ascent snapshots have the same phase when first observed at any render rate
+  ---
+  duration_ms: 11.228535
+  type: 'test'
+  ...
+# Subtest: same-flight invalidation retains crouch/blend history while derivatives remain reset
+ok 45 - same-flight invalidation retains crouch/blend history while derivatives remain reset
+  ---
+  duration_ms: 12.098884
+  type: 'test'
+  ...
+# Subtest: new room/map/life, a completed flight and an upward restart discard retained history
+ok 46 - new room/map/life, a completed flight and an upward restart discard retained history
+  ---
+  duration_ms: 2.739569
+  type: 'test'
+  ...
+# Subtest: phase references agree with the actual native engine snapshots
+ok 47 - phase references agree with the actual native engine snapshots
+  ---
+  duration_ms: 41.817256
+  type: 'test'
+  ...
+# Subtest: native ticks distinguish a repeated first-jump snapshot from a new jump at the same velocity
+ok 48 - native ticks distinguish a repeated first-jump snapshot from a new jump at the same velocity
+  ---
+  duration_ms: 1.070112
+  type: 'test'
+  ...
+# Subtest: an interrupted foot starts at the outgoing solved position and velocity
+ok 49 - an interrupted foot starts at the outgoing solved position and velocity
+  ---
+  duration_ms: 2.343601
+  type: 'test'
+  ...
+# Subtest: foot recovery reaches the moving destination with zero position and velocity correction
+ok 50 - foot recovery reaches the moving destination with zero position and velocity correction
+  ---
+  duration_ms: 0.425846
+  type: 'test'
+  ...
+# Subtest: repeated interruptions retain the latest outgoing position instead of an older trajectory
+ok 51 - repeated interruptions retain the latest outgoing position instead of an older trajectory
+  ---
+  duration_ms: 0.399872
+  type: 'test'
+  ...
+# Subtest: analytic recovery velocity agrees with the trajectory without snapshot-difference noise
+ok 52 - analytic recovery velocity agrees with the trajectory without snapshot-difference noise
+  ---
+  duration_ms: 0.412757
+  type: 'test'
+  ...
+# Subtest: nearby steps cannot interrupt the local cadence and remain quieter
+ok 53 - nearby steps cannot interrupt the local cadence and remain quieter
+  ---
+  duration_ms: 94.48899
+  type: 'test'
+  ...
+# Subtest: industrial footfalls and landing stay bounded and decay at common sample rates
+ok 54 - industrial footfalls and landing stay bounded and decay at common sample rates
+  ---
+  duration_ms: 36.853935
+  type: 'test'
+  ...
+# Subtest: landing sustains a heavier tail than either running footfall
+ok 55 - landing sustains a heavier tail than either running footfall
+  ---
+  duration_ms: 2.681303
+  type: 'test'
+  ...
+# Subtest: standard gamepads are selected without accepting unknown layouts
+ok 56 - standard gamepads are selected without accepting unknown layouts
+  ---
+  duration_ms: 2.181097
+  type: 'test'
+  ...
+# Subtest: sticks suppress drift and preserve direction after the dead zone
+ok 57 - sticks suppress drift and preserve direction after the dead zone
+  ---
+  duration_ms: 1.777754
+  type: 'test'
+  ...
+# Subtest: standard controls map to existing native input fields
+ok 58 - standard controls map to existing native input fields
+  ---
+  duration_ms: 0.380587
+  type: 'test'
+  ...
+# Subtest: button edges, navigation repeat and disconnect clear held input
+ok 59 - button edges, navigation repeat and disconnect clear held input
+  ---
+  duration_ms: 0.532586
+  type: 'test'
+  ...
+# Subtest: partial async recording writes retain every byte and propagate disk failure
+ok 60 - partial async recording writes retain every byte and propagate disk failure
+  ---
+  duration_ms: 4.718288
+  type: 'test'
+  ...
+# Subtest: opponent positions behind walls or smoke never reach client; own state and revealed opponents survive
+ok 61 - opponent positions behind walls or smoke never reach client; own state and revealed opponents survive
+  ---
+  duration_ms: 3.04608
+  type: 'test'
+  ...
+# Subtest: fallen guns are only disclosed through a clear nearby view
+ok 62 - fallen guns are only disclosed through a clear nearby view
+  ---
+  duration_ms: 0.79706
+  type: 'test'
+  ...
+# Subtest: remote interpolation follows server time without moving local prediction or revealing a hidden life
+ok 63 - remote interpolation follows server time without moving local prediction or revealing a hidden life
+  ---
+  duration_ms: 0.813488
+  type: 'test'
+  ...
+# Subtest: one long frame does not downscale; sustained overload still does, recovery tolerates a missed frame
+ok 64 - one long frame does not downscale; sustained overload still does, recovery tolerates a missed frame
+  ---
+  duration_ms: 0.738443
+  type: 'test'
+  ...
+# Subtest: only expired recordings and their stale account references are removed
+ok 65 - only expired recordings and their stale account references are removed
+  ---
+  duration_ms: 37.227545
+  type: 'test'
+  ...
+# Subtest: untrusted rewind fields are bounded and authority fields cannot be injected
+ok 66 - untrusted rewind fields are bounded and authority fields cannot be injected
+  ---
+  duration_ms: 1.347068
+  type: 'test'
+  ...
+# Room step failed acc6cf2b871617fffc7aae24 ENOSPC
+# Subtest: a failed disk writer isolates its room; actual stdin backpressure preserves another match
+ok 67 - a failed disk writer isolates its room; actual stdin backpressure preserves another match
+  ---
+  duration_ms: 439.519578
+  type: 'test'
+  ...
+# Subtest: offline native hit inspector and development overlay agree at 501 stances and world transforms
+ok 68 - offline native hit inspector and development overlay agree at 501 stances and world transforms
+  ---
+  duration_ms: 80.071966
+  type: 'test'
+  ...
+# Subtest: native inspector rejects zero directions, non-finite/out-of-range fixtures and unknown fields
+ok 69 - native inspector rejects zero directions, non-finite/out-of-range fixtures and unknown fields
+  ---
+  duration_ms: 21.881898
+  type: 'test'
+  ...
+# Subtest: mobile requires landscape and real fullscreen; exiting fullscreen blocks controls again
+ok 70 - mobile requires landscape and real fullscreen; exiting fullscreen blocks controls again
+  ---
+  duration_ms: 6.114024
+  type: 'test'
+  ...
+# Subtest: fullscreen rejection stays actionable and never silently releases the gate
+ok 71 - fullscreen rejection stays actionable and never silently releases the gate
+  ---
+  duration_ms: 1.376534
+  type: 'test'
+  ...
+# Subtest: unsupported fullscreen still enforces landscape; desktop remains unrestricted
+ok 72 - unsupported fullscreen still enforces landscape; desktop remains unrestricted
+  ---
+  duration_ms: 1.776562
+  type: 'test'
+  ...
+# Subtest: a finished result remains readable in portrait and restores the gate after leaving
+ok 73 - a finished result remains readable in portrait and restores the gate after leaving
+  ---
+  duration_ms: 0.959622
+  type: 'test'
+  ...
+# Subtest: confirmed impact samples are bounded, short and decay at browser sample rates
+ok 74 - confirmed impact samples are bounded, short and decay at browser sample rates
+  ---
+  duration_ms: 35.832413
+  type: 'test'
+  ...
+# Subtest: head, body and received damage have separate impact textures
+ok 75 - head, body and received damage have separate impact textures
+  ---
+  duration_ms: 4.383496
+  type: 'test'
+  ...
+# Subtest: a held keyboard control cannot restart from autorepeat across a menu or mode change
+ok 76 - a held keyboard control cannot restart from autorepeat across a menu or mode change
+  ---
+  duration_ms: 1.992814
+  type: 'test'
+  ...
+# Subtest: a fresh physical press recovers even when the keyup happened outside the page
+ok 77 - a fresh physical press recovers even when the keyup happened outside the page
+  ---
+  duration_ms: 0.231767
+  type: 'test'
+  ...
+# Subtest: controller confirm cannot become a jump, or a held utility become another release, on resume
+ok 78 - controller confirm cannot become a jump, or a held utility become another release, on resume
+  ---
+  duration_ms: 2.470148
+  type: 'test'
+  ...
+# Subtest: sticks held across a boundary must center before they move or aim again
+ok 79 - sticks held across a boundary must center before they move or aim again
+  ---
+  duration_ms: 0.378386
+  type: 'test'
+  ...
+# Subtest: directional weights cover the full circle continuously and sum to one
+ok 80 - directional weights cover the full circle continuously and sum to one
+  ---
+  duration_ms: 174.935388
+  type: 'test'
+  ...
+# Subtest: gait clips share a normalized clock using actual asset durations
+ok 81 - gait clips share a normalized clock using actual asset durations
+  ---
+  duration_ms: 5.092415
+  type: 'test'
+  ...
+# Subtest: pose smoothing is independent of frame rate and releases on resets/full body/reduced motion
+ok 82 - pose smoothing is independent of frame rate and releases on resets/full body/reduced motion
+  ---
+  duration_ms: 1.960519
+  type: 'test'
+  ...
+# Subtest: render signals preserve authoritative state, wrap yaw and detect discontinuities
+ok 83 - render signals preserve authoritative state, wrap yaw and detect discontinuities
+  ---
+  duration_ms: 2.150448
+  type: 'test'
+  ...
+# Subtest: gradual start and stop cross hysteresis at 30, 60 and 120 fps
+ok 84 - gradual start and stop cross hysteresis at 30, 60 and 120 fps
+  ---
+  duration_ms: 1.401391
+  type: 'test'
+  ...
+# Subtest: walk/run style follows each native hero/weapon speed range
+ok 85 - walk/run style follows each native hero/weapon speed range
+  ---
+  duration_ms: 1.746228
+  type: 'test'
+  ...
+# Subtest: first/third-person stride plans retain one clock through walk/run changes
+ok 86 - first/third-person stride plans retain one clock through walk/run changes
+  ---
+  duration_ms: 23.844473
+  type: 'test'
+  ...
+# Subtest: small analog steps match root distance during support rather than retaining a full stride
+ok 87 - small analog steps match root distance during support rather than retaining a full stride
+  ---
+  duration_ms: 0.453845
+  type: 'test'
+  ...
+# Subtest: authoritative stance is the exact pose group weight through resets and irregular rendering
+ok 88 - authoritative stance is the exact pose group weight through resets and irregular rendering
+  ---
+  duration_ms: 13.954087
+  type: 'test'
+  ...
+# Subtest: fixed-step browser motion matches every native tick on all maps, chassis and weapons
+ok 89 - fixed-step browser motion matches every native tick on all maps, chassis and weapons
+  ---
+  duration_ms: 11413.08424
+  type: 'test'
+  ...
+# Subtest: 30/60/120 Hz and jitter integrate the same acceleration, jump, boundary and stop ticks
+ok 90 - 30/60/120 Hz and jitter integrate the same acceleration, jump, boundary and stop ticks
+  ---
+  duration_ms: 5.721849
+  type: 'test'
+  ...
+# Subtest: public queue and socket metrics track fill, latency and real reconnects
+ok 91 - public queue and socket metrics track fill, latency and real reconnects
+  ---
+  duration_ms: 1251.894349
+  type: 'test'
+  ...
+# Subtest: post-match results require a completed native state and an attached final room
+ok 92 - post-match results require a completed native state and an attached final room
+  ---
+  duration_ms: 2.26464
+  type: 'test'
+  ...
+# Subtest: combat MVP uses recorded stats with stable tie breaks
+ok 93 - combat MVP uses recorded stats with stable tie breaks
+  ---
+  duration_ms: 2.017384
+  type: 'test'
+  ...
+# Subtest: a scoreless draw has no fabricated MVP
+ok 94 - a scoreless draw has no fabricated MVP
+  ---
+  duration_ms: 0.336726
+  type: 'test'
+  ...
+# Subtest: feet stay airborne until actual ground contact and landing fires once
+ok 95 - feet stay airborne until actual ground contact and landing fires once
+  ---
+  duration_ms: 6.000904
+  type: 'test'
+  ...
+# Subtest: airborne crouching uses the same continuous pose fraction as grounded crouching
+ok 96 - airborne crouching uses the same continuous pose fraction as grounded crouching
+  ---
+  duration_ms: 3.827433
+  type: 'test'
+  ...
+# Subtest: corpse pose starts at the outgoing crouch and elapsed-time falling does not mutate native state
+ok 97 - corpse pose starts at the outgoing crouch and elapsed-time falling does not mutate native state
+  ---
+  duration_ms: 9.141387
+  type: 'test'
+  ...
+# Subtest: a dead or full-body reset cannot reactivate the lower locomotion layer
+ok 98 - a dead or full-body reset cannot reactivate the lower locomotion layer
+  ---
+  duration_ms: 1.004142
+  type: 'test'
+  ...
+# Subtest: a corrected native corpse origin retains the same cosmetic fall height
+ok 99 - a corrected native corpse origin retains the same cosmetic fall height
+  ---
+  duration_ms: 1.343774
+  type: 'test'
+  ...
+# Subtest: training cannot create career stats even on verified/recovered results
+ok 100 - training cannot create career stats even on verified/recovered results
+  ---
+  duration_ms: 12.468094
+  type: 'test'
+  ...
+# Subtest: practice metrics name shotgun impacts separately from fired rounds
+ok 101 - practice metrics name shotgun impacts separately from fired rounds
+  ---
+  duration_ms: 0.625589
+  type: 'test'
+  ...
+# Subtest: movement stays immediate with 0 ms round trip and 16 Hz snapshots
+ok 102 - movement stays immediate with 0 ms round trip and 16 Hz snapshots
+  ---
+  duration_ms: 8.242305
+  type: 'test'
+  ...
+# Subtest: movement stays immediate with 80 ms round trip and 16 Hz snapshots
+ok 103 - movement stays immediate with 80 ms round trip and 16 Hz snapshots
+  ---
+  duration_ms: 6.330768
+  type: 'test'
+  ...
+# Subtest: movement stays immediate with 180 ms round trip and 16 Hz snapshots
+ok 104 - movement stays immediate with 180 ms round trip and 16 Hz snapshots
+  ---
+  duration_ms: 7.029697
+  type: 'test'
+  ...
+# Subtest: prediction snaps teleports and bounds stale unacknowledged history
+ok 105 - prediction snaps teleports and bounds stale unacknowledged history
+  ---
+  duration_ms: 0.597986
+  type: 'test'
+  ...
+# Subtest: slow rendering reduces resolution in milliseconds, not after 90 slow frames
+ok 106 - slow rendering reduces resolution in milliseconds, not after 90 slow frames
+  ---
+  duration_ms: 2.611116
+  type: 'test'
+  ...
+# Subtest: 810 fixed native releases cover modes, motion, throw equipment, pitches and combat maps
+ok 107 - 810 fixed native releases cover modes, motion, throw equipment, pitches and combat maps
+  ---
+  duration_ms: 262.751736
+  type: 'test'
+  ...
+# Subtest: offline projectile inspection rejects invalid modes, self-use items and unknown score fields
+ok 108 - offline projectile inspection rejects invalid modes, self-use items and unknown score fields
+  ---
+  duration_ms: 18.952393
+  type: 'test'
+  ...
+# Subtest: aim assistance only selects visible enemies, never smoke, walls or revealed targets behind cover
+ok 109 - aim assistance only selects visible enemies, never smoke, walls or revealed targets behind cover
+  ---
+  duration_ms: 3.106965
+  type: 'test'
+  ...
+# Subtest: assistance is opt-in for mouse, on for touch, bounded per frame and targets the body
+ok 110 - assistance is opt-in for mouse, on for touch, bounded per frame and targets the body
+  ---
+  duration_ms: 2.636487
+  type: 'test'
+  ...
+# Subtest: rail optic has greater magnification with proportionate aim sensitivity
+ok 111 - rail optic has greater magnification with proportionate aim sensitivity
+  ---
+  duration_ms: 0.362923
+  type: 'test'
+  ...
+# Subtest: shipped interface and specification contain no Chinese text
+ok 112 - shipped interface and specification contain no Chinese text
+  ---
+  duration_ms: 2.202979
+  type: 'test'
+  ...
+# Subtest: first playable frame starts at a bounded render budget and can recover on fast hardware
+ok 113 - first playable frame starts at a bounded render budget and can recover on fast hardware
+  ---
+  duration_ms: 0.727082
+  type: 'test'
+  ...
+# Subtest: recognition schedule is repeatable, bounded and covers each chassis/relation/map pair twice
+ok 114 - recognition schedule is repeatable, bounded and covers each chassis/relation/map pair twice
+  ---
+  duration_ms: 8.355047
+  type: 'test'
+  ...
+# Subtest: recognition metrics retain timeouts and invalid trials with real per-condition counts
+ok 115 - recognition metrics retain timeouts and invalid trials with real per-condition counts
+  ---
+  duration_ms: 1.896461
+  type: 'test'
+  ...
+# Subtest: native-box-clear study lanes exist for every combat map and reference distance
+ok 116 - native-box-clear study lanes exist for every combat map and reference distance
+  ---
+  duration_ms: 74.370672
+  type: 'test'
+  ...
+# Subtest: native and browser agree on every gun tick for all twelve weapons and six chassis
+ok 117 - native and browser agree on every gun tick for all twelve weapons and six chassis
+  ---
+  duration_ms: 4783.672112
+  type: 'test'
+  ...
+# Subtest: prediction is frame-rate independent and replay reconciliation emits no duplicate shots
+ok 118 - prediction is frame-rate independent and replay reconciliation emits no duplicate shots
+  ---
+  duration_ms: 5.229157
+  type: 'test'
+  ...
+# Subtest: predicted recoil preserves burst cadence and native fire-rate effects
+ok 119 - predicted recoil preserves burst cadence and native fire-rate effects
+  ---
+  duration_ms: 48.127633
+  type: 'test'
+  ...
+# Subtest: a pending single-click fires once across a long frame and aim clamps at pitch limits
+ok 120 - a pending single-click fires once across a long frame and aim clamps at pitch limits
+  ---
+  duration_ms: 2.483167
+  type: 'test'
+  ...
+# Subtest: snapshot replays never present the same life and shot number twice
+ok 121 - snapshot replays never present the same life and shot number twice
+  ---
+  duration_ms: 3.136506
+  type: 'test'
+  ...
+# Subtest: frame limit persists only supported options and preserves existing controls
+ok 122 - frame limit persists only supported options and preserves existing controls
+  ---
+  duration_ms: 2.486
+  type: 'test'
+  ...
+# Subtest: resolution never rises above a sub-unit device cap under sustained load
+ok 123 - resolution never rises above a sub-unit device cap under sustained load
+  ---
+  duration_ms: 0.593129
+  type: 'test'
+  ...
+# Subtest: live frame limits schedule distinct 30/60/120 draw cadences, with inactive and visibility gates
+ok 124 - live frame limits schedule distinct 30/60/120 draw cadences, with inactive and visibility gates
+  ---
+  duration_ms: 17.138093
+  type: 'test'
+  ...
+# Subtest: a departing host leaves teammates in play; the last departure frees room capacity
+ok 125 - a departing host leaves teammates in play; the last departure frees room capacity
+  ---
+  duration_ms: 718.101826
+  type: 'test'
+  ...
+# Subtest: a restarted service marks an unfinished room interrupted and permits a new match
+ok 126 - a restarted service marks an unfinished room interrupted and permits a new match
+  ---
+  duration_ms: 41.698467
+  type: 'test'
+  ...
+# Subtest: an expired waiting room clears its deadline and permits another session
+ok 127 - an expired waiting room clears its deadline and permits another session
+  ---
+  duration_ms: 75.378883
+  type: 'test'
+  ...
+# Subtest: decorative skyline cannot enter a playable map corner
+ok 128 - decorative skyline cannot enter a playable map corner
+  ---
+  duration_ms: 3.223823
+  type: 'test'
+  ...
+# Subtest: distant skyline buildings keep their original positions
+ok 129 - distant skyline buildings keep their original positions
+  ---
+  duration_ms: 1.931682
+  type: 'test'
+  ...
+# Subtest: network controls cannot set authority, purchases or hero attributes
+ok 130 - network controls cannot set authority, purchases or hero attributes
+  ---
+  duration_ms: 3.901839
+  type: 'test'
+  ...
+# Subtest: reject malformed or unbounded network controls
+ok 131 - reject malformed or unbounded network controls
+  ---
+  duration_ms: 0.864797
+  type: 'test'
+  ...
+# Subtest: training selects only bounded solo settings and packs its recorded command
+ok 132 - training selects only bounded solo settings and packs its recorded command
+  ---
+  duration_ms: 3.714191
+  type: 'test'
+  ...
+# Subtest: compact tapes preserve controls and keep bots implicit
+ok 133 - compact tapes preserve controls and keep bots implicit
+  ---
+  duration_ms: 1.027349
+  type: 'test'
+  ...
+# Subtest: replay profile and hex export budgets cover the entire bounded tape
+ok 134 - replay profile and hex export budgets cover the entire bounded tape
+  ---
+  duration_ms: 1.216335
+  type: 'test'
+  ...
+# Subtest: release mode is bounded, recorded in compact tapes and cannot smuggle a launch vector
+ok 135 - release mode is bounded, recorded in compact tapes and cannot smuggle a launch vector
+  ---
+  duration_ms: 0.685261
+  type: 'test'
+  ...
+# Subtest: preview selection and throw mode share a bounded tape word without adding a trusted launch vector
+ok 136 - preview selection and throw mode share a bounded tape word without adding a trusted launch vector
+  ---
+  duration_ms: 0.460084
+  type: 'test'
+  ...
+# Subtest: temporary connection and server failures recover in the same launch
+ok 137 - temporary connection and server failures recover in the same launch
+  ---
+  duration_ms: 7.390607
+  type: 'test'
+  ...
+# Subtest: expired authentication is not retried and persistent failures are bounded
+ok 138 - expired authentication is not retried and persistent failures are bounded
+  ---
+  duration_ms: 2.158049
+  type: 'test'
+  ...
+# Subtest: sampled shots have bounded peaks and decays at common sample rates
+ok 139 - sampled shots have bounded peaks and decays at common sample rates
+  ---
+  duration_ms: 107.345743
+  type: 'test'
+  ...
+# Subtest: ARC-9 and NEEDLE have distinct durations and transient texture
+ok 140 - ARC-9 and NEEDLE have distinct durations and transient texture
+  ---
+  duration_ms: 4.400201
+  type: 'test'
+  ...
+# Subtest: ION-5 sample finishes before its next rapid-fire interval
+ok 141 - ION-5 sample finishes before its next rapid-fire interval
+  ---
+  duration_ms: 3.677439
+  type: 'test'
+  ...
+# Subtest: SCATTER has a longer blast and a distinct pump return transient
+ok 142 - SCATTER has a longer blast and a distinct pump return transient
+  ---
+  duration_ms: 6.311356
+  type: 'test'
+  ...
+# Subtest: RAIL-LANCE has a compact coil tail without the SCATTER pump return
+ok 143 - RAIL-LANCE has a compact coil tail without the SCATTER pump return
+  ---
+  duration_ms: 7.256742
+  type: 'test'
+  ...
+# Subtest: tracers stop at the first native obstacle surface
+ok 144 - tracers stop at the first native obstacle surface
+  ---
+  duration_ms: 3.832207
+  type: 'test'
+  ...
+# Subtest: the nearest cover wins regardless of obstacle order
+ok 145 - the nearest cover wins regardless of obstacle order
+  ---
+  duration_ms: 0.416247
+  type: 'test'
+  ...
+# Subtest: native and browser agree on 2004 sphere/eye fixtures including elevated, zero-length and tangent rays
+ok 146 - native and browser agree on 2004 sphere/eye fixtures including elevated, zero-length and tangent rays
+  ---
+  duration_ms: 28.556333
+  type: 'test'
+  ...
+# Subtest: smoke expiration and altitude are shared rather than an infinite column
+ok 147 - smoke expiration and altitude are shared rather than an infinite column
+  ---
+  duration_ms: 0.750826
+  type: 'test'
+  ...
+# Subtest: disclosure uses continuous eye height and rotated authored hit geometry at low cover
+ok 148 - disclosure uses continuous eye height and rotated authored hit geometry at low cover
+  ---
+  duration_ms: 2.096599
+  type: 'test'
+  ...
+# Subtest: store stays gated until artwork, live session and painted scene are ready
+ok 149 - store stays gated until artwork, live session and painted scene are ready
+  ---
+  duration_ms: 9.742091
+  type: 'test'
+  ...
+# Subtest: late parent requests get the current state; stale and foreign requests are ignored
+ok 150 - late parent requests get the current state; stale and foreign requests are ignored
+  ---
+  duration_ms: 2.11904
+  type: 'test'
+  ...
+# Subtest: download, graphics and module failures are actionable and never release the store overlay
+ok 151 - download, graphics and module failures are actionable and never release the store overlay
+  ---
+  duration_ms: 4.754854
+  type: 'test'
+  ...
+# Subtest: 3D preparation is labelled separately from connecting and reports real model progress
+ok 152 - 3D preparation is labelled separately from connecting and reports real model progress
+  ---
+  duration_ms: 2.075977
+  type: 'test'
+  ...
+# Subtest: late live-session recovery clears only a session failure without a new launch
+ok 153 - late live-session recovery clears only a session failure without a new launch
+  ---
+  duration_ms: 1.69192
+  type: 'test'
+  ...
+# Subtest: IFF never identifies hidden, dead, self or smoke-obscured targets
+ok 154 - IFF never identifies hidden, dead, self or smoke-obscured targets
+  ---
+  duration_ms: 3.948551
+  type: 'test'
+  ...
+# Subtest: IFF requires a visible body even when the overhead badge clears a wall
+ok 155 - IFF requires a visible body even when the overhead badge clears a wall
+  ---
+  duration_ms: 0.66414
+  type: 'test'
+  ...
+# Subtest: browser wait polls resolved async results rather than Promise truthiness
+ok 156 - browser wait polls resolved async results rather than Promise truthiness
+  ---
+  duration_ms: 6.150034
+  type: 'test'
+  ...
+# Subtest: a false async browser condition fails instead of reporting success
+ok 157 - a false async browser condition fails instead of reporting success
+  ---
+  duration_ms: 6.359851
+  type: 'test'
+  ...
+1..157
+# tests 157
+# suites 0
+# pass 157
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11858.674565

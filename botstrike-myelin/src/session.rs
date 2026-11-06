@@ -128,8 +128,8 @@ fn profile() -> ApplicationProfile {
     ApplicationProfile {
         application_id: ID.into(),
         program_digest: *program.finalize().as_bytes(),
-        input_schema_hash: hash(b"botstrike-2050-tactical-gunplay-v2"),
-        state_codec_hash: hash(b"serde-json-game-snapshot-v2"),
+        input_schema_hash: hash(b"botstrike-2050-tactical-life-inventory-commands-v5"),
+        state_codec_hash: hash(b"serde-json-game-snapshot-v5"),
         logical_time_policy_hash: hash(b"one-accepted-action-one-logical-tick"),
         entropy_policy_hash: hash(b"deterministic-native-neon-arena-no-random-input"),
         vm: ApplicationVmProfile {
@@ -137,7 +137,7 @@ fn profile() -> ApplicationProfile {
         },
         resources: ApplicationResourceEnvelope {
             max_frame_inputs: 1,
-            max_frame_input_bytes: 184_000_000,
+            max_frame_input_bytes: 196_000_000,
             max_frame_cycles: 1,
             max_logical_time_span: 1,
             max_inspect_query_bytes: 1024,

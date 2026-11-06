@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';import {mkdirSync,writeFileSync} from 'node:fs';
+import {waitNativeState} from './browser-native-state.mjs';import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
+import {resizeMobile,screenshotMobile} from './mobile-viewport.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
+const base=process.env.STORE_URL||'http://127.0.0.1:19902',out=process.env.CONTROL_ARTIFACTS||'/tmp/botstrike-map-live-browser';mkdirSync(out,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader']}),errors=[],results=[];
+async function boot(context){const page=await context.newPage();page.setDefaultTimeout(60000);page.on('pageerror',e=>errors.push(e.message));await page.goto(base+'/games/botstrike/');await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Choose your chassis'));return page;}
+async function start(page){await page.locator('#practice-drill').selectOption('5');await page.locator('#training-start').click();await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');return waitNativeState(page,r=>r.state.config.map===0&&r.state.practice.settings.drill===5);}
+async function check(page,width,height,mobile){const info=await page.locator('#arena').evaluate(c=>({backing:[c.width,c.height],rect:{x:c.getBoundingClientRect().x,y:c.getBoundingClientRect().y,w:c.getBoundingClientRect().width,h:c.getBoundingClientRect().height},drawCalls:document.documentElement.dataset.drawCalls,triangles:document.documentElement.dataset.renderTriangles}));assert.deepEqual(info.rect,{x:0,y:0,w:width,h:height});assert.ok(info.backing[0]*info.backing[1]<=(mobile?1280*720:2560*1440));results.push({width,height,mobile,...info});}
+try{
+ const context=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:.5}),page=await boot(context);let room=await start(page),initial=room.state.players[0].position;
+ await page.keyboard.down('KeyW');await page.waitForTimeout(150);await page.keyboard.up('KeyW');await waitNativeState(page,(r,p)=>Math.hypot(r.state.players[0].position[0]-p[0],r.state.players[0].position[2]-p[2])>1,initial);
+ for(const [width,height]of [[1920,1080],[2560,1080],[2560,1440],[3840,2160]]){await page.setViewportSize({width,height});await page.waitForTimeout(100);await check(page,width,height,false);await page.screenshot({path:`${out}/map-${width}x${height}.png`});}
+ await page.keyboard.press('Escape');await leaveBrowserRoom(page);await context.close();
+ const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1}),phone=await boot(mobile);
+ await phone.locator('#immersive-gate').waitFor({state:'visible'});await screenshotMobile(phone,out+'/portrait.png');await phone.locator('#immersive-enter').click();await resizeMobile(phone,844,390);await phone.locator('#immersive-gate').waitFor({state:'hidden'});room=await start(phone);const id=room.id;
+ await phone.locator('#touch-fire').tap();await waitNativeState(phone,r=>r.state.practice.shots>0);await check(phone,844,390,true);await screenshotMobile(phone,out+'/map-844x390.png');
+ await phone.evaluate(()=>document.exitFullscreen());await phone.locator('#immersive-gate').waitFor({state:'visible'});assert.equal((await phone.evaluate(()=>fetch('/games/botstrike/api/state').then(r=>r.json()))).room.id,id);await phone.locator('#immersive-enter').click();await phone.locator('#immersive-gate').waitFor({state:'hidden'});await leaveBrowserRoom(phone);await mobile.close();
+ results.push({width:390,height:844,portraitEntryGate:true,preservedInstanceAfterFullscreenExit:true});assert.deepEqual(errors,[]);const result={automated:true,functionalOnly:true,desktopDpr:.5,mobileDpr:1,map:'neon-docks',results,errors};writeFileSync(out+'/measurements.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
+}finally{await browser.close();}

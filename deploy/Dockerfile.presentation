@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1
+# Presentation-only rebuild of an exact retained application image. The base's
+# engine/verifier/runtime libraries stay byte-identical, including old routing.
+ARG PRESENTATION_BINDING=docs/acceptance/utility-interactions/presentation-binding.json
+ARG APPLICATION_IMAGE=botstrike:tactical-v4-effects-final-881347ed
+FROM ${APPLICATION_IMAGE} AS bound
+FROM bound AS web
+ARG PRESENTATION_BINDING
+USER root
+WORKDIR /work
+COPY package.json package-lock.json ./
+RUN npm ci --include=dev --ignore-scripts --no-audit --no-fund
+COPY botstrike ./botstrike
+COPY botstrike-myelin ./botstrike-myelin
+COPY botstrike-service ./botstrike-service
+COPY shared ./shared
+COPY games ./games
+COPY assets ./assets
+COPY public ./public
+COPY host ./host
+COPY game-host.json ./game-host.json
+COPY tools ./tools
+COPY tests ./tests
+COPY ${PRESENTATION_BINDING} ./presentation-binding.json
+COPY --from=bound /app/release ./release
+COPY --from=bound /app/botstrike/spec.json ./bound-spec.json
+COPY --from=bound /app/dist/botstrike/damage-contract.json ./bound-damage.json
+# A changed native source/spec requires the full native/rules release workflow.
+RUN cmp botstrike/spec.json bound-spec.json && node tools/check-presentation-binding.mjs && cp bound-damage.json games/botstrike/web/damage-contract.json
+RUN npm test && npm run test:host && npm run build
+FROM bound
+COPY --from=web /work/dist /app/dist

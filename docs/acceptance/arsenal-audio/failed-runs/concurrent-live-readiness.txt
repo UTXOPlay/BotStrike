@@ -1,0 +1,9 @@
+file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/browser-condition.mjs:9
+ throw Error('Browser condition timed out after '+timeout+'ms: '+String(predicate).slice(0,180));
+       ^
+
+Error: Browser condition timed out after 30000ms: expected=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{const pilot=room.state.players[room.slot];return pilot.weapon===expected&&pilot.alive&
+    at waitBrowserCondition (file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/browser-condition.mjs:9:8)
+    at async file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-shot-audio-browser.mjs:35:3
+
+Node.js v22.23.1

@@ -1,0 +1,5 @@
+{
+  "tests/botstrike-comms-flow.mjs": "3359f63af1a8efb2359f42892670cb3ed0a3cf42ac90360b0ca1380766b72c40",
+  "tests/botstrike-practice-flow.mjs": "d841fc4a59121b0b2a6369a3d5b29ed5b74c091f9b019a0ede65aecb0828e70f",
+  "tests/botstrike-comms-browser.mjs": "df6f6084b21856f89bc9235f51096b3b7d8e5468b65eeca20b310746f32e4b61"
+}

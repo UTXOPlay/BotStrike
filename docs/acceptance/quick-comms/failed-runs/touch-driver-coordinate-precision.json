@@ -1,0 +1,136 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(Math.abs(event.position[2]-(.35*240-120)/((240-16)/(2*map.extent)))<1e-5)\n",
+  "results": [],
+  "errors": [],
+  "diagnostics": [
+    {
+      "wire": [
+        {
+          "type": "communication",
+          "room": "9dafb5a751b4305cffea63fe",
+          "tick": 52,
+          "comms": {
+            "revision": 1,
+            "events": [
+              {
+                "id": "9dafb5a751b4305cffea63fe:0:1",
+                "sender": 0,
+                "kind": "hold",
+                "position": [
+                  0,
+                  0,
+                  -514.2857831223565
+                ],
+                "callout": "mid_lane",
+                "tick": 52,
+                "remainingMs": 4999.7333149999995
+              }
+            ],
+            "muted": []
+          }
+        }
+      ],
+      "sent": [
+        {
+          "type": "comms",
+          "kind": "hold",
+          "map": 3,
+          "life": 2,
+          "position": [
+            0,
+            0,
+            -514.2857831223565
+          ],
+          "room": "9dafb5a751b4305cffea63fe"
+        }
+      ],
+      "inputs": [
+        {
+          "seq": 1,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 2,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 3,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 4,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 5,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 6,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 7,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 8,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 9,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 10,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 11,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 12,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 13,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 14,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 15,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 16,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 17,
+          "jump": false,
+          "fire": false
+        }
+      ]
+    }
+  ]
+}

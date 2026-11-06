@@ -1,3 +1,4 @@
+import {presentationGait} from './presentation-gait.mjs';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
@@ -249,8 +250,8 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null,hit_reg
    lastCrouch=!!p.crouch;lastScoped=!!p.scoped;
    if(transition&&now>=transitionUntil){transition.fadeOut(.06);transition=null;transitionKind=null;}
    if(continuous){
-    const cycleDuration=feet?feet.plan(motionSignals,dt):advanceStridePlan(viewStride,motionSignals,dt);
-    blend.update(motionSignals,dt,{active:p.alive&&!full,reduced,phase:motionSignals.reset?gaitPhase:blend.phase,cycleDuration});
+    const gait=presentationGait(p,state.tick),cycleDuration=feet?feet.plan(motionSignals,dt,gait):gait?.cycleDuration??advanceStridePlan(viewStride,motionSignals,dt);
+    blend.update(motionSignals,dt,{active:p.alive&&!full,reduced,phase:motionSignals.reset?gaitPhase:blend.phase,cycleDuration,contactPhase:gait?.phase});
     for(let i=0;i<lowerActions.length;i++){const a=lowerActions[i],weight=blend.weights[i]*blend.gain;a.enabled=weight>1e-6;if(a.enabled)a.play();a.paused=true;a.time=blend.times[i];a.setEffectiveWeight(weight);}
     base=action(blend.dominant,'lower');gaitPhase=blend.phase;
    }
@@ -347,7 +348,7 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null,hit_reg
     const c=Math.cos(rig.rotation.y),s=Math.sin(rig.rotation.y),support=corpsePlanes?Math.max(0,...corpsePlanes.planes.filter(p=>p.face?.axis==='y').map(p=>p.face.edge)):0;
     shadow.position.set(c*corpseOffset.x-s*corpseOffset.z,.15+support-Math.max(0,p.position[1]),s*corpseOffset.x+c*corpseOffset.z);
    }
-   gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;if(p.alive)lastRenderYaw=rig.rotation.y;
+   gun.visible=p.alive&&!p.unarmed&&(!p.owned||p.owned[p.weapon]);rig.userData.motion=full?.getClip().name||base?.getClip().name;if(p.alive)lastRenderYaw=rig.rotation.y;
    return {deadAt,motion:rig.userData.motion};
   }
   function invalidate(reason='visibility'){

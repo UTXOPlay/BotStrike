@@ -1,0 +1,18 @@
+{
+  "data": "/tmp/botstrike-flow-MModYX",
+  "profile": "9c96e0871dc51ab80a5684b43f8a97443a75f275d4e4692eac7a4e2a4785273f",
+  "ticks": 23040,
+  "score": [
+    40,
+    35
+  ],
+  "players": 10,
+  "privateJoin": true,
+  "publicMatchmaking": true,
+  "reconnect": true,
+  "balancedTeams": true,
+  "humanInput": true,
+  "respawns": true,
+  "signedReplay": true,
+  "tamperRejected": true
+}

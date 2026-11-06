@@ -1,5 +1,5 @@
 {
-  "version": "botstrike-2050-tactical-v2",
+  "version": "botstrike-2050-tactical-v5",
   "tick_rate": 64,
   "player_radius": 18,
   "eye_height": 56,
@@ -1609,6 +1609,140 @@
           630
         ]
       ]
+    },
+    {
+      "id": "practice-range",
+      "name": "PRACTICE RANGE",
+      "description": "Unranked native target and utility drills.",
+      "practice_only": true,
+      "extent": 1600,
+      "obstacles": [
+        {
+          "min": [
+            -1600,
+            0,
+            -1600
+          ],
+          "max": [
+            1600,
+            1400,
+            -1580
+          ],
+          "kind": "wall"
+        },
+        {
+          "min": [
+            -1600,
+            0,
+            -1600
+          ],
+          "max": [
+            -1580,
+            120,
+            1600
+          ],
+          "kind": "wall"
+        },
+        {
+          "min": [
+            1580,
+            0,
+            -1600
+          ],
+          "max": [
+            1600,
+            120,
+            1600
+          ],
+          "kind": "wall"
+        },
+        {
+          "min": [
+            -1600,
+            0,
+            1580
+          ],
+          "max": [
+            1600,
+            120,
+            1600
+          ],
+          "kind": "wall"
+        }
+      ],
+      "spawns": [
+        [
+          [
+            -140,
+            0,
+            0
+          ],
+          [
+            -70,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            70,
+            0,
+            0
+          ],
+          [
+            140,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            -140,
+            0,
+            -1450
+          ],
+          [
+            -70,
+            0,
+            -1450
+          ],
+          [
+            0,
+            0,
+            -1450
+          ],
+          [
+            70,
+            0,
+            -1450
+          ],
+          [
+            140,
+            0,
+            -1450
+          ]
+        ]
+      ],
+      "sites": [
+        [
+          0,
+          0,
+          -900
+        ],
+        [
+          900,
+          0,
+          0
+        ]
+      ],
+      "colors": [
+        "#182d3a",
+        "#56dfea",
+        "#ffbd79"
+      ]
     }
   ],
   "items": [
@@ -1775,5 +1909,74 @@
     "neck_length": 16.5,
     "head_center_up": 1.8,
     "head_center_z": -0.4
+  },
+  "projectile": {
+    "modes": [
+      {
+        "id": "standard",
+        "speed": 600,
+        "lift": 160
+      },
+      {
+        "id": "short",
+        "speed": 280,
+        "lift": 100
+      },
+      {
+        "id": "lob",
+        "speed": 820,
+        "lift": 200
+      }
+    ],
+    "gravity": 500,
+    "radius": 8,
+    "inherit_velocity": 1,
+    "wall_restitution": 0.5,
+    "floor_restitution": 0.4,
+    "floor_friction": 0.85,
+    "settle_vertical_speed": 20,
+    "stop_horizontal_speed": 5,
+    "max_contacts": 4
+  },
+  "utility_effects": {
+    "flash_radius": 650,
+    "flash_front_ticks": 192,
+    "flash_back_ticks": 32,
+    "emp_radius": 350,
+    "emp_ticks": 320,
+    "fragment_radius": 260,
+    "scan_radius": 450,
+    "scan_reveal_ticks": 32,
+    "repair_radius": 220,
+    "repair_per_second": 8
+  },
+  "economy": {
+    "start": 800,
+    "cap": 16000,
+    "win": 3250,
+    "loss": [
+      1900,
+      2200,
+      2500,
+      2800,
+      3100
+    ],
+    "planted_loss": 200,
+    "objective_actor": 300,
+    "weapon_kill": [
+      300,
+      600,
+      300,
+      100,
+      600,
+      300,
+      300,
+      200,
+      300,
+      200,
+      300,
+      150
+    ],
+    "utility_kill": 200
   }
 }

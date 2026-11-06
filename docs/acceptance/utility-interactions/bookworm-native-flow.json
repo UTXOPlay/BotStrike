@@ -1,0 +1,18 @@
+{
+  "data": "/tmp/botstrike-flow-2pcRmj",
+  "profile": "b8efb5123d1dc99dcf7add70c4069f22d4a320378653c5ff67c1c0169a7d9886",
+  "ticks": 21555,
+  "score": [
+    50,
+    44
+  ],
+  "players": 10,
+  "privateJoin": true,
+  "publicMatchmaking": true,
+  "reconnect": true,
+  "balancedTeams": true,
+  "humanInput": true,
+  "respawns": true,
+  "signedReplay": true,
+  "tamperRejected": true
+}

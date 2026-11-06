@@ -1,0 +1,27 @@
+[
+  {
+    "file": "arsenal-v2.json",
+    "verified": true,
+    "verifier": "arsenal-v2"
+  },
+  {
+    "file": "network-v3.json",
+    "verified": true,
+    "verifier": "network-v3"
+  },
+  {
+    "file": "readability-v5.json",
+    "verified": true,
+    "verifier": "readability-v5"
+  },
+  {
+    "file": "salvage-v1.json",
+    "verified": true,
+    "verifier": "salvage-v1"
+  },
+  {
+    "file": "tactics-v4.json",
+    "verified": true,
+    "verifier": "tactics-v4"
+  }
+]

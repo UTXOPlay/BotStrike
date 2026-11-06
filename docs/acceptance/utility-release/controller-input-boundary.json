@@ -1,0 +1,10 @@
+{
+  "controllerApi": true,
+  "allThreeModesSelected": true,
+  "oneButtonRelease": true,
+  "noDuplicateRelease": true,
+  "heldKeyboardModeChangeBlocked": true,
+  "freshPressReleases": true,
+  "errors": [],
+  "physicalControllerAccepted": false
+}

@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "date": "2026-11-06",
+  "status": "local staged preview, not production deployed; human acceptance pending",
+  "modelSha256": "c388f9609a838df03ad2f97455e7f94663a3cb665e56b27e19c5b4129670de1d",
+  "image": "sha256:a361b16d5193152ec65f2771b3d7c02dbd2a78a22c5d1ba1adfbc0e924c98f7c",
+  "localPair": {
+    "botstrike-engine": "d27177a86a5441a640e5e1a62e7e23ee128f2c6a154bc0c94da2fee84bbc0af4",
+    "myelin-botstrike": "ae6fb398c46f8677d45d4d59f1210ba89b67102146cacad52620f62fd65f89ba"
+  },
+  "bookwormPair": {
+    "botstrike-engine": "35dc15e7b591a3843ce805e43b4d6378c6e20992db8a1399aa6d669c3492453f",
+    "myelin-botstrike": "e8cc623681b78f3a8a6c4d194fcd0df6c42375581d3bb8a9eb54e618166d19d2"
+  },
+  "nativeTests": 50,
+  "unitTests": 128,
+  "additionalAsyncPollRegressionTests": 2,
+  "hostTests": 4,
+  "damageCases": 6048,
+  "damageRowsEqualAcrossBuilds": true,
+  "browserReport": "browser.json",
+  "limitations": [
+    "Browser checks use desktop DPR 0.5/mobile DPR 1 and controller API emulation; they are not physical-device performance or human learning evidence.",
+    "Only the animation PR #2 has been merged; this gameplay candidate is unsigned/unpushed while local GPG unlocking is pending.",
+    "The 180-second comparison protocol and recent 12 native attempt reports are implemented; actual repeated-training measurements remain required."
+  ],
+  "historical": {
+    "synthetic": "historical-synthetic.json",
+    "retainedProduction": "production-history.json",
+    "realInputProvenanceAttested": false,
+    "retainedProductionProfiles": 5
+  }
+}

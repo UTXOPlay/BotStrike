@@ -1,0 +1,12 @@
+Live readiness retry ARC-9 { alive: true, life: 1, weapon: 1, fire_wait: 0 }
+Live readiness retry ARC-9 { alive: false, life: 1, weapon: 1, fire_wait: 0 }
+Live readiness retry ARC-9 { alive: true, life: 2, weapon: 2, fire_wait: 0 }
+file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/browser-condition.mjs:9
+ throw Error('Browser condition timed out after '+timeout+'ms: '+String(predicate).slice(0,180));
+       ^
+
+Error: Browser condition timed out after 5000ms: expected=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>{const p=room.state.players[room.slot];return p.weapon===expected&&p.alive&&p.fire_wait===0&&p.reload
+    at waitBrowserCondition (file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/browser-condition.mjs:9:8)
+    at async file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-shot-audio-browser.mjs:35:8
+
+Node.js v22.23.1

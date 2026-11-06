@@ -1,0 +1,141 @@
+{
+  "status": "provisional spawn-to-A reference throws; flagship map human approval remains pending",
+  "map": "neon-docks",
+  "version": "botstrike-2050-tactical-v3",
+  "modelSha256": "84118774e47dd230dd2a6ebaa187d5e789a1a78b0f02d4445788b7f38b9ab0a6",
+  "profile": "fcf982bb7885747d73985f4f00cd27d040a05802ea3a395d8e3e4e23dabe63f5",
+  "releases": [
+    {
+      "mode": "standard",
+      "kind": "smoke",
+      "pose": {
+        "map": 0,
+        "mode": 0,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      },
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          99.1940905527325,
+          160,
+          -591.7436373966486
+        ]
+      },
+      "landing": [
+        -929.6235833230114,
+        8.000001,
+        1049.4586707719736
+      ],
+      "fuseTicks": 128
+    },
+    {
+      "mode": "short",
+      "kind": "smoke",
+      "pose": {
+        "map": 0,
+        "mode": 1,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      },
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          46.29057559127517,
+          100,
+          -276.1470307851027
+        ]
+      },
+      "landing": [
+        -1016.693551454368,
+        8.000001,
+        789.7501570744066
+      ],
+      "fuseTicks": 128
+    },
+    {
+      "mode": "lob",
+      "kind": "smoke",
+      "pose": {
+        "map": 0,
+        "mode": 2,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      },
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          135.56525708873443,
+          200,
+          -808.7163044420864
+        ]
+      },
+      "landing": [
+        -857.4275756430637,
+        8.000001,
+        1155.5991078993698
+      ],
+      "fuseTicks": 128
+    }
+  ]
+}

@@ -4,8 +4,11 @@ const profiles={
  land:{duration:.19,thump:82,drop:32,weight:.86,weightDecay:.09,plate:270,plateLevel:.13,plateDecay:.055,click:.25},
 };
 
-export function makeFootstepSample(kind,sampleRate=44100){
- const profile=profiles[kind];if(!profile)return null;
+export function makeFootstepSample(kind,sampleRate=44100,surface=0){
+ const original=profiles[kind];if(!original||!Number.isInteger(surface)||surface<0||surface>2)return null;
+ // Original steel remains byte-identical. Concrete has a short gritty scuff;
+ // tile a brighter, compact heel click. All are authored here, no external audio.
+ const profile=surface===0?original:surface===1?{...original,plateLevel:.015,click:.29,weightDecay:original.weightDecay*.7,plateDecay:.012}:{...original,thump:original.thump*1.35,plate:original.plate*2.3,plateLevel:.17,plateDecay:.018,click:.38};
  const count=Math.ceil(profile.duration*sampleRate),samples=new Float32Array(count);
  const lowStep=Math.min(1,2*Math.PI*500/sampleRate);
  let seed=({step0:0xc9f47362,step1:0x8e697c91,land:0x4d829e05})[kind],low=0,phase=0,peak=0;

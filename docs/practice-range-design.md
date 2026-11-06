@@ -1,6 +1,6 @@
 # Authoritative practice range implementation plan (#10)
 
-Status: design for the next implementation slice, not shipped functionality.
+Status: implemented local candidate (model `c388f9609a838…`), not deployed to production or human accepted. Evidence: `acceptance/practice-range/candidate.json`.
 The gunplay/head-calibration checkpoint and its verifier bytes must remain
 retained before changing the native configuration/input schema again.
 
@@ -58,3 +58,36 @@ rejection, fixed-seed reset equivalence, source-derived metrics, public-room
 rejection of training commands and all input/resize/fullscreen checks before
 rollout. Human learning/feel/comprehension comparisons remain real gates; unit
 fixtures cannot supply them.
+
+
+## Candidate behavior and remaining gates
+
+The candidate includes all eight drill types, all twelve live weapons, the four
+native range distances, target chassis/armor/motion controls, fixed-seed reset,
+128 native impacts, an 8 Hz/65-point native throw preview, exact last-release
+rethrow and a bounded list of twelve native attempt reports. A 180-second
+baseline/repeat protocol is visible in the drill menu; partial attempts are
+labelled. The report preserves the settings used by that attempt before any
+settings change. No browser score or arbitrary target/throw coordinates are
+accepted. Retake success requires actual native defuse rather than kills alone.
+
+50 native tests pass, including all 24 drill/map combinations, fixed seed/reset
+identity, bounded original-setting reports, actual utility/preview point equality
+and retake scoring. The service flow verifies signed practice and combat replays,
+rejects result tampering, forbids joins/practice controls in normal rooms and
+leaves career totals unchanged. Both complete flows also pass inside the
+Bookworm image. All 6,048 portable damage-guide cases match the workstation.
+
+Browser fixtures await resolved conditions explicitly. Six viewport checks,
+mouse/touch and controller API start/reset/leave, portrait gating and fullscreen
+exit preserving the instance pass. The mobile practice controls are checked not
+to cover health/armor. Software rendering at desktop DPR 0.5/mobile DPR 1 is a
+functional check; it does not establish laptop/mobile performance or real
+controller usability. Real feel, learning/comprehension measurements and
+approved flagship-map exercises remain open acceptance work.
+
+All five retained production profiles now also pass saved-export routing in the
+Bookworm candidate. Two saved tapes contain substantial takeover movement and
+firing; their counts/hashes are recorded in `acceptance/practice-range/production-history.json`.
+These are production provenance checks, not human-input attestations. Private
+exports are kept outside the repository.

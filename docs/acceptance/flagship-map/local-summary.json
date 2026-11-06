@@ -1,0 +1,35 @@
+{
+  "out": "/tmp/botstrike-map-audit-v4c",
+  "cases": 484,
+  "failed": [],
+  "contacts": 144,
+  "anchorStancePairs": 528,
+  "replay": {
+    "case": "spawn-0-a_pad-h3-w2-run",
+    "score": [
+      0,
+      0
+    ],
+    "state_hash": "5208d4434018f5a129b66b8973cddfe8aedc492903ddfdfa6c5ff12ed377e3b0",
+    "ticks": 23040,
+    "trace_hash": "fa2859eda10029bb9d29b71715bf608f80878c6231867659db3bf91a5c396ea3",
+    "exactEngineStateMatched": true,
+    "exactEngineTraceMatched": true,
+    "profile": "ecc7a7390587866a790d61f71dde87765088f85935eb54e4f637ac9e21fa56bd",
+    "signedReplayVerified": true,
+    "synthetic": true,
+    "tamperRejected": true
+  },
+  "provenance": {
+    "modelSha256": "881347ed6ce9294c91f9bb82c010b06a2302c769fd2810aef4f910b95dd888a5",
+    "pair": {
+      "botstrike-engine": "0cc6cc97ea507c6512cc342074277243939729e929d3a776f26a3ec250c4447a",
+      "myelin-botstrike": "d3ce64cdcdd294e03e09646fd17fdaf273c49978c9d66c48e6eba38c76fecad3"
+    },
+    "exampleSha256": "47c1a5f883e079be8dd381b62535e75b402a3c3e34de78893ea5162b2e384718",
+    "sourceSha256": "d4a74a33eabe6adf149fd4e7d0688e9bc248e0a54086ac1edfd1cda945045acc",
+    "protocolSha256": "0dba47f81006edd229835ced0de080aee19408a7432fd0ada19579a18fb2e6e3",
+    "specSha256": "230f393d72e89801bcbb9a2e078b90cad7909967e6a8bf0bfbd7496b962360b9"
+  },
+  "humanParticipants": 0
+}

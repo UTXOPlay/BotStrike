@@ -23,7 +23,7 @@ export class ResolutionBudget {
     this.slow = 0;
     this.fast = 0;
   }
-  sample(ms, quality = "auto") {
+  sample(ms, quality = "auto", frameBudget = 1000 / 60) {
     if (quality !== "auto") {
       this.ratio = quality === "low" ? Math.min(1, this.max) : this.max;
       this.slow = this.fast = 0;
@@ -31,10 +31,10 @@ export class ResolutionBudget {
     }
     // Require sustained load; one GC/shader stall cannot consume the whole budget.
     const measured = Math.min(ms, 50);
-    this.slow = ms > 24 ? this.slow + measured : Math.max(0, this.slow - measured * 2);
-    this.fast = ms < 20 ? this.fast + measured : Math.max(0, this.fast - measured * 4);
+    this.slow = ms > frameBudget * 1.44 ? this.slow + measured : Math.max(0, this.slow - measured * 2);
+    this.fast = ms < frameBudget * 1.2 ? this.fast + measured : Math.max(0, this.fast - measured * 4);
     if (this.slow >= 350) {
-      this.ratio = Math.max(0.75, this.ratio - 0.25);
+      this.ratio = Math.max(Math.min(0.75, this.max), this.ratio - 0.25);
       this.slow = this.fast = 0;
     }
     if (this.fast >= 8000) {
@@ -67,7 +67,9 @@ export function startRenderLoop(
     if (stopped || document.hidden) return;
     handle = requestAnimationFrame(tick);
     const playing = active(),
-      interval = 1000 / (playing ? maxFps : 30);
+      requested = typeof maxFps === "function" ? maxFps() : maxFps,
+      limit = Number.isFinite(requested) ? Math.max(15, Math.min(120, requested)) : 60,
+      interval = 1000 / (playing ? limit : 30);
     if (scheduled && now + 0.25 < scheduled) return;
     scheduled = scheduled ? scheduled + interval : now + interval;
     if (scheduled < now) scheduled = now + interval;
@@ -76,7 +78,7 @@ export function startRenderLoop(
     last = now;
     const next =
       playing || quality !== "auto"
-        ? budget.sample(frameTime, quality)
+        ? budget.sample(frameTime, quality, interval)
         : budget.ratio;
     if (next !== ratio) {
       ratio = next;

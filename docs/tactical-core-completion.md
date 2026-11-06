@@ -25,6 +25,14 @@ Baseline: animation candidate `52d7701`; native rule version `botstrike-2050-sal
 | [#25](https://github.com/UTXOPlay/BotStrike/issues/25) | [P1] Give the full arsenal and movement surfaces distinct synchronized sound | Open |
 | [#28](https://github.com/UTXOPlay/BotStrike/issues/28) | [P1] Add map callouts, tactical pings and accessible quick communication | Open |
 
+Delivery status on November 6: the integrated V5 candidate has an operator-only
+remote stage, with independent data/secrets/cookies and an internal Docker
+network. Remote native communication/replay checks and six-viewport browser
+checks over SSH pass; all 38 existing container IDs/images remain unchanged.
+See `acceptance/remote-tactical-preview/` and `BOTSTRIKE-RELEASE.md`. This is not
+a public cohort deployment, signed Git publication, production switch or human
+acceptance; all original unchecked requirements below remain open.
+
 ## Issue #21: [P1] Align first-person weapon motion, ADS and feedback with authoritative firing
 
 ### Required scope
@@ -182,17 +190,17 @@ Evidence and remaining gates: see [the candidate contract](tactical-core-contrac
 - Separate unranked practice resets, infinite supplies or instructional overlays from live competitive endpoints and statistics.
 
 ### Acceptance
-- [ ] A drill can be restarted with the same seed, targets and native rules, and its score can be reproduced from authoritative events.
+- [x] A drill can be restarted with the same seed, targets and native rules, and its score can be reproduced from authoritative events.
 - [ ] Targets, hit regions, recoil and accuracy indicators match the corresponding native ruleset.
 - [ ] A baseline and repeated-training protocol measures improvement without silently changing drill difficulty.
-- [ ] Practice shortcuts cannot enter public/ranked rooms, generate competitive rewards or disclose hidden live players.
+- [x] Practice shortcuts cannot enter public/ranked rooms, generate competitive rewards or disclose hidden live players.
 - [ ] Mouse, touch and controller players can start, repeat and leave a drill without controls outside the game scene.
 
 ### Required validation
 - Test native drill scoring/reset isolation and browser input mapping; attach example recordings for gun and throw drills.
 - Keep development-only visualization clearly labeled; a local preview is not a signed competitive score.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: local candidate `c388f9609a838…`, `acceptance/practice-range/candidate.json` and `practice-range-design.md`. Eight drills/all weapons, native projectile preview/rethrow, 50 native tests, complete local and Bookworm signed replay/tamper flows, zero career effect, six sizes and controller API start/reset/leave pass. Human learning and feel/comprehension remain pending; physical input-device/performance validation is not inferred from browser emulation.
 
 ## Issue #23: [P1] Make team identity, cover and effects readable across combat conditions
 
@@ -213,7 +221,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Extend IFF/HUD/readability browser checks and conduct human recognition sessions.
 - Capture static and moving examples at native desktop/mobile budgets and simulated color-vision conditions.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: development recognition task (`npm run dev:recognition`) and `acceptance/readability/candidate.json`. Three combat maps × 384 sampled mesh/native-box/floor rays agree within 3 native units; this is sampled coverage, not a global proof. A 72-trial balanced fractional schedule, per-condition counts/reaction summaries, input/rotation/pause/export mechanics and visual simulations are implemented. Automated QA answers are excluded from human evidence: human n=0. Smoke/continuous-stance consistency and actual human/device recognition remain open.
 
 ## Issue #15: [P1] Make utility throws reproducible across throw modes and player motion
 
@@ -234,7 +242,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Add native projectile fixtures and browser release/acknowledgement tests, plus complete profile-bound replay.
 - Publish a small set of reproducible practice lineups on the flagship map.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: `acceptance/utility-release/candidate.json`, `utility-release-contract.md`. Three persistent throw modes, native velocity inheritance, swept bounded contacts, confirmed-pose preview and exact rethrow are implemented. 810 native release cases, 2,004 sight/eye fixtures, nine observed release trials/reconnect and complete local/Bookworm signed replay/tamper flows pass; 56 native/154 current-source JS tests and six viewports pass. Browser controller API can select every mode and release once without a chord. The 120 FPS browser assertion failed (61/61/60 actual); physical high-refresh rendering, actual human/device usability and flagship-map-approved lineups remain unverified; three spawn-to-A references are provisional.
 
 ## Issue #16: [P1] Validate smoke, flash and ability counterplay as a tactical information system
 
@@ -255,7 +263,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Extend utility/visibility/feedback tests and record native-backed entry/retake exercises on the flagship map.
 - Review team interactions explicitly rather than assuming either universal friendly effects or universal immunity.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: `utility-interactions.md` and `acceptance/utility-interactions/candidate.json` describe the V4 matrix, continuous distance/facing flash, 3D ranges, non-shortening effects and non-stacking repair. Radio-only positions are separated from optical models/poses/IFF/assistance; spectator jamming and private impact-origin audio are corrected. 65 native/157 JS/four host checks, both-build signed replay/tamper flows, five saved production exports, eight retained-profile fixtures and final-image six-viewport/effect browser checks pass. Paired human exercises, real-device/readability cohorts, exact aperture review and flagship 5v5 acceptance remain open. No human or balance acceptance is inferred from automation.
 
 ## Issue #14: [P1] Validate one flagship demolition map through timed routes and human 5v5 playtests
 
@@ -276,7 +284,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Run route/collision/visibility tests plus scheduled human 5v5 sessions and replay review.
 - Apply map version/profile compatibility gates; old signed matches must keep their original map geometry.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: `flagship-map-study.md` and `acceptance/flagship-map/candidate.json`. The unchanged Neon Docks layout has 484/484 reached native configurations, 528 stance-pair sightlines and 144 contact pairs; local/Bookworm measurements are identical and a complete representative replay matches both exact engines' per-frame/final hashes, verifies and rejects result tampering. The offline graybox viewer passes inverse input/size checks at all six viewports. A 30-ray grazing mismatch was fixed with bounded cover decoration; desktop and touch each pass 7,392 critical plus 1,152 sampled geometry rays. A presentation-only image preserves the exact native pair/runtime and passes 159 JS/four host checks and six live-map viewport/input checks. First-contact/spawn/site/rotation findings and the pre-tuning human protocol are documented. Ten-human evidence, physical cohorts, per-anchor/utility human review, the #4 gate and an accepted map revision remain open. No layout tuning or map acceptance is inferred from these synthetic fixtures.
 
 ## Issue #17: [P1] Define competitive weapon slots, salvage replacement and teammate drops
 
@@ -297,7 +305,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Extend salvage, economy and browser armory/pickup tests; include simultaneous claims and switching during reload.
 - Record complete matches for both retained casual inventory and the new competitive ruleset.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: V5 implementation candidate in `inventory-economy-study.md` and `acceptance/inventory-economy/`; concrete provisional rules in `competitive-ruleset.md`. 77 native library/one wire/164 full JS checks, 66 portable contracts/four host checks, complete signed casual/practice/utility/tactical flows, nine retained profiles/five saved production exports and final-image UI captures are separate from human approval. Tactical protocol actors are ten automated clients, zero humans. Reviewed economy distributions, ten-human sessions and physical controller/comprehension gates remain pending.
 
 ## Issue #18: [P1] Make round economy, loss recovery and saving decisions meaningful
 
@@ -318,7 +326,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Use deterministic multi-round fixtures, armory/ownership browser checks and complete signed matches.
 - Publish purchase/outcome distributions and sample sizes from the flagship-map playtest.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: V5 implementation candidate in `inventory-economy-study.md` and `acceptance/inventory-economy/`; concrete provisional rules in `competitive-ruleset.md`. 77 native library/one wire/164 full JS checks, 66 portable contracts/four host checks, complete signed casual/practice/utility/tactical flows, nine retained profiles/five saved production exports and final-image UI captures are separate from human approval. Tactical protocol actors are ten automated clients, zero humans. Reviewed economy distributions, ten-human sessions and physical controller/comprehension gates remain pending.
 
 ## Issue #20: [P1] Validate hero gunplay, selection rules and ability counterplay with human data
 
@@ -339,7 +347,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Combine authoritative scenario tests with replay-reviewed human 5v5 and controlled duels.
 - Keep bot-only acceptance useful for regression but separate from the human balance decision.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: V5 implementation candidate in `inventory-economy-study.md` and `acceptance/inventory-economy/`; concrete provisional rules in `competitive-ruleset.md`. 77 native library/one wire/164 full JS checks, 66 portable contracts/four host checks, complete signed casual/practice/utility/tactical flows, nine retained profiles/five saved production exports and final-image UI captures are separate from human approval. Tactical protocol actors are ten automated clients, zero humans. `hero-matchup-study.md` adds six role/counter/tell hypotheses and the current native breakpoint baseline; its human sample is explicitly zero. Reviewed economy distributions, ten-human sessions and physical controller/comprehension gates remain pending.
 
 ## Issue #24: [P1] Improve spatial audio without disclosing hidden opponent state
 
@@ -360,7 +368,7 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Extend feedback privacy/deduplication tests and perform listening tests on physical output devices.
 - Attach implementation-independent listening tasks and measurements; stereo panning alone is not described as complete HRTF.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Evidence: `spatial-audio-study.md` and `acceptance/spatial-audio/` bind an exact V5 presentation candidate, 177 JS/four host checks, 12 browser audio cases, strict wire-field tests, 32-voice/24-remote priority admission, sample-peak ceiling, lifecycle and six-viewport level controls. The byte-frozen baseline and 48-trial listening task are available; HRTF remains experimental and default stereo is retained. Physical headphone/speaker observations, perceptual mixing, supported elevation/path transitions and accepted real-device budgets are not established. Human sample is zero; no #24 closure is claimed.
 
 ## Issue #25: [P1] Give the full arsenal and movement surfaces distinct synchronized sound
 
@@ -381,7 +389,14 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Extend shot/impact/footstep sample, mix and browser event tests; include duplicate snapshots and reconnect.
 - Measure audio CPU/memory and publish listening evidence rather than relying only on waveform tests.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Engineering milestone: [arsenal-audio-study.md](arsenal-audio-study.md), with exact image/native binding and 191 JS / 4 host checks in `acceptance/arsenal-audio/`. All twelve sampled weapons, bounded 84-buffer cache, reload/equip/empty transitions, shared flat surface zones and trusted calibrated contact clock are implemented. Thirty-six skinned-mesh cases match 492 contact events; browser replay/dedup/life/listener and full-cache pressure checks pass. All acceptance boxes stay open pending blind recognition and physical listening/performance review. The user is temporarily unavailable for listening; human sample size remains zero. No production deployment or issue closure is claimed.
+
+The additional offline identity lab on loopback port 19917 prepares 12-weapon,
+five-action and three-material recognition, each across eight coarse distance,
+occlusion and density contexts, with optional counterbalanced physical outputs.
+It records unsure, timeout and invalid trials, source/bundle hashes and raw
+confusion matrices. It is separate from #24's frozen spatial baseline and does
+not establish perceptual acceptance, native cadence or physical performance.
 
 ## Issue #28: [P1] Add map callouts, tactical pings and accessible quick communication
 
@@ -402,4 +417,4 @@ Evidence: pending; record exact artifact/revision/command or human result for ev
 - Add service disclosure/rate-limit tests and browser pointer/radar mapping at all required viewports.
 - Record human task completion and communication confusion rather than measuring only button clicks.
 
-Evidence: pending; record exact artifact/revision/command or human result for every criterion.
+Engineering candidate: [quick-communications-study.md](quick-communications-study.md), with service/socket entitlement, same-team delivery, match mute, monotonic/tick expiry, team-local identifiers/recipient revisions, render-camera/radar inverses and keyboard/touch/controller UI implemented. `acceptance/quick-comms/` records native three-client flow, 288 real WebGL pointer cases across all six sizes, four desktop UI cases, mobile rotation/instance checks and controller confirmation. Final immutable candidate checks are recorded separately. All acceptance boxes remain open pending human agreement on names and the team coordination/accessibility exercise; the user has no cohort available. Native profile/rules and production remain unchanged by this metadata candidate.

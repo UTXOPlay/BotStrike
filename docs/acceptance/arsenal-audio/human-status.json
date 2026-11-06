@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-06",
+  "source": "user reply in active chat",
+  "status": "Physical listening temporarily unavailable; do not request again until availability changes",
+  "humanParticipants": 0,
+  "headphoneCohort": 0,
+  "speakerCohort": 0,
+  "blindWeaponActionRecognitionPending": true,
+  "movementSurfaceRecognitionPending": true,
+  "physicalPerformancePending": true,
+  "humanAcceptanceClaimed": false
+}

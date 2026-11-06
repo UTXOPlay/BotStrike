@@ -1,0 +1,47 @@
+{
+  "status": "retained exact portable preview pairs; add to future release routing before changing the root rules/profile",
+  "verifiers": [
+    {
+      "name": "tactical-gunplay-v2",
+      "localDirectory": "release/checkpoints/gunplay-e4e83daf-bookworm",
+      "profile": "faf34751951c74813d4893671c6dd0e71c0727e1e3405ed5643994e5cae5e679",
+      "sourceImage": "sha256:28b5e7f41337bb9fff8cecca244c2fea4a0db79f06c5e2556546f11572dc1faa",
+      "sha256": {
+        "botstrike-engine": "f36e32f21ecc6bc8cbf5b78982effc2f7ff0e4a9edccf8f46bc53d4f82fa0741",
+        "myelin-botstrike": "50400185393902b49c86ced12c67f43b3e9107822e2066c3225725ee5c5e02e9"
+      }
+    },
+    {
+      "name": "tactical-training-v2",
+      "localDirectory": "release/checkpoints/training-c388f960-bookworm",
+      "profile": "bd05a9df9e84d3d6f4f1ebd4b97e4f038bb6afee47ed26da0bd083e20d70dc53",
+      "sourceImage": "sha256:a361b16d5193152ec65f2771b3d7c02dbd2a78a22c5d1ba1adfbc0e924c98f7c",
+      "sha256": {
+        "botstrike-engine": "35dc15e7b591a3843ce805e43b4d6378c6e20992db8a1399aa6d669c3492453f",
+        "myelin-botstrike": "e8cc623681b78f3a8a6c4d194fcd0df6c42375581d3bb8a9eb54e618166d19d2"
+      }
+    },
+    {
+      "name": "tactical-v3",
+      "localDirectory": "release/checkpoints/utility-v3-84118774-bookworm",
+      "profile": "fcf982bb7885747d73985f4f00cd27d040a05802ea3a395d8e3e4e23dabe63f5",
+      "sourceImage": "sha256:9a54daf48f45c77d167b85c5962759c0f11e1218ce43f6a93fd3c2da1fb2c663",
+      "status": "private unreleased validation candidate, retained before V4 effects changes",
+      "sha256": {
+        "botstrike-engine": "aa907de2169de8bc03192ec927f3052148910214dc85de65d721d1d348cbd66c",
+        "myelin-botstrike": "7980cd7e998facd126129ff84c04021f0965ba3cb96d93c86202c8cf77b14cfb"
+      }
+    },
+    {
+      "name": "tactical-v4",
+      "localDirectory": "release/checkpoints/effects-v4-881347ed-bookworm",
+      "profile": "b8efb5123d1dc99dcf7add70c4069f22d4a320378653c5ff67c1c0169a7d9886",
+      "sourceImage": "sha256:115780e4753870d1c2fb7a94203daf2ca6ef7f3b1744b85de9272e60b270bb6a",
+      "status": "exact retained V4 candidate; routing required before V5 inventory rules",
+      "sha256": {
+        "botstrike-engine": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+        "myelin-botstrike": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8"
+      }
+    }
+  ]
+}

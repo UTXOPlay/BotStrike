@@ -1,3 +1,4 @@
+import {eyeHeight as nativeEyeHeight} from '../../../shared/sight-geometry.mjs';
 import spec from '../../../botstrike/spec.json' with {type:'json'};
 export const movement=spec.movement;
 // Mirrors the native movement transform and collision constants; never sends positions.
@@ -17,4 +18,4 @@ export function movementAccuracy(speed,runningSpeed,airborne,landing=0,p=movemen
 export function runningSpeed(player,weapon){return (spec.heroes[player.hero]?.speed||305)*(weapon.mobility??1);}
 
 export function stanceAmount(current,crouch,p=movement){const target=Number(!!crouch),value=current+(target-current)*-Math.expm1(-1/(64*p.stance_seconds));return Math.abs(value-target)<1e-6?target:value;}
-export function eyeHeight(player){return 56-19*(Number.isFinite(player.stance)?player.stance:Number(!!player.crouch));}
+export const eyeHeight=nativeEyeHeight;

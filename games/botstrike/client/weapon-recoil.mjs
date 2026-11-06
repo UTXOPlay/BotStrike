@@ -28,8 +28,8 @@ export function advanceWeaponTick(p,input,weapons){
  if(p.reload>0&&--p.reload===0){const n=Math.min(weapons[p.weapon].magazine-p.ammo[p.weapon],p.reserve[p.weapon]);p.ammo[p.weapon]+=n;p.reserve[p.weapon]-=n;}
  if(input.weapon!=null&&p.owned[input.weapon]&&input.weapon!==p.weapon){p.weapon=input.weapon;p.reload=0;p.burst_remaining=0;p.fire_wait=10;Object.assign(p,freshRecoil());}
  const w=weapons[p.weapon];
- if(input.reload&&!p.reload&&p.ammo[p.weapon]<w.magazine&&p.reserve[p.weapon]>0){p.reload=w.reload;p.burst_remaining=0;}
- if(!(input.fire||p.burst_remaining>0)||p.fire_wait>0||p.reload>0||p.ammo[p.weapon]===0)return null;
+ if(p.owned[p.weapon]&&input.reload&&!p.reload&&p.ammo[p.weapon]<w.magazine&&p.reserve[p.weapon]>0){p.reload=w.reload;p.burst_remaining=0;}
+ if(!p.owned[p.weapon]||!(input.fire||p.burst_remaining>0)||p.fire_wait>0||p.reload>0||p.ammo[p.weapon]===0)return null;
  const [yaw,pitch]=weaponAim(input.yaw,input.pitch,p.aim_punch),shot={weapon:p.weapon,yaw,pitch,number:p.shots+1,life:p.life};
  p.ammo[p.weapon]--;p.shots++;p.burst_remaining=p.burst_remaining===0?w.burst-1:p.burst_remaining-1;
  const interval=p.burst_remaining>0?w.burst_interval:w.interval;

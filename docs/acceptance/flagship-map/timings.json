@@ -1,0 +1,2573 @@
+{
+  "version": "botstrike-2050-tactical-v4",
+  "modelSha256": "881347ed6ce9294c91f9bb82c010b06a2302c769fd2810aef4f910b95dd888a5",
+  "humanParticipants": 0,
+  "routeConfigurations": 484,
+  "reached": 484,
+  "timings": [
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6,
+        "median": 6.203125,
+        "max": 6.515625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.46875,
+        "median": 6.671875,
+        "max": 6.984375
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 5.03125,
+        "median": 5.4375,
+        "max": 5.859375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 5.359375,
+        "median": 5.78125,
+        "max": 6.1875
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 4.984375,
+        "median": 5.390625,
+        "max": 5.8125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 5.484375,
+        "median": 5.890625,
+        "max": 6.3125
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.125,
+        "median": 6.3125,
+        "max": 6.609375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.609375,
+        "median": 6.8125,
+        "max": 7.109375
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 11.09375,
+        "median": 11.09375,
+        "max": 11.09375
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 11.84375,
+        "median": 11.84375,
+        "max": 11.84375
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 10.546875,
+        "median": 10.546875,
+        "max": 10.546875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 11.046875,
+        "median": 11.046875,
+        "max": 11.046875
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 10.46875,
+        "median": 10.46875,
+        "max": 10.46875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 11.25,
+        "median": 11.25,
+        "max": 11.25
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 10.734375,
+        "median": 10.734375,
+        "max": 10.734375
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 11.515625,
+        "median": 11.515625,
+        "max": 11.515625
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 13.453125,
+        "median": 13.453125,
+        "max": 13.453125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.34375,
+        "median": 14.34375,
+        "max": 14.34375
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 12.875,
+        "median": 12.875,
+        "max": 12.875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 13.453125,
+        "median": 13.453125,
+        "max": 13.453125
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 12.78125,
+        "median": 12.78125,
+        "max": 12.78125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 13.71875,
+        "median": 13.71875,
+        "max": 13.71875
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 13.078125,
+        "median": 13.078125,
+        "max": 13.078125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.015625,
+        "median": 14.015625,
+        "max": 14.015625
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.078125,
+        "median": 7.3125,
+        "max": 7.6875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.625,
+        "median": 7.859375,
+        "max": 8.234375
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.09375,
+        "median": 6.609375,
+        "max": 7.109375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.46875,
+        "median": 6.96875,
+        "max": 7.484375
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.046875,
+        "median": 6.546875,
+        "max": 7.0625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.609375,
+        "median": 7.125,
+        "max": 7.625
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.34375,
+        "median": 7.5625,
+        "max": 7.9375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.90625,
+        "median": 8.125,
+        "max": 8.5
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.546875,
+        "median": 6.78125,
+        "max": 7.109375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.0625,
+        "median": 7.296875,
+        "max": 7.625
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 5.5625,
+        "median": 6.03125,
+        "max": 6.484375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 5.921875,
+        "median": 6.375,
+        "max": 6.84375
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 5.515625,
+        "median": 5.984375,
+        "max": 6.4375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.046875,
+        "median": 6.515625,
+        "max": 6.96875
+      }
+    },
+    {
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.734375,
+        "median": 6.953125,
+        "max": 7.265625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.265625,
+        "median": 7.484375,
+        "max": 7.796875
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.203125,
+        "median": 7.453125,
+        "max": 7.828125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.765625,
+        "median": 8.015625,
+        "max": 8.390625
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.21875,
+        "median": 6.734375,
+        "max": 7.25
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.59375,
+        "median": 7.109375,
+        "max": 7.640625
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.171875,
+        "median": 6.6875,
+        "max": 7.203125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.75,
+        "median": 7.265625,
+        "max": 7.78125
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.484375,
+        "median": 7.71875,
+        "max": 8.078125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.0625,
+        "median": 8.296875,
+        "max": 8.65625
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 13.6875,
+        "median": 13.6875,
+        "max": 13.6875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.59375,
+        "median": 14.59375,
+        "max": 14.59375
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 13.109375,
+        "median": 13.109375,
+        "max": 13.109375
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 13.703125,
+        "median": 13.703125,
+        "max": 13.703125
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 13.015625,
+        "median": 13.015625,
+        "max": 13.015625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 13.96875,
+        "median": 13.96875,
+        "max": 13.96875
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 13.3125,
+        "median": 13.3125,
+        "max": 13.3125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.28125,
+        "median": 14.28125,
+        "max": 14.28125
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 16.671875,
+        "median": 16.671875,
+        "max": 16.671875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 17.78125,
+        "median": 17.78125,
+        "max": 17.78125
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 16.015625,
+        "median": 16.015625,
+        "max": 16.015625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 16.71875,
+        "median": 16.71875,
+        "max": 16.71875
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 15.890625,
+        "median": 15.890625,
+        "max": 15.890625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 17.046875,
+        "median": 17.046875,
+        "max": 17.046875
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 16.234375,
+        "median": 16.234375,
+        "max": 16.234375
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 17.390625,
+        "median": 17.390625,
+        "max": 17.390625
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 8.609375,
+        "median": 8.90625,
+        "max": 9.359375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.265625,
+        "median": 9.5625,
+        "max": 10.015625
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.5625,
+        "median": 8.1875,
+        "max": 8.828125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.984375,
+        "median": 8.625,
+        "max": 9.25
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.5,
+        "median": 8.125,
+        "max": 8.75
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.171875,
+        "median": 8.796875,
+        "max": 9.4375
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 9.03125,
+        "median": 9.3125,
+        "max": 9.75
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.703125,
+        "median": 10,
+        "max": 10.4375
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.921875,
+        "median": 8.1875,
+        "max": 8.59375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.53125,
+        "median": 8.796875,
+        "max": 9.203125
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.890625,
+        "median": 7.46875,
+        "max": 8.046875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.296875,
+        "median": 7.875,
+        "max": 8.453125
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.84375,
+        "median": 7.40625,
+        "max": 7.984375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.46875,
+        "median": 8.046875,
+        "max": 8.609375
+      }
+    },
+    {
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 8.265625,
+        "median": 8.53125,
+        "max": 8.921875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.890625,
+        "median": 9.15625,
+        "max": 9.546875
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 8.28125,
+        "median": 8.5625,
+        "max": 9.015625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.90625,
+        "median": 9.1875,
+        "max": 9.640625
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.234375,
+        "median": 7.84375,
+        "max": 8.453125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.65625,
+        "median": 8.265625,
+        "max": 8.859375
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.171875,
+        "median": 7.78125,
+        "max": 8.375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.828125,
+        "median": 8.4375,
+        "max": 9.03125
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 8.640625,
+        "median": 8.9375,
+        "max": 9.34375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.296875,
+        "median": 9.578125,
+        "max": 10
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 15.921875,
+        "median": 15.921875,
+        "max": 15.921875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 16.96875,
+        "median": 16.96875,
+        "max": 16.96875
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 15.28125,
+        "median": 15.28125,
+        "max": 15.28125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 15.96875,
+        "median": 15.96875,
+        "max": 15.96875
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 15.171875,
+        "median": 15.171875,
+        "max": 15.171875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 16.265625,
+        "median": 16.265625,
+        "max": 16.265625
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 15.5,
+        "median": 15.5,
+        "max": 15.5
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 16.609375,
+        "median": 16.609375,
+        "max": 16.609375
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 19.421875,
+        "median": 19.421875,
+        "max": 19.421875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 20.6875,
+        "median": 20.6875,
+        "max": 20.6875
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 18.671875,
+        "median": 18.671875,
+        "max": 18.671875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 19.484375,
+        "median": 19.484375,
+        "max": 19.484375
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 18.53125,
+        "median": 18.53125,
+        "max": 18.53125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 19.859375,
+        "median": 19.859375,
+        "max": 19.859375
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 18.921875,
+        "median": 18.921875,
+        "max": 18.921875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 20.265625,
+        "median": 20.265625,
+        "max": 20.265625
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 9.9375,
+        "median": 10.265625,
+        "max": 10.796875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 10.671875,
+        "median": 11,
+        "max": 11.53125
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 8.796875,
+        "median": 9.53125,
+        "max": 10.28125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.28125,
+        "median": 10.03125,
+        "max": 10.765625
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 8.734375,
+        "median": 9.46875,
+        "max": 10.203125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.5,
+        "median": 10.234375,
+        "max": 10.96875
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 10.46875,
+        "median": 10.8125,
+        "max": 11.3125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 11.25,
+        "median": 11.59375,
+        "max": 12.09375
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 9.109375,
+        "median": 9.421875,
+        "max": 9.90625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.796875,
+        "median": 10.109375,
+        "max": 10.59375
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 8.03125,
+        "median": 8.703125,
+        "max": 9.375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.484375,
+        "median": 9.15625,
+        "max": 9.828125
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.953125,
+        "median": 8.625,
+        "max": 9.296875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.671875,
+        "median": 9.34375,
+        "max": 10.015625
+      }
+    },
+    {
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 9.5625,
+        "median": 9.875,
+        "max": 10.34375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 10.28125,
+        "median": 10.59375,
+        "max": 11.0625
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.453125,
+        "median": 6.65625,
+        "max": 7
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.953125,
+        "median": 7.15625,
+        "max": 7.5
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 5.453125,
+        "median": 5.90625,
+        "max": 6.359375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 5.8125,
+        "median": 6.265625,
+        "max": 6.71875
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 5.40625,
+        "median": 5.859375,
+        "max": 6.3125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 5.9375,
+        "median": 6.390625,
+        "max": 6.84375
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.625,
+        "median": 6.828125,
+        "max": 7.140625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.140625,
+        "median": 7.34375,
+        "max": 7.65625
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 12.046875,
+        "median": 12.046875,
+        "max": 12.046875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 12.859375,
+        "median": 12.859375,
+        "max": 12.859375
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 11.484375,
+        "median": 11.484375,
+        "max": 11.484375
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 12.015625,
+        "median": 12.015625,
+        "max": 12.015625
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 11.390625,
+        "median": 11.390625,
+        "max": 11.390625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 12.25,
+        "median": 12.25,
+        "max": 12.25
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 11.6875,
+        "median": 11.6875,
+        "max": 11.6875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 12.53125,
+        "median": 12.53125,
+        "max": 12.53125
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 14.625,
+        "median": 14.625,
+        "max": 14.625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 15.59375,
+        "median": 15.59375,
+        "max": 15.59375
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 14.015625,
+        "median": 14.015625,
+        "max": 14.015625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.640625,
+        "median": 14.640625,
+        "max": 14.640625
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 13.90625,
+        "median": 13.90625,
+        "max": 13.90625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.921875,
+        "median": 14.921875,
+        "max": 14.921875
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 14.234375,
+        "median": 14.234375,
+        "max": 14.234375
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 15.25,
+        "median": 15.25,
+        "max": 15.25
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.625,
+        "median": 7.875,
+        "max": 8.296875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.203125,
+        "median": 8.453125,
+        "max": 8.875
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.625,
+        "median": 7.1875,
+        "max": 7.734375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.015625,
+        "median": 7.578125,
+        "max": 8.125
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.578125,
+        "median": 7.125,
+        "max": 7.671875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.1875,
+        "median": 7.734375,
+        "max": 8.28125
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.953125,
+        "median": 8.203125,
+        "max": 8.578125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.5625,
+        "median": 8.8125,
+        "max": 9.1875
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.046875,
+        "median": 7.265625,
+        "max": 7.640625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.59375,
+        "median": 7.8125,
+        "max": 8.1875
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.046875,
+        "median": 6.546875,
+        "max": 7.0625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.421875,
+        "median": 6.921875,
+        "max": 7.4375
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6,
+        "median": 6.5,
+        "max": 7
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.5625,
+        "median": 7.0625,
+        "max": 7.578125
+      }
+    },
+    {
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.296875,
+        "median": 7.53125,
+        "max": 7.875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.859375,
+        "median": 8.09375,
+        "max": 8.4375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.734375,
+        "median": 6.953125,
+        "max": 7.328125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.25,
+        "median": 7.46875,
+        "max": 7.84375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 5.765625,
+        "median": 6.234375,
+        "max": 6.71875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.125,
+        "median": 6.59375,
+        "max": 7.078125
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 5.71875,
+        "median": 6.1875,
+        "max": 6.671875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.265625,
+        "median": 6.734375,
+        "max": 7.21875
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.953125,
+        "median": 7.15625,
+        "max": 7.515625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.5,
+        "median": 7.703125,
+        "max": 8.0625
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 12.6875,
+        "median": 12.6875,
+        "max": 12.6875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 13.53125,
+        "median": 13.53125,
+        "max": 13.53125
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 12.125,
+        "median": 12.125,
+        "max": 12.125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 12.6875,
+        "median": 12.6875,
+        "max": 12.6875
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 12.03125,
+        "median": 12.03125,
+        "max": 12.03125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 12.921875,
+        "median": 12.921875,
+        "max": 12.921875
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 12.328125,
+        "median": 12.328125,
+        "max": 12.328125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 13.234375,
+        "median": 13.234375,
+        "max": 13.234375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 15.4375,
+        "median": 15.4375,
+        "max": 15.4375
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 16.453125,
+        "median": 16.453125,
+        "max": 16.453125
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 14.8125,
+        "median": 14.8125,
+        "max": 14.8125
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 15.46875,
+        "median": 15.46875,
+        "max": 15.46875
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 14.6875,
+        "median": 14.6875,
+        "max": 14.6875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 15.765625,
+        "median": 15.765625,
+        "max": 15.765625
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 15.015625,
+        "median": 15.015625,
+        "max": 15.015625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 16.09375,
+        "median": 16.09375,
+        "max": 16.09375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 8.046875,
+        "median": 8.3125,
+        "max": 8.734375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.65625,
+        "median": 8.921875,
+        "max": 9.34375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7,
+        "median": 7.578125,
+        "max": 8.171875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.40625,
+        "median": 7.984375,
+        "max": 8.578125
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.9375,
+        "median": 7.515625,
+        "max": 8.109375
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.578125,
+        "median": 8.15625,
+        "max": 8.734375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 8.375,
+        "median": 8.640625,
+        "max": 9.046875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.015625,
+        "median": 9.28125,
+        "max": 9.6875
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.40625,
+        "median": 7.640625,
+        "max": 8.03125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.96875,
+        "median": 8.203125,
+        "max": 8.59375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.390625,
+        "median": 6.921875,
+        "max": 7.453125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.765625,
+        "median": 7.296875,
+        "max": 7.828125
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.328125,
+        "median": 6.859375,
+        "max": 7.390625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.921875,
+        "median": 7.453125,
+        "max": 7.984375
+      }
+    },
+    {
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.65625,
+        "median": 7.90625,
+        "max": 8.296875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.25,
+        "median": 8.5,
+        "max": 8.875
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.484375,
+        "median": 7.71875,
+        "max": 8.125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.0625,
+        "median": 8.296875,
+        "max": 8.703125
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 6.484375,
+        "median": 7.015625,
+        "max": 7.5625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 6.875,
+        "median": 7.40625,
+        "max": 7.953125
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 6.421875,
+        "median": 6.96875,
+        "max": 7.5
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.015625,
+        "median": 7.5625,
+        "max": 8.09375
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.78125,
+        "median": 8.03125,
+        "max": 8.390625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.375,
+        "median": 8.625,
+        "max": 8.984375
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 14.25,
+        "median": 14.25,
+        "max": 14.25
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 15.203125,
+        "median": 15.203125,
+        "max": 15.203125
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 13.671875,
+        "median": 13.671875,
+        "max": 13.671875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.28125,
+        "median": 14.28125,
+        "max": 14.28125
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 13.5625,
+        "median": 13.5625,
+        "max": 13.5625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.5625,
+        "median": 14.5625,
+        "max": 14.5625
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 13.875,
+        "median": 13.875,
+        "max": 13.875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 14.875,
+        "median": 14.875,
+        "max": 14.875
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 17.390625,
+        "median": 17.390625,
+        "max": 17.390625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 18.53125,
+        "median": 18.53125,
+        "max": 18.53125
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 16.6875,
+        "median": 16.6875,
+        "max": 16.6875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 17.421875,
+        "median": 17.421875,
+        "max": 17.421875
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 1,
+        "min": 16.5625,
+        "median": 16.5625,
+        "max": 16.5625
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 17.75,
+        "median": 17.75,
+        "max": 17.75
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 1,
+        "min": 16.921875,
+        "median": 16.921875,
+        "max": 16.921875
+      },
+      "stopped": {
+        "configurations": 1,
+        "min": 18.109375,
+        "median": 18.109375,
+        "max": 18.109375
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 8.953125,
+        "median": 9.25,
+        "max": 9.71875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.625,
+        "median": 9.921875,
+        "max": 10.390625
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.875,
+        "median": 8.53125,
+        "max": 9.1875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.328125,
+        "median": 8.984375,
+        "max": 9.640625
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.8125,
+        "median": 8.46875,
+        "max": 9.125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.515625,
+        "median": 9.171875,
+        "max": 9.828125
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 9.390625,
+        "median": 9.703125,
+        "max": 10.15625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 10.09375,
+        "median": 10.40625,
+        "max": 10.859375
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 8.21875,
+        "median": 8.484375,
+        "max": 8.921875
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 8.84375,
+        "median": 9.109375,
+        "max": 9.546875
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "site": "a_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 7.1875,
+        "median": 7.78125,
+        "max": 8.390625
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.609375,
+        "median": 8.203125,
+        "max": 8.796875
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "attack",
+      "zone": {
+        "configurations": 5,
+        "min": 7.125,
+        "median": 7.71875,
+        "max": 8.328125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 7.78125,
+        "median": 8.375,
+        "max": 8.96875
+      }
+    },
+    {
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "site": "b_pad",
+      "role": "defense",
+      "zone": {
+        "configurations": 5,
+        "min": 8.578125,
+        "median": 8.859375,
+        "max": 9.28125
+      },
+      "stopped": {
+        "configurations": 5,
+        "min": 9.234375,
+        "median": 9.515625,
+        "max": 9.9375
+      }
+    }
+  ],
+  "contacts": {
+    "pairs": 144,
+    "withGeometricContact": 90,
+    "withReferenceCameraContact": 88,
+    "earliest": {
+      "attackerCameraTick": 19,
+      "attackerOpticalTick": 19,
+      "attackerRoute": "spawn-1-b_pad-h3-w2-run",
+      "defenderCameraTick": 24,
+      "defenderOpticalTick": 24,
+      "defenderRoute": "spawn-9-a_pad-h3-w2-run",
+      "firstCamera": {
+        "attacker": {
+          "position": [
+            -941.9742339706863,
+            0,
+            1035.7165402766425
+          ],
+          "stance": 0,
+          "tick": 19,
+          "yaw": -1.347932020458961
+        },
+        "defender": {
+          "position": [
+            747.1641258093207,
+            0,
+            -1034.9030691879548
+          ],
+          "stance": 0,
+          "tick": 19,
+          "yaw": 1.8065868870786037
+        },
+        "distance": 2672.2002106091554,
+        "tick": 19
+      },
+      "firstGeometry": {
+        "attacker": {
+          "position": [
+            -941.9742339706863,
+            0,
+            1035.7165402766425
+          ],
+          "stance": 0,
+          "tick": 19,
+          "yaw": -1.347932020458961
+        },
+        "defender": {
+          "position": [
+            747.1641258093207,
+            0,
+            -1034.9030691879548
+          ],
+          "stance": 0,
+          "tick": 19,
+          "yaw": 1.8065868870786037
+        },
+        "distance": 2672.2002106091554,
+        "tick": 19
+      },
+      "reference": "native 14-point cover LOS; reference camera vertical FOV80, aspect16:9, no reaction/latency; earlier arrival holds final measured pose"
+    },
+    "referenceCamera": {
+      "pairs": 144,
+      "directions": 288,
+      "matched": true,
+      "verticalFov": 80,
+      "aspect": 1.7777777777777777,
+      "near": 0.5,
+      "far": 9000,
+      "reference": "THREE.PerspectiveCamera projection and shared service-cover intersection",
+      "humanRecognition": false
+    }
+  },
+  "exposure": [
+    {
+      "anchor": "attack_spawn",
+      "visibleStandingTargets": [
+        {
+          "anchor": "b_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_south",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "b_entry",
+          "clearSamples": 14
+        }
+      ]
+    },
+    {
+      "anchor": "defense_spawn",
+      "visibleStandingTargets": [
+        {
+          "anchor": "a_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_north",
+          "clearSamples": 14
+        }
+      ]
+    },
+    {
+      "anchor": "a_pad",
+      "visibleStandingTargets": [
+        {
+          "anchor": "defense_spawn",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_north",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_west",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "a_entry",
+          "clearSamples": 14
+        }
+      ]
+    },
+    {
+      "anchor": "b_pad",
+      "visibleStandingTargets": [
+        {
+          "anchor": "attack_spawn",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_south",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_east",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "b_entry",
+          "clearSamples": 14
+        }
+      ]
+    },
+    {
+      "anchor": "west_gate",
+      "visibleStandingTargets": [
+        {
+          "anchor": "mid_east",
+          "clearSamples": 14
+        }
+      ]
+    },
+    {
+      "anchor": "east_gate",
+      "visibleStandingTargets": [
+        {
+          "anchor": "mid_north",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_west",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "a_entry",
+          "clearSamples": 13
+        }
+      ]
+    },
+    {
+      "anchor": "mid_south",
+      "visibleStandingTargets": [
+        {
+          "anchor": "attack_spawn",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "b_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "b_entry",
+          "clearSamples": 14
+        }
+      ]
+    },
+    {
+      "anchor": "mid_north",
+      "visibleStandingTargets": [
+        {
+          "anchor": "defense_spawn",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "a_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "east_gate",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "a_entry",
+          "clearSamples": 6
+        }
+      ]
+    },
+    {
+      "anchor": "mid_west",
+      "visibleStandingTargets": [
+        {
+          "anchor": "a_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "east_gate",
+          "clearSamples": 14
+        }
+      ]
+    },
+    {
+      "anchor": "mid_east",
+      "visibleStandingTargets": [
+        {
+          "anchor": "b_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "west_gate",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "b_entry",
+          "clearSamples": 13
+        }
+      ]
+    },
+    {
+      "anchor": "a_entry",
+      "visibleStandingTargets": [
+        {
+          "anchor": "a_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "east_gate",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_north",
+          "clearSamples": 6
+        }
+      ]
+    },
+    {
+      "anchor": "b_entry",
+      "visibleStandingTargets": [
+        {
+          "anchor": "attack_spawn",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "b_pad",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_south",
+          "clearSamples": 14
+        },
+        {
+          "anchor": "mid_east",
+          "clearSamples": 13
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Offline native movement in a deathmatch supply fixture; not a human demolition match or economic purchase sequence.",
+    "All other actors are idle. No network latency, aim reaction, body blocking or human tactical choice is measured.",
+    "Conservative sampled-grid routes and this follower are reproducibility references, not proven fastest routes."
+  ]
+}

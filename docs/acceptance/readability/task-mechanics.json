@@ -1,0 +1,11 @@
+{
+  "automatedOnly": true,
+  "humanRecognitionAcceptance": false,
+  "desktopRows": 2,
+  "invalidTrialsRecorded": true,
+  "mouseKeyboard": true,
+  "touch": true,
+  "controllerApi": true,
+  "portraitGate": true,
+  "errors": []
+}

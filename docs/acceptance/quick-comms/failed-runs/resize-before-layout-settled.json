@@ -1,0 +1,52 @@
+{
+  "error": "TypeError: Cannot read properties of null (reading 'x')",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "wheel": {
+        "x": 670,
+        "y": 327.1875,
+        "width": 580,
+        "height": 425.625
+      },
+      "button": {
+        "x": 24,
+        "y": 376,
+        "width": 120,
+        "height": 44
+      },
+      "room": "9e7cda30b280594aa8deb101"
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "wheel": {
+        "x": 990,
+        "y": 316.0078125,
+        "width": 580,
+        "height": 447.984375
+      },
+      "button": {
+        "x": 24,
+        "y": 376,
+        "width": 120,
+        "height": 44
+      },
+      "room": "9e7cda30b280594aa8deb101"
+    }
+  ],
+  "errors": []
+}

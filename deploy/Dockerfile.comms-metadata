@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1
+# Squad communication changes only the web UI and authenticated service metadata.
+ARG APPLICATION_IMAGE=botstrike:arsenal-v5-4cb119b7
+FROM ${APPLICATION_IMAGE} AS bound
+FROM bound AS web
+USER root
+WORKDIR /work
+COPY package.json package-lock.json ./
+RUN npm ci --include=dev --ignore-scripts --no-audit --no-fund
+COPY botstrike ./botstrike
+COPY botstrike-myelin ./botstrike-myelin
+COPY botstrike-service ./botstrike-service
+COPY shared ./shared
+COPY games ./games
+COPY assets ./assets
+COPY public ./public
+COPY host ./host
+COPY game-host.json ./game-host.json
+COPY tools ./tools
+COPY tests ./tests
+COPY docs/acceptance/quick-comms/presentation-binding.json ./presentation-binding.json
+COPY docs/acceptance/arsenal-audio/gait-calibration.json ./docs/acceptance/arsenal-audio/gait-calibration.json
+COPY --from=bound /app/release ./release
+COPY --from=bound /app/botstrike/spec.json ./bound-spec.json
+COPY --from=bound /app/dist/botstrike/damage-contract.json ./bound-damage.json
+RUN cmp botstrike/spec.json bound-spec.json && node tools/check-presentation-binding.mjs && cp bound-damage.json games/botstrike/web/damage-contract.json
+RUN node --test --test-concurrency=4 tests/*.test.mjs && npm run test:host && npm run build
+RUN node tests/botstrike-comms-flow.mjs > comms-flow.json
+FROM bound
+COPY --from=web /work/dist /app/dist
+COPY --from=web /work/botstrike-service/server.mjs /work/botstrike-service/communications.mjs /work/botstrike-service/feedback.mjs /app/botstrike-service/
+COPY --from=web /work/shared/tactical-callouts.mjs /work/shared/ping-geometry.mjs /app/shared/
+COPY --from=web /work/comms-flow.json /app/build-validation/comms-flow.json

@@ -1,0 +1,25 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "route": "local client → SSH tunnel → remote game host → native service → same path back",
+  "sampleCount": 12,
+  "samplesMs": [
+    36.077155000000005,
+    38.26315599999998,
+    36.27494200000001,
+    36.519217000000026,
+    36.580873999999994,
+    35.692940000000135,
+    36.40483500000005,
+    36.31829099999982,
+    36.04759000000013,
+    35.80479199999991,
+    35.55735199999981,
+    36.552505999999994
+  ],
+  "p50Ms": 36.27494200000001,
+  "p95Ms": 38.26315599999998,
+  "runtimeHeartbeatMetricsAreProxyHopOnly": true,
+  "physicalAudioOrInputLatencyClaimed": false,
+  "cookieName": "game_botstrike_tactical_preview"
+}

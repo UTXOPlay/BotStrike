@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "date": "2026-11-06",
+  "status": "development task and sampled cover audit; human recognition acceptance pending",
+  "humanParticipants": 0,
+  "humanResponses": 0,
+  "plannedTrialsPerSession": 72,
+  "cohorts": [
+    "mouse / keyboard",
+    "laptop touchpad / keyboard",
+    "touchscreen",
+    "controller"
+  ],
+  "coverAuditRays": 1152,
+  "coverAuditOriginsPerMap": 24,
+  "coverToleranceNativeUnits": 3,
+  "coverAuditMismatches": 0,
+  "automatedAnswersAreHumanEvidence": false,
+  "productionGameplayChangedByThisSlice": false,
+  "remaining": [
+    "Collect human recognition sessions with declared devices/displays and per-condition sample sizes.",
+    "Unify smoke geometry across native AI, service disclosure, IFF and aim assistance under a new bound candidate.",
+    "Audit eye/body visibility through continuous native stance and pitch, not endpoint crouch booleans.",
+    "Validate actual low-budget mobile/desktop hardware; software-renderer task mechanics are not a performance pass."
+  ]
+}

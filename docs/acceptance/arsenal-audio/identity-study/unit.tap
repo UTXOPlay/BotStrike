@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: identity tasks fully balance classes and eight conditions, counterbalance outputs, and keep nuisance factors matched across outputs
+ok 1 - identity tasks fully balance classes and eight conditions, counterbalance outputs, and keep nuisance factors matched across outputs
+  ---
+  duration_ms: 10.663373
+  type: 'test'
+  ...
+# Subtest: recognition targets stay centred and dense distractors use other families, with the same cues at each output
+ok 2 - recognition targets stay centred and dense distractors use other families, with the same cues at each output
+  ---
+  duration_ms: 1.307161
+  type: 'test'
+  ...
+# Subtest: identity report keeps wrong, unsure, timed-out and interrupted observations separate and makes no human or hardware claim
+ok 3 - identity report keeps wrong, unsure, timed-out and interrupted observations separate and makes no human or hardware claim
+  ---
+  duration_ms: 0.52384
+  type: 'test'
+  ...
+# Subtest: identity lab serves frozen in-memory source-bound artifacts, rejects writes and exposes no live match or filesystem routes
+ok 4 - identity lab serves frozen in-memory source-bound artifacts, rejects writes and exposes no live match or filesystem routes
+  ---
+  duration_ms: 56.205751
+  type: 'test'
+  ...
+# Subtest: baseline is frozen and all comparison blocks cover identical coarse conditions
+ok 5 - baseline is frozen and all comparison blocks cover identical coarse conditions
+  ---
+  duration_ms: 7.019273
+  type: 'test'
+  ...
+# Subtest: summaries preserve unsure/timeouts and exclude interrupted trials without claiming human observations
+ok 6 - summaries preserve unsure/timeouts and exclude interrupted trials without claiming human observations
+  ---
+  duration_ms: 0.406106
+  type: 'test'
+  ...
+# Subtest: offline listening server serves an allowlist only and never accepts reports or live game access
+ok 7 - offline listening server serves an allowlist only and never accepts reports or live game access
+  ---
+  duration_ms: 58.447523
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 232.369589

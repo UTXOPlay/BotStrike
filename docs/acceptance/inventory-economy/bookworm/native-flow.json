@@ -1,0 +1,18 @@
+{
+  "data": "/tmp/botstrike-flow-3HmuIU",
+  "profile": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+  "ticks": 23040,
+  "score": [
+    42,
+    40
+  ],
+  "players": 10,
+  "privateJoin": true,
+  "publicMatchmaking": true,
+  "reconnect": true,
+  "balancedTeams": true,
+  "humanInput": true,
+  "respawns": true,
+  "signedReplay": true,
+  "tamperRejected": true
+}

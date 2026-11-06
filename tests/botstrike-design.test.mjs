@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {readFileSync} from 'node:fs';
 import {publicState} from '../botstrike-service/visibility.mjs';
+import {MovementAudioClock} from '../botstrike-service/movement-audio.mjs';
 import {feedbackFor,frameEvents,collectFeedback} from '../botstrike-service/feedback.mjs';
 import {trackHumanFrame,CareerStore} from '../botstrike-service/career.mjs';
 import {pruneReplays} from '../botstrike-service/retention.mjs';
@@ -29,7 +30,7 @@ test('sound discloses coarse direction and loudness, never hidden coordinates or
  assert.ok(feedbackFor([{kind:'hit',actor:5,target:1,value:16}],s,0,rules).every(e=>e.kind==='motion'&&e.actor===1&&!('position' in e)));
 });
 test('footsteps respect walk/crouch and reload/landing only occur on transitions',()=>{
- const before=state(),after=structuredClone(before);after.players[0].velocity=[250,0,0];after.players[0].reload=80;assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='step'));assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='reload'));
+ const before=state(),after=structuredClone(before);after.players[0].velocity=[250,0,0];after.players[0].reload=80;const clock=new MovementAudioClock();let stepped=false;for(let tick=0;tick<64;tick++){after.tick=tick;stepped ||= frameEvents(after,before,spec,clock).some(e=>e.kind==='step');}assert.ok(stepped);assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='reload'));
  after.players[0].velocity=[120,0,0];assert.ok(!frameEvents(after,before,spec).some(e=>e.kind==='step'));after.players[0].velocity=[250,0,0];after.players[0].crouch=true;assert.ok(!frameEvents(after,before,spec).some(e=>e.kind==='step'));
  before.players[0].reload=90;assert.ok(!frameEvents(after,before,spec).some(e=>e.kind==='reload'));before.players[0].position[1]=5;assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='land'));
 });

@@ -1,0 +1,15 @@
+{
+  "geometry": "SphereGeometry(1,32,16), shared by bounded 40-object pool",
+  "triangles": 960,
+  "minFacetPlaneRadius": 0.9904383212219469,
+  "maxRelativeUnderfill": 0.00956167877805314,
+  "maxUnderfillByNativeRadius": {
+    "8": 0.07649343022442512,
+    "175": 1.6732937861592996,
+    "220": 2.1035693311716908,
+    "450": 4.302755450123913
+  },
+  "limitations": [
+    "Geometric audit only; transparency, camera projection, pixel coverage and human perception are separate gates."
+  ]
+}

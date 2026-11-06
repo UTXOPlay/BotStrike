@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+# Offline analysis image. Reuse the exact application pair; do not rebuild it
+# merely to run an example or publish a map report.
+ARG APPLICATION_IMAGE=botstrike:tactical-v4-effects-final-881347ed
+ARG RUST_IMAGE=rust:1.97.1-bookworm
+FROM ${RUST_IMAGE} AS native
+WORKDIR /src
+ENV CARGO_TARGET_DIR=/build-target CARGO_BUILD_JOBS=2
+COPY botstrike ./botstrike
+RUN --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/usr/local/cargo/git --mount=type=cache,target=/build-target \
+    cargo build --release --locked --manifest-path botstrike/Cargo.toml --example map_audit && cp /build-target/release/examples/map_audit /map-audit
+
+FROM ${APPLICATION_IMAGE}
+USER root
+WORKDIR /work
+COPY package.json package-lock.json ./
+RUN npm ci --include=dev --ignore-scripts --no-audit --no-fund
+COPY botstrike ./botstrike
+COPY tools ./tools
+COPY shared ./shared
+COPY botstrike-service ./botstrike-service
+COPY --from=native /map-audit ./tools/map-audit
+RUN ln -s /app/release /work/release && mkdir /work/output && chown node:node /work/output
+USER node
+ENV MAP_AUDIT_BINARY=/work/tools/map-audit MAP_AUDIT_OUT=/work/output
+CMD ["node","tools/run-map-audit.mjs"]

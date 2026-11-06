@@ -1,0 +1,138 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "cohort": "desktop",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 670,
+        "y": 327.1875,
+        "width": 580,
+        "height": 425.625
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 120,
+        "height": 44
+      },
+      "room": "d714d4a3a9ccd1395a08e7be"
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 990,
+        "y": 316.0078125,
+        "width": 580,
+        "height": 447.984375
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 120,
+        "height": 44
+      },
+      "room": "d714d4a3a9ccd1395a08e7be"
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 890,
+        "y": 450.0078125,
+        "width": 780,
+        "height": 539.984375
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 120,
+        "height": 60
+      },
+      "room": "d714d4a3a9ccd1395a08e7be"
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 240,
+        "y": 326,
+        "left": 60,
+        "top": 200,
+        "width": 360,
+        "height": 360
+      },
+      "wheel": {
+        "x": 1530,
+        "y": 806.5390625,
+        "width": 780,
+        "height": 546.921875
+      },
+      "button": {
+        "x": 428,
+        "y": 200,
+        "width": 120,
+        "height": 60
+      },
+      "room": "d714d4a3a9ccd1395a08e7be"
+    }
+  ],
+  "keyboard": true,
+  "controller": true,
+  "touch": false,
+  "heldInputsCleared": true,
+  "reducedMotion": true,
+  "renderFps": 30,
+  "errors": []
+}

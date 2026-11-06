@@ -1,0 +1,12 @@
+{
+  "patch": "/tmp/botstrike-identity-v5-review.patch",
+  "baseCommit": "0d8b15130c70ac1f203d0e985d32aca542ddafdb",
+  "bytes": 33327169,
+  "sha256": "448b708b1f0f8ce77a7cb07f6ab958450b2292e3622ad4d1e1d199e9ca6118f2",
+  "image": "sha256:c1a486aad6b0c3e7c9315335c301004a90a799f1052569dfc535d161bb753842",
+  "identityStudyBundleSha256": "ea0e7f2f1af1a00e0f195bebc9f0533ca0a221e06e095ae6da7e8e356d00ad01",
+  "actualIndexUntouched": true,
+  "newToolAndDocumentWhitespaceCheckPassed": true,
+  "historicalRawLogWhitespaceWarningsRetained": true,
+  "historicalWhitespaceReport": "/tmp/botstrike-identity-v5-whitespace.txt"
+}

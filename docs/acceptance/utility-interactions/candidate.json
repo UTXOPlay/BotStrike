@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "date": "2026-11-06",
+  "status": "unreleased automated candidate; no human counterplay/balance acceptance",
+  "version": "botstrike-2050-tactical-v4",
+  "modelSha256": "881347ed6ce9294c91f9bb82c010b06a2302c769fd2810aef4f910b95dd888a5",
+  "image": "sha256:79c5d17e4ba4b35ab7f1b93a4b6b88149746ac88889cc7f66d5195800ff9008f",
+  "frozenSourceReceiptSha256": "df2d0a143cf5e3eae9a65b5b899024a61cec7e00e2e5ed657edb6ab51f1ff788",
+  "localProfile": "ecc7a7390587866a790d61f71dde87765088f85935eb54e4f637ac9e21fa56bd",
+  "portableProfile": "b8efb5123d1dc99dcf7add70c4069f22d4a320378653c5ff67c1c0169a7d9886",
+  "pairs": {
+    "local": {
+      "botstrike-engine": "0cc6cc97ea507c6512cc342074277243939729e929d3a776f26a3ec250c4447a",
+      "myelin-botstrike": "d3ce64cdcdd294e03e09646fd17fdaf273c49978c9d66c48e6eba38c76fecad3"
+    },
+    "bookworm": {
+      "botstrike-engine": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+      "myelin-botstrike": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8"
+    }
+  },
+  "nativeTests": 65,
+  "unitTests": 157,
+  "hostTests": 4,
+  "nativeSightSampleFixtures": 501,
+  "smokeSphereEyeFixtures": 2004,
+  "nativeDamageCases": 6048,
+  "releaseTrialsPerBuild": 9,
+  "localTrajectorySnapshots": 825,
+  "portableTrajectorySnapshots": 870,
+  "historicalSyntheticProfilesVerified": 8,
+  "savedProductionExportsVerified": 5,
+  "humanParticipants": 0,
+  "remainingGates": [
+    "Human utility/ability response exercises and balance review.",
+    "Flagship human 5v5 acceptance; human recognition and real-device cohorts.",
+    "120 FPS assertion failed on the earlier V3 software-rendered environment; high-refresh gate remains unmet.",
+    "28-ray utility-volume visibility is bounded sampling, not exact continuous aperture occlusion.",
+    "GPG key unlocking is still required for signed commits/push; production remains on accepted animation release."
+  ]
+}

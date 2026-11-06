@@ -1,0 +1,363 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(fonts.every(n=>n>=20))\n",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 670,
+        "y": 325.4296875,
+        "width": 580,
+        "height": 429.140625
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 155.203125,
+        "height": 44
+      },
+      "room": "5e939e1beef2e197f2ff476e"
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2857142857142
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 214,
+        "left": 24,
+        "top": 130,
+        "width": 240,
+        "height": 240
+      },
+      "wheel": {
+        "x": 990,
+        "y": 298.6015625,
+        "width": 580,
+        "height": 482.796875
+      },
+      "button": {
+        "x": 272,
+        "y": 130,
+        "width": 198.28125,
+        "height": 47
+      },
+      "room": "5e939e1beef2e197f2ff476e"
+    }
+  ],
+  "errors": [],
+  "diagnostics": [
+    {
+      "wire": [
+        {
+          "type": "communication",
+          "room": "5e939e1beef2e197f2ff476e",
+          "tick": 489,
+          "comms": {
+            "revision": 1,
+            "events": [
+              {
+                "id": "5e939e1beef2e197f2ff476e:0:1",
+                "sender": 0,
+                "kind": "hold",
+                "position": [
+                  0,
+                  0,
+                  -514.2857142857142
+                ],
+                "callout": "mid_lane",
+                "tick": 489,
+                "remainingMs": 4999.347255000001
+              }
+            ],
+            "muted": []
+          }
+        },
+        {
+          "type": "communication",
+          "room": "5e939e1beef2e197f2ff476e",
+          "tick": 753,
+          "comms": {
+            "revision": 2,
+            "events": [
+              {
+                "id": "5e939e1beef2e197f2ff476e:0:1",
+                "sender": 0,
+                "kind": "hold",
+                "position": [
+                  0,
+                  0,
+                  -514.2857142857142
+                ],
+                "callout": "mid_lane",
+                "tick": 489,
+                "remainingMs": 873.0579350000007
+              },
+              {
+                "id": "5e939e1beef2e197f2ff476e:0:2",
+                "sender": 0,
+                "kind": "hold",
+                "position": [
+                  0,
+                  0,
+                  -514.2857142857142
+                ],
+                "callout": "mid_lane",
+                "tick": 753,
+                "remainingMs": 4999.657089
+              }
+            ],
+            "muted": []
+          }
+        }
+      ],
+      "sent": [
+        {
+          "type": "comms",
+          "kind": "hold",
+          "map": 3,
+          "life": 2,
+          "position": [
+            0,
+            0,
+            -514.2857142857142
+          ],
+          "room": "5e939e1beef2e197f2ff476e"
+        },
+        {
+          "type": "comms",
+          "kind": "hold",
+          "map": 3,
+          "life": 2,
+          "position": [
+            0,
+            0,
+            -514.2857142857142
+          ],
+          "room": "5e939e1beef2e197f2ff476e"
+        }
+      ],
+      "inputs": [
+        {
+          "seq": 148,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 149,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 150,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 151,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 152,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 153,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 154,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 155,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 156,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 157,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 158,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 159,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 160,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 161,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 162,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 163,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 164,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 165,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 166,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 167,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 168,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 169,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 170,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 171,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 172,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 173,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 174,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 175,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 176,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 177,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 178,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 179,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 180,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 181,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 182,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 183,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 184,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 185,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 186,
+          "jump": false,
+          "fire": false
+        },
+        {
+          "seq": 187,
+          "jump": false,
+          "fire": false
+        }
+      ]
+    }
+  ]
+}

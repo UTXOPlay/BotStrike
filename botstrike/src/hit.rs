@@ -42,6 +42,41 @@ pub struct Hit {
     pub region: Region,
 }
 impl Profile {
+    pub fn visibility_samples(
+        &self,
+        position: [f64; 3],
+        stance: f64,
+        look: [f64; 2],
+    ) -> Vec<[f64; 3]> {
+        let v = self.volumes(position, stance, look);
+        let mut points = Vec::with_capacity(14);
+        for sx in [-1., 1.] {
+            for sy in [-1., 1.] {
+                for sz in [-1., 1.] {
+                    let x = v.head_half_extents[0] * sx;
+                    let y = v.head_half_extents[1] * sy;
+                    let z = v.head_half_extents[2] * sz;
+                    let ry = v.head_pitch.cos() * y - v.head_pitch.sin() * z;
+                    let rz = v.head_pitch.sin() * y + v.head_pitch.cos() * z;
+                    points.push([
+                        v.head[0] + v.head_yaw.cos() * x + v.head_yaw.sin() * rz,
+                        v.head[1] + ry,
+                        v.head[2] - v.head_yaw.sin() * x + v.head_yaw.cos() * rz,
+                    ]);
+                }
+            }
+        }
+        points.push(v.upper);
+        points.push(v.lower);
+        for axis in [0, 2] {
+            for sign in [-1., 1.] {
+                let mut point = v.upper;
+                point[axis] += sign * v.body_radius;
+                points.push(point);
+            }
+        }
+        points
+    }
     pub fn volumes(&self, position: [f64; 3], stance: f64, look: [f64; 2]) -> Volumes {
         let t = stance.clamp(0., 1.);
         let lerp = |a: f64, b: f64| a + (b - a) * t;

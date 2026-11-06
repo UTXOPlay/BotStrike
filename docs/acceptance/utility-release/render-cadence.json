@@ -1,0 +1,209 @@
+{
+  "automated": true,
+  "physicalDisplayAccepted": false,
+  "viewport": [
+    844,
+    390
+  ],
+  "deviceScaleFactor": 0.25,
+  "results": [
+    {
+      "cap": 30,
+      "rates": [
+        29,
+        30,
+        30
+      ],
+      "samples": [
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "48",
+          "renderTriangles": "39471",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "29",
+          "renderMs": "1.20",
+          "renderScale": "0.25"
+        },
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "48",
+          "renderTriangles": "39471",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "30",
+          "renderMs": "1.34",
+          "renderScale": "0.25"
+        },
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "48",
+          "renderTriangles": "39471",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "30",
+          "renderMs": "1.15",
+          "renderScale": "0.25"
+        }
+      ],
+      "errors": [],
+      "withinTarget": true
+    },
+    {
+      "cap": 60,
+      "rates": [
+        61,
+        60,
+        59
+      ],
+      "samples": [
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "47",
+          "renderTriangles": "39469",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "61",
+          "renderMs": "1.14",
+          "renderScale": "0.25"
+        },
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "47",
+          "renderTriangles": "39469",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "60",
+          "renderMs": "1.04",
+          "renderScale": "0.25"
+        },
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "47",
+          "renderTriangles": "39469",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "59",
+          "renderMs": "1.26",
+          "renderScale": "0.25"
+        }
+      ],
+      "errors": [],
+      "withinTarget": true
+    },
+    {
+      "cap": 120,
+      "rates": [
+        61,
+        61,
+        60
+      ],
+      "samples": [
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "47",
+          "renderTriangles": "39469",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "61",
+          "renderMs": "1.55",
+          "renderScale": "0.25"
+        },
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "47",
+          "renderTriangles": "39469",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "61",
+          "renderMs": "1.58",
+          "renderScale": "0.25"
+        },
+        {
+          "game": "botstrike",
+          "mobile": "false",
+          "immersiveBlocked": "false",
+          "touch": "false",
+          "result": "false",
+          "resultScrolled": "false",
+          "practice": "true",
+          "playing": "true",
+          "viewModelTriangles": "2317",
+          "drawCalls": "47",
+          "renderTriangles": "39469",
+          "gamepad": "false",
+          "scoped": "false",
+          "renderFps": "60",
+          "renderMs": "1.50",
+          "renderScale": "0.25"
+        }
+      ],
+      "errors": [],
+      "withinTarget": false
+    }
+  ]
+}

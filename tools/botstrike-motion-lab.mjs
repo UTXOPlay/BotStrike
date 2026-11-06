@@ -8,6 +8,7 @@ import {scenarios,motionFrame} from './motion-sequences.mjs';
 import spec from '../botstrike/spec.json';
 import {createHitInspector} from './hit-region-inspector.mjs';
 import {installHardwareBenchmark} from './motion-lab-benchmark.mjs';
+import {MovementAudioClock} from '../botstrike-service/movement-audio.mjs';
 
 const canvas=document.querySelector('canvas'),hud=document.querySelector('#debug'),mobile=matchMedia('(pointer:coarse)').matches;
 const renderer=new THREE.WebGLRenderer({canvas,antialias:false,preserveDrawingBuffer:true});
@@ -127,6 +128,31 @@ function draw(){
  const d=lastDebug;if(d)hud.textContent=`${d.mode} · ${current.scenario} · ${time.toFixed(2)} s\nvelocity ${d.velocity.map(v=>v.toFixed(1)).join(' / ')} · facing ${d.facing.toFixed(2)} rad\n${d.gait?'visual run '+(d.gait.runAmount*100).toFixed(0)+'% · speed '+(d.gait.speedFraction*100).toFixed(0)+'% of '+d.gait.runSpeed.toFixed(1)+'\n':''}phase ${d.phase.toFixed(3)} · pelvis ${d.orientation.toFixed(3)} · cadence ${d.stride.toFixed(2)}\n${Object.entries(d.weights).map(([k,v])=>`${k.replace('lower:','')} ${v.toFixed(2)}`).join(' | ')}\n${d.solvedFeet?'SOLVED':'ESTIMATED'} feet: L ${d.feet.L.state}, R ${d.feet.R.state}\npost-skinning sole error max ${Math.max(...contactStats.map(s=>s.maxError)).toFixed(3)} world units\n${current.count} rigs · ${renderer.info.render.calls} draw calls · reset ${d.reset||'none'}\n${d.springs?Object.entries(d.springs).map(([name,v])=>name+' '+v.map(x=>x.toFixed(3)).join('/')).join(' · '):''}\npose inertia ${(d.inertia||0).toFixed(3)} rad · anchors green / soles white / error orange`;
 }
 function percentile(values,p){return [...values].sort((a,b)=>a-b)[Math.min(values.length-1,Math.floor(values.length*p))]||0;}
+function auditAudioGait({hero=0,weapon=2,fps=60,reduced=false}={}){
+ playing=false;reset({mode:'candidate',hero,weapon,count:1,view:'feet',reduced,diagnostics:true});
+ const actor=actors.candidate[0],clock=new MovementAudioClock(),frames=[],events=[],contacts=[],durations=[];
+ let x=0,z=0,previous=null,finite=true,unchanged=true,phaseError=0,lastHalf=null,solePeak=0,feasibleContacts=0;
+ const maximum=spec.heroes[hero].speed*(spec.weapons[weapon].mobility??1);
+ for(let tick=0;tick<=256;tick++){
+  const t=tick/64,crouch=t>=2&&t<2.5,air=t>=2.5&&t<3,side=t>=1.5&&t<2;
+  const speed=maximum*(t>=1&&t<1.5?.55:crouch?.45:1),vy=air?100*Math.PI*Math.cos((t-2.5)*Math.PI*2):0;
+  const velocity=[side?speed:0,vy,side?0:-speed];x+=velocity[0]/64;z+=velocity[2]/64;
+  const p={slot:0,team:0,hero,weapon,position:[x,air?50*Math.sin((t-2.5)*Math.PI*2):0,z],velocity,yaw:0,pitch:0,life:1,alive:true,crouch,stance:Number(crouch),reload:0};
+  const s={tick,phase:'live',config:{map:0},objective:{},players:[p]};
+  for(const e of clock.advance(s,previous,spec))events.push({...e,tick,half:Math.floor(clock.view()[0].phase*2)});
+  frames.push({...s,players:[{...p,gait:clock.view()[0]}]});previous=s;
+ }
+ for(let frame=0;frame<=fps*4;frame++){
+  const t=frame/fps,at=t*64,a=frames[Math.floor(at)],b=frames[Math.min(256,Math.ceil(at))],u=at%1,pa=a.players[0],pb=b.players[0];
+  const p={...pb,position:pa.position.map((v,i)=>v+(pb.position[i]-v)*u),velocity:pa.velocity.map((v,i)=>v+(pb.velocity[i]-v)*u),stance:pa.stance+(pb.stance-pa.stance)*u,gait:{...pb.gait,phase:pa.gait.phase+(pb.gait.phase-pa.gait.phase)*u,duty:pa.gait.duty+(pb.gait.duty-pa.gait.duty)*u,cycleDuration:pa.gait.cycleDuration+(pb.gait.cycleDuration-pa.gait.cycleDuration)*u,tick:at}};
+  const s={...b,tick:at,players:[p]},before=JSON.stringify(p),start=performance.now();actor.rig.position.fromArray(p.position);actor.rig.rotation.y=p.yaw;actor.update(p,s,t*1000,frame?1/fps:0,{reduced});scene.updateMatrixWorld(true);renderer.render(scene,camera);durations.push(performance.now()-start);
+  unchanged&&=before===JSON.stringify(p);phaseError=Math.max(phaseError,Math.abs(actor.animation.blend.phase-p.gait.phase%1));
+  const half=Math.floor(p.gait.phase*2);if(lastHalf!==null&&half>lastHalf&&p.position[1]<=.001){const foot=actor.animation.feet?.feet[half%2?1:0];let meshSoleHeight=0;for(const sample of foot?.samples||[]){sample.mesh.skeleton.update();sample.mesh.getVertexPosition(sample.index,vector);vector.applyMatrix4(sample.mesh.matrixWorld);meshSoleHeight=Math.max(meshSoleHeight,Math.abs(vector.y));}contacts.push({half,at:t,stance:foot?.wasStance,feasible:foot?.feasible,soleHeight:foot?.sole.y,meshSoleHeight,reason:foot?.reason});if(foot?.feasible){feasibleContacts++;solePeak=Math.max(solePeak,Math.abs(foot.sole.y));}}lastHalf=half;
+  for(const bone of new Set(Object.values(actor.bones)))finite&&=[...bone.position,...bone.quaternion,...bone.scale].every(Number.isFinite);
+ }
+ const matched=events.filter(e=>e.kind==='step').map(e=>({tick:e.tick,half:e.half,contact:contacts.find(c=>c.half===e.half)}));
+ return {hero,weapon,fps,reduced,finite,unchanged,phaseError,events,contacts,matched,feasibleContacts,solePeak,cpuMs:{median:percentile(durations,.5),p95:percentile(durations,.95)},renderer:renderer.getContext().getParameter(renderer.getContext().RENDERER)};
+}
 function run(config={}){
  playing=false;reset(config);const times=[];let finite=true,unchanged=true,frame=0;
  while(time<(config.seconds??6)-1e-7){const dt=Math.min(config.jitter?[.012,.026,.009,.022,.014][frame%5]:1/current.fps,(config.seconds??6)-time),r=step(dt,{check:true});if(frame>15)times.push(r.cpu);finite&&=r.finite;unchanged&&=r.unchanged;frame++;}
@@ -139,7 +165,7 @@ window.motionLabReady=(async()=>{
  await baselineCharacters.preload();
  for(const mode of modes)actors[mode]=Array.from({length:10},(_,slot)=>makeActor(mode,slot,slot%6,2,false));
  reset(options());resize();step(0);await renderer.compileAsync(scene,camera);draw();
- window.motionLab={run,step:dt=>{step(dt,{check:true});draw();return lastDebug;},reset:config=>reset(config),diagnostics(){return actors[current.mode].map(a=>({slot:a.slot,hero:a.hero,feet:a.animation?.feet?.feet.map(f=>({side:f.side,soleYaw:f.soleYaw,home:f.home.toArray(),offset:f.offset.toArray(),goal:f.goal.toArray(),desired:f.desired.toArray(),velocity:f.velocity.toArray(),recovery:{elapsed:f.recovery.elapsed,duration:f.recovery.duration,offset:f.recovery.offset.toArray(),velocity:f.recovery.velocity.toArray()},anchor:f.anchor.toArray(),ankle:f.ankle.toArray(),hip:f.hip.getWorldPosition(new THREE.Vector3()).toArray(),scale:f.solver.upper.getWorldScale(new THREE.Vector3()).toArray(),segments:[f.solver.upper.getWorldPosition(new THREE.Vector3()).distanceTo(f.solver.middle.getWorldPosition(new THREE.Vector3())),f.solver.middle.getWorldPosition(new THREE.Vector3()).distanceTo(f.solver.end.getWorldPosition(new THREE.Vector3()))],legLength:a.animation.feet.legLength,drop:a.animation.feet.drop,status:f.status,reason:f.reason,result:{...f.solver.result}}))}));},framePacing:()=>({samples:frameIntervals.length,p50:percentile(frameIntervals,.5),p95:percentile(frameIntervals,.95)}),play(){frameIntervals=[];lastTick=performance.now();playing=true;},stop(){playing=false;}};
+ window.motionLab={auditAudioGait,run,step:dt=>{step(dt,{check:true});draw();return lastDebug;},reset:config=>reset(config),diagnostics(){return actors[current.mode].map(a=>({slot:a.slot,hero:a.hero,gaitGeometry:a.animation?.feet?{legLength:a.animation.feet.legLength,footWidth:a.animation.feet.footWidth,hipWidth:a.animation.feet.hipWidth,bootWidth:a.animation.feet.bootWidth}:null,feet:a.animation?.feet?.feet.map(f=>({side:f.side,soleYaw:f.soleYaw,home:f.home.toArray(),offset:f.offset.toArray(),goal:f.goal.toArray(),desired:f.desired.toArray(),velocity:f.velocity.toArray(),recovery:{elapsed:f.recovery.elapsed,duration:f.recovery.duration,offset:f.recovery.offset.toArray(),velocity:f.recovery.velocity.toArray()},anchor:f.anchor.toArray(),ankle:f.ankle.toArray(),hip:f.hip.getWorldPosition(new THREE.Vector3()).toArray(),scale:f.solver.upper.getWorldScale(new THREE.Vector3()).toArray(),segments:[f.solver.upper.getWorldPosition(new THREE.Vector3()).distanceTo(f.solver.middle.getWorldPosition(new THREE.Vector3())),f.solver.middle.getWorldPosition(new THREE.Vector3()).distanceTo(f.solver.end.getWorldPosition(new THREE.Vector3()))],legLength:a.animation.feet.legLength,drop:a.animation.feet.drop,status:f.status,reason:f.reason,result:{...f.solver.result}}))}));},framePacing:()=>({samples:frameIntervals.length,p50:percentile(frameIntervals,.5),p95:percentile(frameIntervals,.95)}),play(){frameIntervals=[];lastTick=performance.now();playing=true;},stop(){playing=false;}};
  for(const control of Object.values(controls))control.addEventListener('change',()=>{playing=false;reset(options());step(0);draw();});
  document.querySelector('#restart').onclick=()=>{reset(options());step(0);draw();};
  document.querySelector('#play').onclick=()=>{playing=!playing;lastTick=performance.now();};
