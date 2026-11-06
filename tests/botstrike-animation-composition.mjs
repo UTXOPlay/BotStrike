@@ -1,8 +1,16 @@
+import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {startMotionLab} from '../tools/serve-botstrike-motion-lab.mjs';
 import spec from '../botstrike/spec.json' with {type:'json'};
 
+let nativeStance=null;
+if(process.env.NATIVE_STANCE){
+ const config={map:0,mode:'deathmatch',heroes:Array(10).fill(0),bots:Array(10).fill(false),difficulty:1,seed:2050};
+ const tape=JSON.stringify({config})+'\n'+Array.from({length:500},(_,t)=>JSON.stringify({inputs:[{crouch:t>=319},...Array(9).fill(null)]})).join('\n')+'\n';
+ nativeStance=execFileSync(process.env.BOTSTRIKE_TEST_ENGINE||'release/botstrike-engine',[],{input:tape,maxBuffer:32e6}).toString().trim().split('\n').map(JSON.parse).filter(v=>v.type==='ready'||v.type==='frame').map(v=>v.state.players[0].stance);
+ assert.ok(nativeStance.every(Number.isFinite));
+}
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const out=process.env.ART_OUTPUT||'/tmp/botstrike-animation-composition';await mkdir(out,{recursive:true});
 const recordPoses=!!(process.env.POSE_TRACE||process.env.POSE_REFERENCE),reference=process.env.POSE_REFERENCE?JSON.parse(await readFile(process.env.POSE_REFERENCE,'utf8')):null;
@@ -12,7 +20,7 @@ try{
  await page.goto(`http://127.0.0.1:${server.address().port}`);await page.evaluate(()=>motionLabReady);
  const results=[];
  for(let hero=0;hero<6;hero++)for(let weapon=0;weapon<12;weapon++)for(const firstPerson of [false,true]){
-  const result=await page.evaluate(({hero,weapon,firstPerson,reloadTicks,recordPoses})=>{
+  const result=await page.evaluate(({hero,weapon,firstPerson,reloadTicks,recordPoses,nativeStance})=>{
    motionLab.reset({hero,weapon,count:1,view:firstPerson?'first-person':'front'});
    let maxError=0,maxWrist=0,contacts=0,finite=true,unchanged=true,hitPreservedReload=false,x=0,z=0,previous=0;
    const bad=[],poses=[];
@@ -22,6 +30,7 @@ try{
     const velocity=[Math.cos(t*2.3)*speed,vertical,-Math.sin(t*2.3)*speed];x+=velocity[0]*dt;z+=velocity[2]*dt;
     const reload=t>=1?Math.max(0,reloadTicks-Math.floor((t-1)*64)):0;
     const player={slot:0,team:0,hero,weapon,position:[x,y,z],velocity,yaw,pitch,life:1,alive:true,crouch:t>=5,scoped:t>=5,reload};
+    if(nativeStance)player.stance=nativeStance[Math.round(t*64)];
     const events=[];
     for(const [at,name]of [[.3,'fire'],[1,'reload'],[1.3,'hit'],[5,'fire'],[5.5,'utility']])if(previous<at&&t>=at)events.push({name,duration:name==='reload'?reloadTicks/64:undefined,value:name==='hit'?35:undefined});
     const before=JSON.stringify(player),r=motionLab.sample({player,dt,now:t*1000+1,events});previous=t;finite&&=r.finite;unchanged&&=before===JSON.stringify(player);
@@ -33,7 +42,7 @@ try{
     }
    }
    motionLab.render();return {hero,weapon,firstPerson,maxError,maxWrist,contacts,finite,unchanged,hitPreservedReload,bad,...(recordPoses?{poses}:{})};
-  },{hero,weapon,firstPerson,reloadTicks:spec.weapons[weapon].reload,recordPoses});
+  },{hero,weapon,firstPerson,reloadTicks:spec.weapons[weapon].reload,recordPoses,nativeStance});
   results.push(result);
   assert.ok(result.finite&&result.unchanged,JSON.stringify(result));
   assert.ok(result.contacts>400&&result.maxError<=2&&result.maxWrist<=1.10001,JSON.stringify(result));
@@ -68,6 +77,6 @@ try{
   assert.ok(maxPoseDelta<1e-8,'Matrix optimization changed the sampled pose/contact: '+maxPoseDelta);
  }
  const manifest=await page.evaluate(()=>fetch('./manifest.json').then(r=>r.json()));
- assert.deepEqual(errors,[]);await writeFile(`${out}/measurements.json`,JSON.stringify({results,lifecycle,maxPoseDelta,manifest},null,2));
+ assert.deepEqual(errors,[]);await writeFile(`${out}/measurements.json`,JSON.stringify({results,lifecycle,maxPoseDelta,manifest,nativeStance:!!nativeStance},null,2));
  console.log(JSON.stringify({cases:results.length,framesPerCase:420,maxGripError:Math.max(...results.map(r=>r.maxError)),lifecycle:12,maxPoseDelta,out}));
 }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}

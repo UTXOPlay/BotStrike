@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "date": "2026-11-06",
+  "runtimeSource": "646ec4c84245b345c7df22adf2e068a3a700a453",
+  "candidate": "52d770134a5c47f02c56c29b56b3f552b0b18ede",
+  "reviewPrompt": "PR #2 当前动画版本已部署。请实际查看急停转身、蹲起跳跃、死亡及换弹时的脚步、膝盖和枪械接触后，告诉我真人验收结果；我会同时继续实现后续枪战与战术项目。",
+  "maintainerResponse": "已看过，当前动画可接受",
+  "result": "accepted",
+  "scope": "Current deployed animation behavior; future changes require affected checks and review. This does not establish physical-device performance.",
+  "deferredPerformance": "performance-policy.json; follow-up GitHub issue #11 remains open",
+  "regressions": {
+    "unitTests": {
+      "passed": 111,
+      "failed": 0,
+      "skipped": 0
+    },
+    "hostTests": {
+      "passed": 4
+    },
+    "composition": {
+      "artifact": "accepted-composition.json.gz",
+      "sha256": "5da69b944c45cbafe96252e068ec10a40451ba41e47adf75d2cbdbd65e4fc03b",
+      "cases": 144,
+      "framesPerCase": 420,
+      "lifecycle": 12,
+      "maxGripError": 9.298341530198968e-14,
+      "finite": true,
+      "nativeUnchanged": true
+    }
+  },
+  "releaseEvidence": "audit-deployment.json"
+}

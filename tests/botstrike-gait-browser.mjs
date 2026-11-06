@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,readFile,mkdir,writeFile} from 'node:fs/promises';
@@ -103,7 +104,7 @@ try{
    assert.ok(nativeMotion.every(p=>p.height===0&&p.vertical===0),'AI motion changed native height');
    await writeFile(join(out,'native-motion.json'),JSON.stringify(nativeMotion,null,2));
    await live.keyboard.press('Space',{delay:80});
-   await live.waitForFunction(async()=>{const room=(await(await fetch('/games/botstrike/api/state')).json()).room;return room.state.players[room.slot].position[1]>1});
+   await waitBrowserCondition(live,async()=>{const room=(await(await fetch('/games/botstrike/api/state')).json()).room;return room.state.players[room.slot].position[1]>1});
   }finally{await leaveBrowserRoom(live);await live.close()}
  }
  console.log(JSON.stringify({rootRange,hipRange,phaseCorrelation,groundRange:[Math.min(...samples[0].ground),Math.max(...samples[0].ground)],jitteredGroundRange:[Math.min(...jittered[0].ground),Math.max(...jittered[0].ground)],hitPose,hitFirePose,reducedHitPose,recoveryPose,repeatedPose,nativeBotSamples:nativeMotion?.length,out}));

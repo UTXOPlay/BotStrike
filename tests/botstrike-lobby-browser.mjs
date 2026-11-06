@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
@@ -23,7 +24,7 @@ try{
  await view(first).getByRole('button',{name:'TAKE CONTROL',exact:true}).waitFor();
  assert.equal(await view(first).locator('#leave').isDisabled(),true);
  await view(second).locator('#room-hero').selectOption('3');
- await view(second).waitForFunction(()=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>room.selectedHero===3));
+ await waitBrowserCondition(view(second),()=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>room.selectedHero===3));
  await second.screenshot({path:out+'/waiting-handoff.png'});
  await second.close();
  await view(first).locator('#resume').click();await view(first).waitForFunction(()=>!document.querySelector('#start').disabled);

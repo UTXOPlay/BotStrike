@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
@@ -6,7 +7,7 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.CH
 const context=await browser.newContext({viewport:{width:844,height:390},isMobile:true,hasTouch:true,storageState:process.env.STORAGE_STATE||undefined}),page=await context.newPage(),errors=[],sent=[];page.setDefaultTimeout(60000);
 page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error'&&/Content Security Policy|Couldn't load texture/.test(e.text()))errors.push(e.text());});page.on('websocket',ws=>ws.on('framesent',e=>{try{const m=JSON.parse(e.payload);if(m.type==='input')sent.push(m.input);}catch{}}));
 const ready=()=>page.waitForFunction(()=>window.BotStrikeStartup?.state.ready);
-const native=(field,value)=>page.waitForFunction(async({field,value})=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();const p=room?.state?.players[room.slot];return p?.alive&&p[field]===value;},{field,value});
+const native=(field,value)=>waitBrowserCondition(page,async({field,value})=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();const p=room?.state?.players[room.slot];return p?.alive&&p[field]===value;},{field,value});
 // Freeze rendering only after a real scoped native snapshot, so a bot death cannot race visual assertions.
 await page.addInitScript(()=>{const Original=WebSocket;window.WebSocket=class extends Original{constructor(...args){super(...args);this.addEventListener('message',e=>{try{const m=JSON.parse(e.data);if(window.freezeOptic&&m.type==='state'){e.stopImmediatePropagation();return;}const r=m.room,p=r?.state?.players[r.slot];if(window.captureOptic&&p?.scoped&&p.alive){window.freezeOptic=true;window.captureOptic=false;}}catch{}});}};});
 try{

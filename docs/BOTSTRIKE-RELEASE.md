@@ -144,3 +144,24 @@ profiling are deferred under the maintainer's advisory policy. These software
 browser checks are not a physical-device performance pass. See the
 [release evidence](acceptance/hybrid-animation/audit-deployment.json) and
 [audit follow-up](animation-audit-follow-up.md).
+
+
+## Tactical candidate portable build
+
+Build from a frozen, reviewed source context with `deploy/Dockerfile`. The
+multi-stage build compiles the engine with Rust 1.97.1 on Bookworm before
+compiling its exact-bound adapter. It generates the damage contract from that
+engine and runs native/browser contract tests, host tests and a complete signed
+native flow with tamper rejection. Do not copy a workstation binary into the
+Bookworm runtime: workstation GLIBC requirements can exceed the runtime ABI.
+
+Retain the exact five production legacy pairs under `release/legacy`; the image
+copies only those allowlisted pairs and excludes local checkpoints. Save the
+image digest and the files under `/app/build-validation`, and verify historical
+exports using the built runtime before rollout. The candidate gunplay image was
+checked locally; training changes require a fresh immutable build and report.
+
+If Docker's configured proxy is a host-loopback address, use the build's host
+network option on that workstation so BuildKit can reach it. Do not bake a
+workstation proxy or credentials into the image. Deploy the tested image digest
+with retained production data and the existing rollback procedure.

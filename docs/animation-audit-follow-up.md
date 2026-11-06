@@ -6,11 +6,11 @@ are recorded separately.
 
 | Audit finding | Current status |
 | --- | --- |
-| F01: stop/restart foot discontinuity | Automated correction verified; deployed at `646ec4c`; human review pending |
-| F02: reconstructed corpse changes pose | Automated correction verified; deployed at `646ec4c`; human review pending |
-| F03: corpse intersects existing cover | Automated correction verified; deployed at `646ec4c`; human review pending |
-| F04: airborne reconstruction restarts jump progress | Automated correction verified; deployed at `646ec4c`; human review pending |
-| F05: quiet lateral walking lacks meaningful support coverage | Automated correction verified; deployed at `646ec4c`; human review pending |
+| F01: stop/restart foot discontinuity | Automated correction verified; deployed at `646ec4c`; human accepted 2026-11-06 |
+| F02: reconstructed corpse changes pose | Automated correction verified; deployed at `646ec4c`; human accepted 2026-11-06 |
+| F03: corpse intersects existing cover | Automated correction verified; deployed at `646ec4c`; human accepted 2026-11-06 |
+| F04: airborne reconstruction restarts jump progress | Automated correction verified; deployed at `646ec4c`; human accepted 2026-11-06 |
+| F05: quiet lateral walking lacks meaningful support coverage | Automated correction verified; deployed at `646ec4c`; human accepted 2026-11-06 |
 | F06: CPU budget and sustained desktop/Android acceptance | Dedicated optimization/profiling deferred by maintainer; timing references advisory |
 
 The audit IDs above are separate from the requirement IDs in the
@@ -553,3 +553,15 @@ native replay/tamper checks, historical verifier checks, public asset hashes and
 actual Store input/resize/fullscreen evidence separate from the fixed-step motion
 lab. The maintainer will review human quality later; PR #2 remains a draft.
 Dedicated performance work is still deferred under the advisory policy.
+
+## November 6 human acceptance
+
+The maintainer reviewed the deployed animation and replied “已看过，当前动画可接受”
+to the explicit stop/turn/crouch/jump/death/reload and foot/knee/weapon-contact review
+request. This supersedes the pending human-review statuses in the dated investigation
+notes above for runtime `646ec4c`, candidate `52d7701`. The version-bound
+[acceptance and fresh regression record](acceptance/hybrid-animation/human-acceptance.json)
+keeps that human result separate from the 144 composition cases and 12 lifecycle
+cases. H01/H02/F06 physical performance work remains deferred to #11; no physical
+performance pass is claimed. Future gameplay or presentation changes need their own
+affected validation.

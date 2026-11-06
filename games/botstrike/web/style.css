@@ -246,3 +246,17 @@ html[data-result=true] #menu-toggle,html[data-result-scrolled=true] .brand{displ
 @media(min-width:1800px) and (min-height:1200px){#match-results{max-width:1500px}.result-summary{padding:28px 0;gap:42px}.result-summary strong{font-size:30px}.result-score strong{font-size:72px}.result-summary small{font-size:15px}.result-row{min-height:62px;font-size:17px}.result-player b{font-size:17px}.result-player small,.result-team{font-size:14px}.result-columns{font-size:13px}}
 @media(min-width:3200px) and (min-height:1800px){#match-results{max-width:1800px}#panel[data-result=true] #result-title{font-size:78px}#panel[data-result=true] #room-status{font-size:22px}.result-summary{padding:36px 0;gap:60px}.result-summary strong{font-size:40px}.result-score strong{font-size:98px}.result-summary small{font-size:20px}.result-row{min-height:78px;font-size:23px}.result-player b{font-size:23px}.result-player small,.result-team{font-size:18px}.result-columns{font-size:17px}}
 @media(max-height:500px){#panel[data-result=true]{padding-top:max(62px,env(safe-area-inset-top))}#panel[data-result=true] .store-return{display:none!important}#panel[data-result=true] #result-title{margin:4px 0;font-size:32px}#panel[data-result=true] #room-status{margin:8px 0}#panel[data-result=true] #match-results{margin-top:10px}.result-summary{padding:12px 0}.result-table{margin-top:10px}}
+
+/* In-scene armory comparison, generated from ideal native firing cases. */
+.damage-guide{margin:10px 0 16px;padding:10px;border:1px solid #a4dce04d;border-radius:6px;color:#dceff4;font-size:clamp(12px,.78vw,18px)}
+.damage-guide summary{cursor:pointer;color:#9cecff;min-height:30px;line-height:1.6}
+.damage-guide p{line-height:1.5;margin:8px 0;max-width:90ch}
+.damage-guide-controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:end}
+.damage-guide-controls label{display:grid;gap:4px;font-size:inherit}
+.damage-guide-controls label:last-child{display:flex;align-items:center;min-height:44px}
+.damage-guide select{min-height:44px;max-width:100%;font-size:inherit}
+#buy-items .damage-guide-value{color:#b9eaf0;border-top:1px solid #d4ebf029;padding-top:6px;line-height:1.5}
+
+#buy-items .damage-guide-value{white-space:pre-line}
+
+#accuracy-state{display:block;margin-top:5px;font:clamp(9px,.65vw,15px)/1.4 monospace;color:#c5e4e9;max-width:28ch}

@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
 
@@ -27,14 +28,14 @@ try{
   await page.waitForFunction(expected=>document.querySelector('#weapon-label').textContent===expected,name);
   const canvas=await page.locator('#arena').boundingBox();await page.mouse.move(canvas.x+canvas.width/2,canvas.y+canvas.height/2);
   await page.waitForTimeout(350);
-  await page.waitForFunction(expected=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{const pilot=room.state.players[room.slot];return pilot.weapon===expected&&pilot.alive&&pilot.fire_wait===0&&pilot.reload===0&&pilot.ammo[expected]>0}),weapon);
+  await waitBrowserCondition(page,expected=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{const pilot=room.state.players[room.slot];return pilot.weapon===expected&&pilot.alive&&pilot.fire_wait===0&&pilot.reload===0&&pilot.ammo[expected]>0}),weapon);
   const before=await page.evaluate(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>({shots:room.state.players[room.slot].shots,seq:room.state.players[room.slot].last_seq})));
   const started=await page.evaluate(()=>window.__startedShots.length);
   await page.mouse.down();
   try{await page.waitForFunction(([started,duration])=>window.__startedShots.slice(started).some(value=>Math.abs(value-duration)<.01),[started,duration],{timeout:1500});}
   catch(error){console.error('Sampled shot missing:',name,before,await page.evaluate(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{const pilot=room.state.players[room.slot];return{shots:pilot.shots,seq:pilot.last_seq,alive:pilot.alive,weapon:pilot.weapon,startedShots:window.__startedShots,playing:document.documentElement.dataset.playing}})),errors);throw error;}
   finally{await page.mouse.up();}
-  await page.waitForFunction(before=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{const pilot=room.state.players[room.slot];return pilot.shots>before.shots&&pilot.last_seq>before.seq}),before, {timeout:5000});
+  await waitBrowserCondition(page,before=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{const pilot=room.state.players[room.slot];return pilot.shots>before.shots&&pilot.last_seq>before.seq}),before, {timeout:5000});
  }
  await page.waitForFunction(()=>window.__shotBuffers.length>=5);
  const buffers=await page.evaluate(()=>window.__shotBuffers);
@@ -43,16 +44,16 @@ try{
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.10&&buffer.length/buffer.rate<.11),'ION-5 sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.31&&buffer.length/buffer.rate<.33),'RAIL-LANCE sample reached Web Audio');
  assert.ok(buffers.some(buffer=>buffer.length/buffer.rate>.37&&buffer.length/buffer.rate<.39),'SCATTER sample reached Web Audio');
- await page.waitForFunction(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].alive));
+ await waitBrowserCondition(page,()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].alive));
  const landingStart=await page.evaluate(()=>window.__startedShots.length);
  await page.keyboard.press('Space',{delay:80});
- await page.waitForFunction(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].position[1]>1));
+ await waitBrowserCondition(page,()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].position[1]>1));
  await page.waitForFunction(start=>window.__startedShots.slice(start).some(value=>Math.abs(value-.19)<.003),landingStart);
  const stepStart=await page.evaluate(()=>window.__startedShots.length);
  const beforeMove=await page.evaluate(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>room.state.players[room.slot].position));
  await page.keyboard.down('KeyW');
  try{
-  await page.waitForFunction(([start,origin])=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{
+  await waitBrowserCondition(page,([start,origin])=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(({room})=>{
    const position=room.state.players[room.slot].position;
    return Math.hypot(position[0]-origin[0],position[2]-origin[2])>40&&[.11,.125].every(duration=>window.__startedShots.slice(start).some(value=>Math.abs(value-duration)<.003));
   }),[stepStart,beforeMove]);

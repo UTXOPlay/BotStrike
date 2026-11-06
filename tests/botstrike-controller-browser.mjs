@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 
@@ -32,7 +33,7 @@ try{
  await second.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Connected'));
  const secondRecord=frames.get(second);
  assert.ok(secondRecord.controls.some(message=>message.active));
- await second.waitForFunction(before=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>room.state.players[room.slot].last_seq>before),before);
+ await waitBrowserCondition(second,before=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>room.state.players[room.slot].last_seq>before),before);
  assert.ok(secondRecord.inputs.some(input=>input.seq>before));
  await second.screenshot({path:out+'/takeover-play.png'});
  await first.bringToFront();await first.waitForTimeout(200);

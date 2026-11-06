@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 
@@ -22,7 +23,7 @@ try{
  const state=async()=>(await(await page.request.get(base+'/games/botstrike/api/state')).json()).room;
  const initial=await state(),slot=initial.slot,origin=initial.state.players[slot].position,yaw=initial.state.players[slot].yaw;
  await page.evaluate(()=>{window.__holdSocket=true;window.__gameSocket.close()});
- await page.waitForFunction(({origin,yaw})=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>{if(!room?.state)return false;const pilot=room.state.players[room.slot],turn=Math.atan2(Math.sin(pilot.yaw-yaw),Math.cos(pilot.yaw-yaw));return Math.hypot(...pilot.position.map((v,i)=>v-origin[i]))>250&&Math.abs(turn)>.3}),{origin,yaw},{timeout:20000,polling:500});
+ await waitBrowserCondition(page,({origin,yaw})=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>{if(!room?.state)return false;const pilot=room.state.players[room.slot],turn=Math.atan2(Math.sin(pilot.yaw-yaw),Math.cos(pilot.yaw-yaw));return Math.hypot(...pilot.position.map((v,i)=>v-origin[i]))>250&&Math.abs(turn)>.3}),{origin,yaw},{timeout:20000,polling:500});
  await page.evaluate(()=>window.__holdSocket=false);
  await page.waitForFunction(()=>window.__gameSocket?.readyState===WebSocket.OPEN&&document.querySelector('#status').textContent.startsWith('Connected'));
  const restored=await state();assert.equal(restored.id,initial.id);assert.equal(restored.slot,slot);
@@ -36,7 +37,7 @@ try{
  assert.equal(first.x,0);assert.equal(first.y,0);assert.equal(first.fire,false);
  await page.locator('#resume').click();
  await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');
- await page.waitForFunction(seq=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>room.state.players[room.slot].last_seq>=seq),first.seq);
+ await waitBrowserCondition(page,seq=>fetch('/games/botstrike/api/state').then(r=>r.json()).then(({room})=>room.state.players[room.slot].last_seq>=seq),first.seq);
  assert.deepEqual(errors,[]);
  console.log('Delayed reconnect restores native facing, snapshot timeline and the same playable seat');
 }finally{await browser.close()}

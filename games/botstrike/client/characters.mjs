@@ -46,7 +46,7 @@ function deathAxes(model,clips){
  mixer.stopAllAction();mixer.uncacheRoot(copy);return axes;
 }
 // Models and textures are shared; every actor owns an independent cloned rig.
-export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
+export function createCharacters(art,{weapons=null,heroes=null,maps=null,hit_regions=null}={}){
  const templates=[],weaponTemplates=new Map(),teamMaterials=[0x69efff,0xffae67].map(color=>new THREE.MeshBasicMaterial({color,toneMapped:false})),badgeGeometry=new THREE.BoxGeometry(.09,.025,.035);
  const stamp=document.createElement('canvas');stamp.width=stamp.height=64;const ctx=stamp.getContext('2d'),gradient=ctx.createRadialGradient(32,32,5,32,32,32);gradient.addColorStop(0,'rgba(0,0,0,.5)');gradient.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);const shadowTexture=new THREE.CanvasTexture(stamp),shadowMaterial=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false}),shadowGeometry=new THREE.PlaneGeometry(43,36);
  async function preload(progress=()=>{}){
@@ -296,7 +296,7 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
     model.position.z+=springs.recoil.value[2]+springs.ready.value[0]*.012;model.rotation.x+=springs.recoil.value[0]*.35+springs.ready.value[0]*.045+springs.sway.value[1];model.rotation.z+=Math.sin(phase)*moving*.008*sway+springs.sway.value[2];
    }
    // Small tracking offsets follow the gameplay look direction after blending.
-   if(p.alive){bones.head.rotation.x+=(p.pitch||0)*.5;bones.chest.rotation.x+=(p.pitch||0)*.22;
+   if(p.alive){const chestPitch=Number.isFinite(p.stance)?hit_regions?.pitch_chest??.22:.22,headPitch=Number.isFinite(p.stance)?(hit_regions?.pitch_head??.72)-chestPitch:.5;bones.head.rotation.x+=(p.pitch||0)*headPitch;bones.chest.rotation.x+=(p.pitch||0)*chestPitch;
     if(!firstPerson&&!reduced&&now-hitAt<320){const pulse=Math.sin(Math.PI*Math.max(0,now-hitAt)/320)*hitForce;bones.chest.rotation.x-=pulse*.30;bones.head.rotation.x+=pulse*.22;}
    }
    if(hybrid&&p.alive&&!full&&motionSignals.grounded)bones.chest.updateWorldMatrix(true,true);

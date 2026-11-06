@@ -1,5 +1,6 @@
-import {FeedbackCursor,spreadDegrees,scopeFov} from './preferences.mjs';
-export function createFeedback({audio,getPrefs,getRoom,getYaw,getGamepad,spec}){
+import {damageSourceName} from './damage-guide.mjs';
+import {FeedbackCursor,spreadDegrees,scopeFov,accuracyState} from './preferences.mjs';
+export function createFeedback({audio,getPrefs,getRoom,getYaw,getGamepad,getAimState,spec}){
  const $=id=>document.getElementById(id);let cursor=new FeedbackCursor(),roomId=null,hitUntil=0,hitHead=false,hurtUntil=0,hurtLevel=0,bearing=null,bannerUntil=0,lastProgress=0,lastPlanted=false,lastBeep=-1,lastLife=null,lastVibration=0,received=new Map();
  const text=(id,v)=>{if($(id).textContent!==v)$(id).textContent=v;};
  function banner(message,ms=2600){text('combat-banner',message);bannerUntil=performance.now()+ms;}
@@ -16,10 +17,10 @@ export function createFeedback({audio,getPrefs,getRoom,getYaw,getGamepad,spec}){
    else if(['step','land','reload','skill','item','utility','plasma'].includes(e.kind)){if(fresh)audio.cue(e.kind,{pan:e.self?0:Math.sin(e.bearing+getYaw()),level:e.level,muffled:e.muffled,self:e.self,source:e.actor});}
    else if(e.kind==='hit'||e.kind==='headshot'){
     if(e.actor===room.slot){hitUntil=now+170;hitHead=e.kind==='headshot';if(fresh)audio.hit(hitHead);}
-    if(e.target===room.slot){const hit=received.get(e.actor)||{damage:0,hits:0,head:false};hit.damage+=e.value;hit.hits++;hit.head ||= e.kind==='headshot';hit.bearing=e.bearing;received.set(e.actor,hit);hurtUntil=now+1100;hurtLevel=Math.min(.32,.10+e.value/240);bearing=e.bearing;if(fresh){audio.damage(e.value);vibrate(15);}}
+    if(e.target===room.slot){const hit=received.get(e.actor)||{damage:0,armor:0,shielded:false,hits:0,head:false};hit.damage+=e.value;hit.armor+=e.damage?.armor||0;hit.shielded ||= !!e.damage?.shielded;hit.hits++;hit.head ||= e.kind==='headshot';hit.bearing=e.bearing;received.set(e.actor,hit);hurtUntil=now+1100;hurtLevel=Math.min(.32,.10+e.value/240);bearing=e.bearing;if(fresh){audio.damage(e.value);vibrate(15);}}
    }else if(e.kind==='kill'){
     if(e.actor===room.slot){if(fresh){audio.kill();vibrate(12);}banner('ELIMINATED · '+name(e.target),1400);}
-    if(e.target===room.slot){const taken=received.get(e.actor);text('killer','Eliminated by '+name(e.actor));text('death-detail',(spec.weapons[e.value]?.name||'Combat damage')+(taken?' · '+taken.hits+' hits · '+taken.damage+' HP':''));text('death-tip',taken?.head?'Headshot. Use cover and avoid repeat peeks.':Math.abs(Math.atan2(Math.sin((taken?.bearing??0)+me.yaw),Math.cos((taken?.bearing??0)+me.yaw)))>1.1?'Flanked. Check your sides before crossing.':'Strafe to cover. Stop briefly for accurate bursts.');}
+    if(e.target===room.slot){const taken=received.get(e.actor);text('killer','Eliminated by '+name(e.actor));text('death-detail',damageSourceName(e.damage?.source,spec,e.value)+(taken?' · '+taken.hits+' hits · '+taken.damage+' HP'+(taken.armor?' · '+taken.armor+' armor absorbed':'')+(taken.shielded?' · shield reduced damage':''):''));text('death-tip',taken?.head?'Headshot. Use cover and avoid repeat peeks.':Math.abs(Math.atan2(Math.sin((taken?.bearing??0)+me.yaw),Math.cos((taken?.bearing??0)+me.yaw)))>1.1?'Flanked. Check your sides before crossing.':'Strafe to cover. Stop briefly for accurate bursts.');}
     const feed=document.createElement('div');feed.textContent=name(e.actor)+' ▸ '+name(e.target);feed.dataset.until=String(now+4500);$('kill-feed').append(feed);while($('kill-feed').children.length>3)$('kill-feed').firstChild.remove();
    }else if(e.kind==='planted'){banner('RELAY PLANTED · SITE '+(e.value===0?'A':'B'));if(fresh)audio.cue('planted');}
    else if(['defused','detonation','elimination','time'].includes(e.kind)){const won=e.value===me.team;banner((won?'ROUND WON · ':'ROUND LOST · ')+({defused:'RELAY DEFUSED',detonation:'RELAY DETONATED',elimination:'SQUAD ELIMINATED',time:'TIME EXPIRED'}[e.kind]),4500);if(fresh)audio.cue(won?'win':'loss');}
@@ -45,7 +46,7 @@ export function createFeedback({audio,getPrefs,getRoom,getYaw,getGamepad,spec}){
   $('damage-bearing').style.opacity=now<hurtUntil&&bearing!=null?'1':'0';if(bearing!=null)$('damage-bearing').style.transform=`translate(-50%,-50%) rotate(${bearing+getYaw()}rad)`;
   $('combat-banner').hidden=now>=bannerUntil;
   for(const feed of [...$('kill-feed').children])if(Number(feed.dataset.until)<now)feed.remove();
-  if(me){const fov=me.scoped?scopeFov(spec.weapons[me.weapon]):p.fov,gap=Math.min(48,Math.max(3,Math.tan(spreadDegrees(me,spec.weapons[me.weapon])*Math.PI/360)*innerHeight/(2*Math.tan(fov*Math.PI/360))));$('crosshair').style.setProperty('--gap',gap+'px');$('crosshair').style.opacity=me.scoped||!me.alive?'0':'1';}
+  if(me){const aim=getAimState?.(me)||me;const ready=$('accuracy-state');if(ready)ready.textContent=accuracyState(aim,spec.weapons[me.weapon]);const fov=me.scoped?scopeFov(spec.weapons[me.weapon]):p.fov,gap=Math.min(48,Math.max(3,Math.tan(spreadDegrees(aim,spec.weapons[me.weapon])*Math.PI/360)*innerHeight/(2*Math.tan(fov*Math.PI/360))));$('crosshair').style.setProperty('--gap',gap+'px');$('crosshair').style.opacity=me.scoped||!me.alive?'0':'1';}
  }
  return {accept,render,banner};
 }

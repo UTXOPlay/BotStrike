@@ -21,7 +21,7 @@ export class SnapshotBuffer {
    const a=before.state.players[i],b=after.state.players[i];
    if(!a?.position||!b?.position||a.hidden||b.hidden||a.life!==p.life||b.life!==p.life||a.alive!==p.alive||b.alive!==p.alive||Math.hypot(...b.position.map((v,j)=>v-a.position[j]))>200)return p;
    const angle=Math.atan2(Math.sin(b.yaw-a.yaw),Math.cos(b.yaw-a.yaw));
-   return {...p,position:a.position.map((v,j)=>v+(b.position[j]-v)*fraction),yaw:a.yaw+angle*fraction,pitch:a.pitch+(b.pitch-a.pitch)*fraction};
+   return {...p,...(Number.isFinite(a.stance)&&Number.isFinite(b.stance)?{stance:a.stance+(b.stance-a.stance)*fraction}:{}),position:a.position.map((v,j)=>v+(b.position[j]-v)*fraction),yaw:a.yaw+angle*fraction,pitch:a.pitch+(b.pitch-a.pitch)*fraction};
   })};
  }
  viewTick(){return Math.max(0,Math.floor(this.renderTick));}

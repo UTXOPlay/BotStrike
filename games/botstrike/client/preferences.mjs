@@ -1,3 +1,4 @@
+import {movementAccuracy,runningSpeed,movement} from './motion.mjs';
 export const defaults={keyboardLayout:'qwerty',aimAssist:0,gamepadAimAssist:1,sensitivity:1,gamepadSensitivity:1,ads:.65,fov:80,volume:.6,brightness:1,crosshair:1,crosshairColor:'#68e8ff',sound:true,motion:true,invertY:false,haptics:false,touch:false};
 export const bindings={forward:'KeyW',back:'KeyS',left:'KeyA',right:'KeyD',fire:'Mouse0',scope:'Mouse2',reload:'KeyR',skill:'KeyQ',use:'KeyE',walk:'ShiftLeft',crouch:'KeyF',jump:'Space',armory:'KeyB',scoreboard:'Tab',previous:'BracketLeft',next:'BracketRight',flash:'KeyZ',smoke:'KeyX',grenade:'KeyC',utility:'KeyG',...Object.fromEntries(['Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9','Digit0','Minus','Equal'].map((key,i)=>['weapon'+i,key]))};
 export const actionNames={forward:'Move forward',back:'Move backward',left:'Move left',right:'Move right',fire:'Fire',scope:'Aim down sights',reload:'Reload',skill:'Hero skill',use:'Plant / defuse',walk:'Walk quietly',crouch:'Crouch',jump:'Jump',armory:'Armory',scoreboard:'Scoreboard',previous:'Previous weapon',next:'Next weapon',flash:'Flash',smoke:'Smoke',grenade:'Fragment',utility:'Selected equipment'};
@@ -26,8 +27,17 @@ export function rebind(map,action,code){
 }
 export const scopeFov=weapon=>weapon?.id==='rail'?20:38;
 export function aimScale(p,scoped,weapon){return p.sensitivity*.0025*(scoped?p.ads*Math.tan(scopeFov(weapon)*Math.PI/360)/Math.tan(p.fov*Math.PI/360):1);}
-export function spreadDegrees(player,weapon){return weapon.spread*(player.crouch?.65:1)*(weapon.scoped&&!player.scoped?12:1)*(Math.hypot(player.velocity[0],player.velocity[2])>40?2.5:1)*((player.hero===5&&player.effect>0)||player.overclock>0?1.5:1)+(player.recoil||0);}
+export function spreadDegrees(player,weapon){return weapon.spread*(player.crouch?.65:1)*(weapon.scoped&&!player.scoped?12:1)*movementAccuracy(Math.hypot(player.velocity[0],player.velocity[2]),runningSpeed(player,weapon),(player.position?.[1]||0)>0,player.landing||0)*((player.hero===5&&player.effect>0)||player.overclock>0?1.5:1)+(player.recoil||0);}
 export class FeedbackCursor{
  constructor(){this.seen=new Set();}
  consume(events,tick){const fresh=[];for(const e of events||[]){if(this.seen.has(e.id))continue;this.seen.add(e.id);if(tick-e.tick<=128)fresh.push(e);}if(this.seen.size>1024)this.seen=new Set([...this.seen].slice(-512));return fresh;}
+}
+
+export function accuracyState(player,weapon){
+ if((player.position?.[1]||0)>0)return 'AIRBORNE · WIDE SPREAD';
+ if(player.landing>0)return 'LANDING · RECOVERING';
+ if(Math.hypot(player.velocity[0],player.velocity[2])>runningSpeed(player,weapon)*movement.accurate_speed_fraction)return 'MOVING · STOP FOR PRECISION';
+ if(player.recoil>1e-8||player.aim_punch?.some(v=>Math.abs(v)>1e-8))return 'RECOIL · RECOVERING';
+ if(weapon.scoped&&!player.scoped)return 'USE SCOPE FOR PRECISION';
+ return 'STEADY · BASE SPREAD';
 }

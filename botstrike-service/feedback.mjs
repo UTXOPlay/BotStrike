@@ -32,7 +32,7 @@ export function feedbackFor(events,state,slot,spec,spectate=null){
   const action=e.kind==='item'&&e.value>=6?'use_item':({shot:'fire',reload:'reload',skill:'skill',item:'utility',utility:'utility',plasma:'utility',hit:'hit',headshot:'hit',land:'land'})[e.kind];
   const subject=state.players[['hit','headshot'].includes(e.kind)?e.target:e.actor];
   if(action&&subject&&canSee(state,listener,subject,map))out.push({id:e.id+':motion',tick:e.tick,kind:'motion',action,actor:subject.slot,life:subject.life,value:e.value});
-  if(globalKinds.has(e.kind)){out.push(e);continue;}
+  if(globalKinds.has(e.kind)){const {damage,...publicEvent}=e;out.push(e.actor===slot||e.target===slot?e:publicEvent);continue;}
   if(personalKinds.has(e.kind)){
    if(e.actor!==slot&&e.target!==slot)continue;
    const source=state.players[e.actor];

@@ -15,6 +15,56 @@ struct Header {
 struct Step {
     inputs: [Option<WireInput>; 10],
 }
+// Offline developer inspector. It consumes explicit fixtures, has no room
+// access and is never exposed as a game-service/HTTP endpoint.
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct HitProbe {
+    origin: [f64; 3],
+    direction: [f64; 3],
+    position: [f64; 3],
+    stance: f64,
+    #[serde(default)]
+    yaw: f64,
+    #[serde(default)]
+    pitch: f64,
+}
+fn hit_probes() -> Result<(), Box<dyn std::error::Error>> {
+    let rules = Rules::load();
+    let mut out = io::BufWriter::new(io::stdout());
+    for (index, line) in io::stdin().lock().lines().enumerate() {
+        let line = line?;
+        if index >= 10000 || line.len() > 4096 {
+            return Err("Probe limit".into());
+        }
+        let p: HitProbe = serde_json::from_str(&line)?;
+        let norm = p.direction.iter().map(|v| v * v).sum::<f64>().sqrt();
+        if !p
+            .origin
+            .iter()
+            .chain(p.position.iter())
+            .chain(p.direction.iter())
+            .all(|v| v.is_finite() && v.abs() <= 100000.)
+            || !p.yaw.is_finite()
+            || p.yaw.abs() > 3.142
+            || !p.pitch.is_finite()
+            || p.pitch.abs() > 1.5
+            || !p.stance.is_finite()
+            || !(0. ..=1.).contains(&p.stance)
+            || norm < 1e-10
+        {
+            return Err("Invalid hit probe".into());
+        }
+        let direction = p.direction.map(|v| v / norm);
+        writeln!(
+            out,
+            "{}",
+            json!({"version":rules.version,"volumes":rules.hit_regions.volumes(p.position,p.stance,[p.yaw,p.pitch]),"hit":rules.hit_regions.intersect(p.origin,direction,p.position,p.stance,[p.yaw,p.pitch])})
+        )?;
+    }
+    out.flush()?;
+    Ok(())
+}
 // Compact tape form bounds long 5v5 recordings without reducing tick rate.
 #[derive(Deserialize)]
 #[serde(untagged)]
@@ -68,6 +118,17 @@ impl WireInput {
 }
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<_> = std::env::args().collect();
+    if args.get(1).map(String::as_str) == Some("damage-matrix") {
+        let rules = Rules::load();
+        println!(
+            "{}",
+            json!({"schema":1,"version":rules.version,"tick_rate":64,"ideal_hits":true,"rows":botstrike_engine::damage_contract::matrix(&rules)?})
+        );
+        return Ok(());
+    }
+    if args.get(1).map(String::as_str) == Some("hit-probe") {
+        return hit_probes();
+    }
     if args.get(1).map(String::as_str) == Some("spec") {
         println!("{SPEC}");
         return Ok(());
@@ -121,7 +182,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     if game.tick == 0 {
         return Err("Empty match".into());
     }
-    let result = json!({"version":"botstrike-2050-salvage-v1","ticks":game.tick,"completed":game.phase=="finished","winner":game.winner,"score":game.score,"trace_hash":hash.finalize().to_hex().to_string(),"state_hash":blake3::hash(&serde_json::to_vec(&game)?).to_hex().to_string(),"players":game.players.iter().map(|p|json!({"slot":p.slot,"hero":p.hero,"kills":p.kills,"deaths":p.deaths,"assists":p.assists,"damage":p.damage,"shots":p.shots})).collect::<Vec<_>>()});
+    let result = json!({"version":rules.version,"ticks":game.tick,"completed":game.phase=="finished","winner":game.winner,"score":game.score,"trace_hash":hash.finalize().to_hex().to_string(),"state_hash":blake3::hash(&serde_json::to_vec(&game)?).to_hex().to_string(),"players":game.players.iter().map(|p|json!({"slot":p.slot,"hero":p.hero,"kills":p.kills,"deaths":p.deaths,"assists":p.assists,"damage":p.damage,"shots":p.shots})).collect::<Vec<_>>()});
     if replay {
         writeln!(output, "{result}")?
     } else {

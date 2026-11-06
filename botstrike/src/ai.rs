@@ -203,7 +203,7 @@ impl Game {
                 && length < weapon.range.min(2400.)
                 && (!weapon.scoped || p.scoped)
                 && (!reloading)
-                && !(length > 600. && p.recoil > 1.1);
+                && !(length > 600. && p.weapon_recoil.recoil > 1.1);
             input.scope = weapon.scoped;
             let desired_range = if weapon.pellets > 1 {
                 240.

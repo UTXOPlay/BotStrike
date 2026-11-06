@@ -6,3 +6,6 @@
 .env
 *.log
 artifacts
+
+release/checkpoints
+release/local-baseline-salvage

@@ -32,13 +32,16 @@ export function publicState(state,slot,spec,spectate=null){
  const viewer=self.alive?self:chosen?.alive&&chosen.team===self.team?chosen:state.players.find(p=>p.team===self.team&&p.alive)||self;
  const result={...state,config:{map:state.config.map,mode:state.config.mode}};
  delete result.random;
+ // Raw native events are private replay state. The service's feedback stream
+ // separately authorizes global, personal, visible-motion and coarse audio cues.
+ result.events=[];
  result.players=state.players.map(p=>{
   if(p.slot===slot){const own={...p};for(const key of Object.keys(own))if(key.startsWith('ai_')||['attackers','skill_held','jump_held','interact_held','item_held'].includes(key))delete own[key];return own;}
   const visible=canSee(state,viewer,p,spec.maps[state.config.map]);
   const out={};
   for(const key of ['slot','team','hero','alive','kills','deaths','assists','damage','life'])out[key]=p[key];
   out.hidden=!visible;
-  if(visible)for(const key of ['position','velocity','yaw','pitch','crouch','scoped','weapon','health','armor','revealed','reload','effect','disabled'])out[key]=p[key];
+  if(visible)for(const key of ['position','velocity','yaw','pitch','crouch','scoped','weapon','health','armor','revealed','reload','effect','disabled','aim_punch','stance'])out[key]=p[key];
   else {out.position=null;out.velocity=[0,0,0];out.yaw=out.pitch=0;out.weapon=0;out.crouch=out.scoped=false;}
   return out;
  });

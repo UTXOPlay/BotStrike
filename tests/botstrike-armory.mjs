@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 
@@ -22,7 +23,7 @@ try{
  await page.getByRole('button',{name:'EQUIPMENT / 12',exact:true}).click();
  await page.screenshot({path:out+'/armory-before.png'});
  await page.locator('#buy-items button[data-item="12"]').click();
- await page.waitForFunction(async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].armor===100&&r.room.state.players[0].credits===150});
+ await waitBrowserCondition(page,async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].armor===100&&r.room.state.players[0].credits===150});
  await page.screenshot({path:out+'/armory.png'});
  assert.ok(await page.locator('#buy-items button[data-item="12"]').isDisabled(),'already full armor cannot be bought twice');
  await page.locator('#buy-close').click();assert.equal(await page.evaluate(()=>document.documentElement.dataset.playing),'true');
@@ -35,11 +36,11 @@ try{
  await page.waitForFunction(()=>!document.pointerLockElement);
  await page.getByRole('button',{name:'WEAPONS / 12',exact:true}).click();
  await page.locator('#buy-items button[data-item="11"]').click();
- await page.waitForFunction(async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].weapon===11});
+ await waitBrowserCondition(page,async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].weapon===11});
  await page.keyboard.press('KeyB');await page.waitForFunction(()=>!document.pointerLockElement);
  await page.getByRole('button',{name:'EQUIPMENT / 12',exact:true}).click();
  await page.locator('#buy-items button[data-item="21"]').click();
- await page.waitForFunction(async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].items[9]===0&&r.room.state.players[0].overclock>0});
+ await waitBrowserCondition(page,async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].items[9]===0&&r.room.state.players[0].overclock>0});
  await page.screenshot({path:out+'/quasar-equipped.png'});
  assert.deepEqual(errors,[]);
  console.log('Demolition armory: native credits, armor, duplicate prevention and return to game passed');

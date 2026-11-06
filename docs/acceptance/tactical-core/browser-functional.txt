@@ -1,0 +1,10 @@
+desktop initialized
+mobile initialized
+Shift hold/release switched native walk/run speed
+desktop 1920 1080 passed
+desktop 2560 1080 passed
+desktop 2560 1440 passed
+desktop 3840 2160 passed
+touch firing and aim reached native authority
+touch 844 390 passed
+Browser joining, native movement, skill and six viewports passed

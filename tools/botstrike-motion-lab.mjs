@@ -6,6 +6,7 @@ import {createCharacters} from '../games/botstrike/client/characters.mjs';
 import {createCharacters as createBaseline} from './motion-baseline/characters.mjs';
 import {scenarios,motionFrame} from './motion-sequences.mjs';
 import spec from '../botstrike/spec.json';
+import {createHitInspector} from './hit-region-inspector.mjs';
 import {installHardwareBenchmark} from './motion-lab-benchmark.mjs';
 
 const canvas=document.querySelector('canvas'),hud=document.querySelector('#debug'),mobile=matchMedia('(pointer:coarse)').matches;
@@ -15,32 +16,33 @@ const scene=new THREE.Scene();scene.background=new THREE.Color('#101c29');
 scene.add(new THREE.HemisphereLight(0xd0edff,0x5a6173,2));
 for(const [x,y,z,color]of [[-200,300,-300,0xd5ecff],[250,150,100,0xffbb88]]){const light=new THREE.DirectionalLight(color,3);light.position.set(x,y,z);scene.add(light);}
 const floor=new THREE.GridHelper(10000,200,0x537080,0x233747);scene.add(floor);
-const camera=new THREE.PerspectiveCamera(45,1,.5,10000),art=createArt(renderer,{mobile}),characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes,maps:spec.maps}),baselineCharacters=createBaseline(art);scene.add(camera);
+const camera=new THREE.PerspectiveCamera(45,1,.5,10000),art=createArt(renderer,{mobile}),characters=createCharacters(art,{weapons:spec.weapons,heroes:spec.heroes,maps:spec.maps,hit_regions:spec.hit_regions}),baselineCharacters=createBaseline(art);scene.add(camera);
 const modes=['baseline','candidate'],actors={},vector=new THREE.Vector3();
 const debugGroup=new THREE.Group();scene.add(debugGroup);
+const hitInspector=createHitInspector(scene);
 const markers=Array.from({length:20},()=>{
  const anchor=new THREE.Mesh(new THREE.SphereGeometry(1.2,6,4),new THREE.MeshBasicMaterial({color:0x74ffb0,depthTest:false}));
  const sole=new THREE.Mesh(new THREE.SphereGeometry(.8,6,4),new THREE.MeshBasicMaterial({color:0xffffff,depthTest:false}));
  const line=new THREE.Line(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3)),new THREE.LineBasicMaterial({color:0xff914a,depthTest:false}));debugGroup.add(anchor,sole,line);return {anchor,sole,line};
 });
 const velocityArrow=new THREE.ArrowHelper(new THREE.Vector3(0,0,-1),new THREE.Vector3(),35,0x5bceff),facingArrow=new THREE.ArrowHelper(new THREE.Vector3(0,0,-1),new THREE.Vector3(),25,0xffcc77);debugGroup.add(velocityArrow,facingArrow);
-const controls=Object.fromEntries(['mode','scenario','hero','weapon','view','count','fps','reduced','diagnostics'].map(id=>[id,document.querySelector('#'+id)]));
+const controls=Object.fromEntries(['mode','scenario','hero','weapon','view','count','fps','reduced','diagnostics','hit-regions'].map(id=>[id,document.querySelector('#'+id)]));
 for(const value of scenarios)controls.scenario.add(new Option(value,value));controls.scenario.value='walk_run';
 spec.heroes.forEach((hero,i)=>controls.hero.add(new Option(hero.name,String(i))));
 spec.weapons.forEach((weapon,i)=>controls.weapon.add(new Option(weapon.name,String(i))));controls.weapon.value='2';
 let playing=false,time=0,current,trailX=0,trailZ=0,frameIntervals=[];
 function resize(){const w=innerWidth,h=innerHeight;if(h>w&&mobile)playing=false;renderer.setPixelRatio(Math.min(1,Math.sqrt((mobile?1280*720:2560*1440)/(w*h))));renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(current)draw();}
-function options(){return {mode:controls.mode.value,scenario:controls.scenario.value,fps:Number(controls.fps.value),reduced:controls.reduced.checked,count:Number(controls.count.value),hero:controls.hero.value==='mixed'?null:Number(controls.hero.value),weapon:Number(controls.weapon.value),view:controls.view.value,diagnostics:controls.diagnostics.checked};}
+function options(){return {mode:controls.mode.value,scenario:controls.scenario.value,fps:Number(controls.fps.value),reduced:controls.reduced.checked,count:Number(controls.count.value),hero:controls.hero.value==='mixed'?null:Number(controls.hero.value),weapon:Number(controls.weapon.value),view:controls.view.value,diagnostics:controls.diagnostics.checked,hitRegions:controls['hit-regions'].checked};}
 function makeActor(mode,slot,hero,weapon,firstPerson){
  const actor=(mode==='baseline'?baselineCharacters:characters).actor(slot,hero,weapon,{firstPerson});actor.labFirstPerson=firstPerson;
  if(firstPerson){actor.rig.scale.setScalar(.8);camera.add(actor.rig);}else scene.add(actor.rig);return actor;
 }
 function sampleWorld(actor){actor.rig.parent.updateWorldMatrix(true,false);actor.rig.updateMatrixWorld(true);}
 function reset(config){
- current={mode:'candidate',scenario:'circle',fps:60,count:10,reduced:false,hero:null,weapon:2,view:'lineup',diagnostics:true,...config};time=trailX=trailZ=0;
+ current={mode:'candidate',scenario:'circle',fps:60,count:10,reduced:false,hero:null,weapon:2,view:'lineup',diagnostics:true,hitRegions:false,...config};time=trailX=trailZ=0;hitInspector.clear();
  if(current.view!=='lineup')current.count=1;
  controls.mode.value=current.mode;controls.scenario.value=current.scenario;controls.fps.value=String(current.fps);controls.reduced.checked=current.reduced;
- controls.hero.value=current.hero===null?'mixed':String(current.hero);controls.weapon.value=String(current.weapon);controls.view.value=current.view;controls.count.value=String(current.count);controls.diagnostics.checked=current.diagnostics;
+ controls.hero.value=current.hero===null?'mixed':String(current.hero);controls.weapon.value=String(current.weapon);controls.view.value=current.view;controls.count.value=String(current.count);controls.diagnostics.checked=current.diagnostics;controls['hit-regions'].checked=current.hitRegions;
  for(const mode of modes)actors[mode]=actors[mode].map(a=>{const hero=current.hero??a.slot%6,firstPerson=current.view==='first-person'&&a.slot===0;if(mode==='baseline'||a.hero!==hero||a.labFirstPerson!==firstPerson){a.dispose();return makeActor(mode,a.slot,hero,current.weapon,firstPerson);}return a;});
  for(const mode of modes)for(const a of actors[mode]){a.invalidate?.('room');a.rig.visible=mode===current.mode&&a.slot<current.count;}
  contacts=Array.from({length:10},()=>({L:null,R:null}));maxDrift=0;lastDebug=null;
@@ -65,6 +67,7 @@ function step(dt,{check=false}={}){
   if(a.labFirstPerson)a.rig.position.y+=13.6*(a.animation?.signals.crouchAmount??Number(p.crouch));
   if(a.slot===0&&a.animation?.signals.reset)contacts[0]={L:null,R:null};
  }
+ hitInspector.update(players,i=>active[i]?.animation?.signals.crouchAmount??Number(players[i]?.crouch),current.hitRegions&&current.view!=='first-person');
  const cpu=performance.now()-started;
  if(check)for(let i=0;i<active.length;i++){unchanged&&=before[i]===JSON.stringify(players[i]);for(const bone of new Set(Object.values(active[i].bones)))finite&&=[...bone.position,...bone.quaternion,...bone.scale].every(Number.isFinite)&&Math.abs(bone.quaternion.length()-1)<.001;}
  time=next;
@@ -145,6 +148,11 @@ window.motionLabReady=(async()=>{
  document.querySelector('#fullscreen').onclick=async()=>{if(document.fullscreenElement)await document.exitFullscreen?.();else if(document.documentElement.requestFullscreen){await document.documentElement.requestFullscreen();try{await screen.orientation?.lock?.('landscape');}catch{}}else document.querySelector('#measure-status').textContent='Fullscreen is unavailable. Use landscape edge-to-edge, or add this page to your Home Screen.';};
  Object.assign(window.motionLab,{frame(dt){const start=performance.now(),result=step(dt);draw();return {...result,frameCpu:performance.now()-start};},config:()=>({...current}),device(){const gl=renderer.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');return {renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),vendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),userAgent:navigator.userAgent,cores:navigator.hardwareConcurrency,memoryGB:navigator.deviceMemory,viewport:[innerWidth,innerHeight],backing:[canvas.width,canvas.height],dpr:devicePixelRatio};}});
  Object.assign(window.motionLab,{
+  headMetrics(){
+   const actor=actors[current.mode][0],points=[];
+   actor.model.traverse(mesh=>{if(!mesh.isSkinnedMesh)return;mesh.skeleton.update();const index=mesh.skeleton.bones.indexOf(actor.bones.head);if(index<0)return;const attrs=mesh.geometry.attributes;for(let i=0;i<attrs.position.count;i++){let weight=0;for(let k=0;k<4;k++)if(attrs.skinIndex.getComponent(i,k)===index)weight+=attrs.skinWeight.getComponent(i,k);if(weight<.5)continue;points.push(mesh.getVertexPosition(i,new THREE.Vector3()).applyMatrix4(mesh.matrixWorld).toArray());}});
+   return {points,min:[0,1,2].map(a=>Math.min(...points.map(p=>p[a]))),max:[0,1,2].map(a=>Math.max(...points.map(p=>p[a])))};
+  },
   bodyMetrics({geometry=false,regions=false}={}){
    const a=actors[current.mode][0],points={};
    a.model.traverse(o=>{if(o.isSkinnedMesh)o.skeleton.update();});
@@ -159,6 +167,7 @@ window.motionLabReady=(async()=>{
    for(const event of events)a.trigger(event.name,now,event.duration,event.value,event.life??player.life);
    a.update(player,state,now,dt,{reduced:current.reduced});time=now/1000;sampleWorld(a);
    if(a.labFirstPerson){a.rig.position.y+=13.6*(a.animation?.signals.crouchAmount??Number(player.crouch));sampleWorld(a);}
+   hitInspector.update([player],()=>a.animation?.signals.crouchAmount??Number(player.crouch),current.hitRegions&&!a.labFirstPerson);
    const contacts={};
    for(const side of ['L','R']){
     const c=a.animation?.contacts[side],hand=a.bones['hand.'+side].getWorldPosition(new THREE.Vector3());
@@ -187,7 +196,7 @@ window.motionLabReady=(async()=>{
     const centroid=samples=>{const p=new THREE.Vector3();for(const sample of samples)p.add(point(sample));return p.multiplyScalar(1/samples.length);},axis=centroid(f.toes).sub(centroid(f.heels));
     return {side:f.side,state:f.status,feasible:f.feasible,toeYaw:Math.atan2(-axis.x,-axis.z),center:center.toArray(),hipWidth:actor.animation.feet.hipWidth,minHeight:Math.min(...heights),maxHeight:Math.max(...heights)};
    })||[];
-  },render:draw
+  },inspectRay({origin,direction,hit}){const result=hitInspector.trace(origin,direction,hit);draw();return result;},render:draw
  });
  installHardwareBenchmark(window.motionLab,options);
  addEventListener('resize',resize);requestAnimationFrame(tick);return true;

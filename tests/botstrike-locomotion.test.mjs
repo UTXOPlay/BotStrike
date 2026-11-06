@@ -114,3 +114,13 @@ test('small analog steps match root distance during support rather than retainin
   if(speed<25)assert.ok(plan.supportTravel<17,'slow analog input must shorten the step');
  }
 });
+
+test('authoritative stance is the exact pose group weight through resets and irregular rendering',()=>{
+ const blend=new LocomotionBlend();
+ for(let i=0;i<400;i++){
+  const stance=(1+Math.sin(i*.17))/2,dt=[1/30,1/60,1/120,.041][i%4];
+  const m={...motion(i%3?145:0,i%5?20:0),grounded:i%7!==0,rising:i%2===0,crouch:stance>.5,crouchAmount:stance,stanceAuthoritative:true,reset:i%59===0?'visibility':null};
+  blend.update(m,dt);near(blend.weights[6]+blend.weights[7],stance,1e-12);near([...blend.weights].reduce((a,b)=>a+b,0),1,1e-12);
+  assert.ok([...blend.weights].every(v=>Number.isFinite(v)&&v>=0&&v<=1));
+ }
+});

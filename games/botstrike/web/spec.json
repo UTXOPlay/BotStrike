@@ -1,5 +1,5 @@
 {
-  "version": "botstrike-2050-salvage-v1",
+  "version": "botstrike-2050-tactical-v2",
   "tick_rate": 64,
   "player_radius": 18,
   "eye_height": 56,
@@ -98,7 +98,38 @@
       "effect": "none",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "A compact ion sidearm with reliable single pulses."
+      "description": "A compact ion sidearm with reliable single pulses.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            1.35
+          ],
+          [
+            0.12,
+            1.2
+          ],
+          [
+            -0.18,
+            1.15
+          ],
+          [
+            0.16,
+            1.1
+          ]
+        ],
+        "cap": [
+          2,
+          9
+        ],
+        "recovery_delay": 10,
+        "recovery_short": 11,
+        "recovery_long": 7,
+        "long_burst": 4,
+        "spread_per_shot": 0.18,
+        "spread_cap": 1.4,
+        "spread_recovery": 2.8
+      }
     },
     {
       "id": "needle",
@@ -120,7 +151,62 @@
       "effect": "none",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "A rapid flechette accelerator for close-range chassis combat."
+      "description": "A rapid flechette accelerator for close-range chassis combat.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            0.36
+          ],
+          [
+            0.04,
+            0.4
+          ],
+          [
+            0.08,
+            0.44
+          ],
+          [
+            0.13,
+            0.48
+          ],
+          [
+            0.2,
+            0.5
+          ],
+          [
+            0.24,
+            0.5
+          ],
+          [
+            -0.22,
+            0.46
+          ],
+          [
+            -0.26,
+            0.42
+          ],
+          [
+            -0.18,
+            0.4
+          ],
+          [
+            0.2,
+            0.38
+          ]
+        ],
+        "cap": [
+          3.4,
+          10
+        ],
+        "recovery_delay": 7,
+        "recovery_short": 9,
+        "recovery_long": 5,
+        "long_burst": 8,
+        "spread_per_shot": 0.09,
+        "spread_cap": 1.4,
+        "spread_recovery": 2.2
+      }
     },
     {
       "id": "ion",
@@ -142,7 +228,66 @@
       "effect": "none",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "An induction carbine balancing reach, precision and sustained fire."
+      "description": "An induction carbine balancing reach, precision and sustained fire.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            0.62
+          ],
+          [
+            0,
+            0.7
+          ],
+          [
+            0.06,
+            0.76
+          ],
+          [
+            0.12,
+            0.86
+          ],
+          [
+            0.18,
+            0.94
+          ],
+          [
+            0.27,
+            1.0
+          ],
+          [
+            0.32,
+            1.0
+          ],
+          [
+            -0.3,
+            0.92
+          ],
+          [
+            -0.36,
+            0.84
+          ],
+          [
+            -0.28,
+            0.76
+          ],
+          [
+            0.26,
+            0.7
+          ]
+        ],
+        "cap": [
+          4,
+          14
+        ],
+        "recovery_delay": 8,
+        "recovery_short": 10,
+        "recovery_long": 5.5,
+        "long_burst": 6,
+        "spread_per_shot": 0.11,
+        "spread_cap": 1.6,
+        "spread_recovery": 2.4
+      }
     },
     {
       "id": "rail",
@@ -164,7 +309,30 @@
       "effect": "none",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "A scoped magnetic lance built for long-range armor penetration."
+      "description": "A scoped magnetic lance built for long-range armor penetration.",
+      "recoil": {
+        "pattern": [
+          [
+            0.18,
+            3.8
+          ],
+          [
+            -0.18,
+            3.6
+          ]
+        ],
+        "cap": [
+          2,
+          10
+        ],
+        "recovery_delay": 18,
+        "recovery_short": 12,
+        "recovery_long": 8,
+        "long_burst": 3,
+        "spread_per_shot": 0.3,
+        "spread_cap": 1.2,
+        "spread_recovery": 3.2
+      }
     },
     {
       "id": "scatter",
@@ -186,7 +354,34 @@
       "effect": "none",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "Eight conductive shards per shot; devastating at close range."
+      "description": "Eight conductive shards per shot; devastating at close range.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            2.8
+          ],
+          [
+            0.24,
+            2.6
+          ],
+          [
+            -0.24,
+            2.6
+          ]
+        ],
+        "cap": [
+          2.5,
+          11
+        ],
+        "recovery_delay": 15,
+        "recovery_short": 11,
+        "recovery_long": 7,
+        "long_burst": 3,
+        "spread_per_shot": 0.35,
+        "spread_cap": 1.8,
+        "spread_recovery": 3
+      }
     },
     {
       "id": "helix",
@@ -208,7 +403,46 @@
       "effect": "none",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "Three tightly spaced coil pulses per trigger cycle."
+      "description": "Three tightly spaced coil pulses per trigger cycle.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            0.46
+          ],
+          [
+            0.08,
+            0.5
+          ],
+          [
+            -0.1,
+            0.54
+          ],
+          [
+            0.16,
+            0.6
+          ],
+          [
+            0.2,
+            0.64
+          ],
+          [
+            -0.22,
+            0.64
+          ]
+        ],
+        "cap": [
+          3,
+          11
+        ],
+        "recovery_delay": 9,
+        "recovery_short": 10,
+        "recovery_long": 5.5,
+        "long_burst": 6,
+        "spread_per_shot": 0.07,
+        "spread_cap": 1.1,
+        "spread_recovery": 2.4
+      }
     },
     {
       "id": "aurora",
@@ -230,7 +464,62 @@
       "effect": "none",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "A high-capacity particle stream that bypasses part of enemy armor."
+      "description": "A high-capacity particle stream that bypasses part of enemy armor.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            0.18
+          ],
+          [
+            0.02,
+            0.2
+          ],
+          [
+            0.04,
+            0.22
+          ],
+          [
+            0.06,
+            0.24
+          ],
+          [
+            0.08,
+            0.26
+          ],
+          [
+            -0.1,
+            0.28
+          ],
+          [
+            -0.12,
+            0.3
+          ],
+          [
+            -0.1,
+            0.32
+          ],
+          [
+            0.12,
+            0.34
+          ],
+          [
+            0.14,
+            0.36
+          ]
+        ],
+        "cap": [
+          3,
+          12
+        ],
+        "recovery_delay": 7,
+        "recovery_short": 8,
+        "recovery_long": 4,
+        "long_burst": 12,
+        "spread_per_shot": 0.04,
+        "spread_cap": 1,
+        "spread_recovery": 1.8
+      }
     },
     {
       "id": "kraken",
@@ -252,7 +541,58 @@
       "effect": "none",
       "mobility": 0.82,
       "splash": 0.0,
-      "description": "A belt-fed coilgun. Huge sustained capacity at the cost of mobility."
+      "description": "A belt-fed coilgun. Huge sustained capacity at the cost of mobility.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            0.42
+          ],
+          [
+            0.08,
+            0.48
+          ],
+          [
+            0.16,
+            0.54
+          ],
+          [
+            0.24,
+            0.6
+          ],
+          [
+            0.3,
+            0.66
+          ],
+          [
+            -0.28,
+            0.7
+          ],
+          [
+            -0.34,
+            0.74
+          ],
+          [
+            -0.26,
+            0.76
+          ],
+          [
+            0.3,
+            0.78
+          ]
+        ],
+        "cap": [
+          4.5,
+          16
+        ],
+        "recovery_delay": 10,
+        "recovery_short": 8,
+        "recovery_long": 4,
+        "long_burst": 10,
+        "spread_per_shot": 0.13,
+        "spread_cap": 2.4,
+        "spread_recovery": 1.8
+      }
     },
     {
       "id": "nullifier",
@@ -274,7 +614,38 @@
       "effect": "emp",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "Hits briefly disable enemy skills and break active defensive effects."
+      "description": "Hits briefly disable enemy skills and break active defensive effects.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            0.86
+          ],
+          [
+            0.14,
+            0.94
+          ],
+          [
+            -0.18,
+            1.02
+          ],
+          [
+            0.22,
+            1.06
+          ]
+        ],
+        "cap": [
+          3,
+          11
+        ],
+        "recovery_delay": 11,
+        "recovery_short": 10,
+        "recovery_long": 6,
+        "long_burst": 5,
+        "spread_per_shot": 0.12,
+        "spread_cap": 1.5,
+        "spread_recovery": 2.6
+      }
     },
     {
       "id": "echo",
@@ -296,7 +667,34 @@
       "effect": "mark",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "A scoped precision rifle whose hits reveal the target on squad radar."
+      "description": "A scoped precision rifle whose hits reveal the target on squad radar.",
+      "recoil": {
+        "pattern": [
+          [
+            0.06,
+            1.3
+          ],
+          [
+            -0.08,
+            1.4
+          ],
+          [
+            0.12,
+            1.5
+          ]
+        ],
+        "cap": [
+          2.5,
+          10
+        ],
+        "recovery_delay": 12,
+        "recovery_short": 11,
+        "recovery_long": 7,
+        "long_burst": 4,
+        "spread_per_shot": 0.13,
+        "spread_cap": 1.1,
+        "spread_recovery": 2.8
+      }
     },
     {
       "id": "siphon",
@@ -318,7 +716,46 @@
       "effect": "siphon",
       "mobility": 1.0,
       "splash": 0.0,
-      "description": "Damage to hostile chassis recovers a small amount of your own health."
+      "description": "Damage to hostile chassis recovers a small amount of your own health.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            0.66
+          ],
+          [
+            -0.1,
+            0.72
+          ],
+          [
+            -0.16,
+            0.78
+          ],
+          [
+            0.2,
+            0.84
+          ],
+          [
+            0.26,
+            0.9
+          ],
+          [
+            -0.24,
+            0.94
+          ]
+        ],
+        "cap": [
+          3.5,
+          12
+        ],
+        "recovery_delay": 8,
+        "recovery_short": 10,
+        "recovery_long": 5.5,
+        "long_burst": 7,
+        "spread_per_shot": 0.12,
+        "spread_cap": 1.7,
+        "spread_recovery": 2.4
+      }
     },
     {
       "id": "quasar",
@@ -340,7 +777,34 @@
       "effect": "none",
       "mobility": 0.9,
       "splash": 140.0,
-      "description": "A slow plasma impact weapon with cover-aware splash damage."
+      "description": "A slow plasma impact weapon with cover-aware splash damage.",
+      "recoil": {
+        "pattern": [
+          [
+            0,
+            4.2
+          ],
+          [
+            0.2,
+            4.0
+          ],
+          [
+            -0.2,
+            4.0
+          ]
+        ],
+        "cap": [
+          2.5,
+          12
+        ],
+        "recovery_delay": 20,
+        "recovery_short": 13,
+        "recovery_long": 8,
+        "long_burst": 3,
+        "spread_per_shot": 0.4,
+        "spread_cap": 1.5,
+        "spread_recovery": 3.5
+      }
     }
   ],
   "maps": [
@@ -1268,5 +1732,48 @@
       "color": "#ffce6b",
       "description": "Replenish half of the reserve capacity of each owned weapon."
     }
-  ]
+  ],
+  "movement": {
+    "acceleration": 1900,
+    "braking": 1700,
+    "counter_strafe": 2800,
+    "air_acceleration": 250,
+    "accurate_speed_fraction": 0.12,
+    "moving_spread": 2.5,
+    "airborne_spread": 5,
+    "landing_ticks": 18,
+    "landing_spread": 1.25,
+    "stance_seconds": 0.07
+  },
+  "hit_regions": {
+    "standing": {
+      "head_y": 64.95,
+      "body_lower": 18,
+      "body_upper": 43,
+      "body_radius": 18,
+      "head_z": 0.13,
+      "head_half_extents": [
+        8.5,
+        6.25,
+        7.5
+      ]
+    },
+    "crouched": {
+      "head_y": 46.8,
+      "body_lower": 15,
+      "body_upper": 28,
+      "body_radius": 15,
+      "head_z": 5.5,
+      "head_half_extents": [
+        8.5,
+        6.25,
+        7.5
+      ]
+    },
+    "pitch_chest": 0.22,
+    "pitch_head": 0.72,
+    "neck_length": 16.5,
+    "head_center_up": 1.8,
+    "head_center_z": -0.4
+  }
 }

@@ -8,6 +8,12 @@ const duration=[3,1,.66,1.1,1,1,2,1.2,.5,1];
 
 export function locomotionTargets(motion,out=new Float64Array(locomotionClips.length)){
  out.fill(0);
+ if(motion.stanceAuthoritative){
+  const t=clamp(motion.crouchAmount,0,1),amount=motion.grounded?smooth(0,24,motion.speed):0;
+  locomotionTargets({...motion,stanceAuthoritative:false,crouch:false},out);
+  for(let i=0;i<out.length;i++)out[i]*=1-t;
+  out[6]=t*(1-amount);out[7]=t*amount;return out;
+ }
  if(!motion.grounded){out[motion.crouch?6:motion.rising?8:9]=1;return out;}
  const amount=smooth(0,24,motion.speed),run=runningAmount(motion);
  if(motion.crouch){out[6]=1-amount;out[7]=amount;return out;}
@@ -30,6 +36,15 @@ export class LocomotionBlend{
   else{
    const blend=-Math.expm1(-seconds/.07);
    for(let i=0;i<this.weights.length;i++)this.weights[i]+=(this.targets[i]-this.weights[i])*blend;
+  }
+  // Native stance already has its own response clock. Preserve that group's
+  // exact weight, while retaining gait/direction blending inside each group.
+  if(motion.stanceAuthoritative){
+   const crouch=clamp(motion.crouchAmount,0,1);
+   for(const [indices,total]of [[[6,7],crouch],[[0,1,2,3,4,5,8,9],1-crouch]]){
+    const sum=indices.reduce((s,i)=>s+this.weights[i],0),target=indices.reduce((s,i)=>s+this.targets[i],0);
+    for(const i of indices)this.weights[i]=sum>1e-12?this.weights[i]/sum*total:target>1e-12?this.targets[i]/target*total:0;
+   }
   }
   let sum=0,travel=0,reference=0,cycle=0,largest=-1;
   for(let i=0;i<this.weights.length;i++){sum+=this.weights[i];if(this.weights[i]>largest){largest=this.weights[i];this.dominant=locomotionClips[i];}}

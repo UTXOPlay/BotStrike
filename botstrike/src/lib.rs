@@ -1,4 +1,8 @@
 mod ai;
+pub mod damage_contract;
+pub mod hit;
+pub mod movement;
+pub mod recoil;
 use serde::{Deserialize, Serialize};
 pub const HZ: u32 = 64;
 pub const WEAPONS: usize = 12;
@@ -30,6 +34,7 @@ pub struct Weapon {
     pub effect: String,
     pub mobility: f64,
     pub splash: f64,
+    pub recoil: recoil::Profile,
 }
 #[derive(Clone, Deserialize)]
 pub struct Item {
@@ -53,6 +58,9 @@ pub struct Map {
 }
 #[derive(Clone, Deserialize)]
 pub struct Rules {
+    pub version: String,
+    pub movement: movement::Profile,
+    pub hit_regions: hit::Profile,
     pub heroes: Vec<Hero>,
     pub weapons: Vec<Weapon>,
     pub items: Vec<Item>,
@@ -138,6 +146,8 @@ pub struct Player {
     pub armor: i32,
     pub alive: bool,
     pub crouch: bool,
+    pub landing: u32,
+    pub stance: f64,
     pub scoped: bool,
     pub weapon: usize,
     pub owned: [bool; WEAPONS],
@@ -147,7 +157,8 @@ pub struct Player {
     pub fire_wait: u32,
     pub burst_remaining: u8,
     pub overclock: u32,
-    pub recoil: f64,
+    #[serde(flatten)]
+    pub weapon_recoil: recoil::State,
     pub credits: i32,
     pub kills: u32,
     pub deaths: u32,
@@ -208,17 +219,36 @@ pub struct Objective {
     pub actor: Option<usize>,
 }
 #[derive(Clone, Serialize, Deserialize)]
+#[serde(tag = "kind", content = "id", rename_all = "snake_case")]
+pub enum DamageSource {
+    Weapon(usize),
+    Splash(usize),
+    Utility(usize),
+    Other,
+}
+#[derive(Clone, Serialize, Deserialize)]
+pub struct DamageInfo {
+    pub raw: i32,
+    pub health: i32,
+    pub armor: i32,
+    pub shielded: bool,
+    pub source: DamageSource,
+}
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Event {
     pub kind: String,
     pub actor: Option<usize>,
     pub target: Option<usize>,
     pub value: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub damage: Option<DamageInfo>,
 }
 pub const MAX_REWIND: u32 = 13; // 203 ms at 64 Hz.
 #[derive(Clone)]
 struct HitPose {
     position: [f64; 3],
-    crouch: bool,
+    stance: f64,
+    look: [f64; 2],
     alive: bool,
     life: u32,
 }
@@ -310,7 +340,7 @@ fn direction(yaw: f64, pitch: f64) -> [f64; 3] {
 fn eye(p: &Player) -> [f64; 3] {
     [
         p.position[0],
-        p.position[1] + if p.crouch { 37. } else { 56. },
+        p.position[1] + 56. - 19. * p.stance,
         p.position[2],
     ]
 }
@@ -355,6 +385,8 @@ impl Game {
                 armor: 0,
                 alive: false,
                 crouch: false,
+                landing: 0,
+                stance: 0.,
                 scoped: false,
                 weapon: 0,
                 owned: [false; WEAPONS],
@@ -364,7 +396,7 @@ impl Game {
                 fire_wait: 0,
                 burst_remaining: 0,
                 overclock: 0,
-                recoil: 0.,
+                weapon_recoil: recoil::State::default(),
                 credits: 800,
                 kills: 0,
                 deaths: 0,
@@ -405,6 +437,7 @@ impl Game {
             actor,
             target,
             value,
+            damage: None,
         });
     }
     fn safe_respawn(&self, slot: usize, rules: &Rules) -> [f64; 3] {
@@ -480,6 +513,8 @@ impl Game {
         p.ai_path.clear();
         p.alive = true;
         p.crouch = false;
+        p.landing = 0;
+        p.stance = 0.;
         p.scoped = false;
         p.respawn = 0;
         p.protection = if self.config.mode == "deathmatch" {
@@ -491,7 +526,7 @@ impl Game {
         p.fire_wait = 0;
         p.burst_remaining = 0;
         p.overclock = 0;
-        p.recoil = 0.;
+        p.weapon_recoil = recoil::State::default();
         p.skill_wait = 0;
         p.disabled = 0;
         p.effect = 0;
@@ -614,8 +649,17 @@ impl Game {
         p.credits -= price;
         self.event("buy", Some(slot), None, item as i32);
     }
+    #[cfg(test)]
     fn hurt(&mut self, target: usize, attacker: usize, damage: i32, head: bool, rules: &Rules) {
-        self.hurt_piercing(target, attacker, damage, head, 0., rules);
+        self.hurt_with_source(
+            target,
+            attacker,
+            damage,
+            head,
+            0.,
+            DamageSource::Other,
+            rules,
+        );
     }
     fn hurt_piercing(
         &mut self,
@@ -626,6 +670,26 @@ impl Game {
         pierce: f64,
         rules: &Rules,
     ) {
+        self.hurt_with_source(
+            target,
+            attacker,
+            damage,
+            head,
+            pierce,
+            DamageSource::Weapon(self.players[attacker].weapon),
+            rules,
+        );
+    }
+    fn hurt_with_source(
+        &mut self,
+        target: usize,
+        attacker: usize,
+        damage: i32,
+        head: bool,
+        pierce: f64,
+        source: DamageSource,
+        rules: &Rules,
+    ) {
         if !self.players[target].alive
             || self.players[target].protection > 0
             || self.players[target].team == self.players[attacker].team
@@ -633,8 +697,10 @@ impl Game {
             return;
         }
         let p = &mut self.players[target];
-        let mut amount = damage.max(1);
-        if p.hero == 2 && p.effect > 0 {
+        let raw = damage.max(1);
+        let mut amount = raw;
+        let shielded = p.hero == 2 && p.effect > 0;
+        if shielded {
             amount = (amount + 1) / 2
         }
         let absorbed = ((amount as f64 * 0.5 * (1. - pierce.clamp(0., 1.))) as i32).min(p.armor);
@@ -650,6 +716,14 @@ impl Game {
             Some(target),
             actual,
         );
+        let accounting = DamageInfo {
+            raw,
+            health: actual,
+            armor: absorbed,
+            shielded,
+            source,
+        };
+        self.events.last_mut().unwrap().damage = Some(accounting.clone());
         if self.players[target].health == 0 {
             let fallen = &self.players[target];
             let weapon = fallen.weapon;
@@ -691,6 +765,7 @@ impl Game {
                 Some(target),
                 self.players[attacker].weapon as i32,
             );
+            self.events.last_mut().unwrap().damage = Some(accounting);
         }
     }
     fn skill(&mut self, slot: usize, rules: &Rules, input: &Input) {
@@ -704,6 +779,7 @@ impl Game {
         self.players[slot].skill_wait = rules.heroes[hero].cooldown * HZ;
         match hero {
             0 => {
+                self.players[slot].landing = rules.movement.landing_ticks;
                 let (yaw, x, y) = (input.yaw, input.x, input.y);
                 let norm = x.hypot(y);
                 let (x, y) = if norm < 0.1 {
@@ -778,20 +854,26 @@ impl Game {
         };
         let weapon = p.weapon;
         let origin = eye(p);
-        let aim = [p.yaw, p.pitch];
-        let moving = p.velocity[0].hypot(p.velocity[2]) > 40.;
+        let aim = recoil::aim(p.yaw, p.pitch, p.weapon_recoil.aim_punch);
+        let accuracy = movement::accuracy(
+            p.velocity[0].hypot(p.velocity[2]),
+            rules.heroes[p.hero].speed * w.mobility,
+            p.position[1] > 0.,
+            p.landing,
+            &rules.movement,
+        );
         let spread = w.spread
             * (if p.crouch { 0.65 } else { 1. })
             * (if w.scoped && !p.scoped { 12. } else { 1. })
-            * (if moving { 2.5 } else { 1. })
+            * accuracy
             * (if (p.hero == 5 && p.effect > 0) || p.overclock > 0 {
                 1.5
             } else {
                 1.
             })
-            + p.recoil;
+            + p.weapon_recoil.recoil;
         let team = p.team;
-        p.recoil = (p.recoil + 0.25).min(3.);
+        p.weapon_recoil.shot(&w.recoil);
         let pellets = w.pellets;
         self.event("shot", Some(slot), None, weapon as i32);
         for _ in 0..pellets {
@@ -818,18 +900,16 @@ impl Game {
                     continue;
                 }
                 let position = past.map_or(p.position, |pose| pose.position);
-                let crouch = past.map_or(p.crouch, |pose| pose.crouch);
-                let height = if crouch { 47. } else { 70. };
-                if let Some(t) = ray_box(
-                    origin,
-                    dir,
-                    [position[0] - 18., position[1], position[2] - 18.],
-                    [position[0] + 18., position[1] + height, position[2] + 18.],
-                ) {
-                    if t < nearest {
-                        nearest = t;
+                let stance = past.map_or(p.stance, |pose| pose.stance);
+                let look = past.map_or([p.yaw, p.pitch], |pose| pose.look);
+                if let Some(region) = rules
+                    .hit_regions
+                    .intersect(origin, dir, position, stance, look)
+                {
+                    if region.distance < nearest {
+                        nearest = region.distance;
                         hit = Some(p.slot);
-                        head = origin[1] + dir[1] * t > position[1] + height - 16.;
+                        head = region.region == hit::Region::Head;
                     }
                 }
             }
@@ -892,11 +972,13 @@ impl Game {
                     {
                         continue;
                     }
-                    self.hurt(
+                    self.hurt_with_source(
                         target,
                         slot,
                         (35. * (1. - distance / w.splash)) as i32,
                         false,
+                        0.,
+                        DamageSource::Splash(weapon),
                         rules,
                     );
                 }
@@ -1055,7 +1137,15 @@ impl Game {
                         self.players[slot].overclock = 0;
                     }
                 } else {
-                    self.hurt(slot, u.owner, (95. * (1. - d / max)) as i32, false, rules);
+                    self.hurt_with_source(
+                        slot,
+                        u.owner,
+                        (95. * (1. - d / max)) as i32,
+                        false,
+                        0.,
+                        DamageSource::Utility(u.kind as usize),
+                        rules,
+                    );
                 }
             }
         }
@@ -1092,7 +1182,8 @@ impl Game {
                 .iter()
                 .map(|p| HitPose {
                     position: p.position,
-                    crouch: p.crouch,
+                    stance: p.stance,
+                    look: [p.yaw, p.pitch],
                     alive: p.alive,
                     life: p.life,
                 })
@@ -1167,7 +1258,7 @@ impl Game {
             ] {
                 dec(v)
             }
-            p.recoil = (p.recoil - 0.035).max(0.);
+            p.weapon_recoil.recover(&rules.weapons[p.weapon].recoil);
             if p.reload > 0 {
                 dec(&mut p.reload);
                 if p.reload == 0 {
@@ -1183,10 +1274,11 @@ impl Game {
                     p.reload = 0;
                     p.burst_remaining = 0;
                     p.fire_wait = 10;
-                    p.recoil = 0.;
+                    p.weapon_recoil = recoil::State::default();
                 }
             }
             p.crouch = input.crouch;
+            p.stance = movement::stance(p.stance, p.crouch, &rules.movement);
             p.scoped = input.scope && rules.weapons[p.weapon].scoped;
             let length = input.x.hypot(input.y).max(1.);
             let speed = rules.heroes[p.hero].speed
@@ -1198,10 +1290,20 @@ impl Game {
                 } else {
                     1.
                 };
-            p.velocity[0] =
-                (-input.yaw.sin() * input.y + input.yaw.cos() * input.x) / length * speed;
-            p.velocity[2] =
-                (-input.yaw.cos() * input.y - input.yaw.sin() * input.x) / length * speed;
+            let wish = [
+                (-input.yaw.sin() * input.y + input.yaw.cos() * input.x) / length * speed,
+                (-input.yaw.cos() * input.y - input.yaw.sin() * input.x) / length * speed,
+            ];
+            let grounded = p.position[1] <= 0.;
+            let velocity = movement::horizontal(
+                [p.velocity[0], p.velocity[2]],
+                wish,
+                grounded,
+                &rules.movement,
+            );
+            p.velocity[0] = velocity[0];
+            p.velocity[2] = velocity[1];
+            dec(&mut p.landing);
             if input.jump && !p.jump_held && p.position[1] <= 0. {
                 p.velocity[1] = 220.
             }
@@ -1214,7 +1316,16 @@ impl Game {
                 p.position[1] = 0.;
                 p.velocity[1] = 0.;
             }
+            if !grounded && p.position[1] <= 0. {
+                p.landing = rules.movement.landing_ticks;
+            }
+            let before_collision = p.position;
             constrain(&mut p.position, &rules.maps[self.config.map]);
+            for a in [0, 2] {
+                if before_collision[a] != p.position[a] {
+                    p.velocity[a] = 0.;
+                }
+            }
             // Protection is for a safe restart, never for protected attacks.
             if input.fire || input.ability || input.item > 0 || input.interact {
                 p.protection = 0;
@@ -1335,7 +1446,7 @@ impl Game {
                 p.reload = 0;
                 p.burst_remaining = 0;
                 p.fire_wait = 10;
-                p.recoil = 0.;
+                p.weapon_recoil = recoil::State::default();
                 self.event("gun_pickup", Some(slot), None, weapon as i32);
             }
         }
@@ -1626,7 +1737,9 @@ mod tests {
         i[0].y = 1.;
         g.step(i, &r).unwrap();
         assert!(
-            (dist(initial, g.players[0].position) - r.heroes[0].speed / HZ as f64).abs() < 1e-8
+            (dist(initial, g.players[0].position) - r.movement.acceleration / (HZ * HZ) as f64)
+                .abs()
+                < 1e-8
         );
         for _ in 0..2000 {
             g.step(i, &r).unwrap();
@@ -1681,6 +1794,32 @@ mod tests {
         g.players[5].disabled = 0;
         g.skill(5, &r, &Input::default());
         assert!(g.players[5].effect > 0);
+    }
+    #[test]
+    fn confirmed_damage_accounts_for_shield_armor_overkill_and_the_real_source() {
+        let (r, mut g) = setup("deathmatch");
+        combat(&mut g);
+        g.players[5].hero = 2;
+        g.players[5].health = 140;
+        g.players[5].armor = 70;
+        g.players[5].effect = HZ * 5;
+        g.players[0].weapon = 3;
+        g.hurt_piercing(5, 0, 100, true, 0.4, &r);
+        let hit = g.events.last().unwrap();
+        let info = hit.damage.as_ref().unwrap();
+        assert_eq!(
+            (info.raw, info.health, info.armor, info.shielded),
+            (100, 35, 15, true)
+        );
+        assert!(matches!(info.source, DamageSource::Weapon(3)));
+        assert_eq!(hit.value, info.health);
+        g.hurt_with_source(5, 0, 1000, false, 0., DamageSource::Utility(3), &r);
+        let kill = g.events.last().unwrap();
+        assert_eq!(kill.kind, "kill");
+        let info = kill.damage.as_ref().unwrap();
+        assert!(matches!(info.source, DamageSource::Utility(3)));
+        assert_eq!((info.health, info.armor), (105, 55));
+        assert_eq!(g.players[0].damage, 140);
     }
     #[test]
     fn fire_reload_armor_and_cover_are_authoritative() {
@@ -2236,6 +2375,94 @@ mod tests {
         }
     }
     #[test]
+    fn rewind_restores_head_orientation_instead_of_using_the_current_look() {
+        let (mut r, mut g) = setup("deathmatch");
+        r.maps[0].obstacles.clear();
+        r.weapons[3].spread = 0.;
+        combat(&mut g);
+        g.tick = 100;
+        for p in &mut g.players {
+            if p.slot != 0 && p.slot != 5 {
+                p.alive = false;
+            }
+        }
+        g.players[0].position = [12., 0., 200.];
+        g.players[0].weapon = 3;
+        g.players[0].scoped = true;
+        g.players[0].yaw = 0.;
+        g.players[0].pitch = ((r.hit_regions.crouched.head_y - 56.) / 200.).atan();
+        g.players[5].position = [0.; 3];
+        g.players[5].crouch = true;
+        g.players[5].stance = 1.;
+        g.players[5].yaw = std::f64::consts::FRAC_PI_2;
+        g.history.push_back((
+            94,
+            g.players
+                .iter()
+                .map(|p| HitPose {
+                    position: p.position,
+                    stance: p.stance,
+                    look: [p.yaw, p.pitch],
+                    alive: p.alive,
+                    life: p.life,
+                })
+                .collect(),
+        ));
+        g.players[5].yaw = -std::f64::consts::FRAC_PI_2;
+        let health = g.players[5].health;
+        let mut current = g.clone();
+        current.fire(0, &r, None);
+        assert_eq!(current.players[5].health, health);
+        g.fire(0, &r, Some(94));
+        assert!(g.players[5].health < health);
+        assert!(g.events.iter().any(|e| e.kind == "headshot"));
+    }
+    #[test]
+    fn rewound_hit_regions_use_recorded_stance_and_report_the_nearest_region() {
+        let (mut r, mut g) = setup("deathmatch");
+        r.maps[0].obstacles.clear();
+        r.weapons[3].spread = 0.;
+        combat(&mut g);
+        g.tick = 100;
+        for p in &mut g.players {
+            if p.slot != 0 && p.slot != 5 {
+                p.alive = false;
+            }
+        }
+        g.players[0].position = [0., 0., 200.];
+        g.players[0].weapon = 3;
+        g.players[0].scoped = true;
+        g.players[0].pitch = (5_f64 / 200.).atan();
+        g.players[0].yaw = 0.;
+        g.players[5].position = [0.; 3];
+        g.players[5].stance = 0.;
+        g.history.push_back((
+            94,
+            g.players
+                .iter()
+                .map(|p| HitPose {
+                    position: p.position,
+                    stance: p.stance,
+                    look: [p.yaw, p.pitch],
+                    alive: p.alive,
+                    life: p.life,
+                })
+                .collect(),
+        ));
+        g.players[5].crouch = true;
+        g.players[5].stance = 1.;
+        let health = g.players[5].health;
+        let mut present = g.clone();
+        present.fire(0, &r, None);
+        assert_eq!(present.players[5].health, health);
+        g.fire(0, &r, Some(94));
+        assert!(g.players[5].health < health);
+        assert!(g
+            .events
+            .iter()
+            .any(|e| e.kind == "headshot" && e.target == Some(5)));
+    }
+    #[test]
     fn bounded_rewind_hits_the_rendered_pose_but_never_a_new_life_or_through_cover() {
         let (mut rules, mut game) = setup("deathmatch");
         rules.maps[0].obstacles.clear();
@@ -2255,7 +2482,8 @@ mod tests {
             .iter()
             .map(|p| HitPose {
                 position: p.position,
-                crouch: p.crouch,
+                stance: p.stance,
+                look: [p.yaw, p.pitch],
                 alive: p.alive,
                 life: p.life,
             })

@@ -1,0 +1,55 @@
+{
+  "modelSourceSha256": "e4e83daf03d9cb8a331ce77265c3b2505a92525a6ecc613bce8d24cee87b36a0",
+  "image": "sha256:28b5e7f41337bb9fff8cecca244c2fea4a0db79f06c5e2556546f11572dc1faa",
+  "runtime": "Debian Bookworm GLIBC 2.36",
+  "productionDeployed": false,
+  "humanGunplayAccepted": false,
+  "build-validation/native-flow.json": {
+    "data": "/tmp/botstrike-flow-3gUJrr",
+    "profile": "faf34751951c74813d4893671c6dd0e71c0727e1e3405ed5643994e5cae5e679",
+    "ticks": 23040,
+    "score": [
+      48,
+      38
+    ],
+    "players": 10,
+    "privateJoin": true,
+    "publicMatchmaking": true,
+    "reconnect": true,
+    "balancedTeams": true,
+    "humanInput": true,
+    "respawns": true,
+    "signedReplay": true,
+    "tamperRejected": true
+  },
+  "historical.json": {
+    "synthetic": true,
+    "results": [
+      {
+        "name": "salvage-v1",
+        "verified": true,
+        "candidateRejected": true
+      },
+      {
+        "name": "readability-v5",
+        "verified": true,
+        "candidateRejected": true
+      },
+      {
+        "name": "tactics-v4",
+        "verified": true,
+        "candidateRejected": true
+      },
+      {
+        "name": "network-v3",
+        "verified": true,
+        "candidateRejected": true
+      },
+      {
+        "name": "arsenal-v2",
+        "verified": true,
+        "candidateRejected": true
+      }
+    ]
+  }
+}

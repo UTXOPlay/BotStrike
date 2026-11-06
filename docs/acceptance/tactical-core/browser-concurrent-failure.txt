@@ -1,0 +1,50 @@
+desktop initialized
+mobile initialized
+Shift hold/release switched native walk/run speed
+desktop 1920 1080 passed
+desktop 2560 1080 passed
+desktop 2560 1440 passed
+desktop 3840 2160 passed
+browser failure context {
+  lifecycle: [
+    {
+      event: 'pointerlockchange',
+      at: 5075.799999999814,
+      playing: 'true',
+      hidden: false,
+      locked: true
+    },
+    {
+      event: 'resize',
+      at: 24958.599999999627,
+      playing: 'true',
+      hidden: false,
+      locked: true
+    },
+    {
+      event: 'resize',
+      at: 32751.200000000186,
+      playing: 'true',
+      hidden: false,
+      locked: true
+    },
+    {
+      event: 'resize',
+      at: 43163.299999999814,
+      playing: 'true',
+      hidden: false,
+      locked: true
+    }
+  ],
+  playing: 'true',
+  status: 'Connected · 1506 ms'
+} {"sent":[{"seq":160,"viewTick":4284,"x":0,"y":0,"yaw":0,"pitch":0,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":161,"viewTick":4284,"x":0,"y":0,"yaw":0,"pitch":0,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":162,"viewTick":4412,"x":0,"y":0,"yaw":0,"pitch":0,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0}],"native":[{"seq":159,"alive":true,"yaw":0,"skill":0},{"seq":160,"alive":true,"yaw":0,"skill":0}]}
+SOCKET ERROR { type: 'error', error: 'No active match' }
+file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-browser.mjs:43
+ const before=(await state(mobile)).state.players[5],fireButton=await b.locator('#touch-fire').boundingBox(),finger={id:2,x:fireButton.x+fireButton.width/2,y:fireButton.y+fireButton.height/2};
+                                                                                                                                       ^
+
+TypeError: Cannot read properties of null (reading 'x')
+    at file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-browser.mjs:43:136
+
+Node.js v22.23.1

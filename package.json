@@ -13,7 +13,8 @@
     "dev:motion": "node tools/serve-botstrike-motion-lab.mjs",
     "test:motion-browser": "node tests/botstrike-locomotion-browser.mjs",
     "test:botstrike-online-load": "node tests/botstrike-online-load.mjs",
-    "test:botstrike-sealing-failure": "node tests/botstrike-sealing-failure.mjs"
+    "test:botstrike-sealing-failure": "node tests/botstrike-sealing-failure.mjs",
+    "build:damage": "node tools/generate-damage-contract.mjs"
   },
   "dependencies": {
     "express": "5.1.0",

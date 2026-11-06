@@ -1,3 +1,4 @@
+import {eyeHeight} from './motion.mjs';
 // Client input assistance only. Native simulation still owns every shot and hit.
 const angle=v=>Math.atan2(Math.sin(v),Math.cos(v));
 export function blocked(a,b,box){let lo=0,hi=1;for(let axis=0;axis<3;axis++){const d=b[axis]-a[axis];if(Math.abs(d)<1e-8){if(a[axis]<box.min[axis]||a[axis]>box.max[axis])return false;}else{const x=(box.min[axis]-a[axis])/d,y=(box.max[axis]-a[axis])/d;lo=Math.max(lo,Math.min(x,y));hi=Math.min(hi,Math.max(x,y));if(lo>hi)return false;}}return hi>=0&&lo<=1;}
