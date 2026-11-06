@@ -1,0 +1,38 @@
+{
+  "imageId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+  "javascriptTests": 217,
+  "hostTests": 4,
+  "checks": {
+    "layout": {
+      "processExitCode": 0,
+      "receipt": "layout.json"
+    },
+    "communications": {
+      "processExitCode": 0,
+      "receipt": "comms.json"
+    },
+    "practice": {
+      "processExitCode": 0,
+      "receipt": "practice.json"
+    },
+    "tacticalDesktop": {
+      "processExitCode": 0,
+      "receipt": "tactical-desktop.json"
+    },
+    "tacticalTouchCpu8": {
+      "processExitCode": 0,
+      "receipt": "tactical-touch.json"
+    },
+    "dpr1Visuals": {
+      "processExitCode": 0,
+      "receipt": "visuals.json"
+    },
+    "standaloneMenuFocus": {
+      "receipt": "menu-focus.json",
+      "sourceUnchangedFromPassedFixture": true,
+      "nativeRoomCreated": false
+    }
+  },
+  "humanParticipants": 0,
+  "physicalPerformanceAccepted": false
+}

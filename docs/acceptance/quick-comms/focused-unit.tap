@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: legacy controls retain every existing binding when new communication keys collide
+ok 1 - legacy controls retain every existing binding when new communication keys collide
+  ---
+  duration_ms: 1.959562
+  type: 'test'
+  ...
+# Subtest: new session boundary drops old reports; duplicate snapshots cannot extend expiry
+ok 2 - new session boundary drops old reports; duplicate snapshots cannot extend expiry
+  ---
+  duration_ms: 1.220231
+  type: 'test'
+  ...
+# Subtest: a fresh higher-revision report in the boundary tick is distinguishable from the initial snapshot
+ok 3 - a fresh higher-revision report in the boundary tick is distinguishable from the initial snapshot
+  ---
+  duration_ms: 1.095026
+  type: 'test'
+  ...
+# Subtest: expired, removed/muted, stale-revision, old-room and round reports cannot resurrect
+ok 4 - expired, removed/muted, stale-revision, old-room and round reports cannot resurrect
+  ---
+  duration_ms: 0.236368
+  type: 'test'
+  ...
+# Subtest: manual terrain reports never attach guessed enemies; sender/team/expiry/labels cannot be spoofed
+ok 5 - manual terrain reports never attach guessed enemies; sender/team/expiry/labels cannot be spoofed
+  ---
+  duration_ms: 2.961844
+  type: 'test'
+  ...
+# Subtest: socket commands require the authenticated active controller, current token, room and connection
+ok 6 - socket commands require the authenticated active controller, current token, room and connection
+  ---
+  duration_ms: 0.514124
+  type: 'test'
+  ...
+# Subtest: enemy attachment requires current sight/reveal from the authorized living or squad spectator viewpoint
+ok 7 - enemy attachment requires current sight/reveal from the authorized living or squad spectator viewpoint
+  ---
+  duration_ms: 1.087407
+  type: 'test'
+  ...
+# Subtest: quotas survive reconnect; muted, expired and disconnected messages cannot resurrect in later views
+ok 8 - quotas survive reconnect; muted, expired and disconnected messages cannot resurrect in later views
+  ---
+  duration_ms: 0.781421
+  type: 'test'
+  ...
+# Subtest: enemy activity cannot advance another team wire revision or share its sequence counter
+ok 9 - enemy activity cannot advance another team wire revision or share its sequence counter
+  ---
+  duration_ms: 0.289109
+  type: 'test'
+  ...
+# Subtest: an enemy team cannot consume the other team quota bookkeeping capacity
+ok 10 - an enemy team cannot consume the other team quota bookkeeping capacity
+  ---
+  duration_ms: 0.371874
+  type: 'test'
+  ...
+# Subtest: terrain rays use the nearest native surface and radar uses the exact inverse of its draw transform
+ok 11 - terrain rays use the nearest native surface and radar uses the exact inverse of its draw transform
+  ---
+  duration_ms: 1.850374
+  type: 'test'
+  ...
+# Subtest: render-camera inverse and radar inverse survive all six viewports, FOV, translation and camera roll
+ok 12 - render-camera inverse and radar inverse survive all six viewports, FOV, translation and camera roll
+  ---
+  duration_ms: 8.738686
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 155.813397

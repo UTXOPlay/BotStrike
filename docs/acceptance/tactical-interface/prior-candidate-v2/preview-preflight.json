@@ -1,0 +1,11 @@
+{
+  "imageId": "sha256:29a483f16f3aa0f28ae337fd805332c607e911ff76e1fcd875e1e2be4618fb5e",
+  "containerId": "262f69fc8b3ef7abfbc6661a817a86f4e227f540315f997e47cabadc3341cfe3",
+  "origin": "http://127.0.0.1:19925",
+  "healthStatus": 200,
+  "guestStatus": 200,
+  "nativeSocketStateReceived": true,
+  "nativeRoom": null,
+  "roomCreated": false,
+  "configurationFix": "Preview-only GAME_ORIGIN corrected from 19923 to published port 19925. Application image/source unchanged."
+}

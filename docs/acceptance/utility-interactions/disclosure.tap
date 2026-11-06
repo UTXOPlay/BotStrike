@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: hidden enemy projectiles are absent; visible objects never identify their owner or inherited velocity
+ok 1 - hidden enemy projectiles are absent; visible objects never identify their owner or inherited velocity
+  ---
+  duration_ms: 2.998812
+  type: 'test'
+  ...
+# Subtest: deployed smoke uses its visible volume, including near edges and the inside
+ok 2 - deployed smoke uses its visible volume, including near edges and the inside
+  ---
+  duration_ms: 0.207449
+  type: 'test'
+  ...
+# Subtest: objective hides carrier, actor, progress and dropped location until legitimately disclosed
+ok 3 - objective hides carrier, actor, progress and dropped location until legitimately disclosed
+  ---
+  duration_ms: 0.935535
+  type: 'test'
+  ...
+# Subtest: plant announcement remains global without revealing the hidden planter
+ok 4 - plant announcement remains global without revealing the hidden planter
+  ---
+  duration_ms: 0.245203
+  type: 'test'
+  ...
+# Subtest: snapshot and animation feedback share authored head visibility samples
+ok 5 - snapshot and animation feedback share authored head visibility samples
+  ---
+  duration_ms: 0.320605
+  type: 'test'
+  ...
+# Subtest: dead seats follow living squad views and cannot use enemy or dead views, including revealed targets
+ok 6 - dead seats follow living squad views and cannot use enemy or dead views, including revealed targets
+  ---
+  duration_ms: 0.256857
+  type: 'test'
+  ...
+# Subtest: radio reveal exposes location without optical pose, motion, IFF, assistance or objective interactions
+ok 7 - radio reveal exposes location without optical pose, motion, IFF, assistance or objective interactions
+  ---
+  duration_ms: 0.481074
+  type: 'test'
+  ...
+# Subtest: world audio and personal damage point to impact rather than hidden owner and never disclose the precise origin
+ok 8 - world audio and personal damage point to impact rather than hidden owner and never disclose the precise origin
+  ---
+  duration_ms: 0.26649
+  type: 'test'
+  ...
+# Subtest: flash is equally opaque in reduced motion and follows the authorized living spectator
+ok 9 - flash is equally opaque in reduced motion and follows the authorized living spectator
+  ---
+  duration_ms: 0.309719
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 127.305797

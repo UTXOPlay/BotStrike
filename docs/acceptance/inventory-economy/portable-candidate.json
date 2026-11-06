@@ -1,0 +1,20 @@
+{
+  "status": "private validation image; human gates and publication pending",
+  "image": "sha256:dae1966422e99b9e97f1d99ebb13e739af402479565c626b525dd652ede9eca5",
+  "model": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+  "profile": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+  "sha256": {
+    "botstrike-engine": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+    "myelin-botstrike": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74"
+  },
+  "nativeDamageRowsCompared": 6048,
+  "sameNativeDamageValuesAcrossBuilds": true,
+  "automatedClients": 10,
+  "humanParticipants": 0,
+  "nativeVersion": "botstrike-2050-tactical-v5",
+  "localValidation": "http://127.0.0.1:19905/games/botstrike/",
+  "imageDesktopViewports": 4,
+  "imageTouchViewports": 2,
+  "imageTouchRunsPassedAfterActiveWait": 2,
+  "inputTestLimitation": "First image touch run recorded no interact before its gameplay-active wait was added; physical and long-stall behavior are not established."
+}

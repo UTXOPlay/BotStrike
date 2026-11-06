@@ -1,0 +1,1762 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "physicalOutputReviewed": false,
+  "measurements": [
+    {
+      "mode": "baseline",
+      "rate": 44100,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 12.100000001490116,
+      "channels": [
+        {
+          "peak": 6.23841667175293,
+          "rms": 0.2593611213995182,
+          "clipped": 833,
+          "onset": 0.1
+        },
+        {
+          "peak": 6.23841667175293,
+          "rms": 0.2593611213995182,
+          "clipped": 833,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 4834.975314989167,
+      "sourceCount": 32,
+      "essentialSamples": 0,
+      "bufferBytes": 377508,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 44100,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 12.400000002235174,
+      "channels": [
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14151104399613454,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14151104399613454,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 2826.9296405911446,
+      "sourceCount": 26,
+      "essentialSamples": 2,
+      "bufferBytes": 774416,
+      "before": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 26,
+        "remote": 24,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 26,
+        "buffers": 24,
+        "bufferBytes": 774416,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 774416,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 9.399999998509884,
+      "channels": [
+        {
+          "peak": 6.432135581970215,
+          "rms": 0.2618640414209371,
+          "clipped": 920,
+          "onset": 0.1
+        },
+        {
+          "peak": 6.432135581970215,
+          "rms": 0.2618640414209371,
+          "clipped": 920,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 1764.3846818083734,
+      "sourceCount": 32,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 13.299999997019768,
+      "channels": [
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14211045477445552,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14211045477445552,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 1921.9169892072678,
+      "sourceCount": 26,
+      "essentialSamples": 2,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 26,
+        "remote": 24,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 26,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 3.099999997764826,
+      "channels": [
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.13701263498719,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.800000000745058,
+      "channels": [
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.13701263498719,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 2.399999998509884,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 2.5,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 301.4000000022352,
+      "channels": [
+        {
+          "peak": 0.20325922966003418,
+          "rms": 0.012500189911311525,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        },
+        {
+          "peak": 0.20325922966003418,
+          "rms": 0.012500189911311525,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        }
+      ],
+      "waveProbe": 54.44738417863846,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "hrtfNodes": 1
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.8999999985098839,
+      "channels": [
+        {
+          "peak": 0.19239836931228638,
+          "rms": 0.011230632366441262,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        },
+        {
+          "peak": 0.19239836931228638,
+          "rms": 0.011230632366441262,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        }
+      ],
+      "waveProbe": 56.52453690767288,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "hrtfNodes": 1
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": true,
+      "renderMs": 1.5999999977648258,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": "mono",
+      "renderMs": 1.699999999254942,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 842892,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 0,
+        "monoStarted": 1,
+        "routes": 1,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 0,
+        "monoStarted": 1,
+        "routes": 0,
+        "buffers": 24,
+        "bufferBytes": 842892,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    }
+  ],
+  "live": {
+    "reserved": {
+      "admitted": 26,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 0,
+      "peakVoices": 26,
+      "peakPending": 0,
+      "voices": 26,
+      "remote": 24,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 26,
+      "monoStarted": 0,
+      "routes": 26,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "retiring": {
+      "admitted": 32,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 32,
+      "remote": 24,
+      "pending": 7,
+      "hrtfStarted": 0,
+      "stereoStarted": 32,
+      "monoStarted": 0,
+      "routes": 32,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "drained": {
+      "admitted": 39,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 32,
+      "remote": 17,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 39,
+      "monoStarted": 0,
+      "routes": 32,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "changed": {
+      "admitted": 39,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 39,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "anonymousSteps": {
+      "admitted": 41,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 2,
+      "remote": 2,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 41,
+      "monoStarted": 0,
+      "routes": 2,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "muted": {
+      "admitted": 41,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 41,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "suspended": {
+      "admitted": 41,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 41,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "suspended",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "resumed": {
+      "admitted": 42,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 1,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 42,
+      "monoStarted": 0,
+      "routes": 1,
+      "buffers": 24,
+      "bufferBytes": 842892,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "disposed": {
+      "admitted": 42,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 42,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 0,
+      "bufferBytes": 0,
+      "context": "closed",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "sourceCount": 42
+  },
+  "arsenal": {
+    "cached": {
+      "admitted": 24,
+      "dropped": 36,
+      "expired": 0,
+      "stolen": 0,
+      "peakVoices": 24,
+      "peakPending": 0,
+      "voices": 24,
+      "remote": 24,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 24,
+      "monoStarted": 0,
+      "routes": 24,
+      "buffers": 84,
+      "bufferBytes": 1925820,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "cacheMs": 78.90000000223517,
+    "pressure": {
+      "admitted": 50,
+      "dropped": 212,
+      "expired": 0,
+      "stolen": 0,
+      "peakVoices": 26,
+      "peakPending": 0,
+      "voices": 26,
+      "remote": 24,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 50,
+      "monoStarted": 0,
+      "routes": 26,
+      "buffers": 84,
+      "bufferBytes": 1925820,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "essentialSamples": 2,
+    "disposed": {
+      "admitted": 50,
+      "dropped": 212,
+      "expired": 0,
+      "stolen": 0,
+      "peakVoices": 26,
+      "peakPending": 0,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 50,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 0,
+      "bufferBytes": 0,
+      "context": "closed",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    }
+  },
+  "eventOrder": {
+    "first": 60,
+    "duplicate": 60,
+    "skipped": 61,
+    "lifeBoundary": 61,
+    "nextLife": 62,
+    "reconnect": 62,
+    "afterReconnect": 63,
+    "beforeContact": 63,
+    "atContact": 64,
+    "changedListener": 64,
+    "played": [
+      {
+        "kind": "shot",
+        "weapon": 0,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 0,
+        "surface": 0
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 0,
+        "surface": 0
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 0,
+        "surface": 0
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 0,
+        "surface": 0
+      },
+      {
+        "kind": "shot",
+        "weapon": 1,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 1,
+        "surface": 1
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 1,
+        "surface": 1
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 1,
+        "surface": 1
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 1,
+        "surface": 1
+      },
+      {
+        "kind": "shot",
+        "weapon": 2,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 2,
+        "surface": 2
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 2,
+        "surface": 2
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 2,
+        "surface": 2
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 2,
+        "surface": 2
+      },
+      {
+        "kind": "shot",
+        "weapon": 3,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 3,
+        "surface": 3
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 3,
+        "surface": 3
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 3,
+        "surface": 3
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 3,
+        "surface": 3
+      },
+      {
+        "kind": "shot",
+        "weapon": 4,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 4,
+        "surface": 4
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 4,
+        "surface": 4
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 4,
+        "surface": 4
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 4,
+        "surface": 4
+      },
+      {
+        "kind": "shot",
+        "weapon": 5,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 5,
+        "surface": 5
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 5,
+        "surface": 5
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 5,
+        "surface": 5
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 5,
+        "surface": 5
+      },
+      {
+        "kind": "shot",
+        "weapon": 6,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 6,
+        "surface": 6
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 6,
+        "surface": 6
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 6,
+        "surface": 6
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 6,
+        "surface": 6
+      },
+      {
+        "kind": "shot",
+        "weapon": 7,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 7,
+        "surface": 7
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 7,
+        "surface": 7
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 7,
+        "surface": 7
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 7,
+        "surface": 7
+      },
+      {
+        "kind": "shot",
+        "weapon": 8,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 8,
+        "surface": 8
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 8,
+        "surface": 8
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 8,
+        "surface": 8
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 8,
+        "surface": 8
+      },
+      {
+        "kind": "shot",
+        "weapon": 9,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 9,
+        "surface": 9
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 9,
+        "surface": 9
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 9,
+        "surface": 9
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 9,
+        "surface": 9
+      },
+      {
+        "kind": "shot",
+        "weapon": 10,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 10,
+        "surface": 10
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 10,
+        "surface": 10
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 10,
+        "surface": 10
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 10,
+        "surface": 10
+      },
+      {
+        "kind": "shot",
+        "weapon": 11,
+        "bearing": 0.7853981633974483,
+        "self": false,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true
+      },
+      {
+        "kind": "reload",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 11,
+        "surface": 11
+      },
+      {
+        "kind": "reload_feed",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 11,
+        "surface": 11
+      },
+      {
+        "kind": "reload_close",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 11,
+        "surface": 11
+      },
+      {
+        "kind": "equip",
+        "bearing": 0.7853981633974483,
+        "pan": 0.7071067811865475,
+        "level": 0.6,
+        "muffled": true,
+        "self": false,
+        "weapon": 11,
+        "surface": 11
+      },
+      {
+        "kind": "reload_feed",
+        "pan": 0,
+        "self": true,
+        "weapon": 5,
+        "surface": 5
+      },
+      {
+        "kind": "equip",
+        "pan": 0,
+        "self": true,
+        "weapon": 5,
+        "surface": 5
+      },
+      {
+        "kind": "reload",
+        "pan": 0,
+        "self": true,
+        "weapon": 5,
+        "surface": 5
+      },
+      {
+        "kind": "step",
+        "bearing": 0,
+        "pan": 0,
+        "level": 0.6,
+        "self": false,
+        "weapon": 1,
+        "surface": 1
+      }
+    ]
+  },
+  "study": {
+    "index": 1,
+    "total": 48,
+    "active": false,
+    "report": {
+      "schema": 1,
+      "study": "botstrike-audio-baseline-v1",
+      "automated": true,
+      "manifest": {
+        "schema": 1,
+        "kind": "offline-listening-study",
+        "humanObservations": 0,
+        "liveMatchData": false,
+        "rendererSelection": "baseline first; optional candidates are unaccepted experiments",
+        "baseline": {
+          "kind": "frozen V5 listening baseline, not a new game renderer",
+          "sourceImage": "sha256:dae1966422e99b9e97f1d99ebb13e739af402479565c626b525dd652ede9eca5",
+          "copiedFrom": "games/botstrike/client/",
+          "sha256": {
+            "audio.mjs": "a85c448eb3589ff2a90734032c0150f980950e56ac53c3a2c0ca66d5525a2f03",
+            "shot-sound.mjs": "63410bbca5371180d5ff9c11e048a5eab481b881b2ced334ca4c06122f69ea6d",
+            "impact-sound.mjs": "ec4444c05803964829dbf3a01f85ab039285e32c7cf02b64511228bc7f891c28",
+            "footstep-sound.mjs": "f900db1aa994a134f99a080159e67c1039abf949dff0f3e4a8309d74da7e8ff3"
+          }
+        },
+        "bundleSha256": "1d3858ec839e428ac31a7b3e58fb1868765c5145f8467870c2e3eb15cc7e7553",
+        "conditions": "8 directions × 3 distance bands × 2 occlusion states; 24 distractor trials per block; no elevation cue",
+        "nativeRulesUnchanged": true
+      },
+      "metadata": {
+        "participant": "automated-qa",
+        "output": "headphones",
+        "device": "",
+        "notes": "",
+        "sampleRate": 48000,
+        "baseLatency": 0.010666666666666666,
+        "volume": 0.6,
+        "reducedMotion": false,
+        "physicalOutputSelfReported": false,
+        "reviewerObserved": false
+      },
+      "rows": [
+        {
+          "trial": {
+            "id": "0:0",
+            "block": 0,
+            "mode": "baseline",
+            "sector": 1,
+            "range": 2,
+            "muffled": true,
+            "dense": true,
+            "bearing": 0.7853981633974483,
+            "level": 0.105
+          },
+          "effectiveMode": "baseline",
+          "valid": true,
+          "reason": null,
+          "answer": {
+            "sector": null,
+            "range": null,
+            "frontBack": null,
+            "muffled": null
+          },
+          "confidence": 0,
+          "reactionMs": 871.5999999977648,
+          "timing": [
+            {
+              "expectedMs": 100,
+              "actualMs": 100.59999999776483,
+              "audioTime": 0.256
+            },
+            {
+              "expectedMs": 230,
+              "actualMs": 230.30000000074506,
+              "audioTime": 0.384
+            },
+            {
+              "expectedMs": 360,
+              "actualMs": 360.5999999977648,
+              "audioTime": 0.512
+            }
+          ],
+          "audioState": "running",
+          "rendererStats": null
+        }
+      ],
+      "startedAt": "2026-11-06T00:34:13.899Z",
+      "seed": 3089976838,
+      "rendererBefore": null,
+      "summary": {
+        "evidence": "AUTOMATED QA — zero human observations",
+        "output": "headphones",
+        "invalid": 0,
+        "groups": {
+          "baseline": {
+            "n": 1,
+            "unknown": 1,
+            "direction": [
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            "distance": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1
+              ]
+            ],
+            "frontBack": {
+              "front": {
+                "null": 1
+              },
+              "back": {},
+              "side": {}
+            },
+            "timedOut": 0,
+            "reactionMs": [
+              871.5999999977648
+            ]
+          }
+        }
+      }
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,73 @@
+{
+  "automated": true,
+  "physicalDevices": false,
+  "desktopDpr": 0.5,
+  "mobileDpr": 1,
+  "persistence": true,
+  "independentLevels": true,
+  "existingControlsPreserved": true,
+  "rows": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "effects": {
+        "x": 1334.046875,
+        "y": 533.71875,
+        "width": 129,
+        "height": 44
+      }
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "effects": {
+        "x": 1654.046875,
+        "y": 534.78125,
+        "width": 129,
+        "height": 44
+      }
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "mobile": false,
+      "effects": {
+        "x": 1016.546875,
+        "y": 947.4375,
+        "width": 129,
+        "height": 44
+      }
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mobile": false,
+      "effects": {
+        "x": 1656.546875,
+        "y": 1667.4375,
+        "width": 129,
+        "height": 44
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "mobile": true,
+      "effects": {
+        "x": 197.5,
+        "y": 172.9375,
+        "width": 129,
+        "height": 44
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "portraitGate": true
+    }
+  ],
+  "errors": []
+}

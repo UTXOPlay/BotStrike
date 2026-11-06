@@ -1,4 +1,4 @@
-export const padButtons={confirm:0,back:1,reload:2,skill:3,previous:4,next:5,scope:6,fire:7,scoreboard:8,menu:9,walk:10,interact:11,armory:12,utility:13,left:14,right:15};
+export const padButtons={confirm:0,back:1,reload:2,skill:3,previous:4,next:5,scope:6,fire:7,scoreboard:8,menu:9,walk:10,interact:11,armory:12,utility:13,left:14,right:15,comms:15};
 
 export function standardGamepad(pads){return Array.from(pads||[]).find(p=>p&&p.connected!==false&&p.mapping==='standard'&&p.axes?.length>=4&&p.buttons?.length>=16)||null;}
 

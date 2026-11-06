@@ -1,0 +1,47 @@
+[
+  {
+    "reference": "native obstacle AABBs and movement floor plane; outside-playfield scenery excluded",
+    "map": "neon-docks",
+    "samples": 24,
+    "rays": 384,
+    "tolerance": 3,
+    "nativeOnly": 0,
+    "visualOnly": 0,
+    "edgeMismatch": 0,
+    "visualHits": 197,
+    "meshCount": 48,
+    "rootChildren": 48,
+    "rawHits": 388,
+    "examples": []
+  },
+  {
+    "reference": "native obstacle AABBs and movement floor plane; outside-playfield scenery excluded",
+    "map": "skyline",
+    "samples": 24,
+    "rays": 384,
+    "tolerance": 3,
+    "nativeOnly": 0,
+    "visualOnly": 0,
+    "edgeMismatch": 0,
+    "visualHits": 196,
+    "meshCount": 43,
+    "rootChildren": 43,
+    "rawHits": 256,
+    "examples": []
+  },
+  {
+    "reference": "native obstacle AABBs and movement floor plane; outside-playfield scenery excluded",
+    "map": "reactor",
+    "samples": 24,
+    "rays": 384,
+    "tolerance": 3,
+    "nativeOnly": 0,
+    "visualOnly": 0,
+    "edgeMismatch": 0,
+    "visualHits": 213,
+    "meshCount": 44,
+    "rootChildren": 44,
+    "rawHits": 322,
+    "examples": []
+  }
+]

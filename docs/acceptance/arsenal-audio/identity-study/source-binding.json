@@ -1,0 +1,11 @@
+{
+  "sha256": {
+    "tools/arsenal-listening-protocol.mjs": "9b961c702f3a3960432c7ad1c252df907d1e874df673c34b73d302297b06e40c",
+    "tools/arsenal-listening-lab.mjs": "182653235924d516af3c0661449ade68544d07f8b0f08e818ebfd3b2d7246808",
+    "tools/serve-arsenal-listening-lab.mjs": "d9eebe9a25c2d294c26cdab3632dd91590e44bdf0ecb35a4bd2d4eaa26038103",
+    "tests/botstrike-arsenal-listening.test.mjs": "d54779337044feef9d0155ce4d2eaae714528c60a544df179507ad97ad3c42a9",
+    "tests/botstrike-arsenal-listening-browser.mjs": "c34d3bd4f7b915dc3f9d3044b250a97e2f31b52a22764a8f6f9d07b3bf0bb0f9"
+  },
+  "humanParticipants": 0,
+  "physicalOutputReviewed": false
+}

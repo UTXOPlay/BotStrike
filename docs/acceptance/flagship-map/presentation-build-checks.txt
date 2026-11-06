@@ -1,0 +1,8 @@
+#26 0.089 Exact native, adapter and backend binding preserved.
+#27 11.45 # tests 159
+#27 11.45 # pass 159
+#27 11.45 # fail 0
+#27 11.68 # tests 4
+#27 11.68 # pass 4
+#27 11.68 # fail 0
+#29 writing image sha256:115780e4753870d1c2fb7a94203daf2ca6ef7f3b1744b85de9272e60b270bb6a done

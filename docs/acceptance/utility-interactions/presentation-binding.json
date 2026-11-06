@@ -1,0 +1,27 @@
+{
+  "baseImage": "sha256:79c5d17e4ba4b35ab7f1b93a4b6b88149746ac88889cc7f66d5195800ff9008f",
+  "modelSha256": "881347ed6ce9294c91f9bb82c010b06a2302c769fd2810aef4f910b95dd888a5",
+  "pair": {
+    "botstrike-engine": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+    "myelin-botstrike": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8"
+  },
+  "sourceSha256": {
+    "botstrike-myelin/Cargo.lock": "52e00b9790e02ecc6bdab1854ce397e9966b703c2e592fc046e9ae951c9fab79",
+    "botstrike-myelin/Cargo.toml": "c78ac1270fdf9cbc4eabe4557b40d0d48c836a1b7da17e7a1c9bbd8ef63a9598",
+    "botstrike-myelin/src/game.rs": "5fae11a4648b1bcac409220bc76bf034eac31cebc0e20f05ef58b4d8a2ef965e",
+    "botstrike-myelin/src/session.rs": "682383101dc4a4144a0c51e2427c729c8fe79bcc92576a7bb4d8f10fc740400f",
+    "botstrike-service/career.mjs": "c89a218243b7bcc64905f8b101f7f1f2161db5074bc22571fd6be2131901a43e",
+    "botstrike-service/feedback.mjs": "2ff238dfc8e0e7b34f04d77a3de6916dbd6cc14547b24e60e8c9a70873deceaa",
+    "botstrike-service/io.mjs": "229d8fbccfce9cda41cf8d222244af8b19b4b73b3bfcec1e615f3aa30ae7c649",
+    "botstrike-service/retention.mjs": "c43d500b9bd2d4f64c13ac6d594d344890dd520eabe82529aa39e08acb898237",
+    "botstrike-service/seal-worker.mjs": "9e3179ee7a57bc500f5c3bb917b146fcba524c318f8f46bdfe0b76746b176b40",
+    "botstrike-service/server.mjs": "48275c957c7fb70b57d8932bb81cdf5741078610ad7c9010057f7298177deef4",
+    "botstrike-service/visibility.mjs": "ad15839250c3caa9e32319b6892c089676f28d988c36875e1f0803943b5edff0",
+    "host/server.mjs": "a4ec3a267275a67272588188689cc0d28a15c5cb6af46c1b89fde583c6d3466b",
+    "host/socket-proxy.mjs": "3f7fd99774e86475e3207f21121c41b67d867db87e384218e2b253fb48e3525e",
+    "host/start.mjs": "0195146491e31167198e8dd1d6ab376173c90c17fcc5fd3c7ffeb1df33022817",
+    "host/static.mjs": "c2dd5ce6e8e905e3c45752922ac3d4ae0552de6d24c0003436b57c52402ae223",
+    "shared/hit-volumes.mjs": "e54e4d750fd096603033d32478d44048e01ce99e76a38cb9f7e8d0497c416b27",
+    "shared/sight-geometry.mjs": "c0b05a4dc0384bf05bef979be287b3dae5e9f1d6062ce7941ea5e8da0980f30c"
+  }
+}

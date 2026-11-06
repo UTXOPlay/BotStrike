@@ -1,0 +1,3497 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "physicalOutputReviewed": false,
+  "completeOutputTrials": 160,
+  "responsiveCases": 18,
+  "touchOrientations": 2,
+  "pairedOutputGuard": true,
+  "invalidRows": 2,
+  "results": [
+    {
+      "family": "action",
+      "width": 1920,
+      "height": 1080,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 226,
+            "y": 199.59375,
+            "width": 236.328125,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 472.328125,
+            "y": 199.59375,
+            "width": 236.34375,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 718.671875,
+            "y": 199.59375,
+            "width": 236.328125,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 965,
+            "y": 199.59375,
+            "width": 236.34375,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1211.34375,
+            "y": 199.59375,
+            "width": 236.328125,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1457.671875,
+            "y": 199.59375,
+            "width": 236.328125,
+            "height": 49.6875,
+            "font": 21.12
+          }
+        ]
+      }
+    },
+    {
+      "family": "action",
+      "width": 2560,
+      "height": 1080,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 546,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 792.328125,
+            "y": 214,
+            "width": 236.34375,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1038.671875,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1285,
+            "y": 214,
+            "width": 236.34375,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1531.34375,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1777.671875,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "action",
+      "width": 2560,
+      "height": 1440,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 546,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 792.328125,
+            "y": 214,
+            "width": 236.34375,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1038.671875,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1285,
+            "y": 214,
+            "width": 236.34375,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1531.34375,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1777.671875,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "action",
+      "width": 3840,
+      "height": 2160,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 1186,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1432.328125,
+            "y": 214,
+            "width": 236.34375,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1678.671875,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1925,
+            "y": 214,
+            "width": 236.34375,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 2171.34375,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 2417.671875,
+            "y": 214,
+            "width": 236.328125,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "action",
+      "width": 390,
+      "height": 844,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 16,
+            "y": 145,
+            "width": 112.65625,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 138.65625,
+            "y": 145,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 261.328125,
+            "y": 145,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 16,
+            "y": 199,
+            "width": 112.65625,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 138.65625,
+            "y": 199,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 261.328125,
+            "y": 199,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          }
+        ]
+      }
+    },
+    {
+      "family": "action",
+      "width": 844,
+      "height": 390,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 16,
+            "y": 145,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 153,
+            "y": 145,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 290,
+            "y": 145,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 427,
+            "y": 145,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 564,
+            "y": 145,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 701,
+            "y": 145,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          }
+        ]
+      }
+    },
+    {
+      "family": "surface",
+      "width": 1920,
+      "height": 1080,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 226,
+            "y": 199.59375,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 595.5,
+            "y": 199.59375,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 965,
+            "y": 199.59375,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1334.5,
+            "y": 199.59375,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          }
+        ]
+      }
+    },
+    {
+      "family": "surface",
+      "width": 2560,
+      "height": 1080,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 546,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 915.5,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1285,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1654.5,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "surface",
+      "width": 2560,
+      "height": 1440,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 546,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 915.5,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1285,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1654.5,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "surface",
+      "width": 3840,
+      "height": 2160,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 1186,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1555.5,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1925,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 2294.5,
+            "y": 214,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "surface",
+      "width": 390,
+      "height": 844,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 16,
+            "y": 166,
+            "width": 112.65625,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 138.65625,
+            "y": 166,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 261.328125,
+            "y": 166,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 16,
+            "y": 220,
+            "width": 358,
+            "height": 44,
+            "font": 14
+          }
+        ]
+      }
+    },
+    {
+      "family": "surface",
+      "width": 844,
+      "height": 390,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 16,
+            "y": 145,
+            "width": 195.5,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 221.5,
+            "y": 145,
+            "width": 195.5,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 427,
+            "y": 145,
+            "width": 195.5,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 632.5,
+            "y": 145,
+            "width": 195.5,
+            "height": 44,
+            "font": 14
+          }
+        ]
+      }
+    },
+    {
+      "family": "weapon",
+      "width": 1920,
+      "height": 1080,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 226,
+            "y": 199.59375,
+            "width": 154.21875,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 390.21875,
+            "y": 199.59375,
+            "width": 154.234375,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 554.453125,
+            "y": 199.59375,
+            "width": 154.21875,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 718.671875,
+            "y": 199.59375,
+            "width": 154.234375,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 882.90625,
+            "y": 199.59375,
+            "width": 154.21875,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1047.125,
+            "y": 199.59375,
+            "width": 154.21875,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1211.34375,
+            "y": 199.59375,
+            "width": 154.21875,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1375.5625,
+            "y": 199.59375,
+            "width": 154.21875,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1539.78125,
+            "y": 199.59375,
+            "width": 154.21875,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 226,
+            "y": 259.28125,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 595.5,
+            "y": 259.28125,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 965,
+            "y": 259.28125,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          },
+          {
+            "x": 1334.5,
+            "y": 259.28125,
+            "width": 359.5,
+            "height": 49.6875,
+            "font": 21.12
+          }
+        ]
+      }
+    },
+    {
+      "family": "weapon",
+      "width": 2560,
+      "height": 1080,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 546,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 710.21875,
+            "y": 214,
+            "width": 154.234375,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 874.453125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1038.671875,
+            "y": 214,
+            "width": 154.234375,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1202.90625,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1367.125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1531.34375,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1695.5625,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1859.78125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 546,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 915.5,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1285,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1654.5,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "weapon",
+      "width": 2560,
+      "height": 1440,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 546,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 710.21875,
+            "y": 214,
+            "width": 154.234375,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 874.453125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1038.671875,
+            "y": 214,
+            "width": 154.234375,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1202.90625,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1367.125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1531.34375,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1695.5625,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1859.78125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 546,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 915.5,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1285,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1654.5,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "weapon",
+      "width": 3840,
+      "height": 2160,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 1186,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1350.21875,
+            "y": 214,
+            "width": 154.234375,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1514.453125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1678.671875,
+            "y": 214,
+            "width": 154.234375,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1842.90625,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 2007.125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 2171.34375,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 2335.5625,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 2499.78125,
+            "y": 214,
+            "width": 154.21875,
+            "height": 90,
+            "font": 24
+          },
+          {
+            "x": 1186,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1555.5,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 1925,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          },
+          {
+            "x": 2294.5,
+            "y": 314,
+            "width": 359.5,
+            "height": 54,
+            "font": 24
+          }
+        ]
+      }
+    },
+    {
+      "family": "weapon",
+      "width": 390,
+      "height": 844,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 16,
+            "y": 145,
+            "width": 112.65625,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 138.65625,
+            "y": 145,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 261.328125,
+            "y": 145,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 16,
+            "y": 199,
+            "width": 112.65625,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 138.65625,
+            "y": 199,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 261.328125,
+            "y": 199,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 16,
+            "y": 253,
+            "width": 112.65625,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 138.65625,
+            "y": 253,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 261.328125,
+            "y": 253,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 16,
+            "y": 307,
+            "width": 112.65625,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 138.65625,
+            "y": 307,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 261.328125,
+            "y": 307,
+            "width": 112.671875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 16,
+            "y": 361,
+            "width": 358,
+            "height": 44,
+            "font": 14
+          }
+        ]
+      }
+    },
+    {
+      "family": "weapon",
+      "width": 844,
+      "height": 390,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 16,
+            "y": 143,
+            "width": 107.421875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 133.421875,
+            "y": 143,
+            "width": 107.4375,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 250.859375,
+            "y": 143,
+            "width": 107.421875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 368.28125,
+            "y": 143,
+            "width": 107.4375,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 485.71875,
+            "y": 143,
+            "width": 107.421875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 603.140625,
+            "y": 143,
+            "width": 107.4375,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 720.578125,
+            "y": 143,
+            "width": 107.421875,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 16,
+            "y": 197,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 153,
+            "y": 197,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 290,
+            "y": 197,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 427,
+            "y": 197,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 564,
+            "y": 197,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          },
+          {
+            "x": 701,
+            "y": 197,
+            "width": 127,
+            "height": 44,
+            "font": 14
+          }
+        ]
+      }
+    }
+  ],
+  "manifest": {
+    "schema": 1,
+    "kind": "offline-arsenal-identity-study",
+    "humanObservations": 0,
+    "liveMatchData": false,
+    "nativeRulesUnchanged": true,
+    "renderer": "shipping createAudio, default stereo; no HRTF experiment",
+    "sha256": {
+      "games/botstrike/client/audio-budget.mjs": "4ea1acbf37b43b02285da069ea1b6e9c97a0659bebfa75c85297c6f89b7a4971",
+      "games/botstrike/client/audio-spatial.mjs": "8771bfe75ee377ead0040decfc2e8044d4816c6b54f4cba88d68989e2f4f2123",
+      "games/botstrike/client/weapon-action-sound.mjs": "b8f6a1f2744a262a517859acfe8becbd0b4b4320654ba6e31252de81c0fecf66",
+      "games/botstrike/client/shot-sound.mjs": "87a39c38f2b685903c072972366b670bf9a7e448c5d3255651dde1182325e0d7",
+      "games/botstrike/client/impact-sound.mjs": "ec4444c05803964829dbf3a01f85ab039285e32c7cf02b64511228bc7f891c28",
+      "games/botstrike/client/footstep-sound.mjs": "71af13f7b7755b55c2bf866e7e7b6512638d390bec51c793f297f6a1930cb73c",
+      "games/botstrike/client/audio.mjs": "9cd3ad3d6bda23d0f1951f9b630aff57b16b825a739c91114183bb22a0ac48ec",
+      "tools/arsenal-listening-protocol.mjs": "9b961c702f3a3960432c7ad1c252df907d1e874df673c34b73d302297b06e40c",
+      "tools/arsenal-listening-lab.mjs": "182653235924d516af3c0661449ade68544d07f8b0f08e818ebfd3b2d7246808",
+      "botstrike/spec.json": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6"
+    },
+    "bundleSha256": "ea0e7f2f1af1a00e0f195bebc9f0533ca0a221e06e095ae6da7e8e356d00ad01",
+    "conditions": "12 weapons + 5 actions + 3 materials; 8 contexts per class; 160 trials/output; optional counterbalanced paired outputs",
+    "nuisanceFactors": "fractional action weapon and step/landing variants; isolated fixed lab timing"
+  },
+  "summary": {
+    "evidence": "AUTOMATED QA \u2014 zero human observations",
+    "invalid": 2,
+    "groups": {
+      "headphones/action/far/clear/dense": {
+        "n": 5,
+        "correct": 0,
+        "unsure": 3,
+        "timeouts": 1,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          15000.39999999851,
+          1399.2000000029802,
+          1399.2000000029802,
+          1401.3000000044703,
+          1398.7000000029802
+        ]
+      },
+      "headphones/action/near/clear/dense": {
+        "n": 5,
+        "correct": 1,
+        "unsure": 2,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1434.4000000059605,
+          1400.8000000044703,
+          1400.3999999985099,
+          1399,
+          1401.8999999985099
+        ]
+      },
+      "headphones/action/far/muffled/dense": {
+        "n": 5,
+        "correct": 3,
+        "unsure": 1,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1432.6000000014901,
+          1399.3999999985099,
+          1400.1000000014901,
+          1400.8000000044703,
+          1399.7000000029802
+        ]
+      },
+      "headphones/action/near/muffled/sparse": {
+        "n": 5,
+        "correct": 2,
+        "unsure": 1,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        ],
+        "reactionMs": [
+          1436.5,
+          1401.2000000029802,
+          1398.1000000014901,
+          1401,
+          1400.6000000014901
+        ]
+      },
+      "headphones/action/near/clear/sparse": {
+        "n": 5,
+        "correct": 1,
+        "unsure": 2,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1483.1999999955297,
+          1399.5999999940395,
+          1400.8999999985099,
+          1400.2000000029802,
+          1400.8000000044703
+        ]
+      },
+      "headphones/action/far/clear/sparse": {
+        "n": 5,
+        "correct": 3,
+        "unsure": 1,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1415.8999999985099,
+          1432.5999999940395,
+          1401.1000000014901,
+          1398.7999999970198,
+          1400.2999999970198
+        ]
+      },
+      "headphones/action/near/muffled/dense": {
+        "n": 5,
+        "correct": 1,
+        "unsure": 3,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1400.7999999970198,
+          1401.2999999970198,
+          1397.7999999970198,
+          1400.3000000044703,
+          1399.1000000014901
+        ]
+      },
+      "headphones/action/far/muffled/sparse": {
+        "n": 5,
+        "correct": 2,
+        "unsure": 1,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1400.2000000029802,
+          1402.1000000014901,
+          1400.8000000044703,
+          1402.4000000059605,
+          1401.8000000044703
+        ]
+      },
+      "headphones/surface/far/clear/dense": {
+        "n": 3,
+        "correct": 0,
+        "unsure": 3,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ],
+        "reactionMs": [
+          1432.3999999985099,
+          1400.1999999955297,
+          1400.5999999940395
+        ]
+      },
+      "headphones/surface/far/clear/sparse": {
+        "n": 3,
+        "correct": 1,
+        "unsure": 0,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1433.1999999955297,
+          1416.5,
+          1399.8999999985099
+        ]
+      },
+      "headphones/surface/far/muffled/dense": {
+        "n": 3,
+        "correct": 1,
+        "unsure": 1,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1434,
+          1400.0999999940395,
+          1402
+        ]
+      },
+      "headphones/surface/near/muffled/sparse": {
+        "n": 3,
+        "correct": 0,
+        "unsure": 1,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ]
+        ],
+        "reactionMs": [
+          1483.2000000029802,
+          1398.8999999985099,
+          1401.9000000059605
+        ]
+      },
+      "headphones/surface/near/clear/sparse": {
+        "n": 3,
+        "correct": 3,
+        "unsure": 0,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1417.3999999985099,
+          1397.6999999955297,
+          1401.3999999985099
+        ]
+      },
+      "headphones/surface/near/muffled/dense": {
+        "n": 3,
+        "correct": 1,
+        "unsure": 2,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1400.1000000014901,
+          1401.1000000014901,
+          1401.1999999955297
+        ]
+      },
+      "headphones/surface/near/clear/dense": {
+        "n": 3,
+        "correct": 1,
+        "unsure": 1,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1397.8000000044703,
+          1400.7999999970198,
+          1401.4000000059605
+        ]
+      },
+      "headphones/surface/far/muffled/sparse": {
+        "n": 3,
+        "correct": 1,
+        "unsure": 0,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1401.5,
+          1400.1000000014901,
+          1400.5
+        ]
+      },
+      "headphones/weapon/near/clear/sparse": {
+        "n": 12,
+        "correct": 2,
+        "unsure": 4,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1432,
+          1433.2999999970198,
+          1400.7999999970198,
+          1402.2999999970198,
+          1399,
+          1402.4000000059605,
+          1399.2000000029802,
+          1401.7000000029802,
+          1402.2000000029802,
+          1400.2000000029802,
+          1400.6000000014901,
+          1401
+        ]
+      },
+      "headphones/weapon/far/clear/dense": {
+        "n": 12,
+        "correct": 4,
+        "unsure": 4,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1435.0999999940395,
+          1416.5,
+          1399.9000000059605,
+          1401.9000000059605,
+          1401.1000000014901,
+          1400.1000000014901,
+          1401.3000000044703,
+          1401.0999999940395,
+          1400.7000000029802,
+          1400.5,
+          1401.1999999955297,
+          1401.5
+        ]
+      },
+      "headphones/weapon/far/clear/sparse": {
+        "n": 12,
+        "correct": 7,
+        "unsure": 3,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1482.8000000044703,
+          1400,
+          1399.1000000014901,
+          1400.2999999970198,
+          1399.4000000059605,
+          1400.6000000014901,
+          1400.5,
+          1399.8999999985099,
+          1401.3999999985099,
+          1401,
+          1400.8999999985099,
+          1399.6000000014901
+        ]
+      },
+      "headphones/weapon/far/muffled/dense": {
+        "n": 12,
+        "correct": 5,
+        "unsure": 2,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1418,
+          1401.7999999970198,
+          1401.2000000029802,
+          1399.3999999985099,
+          1400.7000000029802,
+          1399.3999999985099,
+          1399.9000000059605,
+          1401.7999999970198,
+          1401.3999999985099,
+          1402.7000000029802,
+          1401,
+          1401.3999999985099
+        ]
+      },
+      "headphones/weapon/far/muffled/sparse": {
+        "n": 12,
+        "correct": 3,
+        "unsure": 8,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        ],
+        "reactionMs": [
+          1399.3999999985099,
+          1401.2999999970198,
+          1401,
+          1399.2999999970198,
+          1400.4000000059605,
+          1401,
+          1400,
+          1400,
+          1400,
+          1400.7000000029802,
+          1399.3999999985099,
+          1400.1000000014901
+        ]
+      },
+      "headphones/weapon/near/muffled/dense": {
+        "n": 12,
+        "correct": 5,
+        "unsure": 3,
+        "timeouts": 0,
+        "confusion": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1397.8999999985099,
+          1399,
+          1401.1000000014901,
+          1401.6999999955297,
+          1400.0999999940395,
+          1399.1999999955297,
+          1401.3999999985099,
+          1401.1000000014901,
+          1401.2000000029802,
+          1403.1000000014901,
+          1400.5,
+          1399.8999999985099
+        ]
+      },
+      "headphones/weapon/near/muffled/sparse": {
+        "n": 12,
+        "correct": 3,
+        "unsure": 4,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        ],
+        "reactionMs": [
+          1400.1999999955297,
+          1399,
+          1400.2999999970198,
+          1401.2000000029802,
+          1401,
+          1398.6000000014901,
+          1399.6000000014901,
+          1400.7000000029802,
+          1400.3999999985099,
+          1402.8999999985099,
+          1400.0999999940395,
+          1401.1999999955297
+        ]
+      },
+      "headphones/weapon/near/clear/dense": {
+        "n": 12,
+        "correct": 3,
+        "unsure": 4,
+        "timeouts": 0,
+        "confusion": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "reactionMs": [
+          1399.5,
+          1399.8000000044703,
+          1402,
+          1400.6000000014901,
+          1399.6000000014901,
+          1401.2000000029802,
+          1398.8999999985099,
+          1400.2000000029802,
+          1399.7999999970198,
+          1398.7999999970198,
+          1400,
+          1400.1000000014901
+        ]
+      }
+    },
+    "limitations": [
+      "Isolated repeated stimuli use fixed lab timing, not native weapon cadence.",
+      "Action weapons and step/landing variants are fractional nuisance factors.",
+      "No inference about network latency, gait synchrony, HRTF, elevation or hardware CPU."
+    ]
+  },
+  "errors": []
+}

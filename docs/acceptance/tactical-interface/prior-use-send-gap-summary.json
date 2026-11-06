@@ -1,0 +1,62 @@
+{
+  "enabledAdjacentSendCount": 174,
+  "enabledGapsAtLeast100ms": 1,
+  "largestEnabledGaps": [
+    {
+      "gapMs": 208.7,
+      "fromSeq": 2,
+      "toSeq": 3,
+      "fromStage": "setup",
+      "toStage": "setup"
+    },
+    {
+      "gapMs": 90.9,
+      "fromSeq": 190,
+      "toSeq": 191,
+      "fromStage": "after-use",
+      "toStage": "after-use"
+    },
+    {
+      "gapMs": 90.7,
+      "fromSeq": 188,
+      "toSeq": 189,
+      "fromStage": "after-use",
+      "toStage": "after-use"
+    },
+    {
+      "gapMs": 90.3,
+      "fromSeq": 189,
+      "toSeq": 190,
+      "fromStage": "after-use",
+      "toStage": "after-use"
+    },
+    {
+      "gapMs": 89.4,
+      "fromSeq": 191,
+      "toSeq": 192,
+      "fromStage": "after-use",
+      "toStage": "after-use"
+    },
+    {
+      "gapMs": 88.4,
+      "fromSeq": 11,
+      "toSeq": 12,
+      "fromStage": "setup",
+      "toStage": "setup"
+    },
+    {
+      "gapMs": 87.0,
+      "fromSeq": 10,
+      "toSeq": 11,
+      "fromStage": "setup",
+      "toStage": "setup"
+    },
+    {
+      "gapMs": 86.9,
+      "fromSeq": 33,
+      "toSeq": 34,
+      "fromStage": "setup",
+      "toStage": "setup"
+    }
+  ]
+}

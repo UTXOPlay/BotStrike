@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
@@ -19,7 +20,7 @@ try{
  await desk.locator('#practice').click();
  await desk.waitForFunction(()=>document.documentElement.dataset.playing==='true'&&!!window.testRoom?.state);
  await desk.keyboard.press('Digit2');
- await desk.waitForFunction(async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].weapon===1});
+ await waitBrowserCondition(desk,async()=>{const {room}=await(await fetch('/games/botstrike/api/state')).json();return room.state.players[room.slot].weapon===1});
  await inject(desk,true,false,[2],'gun_pickup',180);
  await desk.waitForFunction(()=>document.querySelector('#drop-marker').textContent.includes('AMMO · ION-5'));
  assert.equal(await desk.locator('#pickup-hud').isHidden(),true);

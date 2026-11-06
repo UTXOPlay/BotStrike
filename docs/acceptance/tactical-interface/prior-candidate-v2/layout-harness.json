@@ -1,0 +1,10 @@
+{
+  "immutableImage": "29a483f16f3aa0f28ae337fd805332c607e911ff76e1fcd875e1e2be4618fb5e",
+  "origin": "http://127.0.0.1:19925",
+  "harnessPath": "tests/botstrike-tactical-ui-browser.mjs",
+  "postbuildHarnessSha256": "2443cb6ce6116c169fb73e10fc31e044934fe7744bb0f6d31daff5217a2f15bd",
+  "fixtureChange": "Await two requestAnimationFrame callbacks after final CDP portrait-to-landscape rotation before reading the gate; retain all native room and held-input assertions.",
+  "priorFailure": "/tmp/botstrike-ui-final-v2-layout/failed-runs/orientation-fixture-race/failure.json",
+  "softwareRendering": true,
+  "humanParticipants": 0
+}

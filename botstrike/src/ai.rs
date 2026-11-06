@@ -2,30 +2,32 @@
 //! hidden live enemy positions never become navigation destinations.
 use super::*;
 
-fn sight(game: &Game, p: &Player, q: &Player, map: &Map) -> bool {
+fn sight(game: &Game, p: &Player, q: &Player, map: &Map, profile: &hit::Profile) -> bool {
     if p.flash > 0 || !q.alive || p.team == q.team {
         return false;
     }
     let a = eye(p);
     let b = eye(q);
-    let length = dist(a, b).max(0.001);
-    let dir = [
-        (b[0] - a[0]) / length,
-        (b[1] - a[1]) / length,
-        (b[2] - a[2]) / length,
-    ];
-    // A forward visual cone prevents instant awareness of enemies behind us.
-    let facing = -(b[0] - a[0]) * p.yaw.sin() - (b[2] - a[2]) * p.yaw.cos();
+    let length = utility_effects::distance(a, b).max(0.001);
+    let facing = direction(p.yaw, p.pitch)
+        .iter()
+        .enumerate()
+        .map(|(i, d)| d * (b[i] - a[i]))
+        .sum::<f64>();
     length < [1100., 1550., 2200.][game.config.difficulty as usize]
         && facing / length > (70_f64.to_radians()).cos()
-        && !map
-            .obstacles
+        && profile
+            .visibility_samples(q.position, q.stance, [q.yaw, q.pitch])
             .iter()
-            .any(|o| ray_box(a, dir, o.min, o.max).is_some_and(|d| d < length))
-        && !game
-            .utilities
-            .iter()
-            .any(|u| u.kind == 2 && u.fuse == 0 && segment_near(a, b, u.position, 175.))
+            .any(|point| {
+                !map.obstacles
+                    .iter()
+                    .any(|wall| sight::intersects_box(a, *point, wall))
+                    && !game
+                        .utilities
+                        .iter()
+                        .any(|u| sight::smoke_blocks(a, *point, u))
+            })
 }
 fn free(map: &Map, p: [f64; 3]) -> bool {
     p[0].abs() < map.extent - 28.
@@ -121,7 +123,7 @@ impl Game {
         let target = self
             .players
             .iter()
-            .filter(|q| sight(self, &p, q, map))
+            .filter(|q| sight(self, &p, q, map, &rules.hit_regions))
             .min_by(|a, b| {
                 let score = |q: &Player| {
                     dist(p.position, q.position)
@@ -135,6 +137,21 @@ impl Game {
             })
             .map(|q| q.slot);
         let enemy_visible = target.is_some();
+        // Radio scan positions are authorized even during optical blindness.
+        // They update navigation memory, never optical targeting or fire.
+        if target.is_none() {
+            if let Some(marked) = self
+                .players
+                .iter()
+                .filter(|q| q.alive && q.team != p.team && q.revealed > 0)
+                .min_by(|a, b| {
+                    dist(p.position, a.position).total_cmp(&dist(p.position, b.position))
+                })
+            {
+                self.players[slot].ai_last_seen = Some(marked.position);
+                self.players[slot].ai_seen_tick = self.tick;
+            }
+        }
         if let Some(other) = target {
             self.players[slot].ai_last_seen = Some(self.players[other].position);
             self.players[slot].ai_seen_tick = self.tick;
@@ -203,7 +220,7 @@ impl Game {
                 && length < weapon.range.min(2400.)
                 && (!weapon.scoped || p.scoped)
                 && (!reloading)
-                && !(length > 600. && p.recoil > 1.1);
+                && !(length > 600. && p.weapon_recoil.recoil > 1.1);
             input.scope = weapon.scoped;
             let desired_range = if weapon.pellets > 1 {
                 240.
@@ -266,7 +283,12 @@ impl Game {
             input.ability = memory.is_some() && self.tick % (HZ * 3) == slot as u32;
         }
         let mut objective_move = false;
-        if self.config.mode == "demolition" {
+        if self.config.mode == "demolition"
+            || self
+                .practice
+                .as_ref()
+                .is_some_and(|s| s.settings.drill >= 6)
+        {
             if self.objective.planted {
                 let site = self.objective.position;
                 if p.team != self.attacker {
@@ -340,7 +362,11 @@ impl Game {
         input.reload =
             p.ammo[p.weapon] == 0 || (p.ammo[p.weapon] < weapon.magazine / 3 && !enemy_visible);
         if !input.interact && (!enemy_visible || retreat || objective_move) {
-            let arrival_radius = if self.config.mode == "demolition"
+            let arrival_radius = if (self.config.mode == "demolition"
+                || self
+                    .practice
+                    .as_ref()
+                    .is_some_and(|s| s.settings.drill >= 6))
                 && p.team == self.attacker
                 && !self.objective.planted
                 && self.objective.carrier.is_none()
@@ -469,10 +495,12 @@ mod tests {
             Config {
                 map: 0,
                 mode: "deathmatch".into(),
+                ruleset: Default::default(),
                 heroes: [0; 10],
                 bots: [true; 10],
                 difficulty: 1,
                 seed: 2050,
+                practice: None,
             },
             &r,
         )
@@ -489,6 +517,51 @@ mod tests {
         g.players[5].alive = true;
         g.players[5].position = [0., 0., -300.];
         (r, g)
+    }
+    #[test]
+    fn radio_scan_updates_memory_without_optical_targeting_and_stops_tracking_at_expiry() {
+        let (mut r, mut g) = arena();
+        r.maps[0].obstacles.push(Obstacle {
+            min: [-1000., 0., -180.],
+            max: [1000., 100., -150.],
+            kind: "wall".into(),
+        });
+        g.players[0].flash = HZ;
+        g.players[5].revealed = 10;
+        let input = g.bot(0, &r);
+        assert!(!input.fire);
+        assert_eq!(g.players[0].ai_target, None);
+        assert_eq!(g.players[0].ai_last_seen, Some(g.players[5].position));
+        g.players[5].revealed = 0;
+        g.players[5].position = [200., 0., -300.];
+        g.tick += 1;
+        g.bot(0, &r);
+        assert_eq!(g.players[0].ai_last_seen, Some([0., 0., -300.]));
+    }
+    #[test]
+    fn low_cover_uses_authored_head_corners_like_service_disclosure() {
+        let (mut r, mut g) = arena();
+        g.players[5].position = [0., 0., -200.];
+        r.maps[0].obstacles.push(Obstacle {
+            min: [-1000., 0., -180.],
+            max: [1000., 69., -175.],
+            kind: "wall".into(),
+        });
+        assert!(sight(
+            &g,
+            &g.players[0],
+            &g.players[5],
+            &r.maps[0],
+            &r.hit_regions
+        ));
+        r.maps[0].obstacles[0].max[1] = 100.;
+        assert!(!sight(
+            &g,
+            &g.players[0],
+            &g.players[5],
+            &r.maps[0],
+            &r.hit_regions
+        ));
     }
     #[test]
     fn recruit_has_forward_perception_body_aim_and_reaction_time() {

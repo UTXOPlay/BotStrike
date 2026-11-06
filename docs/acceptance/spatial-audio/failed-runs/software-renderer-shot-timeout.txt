@@ -1,0 +1,37 @@
+Sampled shot missing: ARC-9 { shots: 0, seq: 30 } {
+  shots: 8,
+  seq: 44,
+  alive: true,
+  weapon: 0,
+  startedShots: [
+                   0.11, 0.28002083333333333,               0.125,
+                  0.125,               0.125,               0.125,
+                  0.125,               0.125,               0.125,
+                  0.125,               0.125,               0.125,
+                  0.125,               0.125,               0.125,
+                  0.125,               0.125,               0.125,
+                   0.11,                0.11,               0.125,
+                  0.125,               0.125,               0.125,
+                   0.11,                0.11,                0.11,
+                   0.11,               0.125,               0.125,
+                  0.125,                0.11,                0.11,
+                   0.19,                0.11,                0.11,
+                   0.11, 0.28002083333333333,               0.125,
+                  0.125,                0.11,                0.11,
+    0.28002083333333333,                0.19,               0.125,
+                  0.125,               0.125, 0.28002083333333333,
+                  0.125,                0.19,                0.19,
+    0.28002083333333333,               0.125,                0.11
+  ],
+  playing: 'true'
+} []
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 1500ms exceeded.
+    at /home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-shot-audio-browser.mjs:35:18 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.1

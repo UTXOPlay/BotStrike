@@ -1,0 +1,445 @@
+{
+  "data": "/tmp/botstrike-utility-flow-J1tp8V",
+  "profile": "ecc7a7390587866a790d61f71dde87765088f85935eb54e4f637ac9e21fa56bd",
+  "signedReplay": true,
+  "tamperRejected": true,
+  "careerMatches": 0,
+  "results": [
+    {
+      "requestedCadence": 30,
+      "transportCadence": 30,
+      "mode": 0,
+      "samples": 91,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 13,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          99.1940905527325,
+          160,
+          -591.7436373966486
+        ]
+      },
+      "landing": [
+        -929.6235833230114,
+        8.000001,
+        1049.4586707719736
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 0,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 30,
+      "transportCadence": 30,
+      "mode": 1,
+      "samples": 92,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 150,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          46.29057559127517,
+          100,
+          -276.1470307851027
+        ]
+      },
+      "landing": [
+        -1016.693551454368,
+        8.000001,
+        789.7501570744066
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 1,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 30,
+      "transportCadence": 30,
+      "mode": 2,
+      "samples": 92,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 288,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          135.56525708873443,
+          200,
+          -808.7163044420864
+        ]
+      },
+      "landing": [
+        -857.4275756430637,
+        8.000001,
+        1155.5991078993698
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 2,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 60,
+      "transportCadence": 60,
+      "mode": 0,
+      "samples": 92,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 425,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          99.1940905527325,
+          160,
+          -591.7436373966486
+        ]
+      },
+      "landing": [
+        -929.6235833230114,
+        8.000001,
+        1049.4586707719736
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 0,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 60,
+      "transportCadence": 60,
+      "mode": 1,
+      "samples": 92,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 563,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          46.29057559127517,
+          100,
+          -276.1470307851027
+        ]
+      },
+      "landing": [
+        -1016.693551454368,
+        8.000001,
+        789.7501570744066
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 1,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 60,
+      "transportCadence": 60,
+      "mode": 2,
+      "samples": 90,
+      "reconnected": true,
+      "trajectoryMatched": true,
+      "releaseTick": 701,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          135.56525708873443,
+          200,
+          -808.7163044420864
+        ]
+      },
+      "landing": [
+        -857.4275756430637,
+        8.000001,
+        1155.5991078993698
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 2,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 120,
+      "transportCadence": 60,
+      "mode": 0,
+      "samples": 92,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 840,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          99.1940905527325,
+          160,
+          -591.7436373966486
+        ]
+      },
+      "landing": [
+        -929.6235833230114,
+        8.000001,
+        1049.4586707719736
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 0,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 120,
+      "transportCadence": 60,
+      "mode": 1,
+      "samples": 92,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 978,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          46.29057559127517,
+          100,
+          -276.1470307851027
+        ]
+      },
+      "landing": [
+        -1016.693551454368,
+        8.000001,
+        789.7501570744066
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 1,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    },
+    {
+      "requestedCadence": 120,
+      "transportCadence": 60,
+      "mode": 2,
+      "samples": 92,
+      "reconnected": false,
+      "trajectoryMatched": true,
+      "releaseTick": 1115,
+      "initial": {
+        "fuse": 128,
+        "kind": 2,
+        "life": 896,
+        "owner": 0,
+        "position": [
+          -1070,
+          56,
+          1050
+        ],
+        "velocity": [
+          135.56525708873443,
+          200,
+          -808.7163044420864
+        ]
+      },
+      "landing": [
+        -857.4275756430637,
+        8.000001,
+        1155.5991078993698
+      ],
+      "pose": {
+        "map": 0,
+        "mode": 2,
+        "kind": 2,
+        "position": [
+          -1070,
+          0,
+          1050
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "yaw": -0.166086,
+        "pitch": 0,
+        "stance": 0
+      }
+    }
+  ],
+  "limitations": [
+    "Input-rate and controller tests are automated; not human feel or physical-device acceptance.",
+    "Spawn-to-A lineup references are provisional until flagship-map playtests."
+  ]
+}

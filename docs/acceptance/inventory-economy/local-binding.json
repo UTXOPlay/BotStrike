@@ -1,0 +1,20 @@
+{
+  "status": "local validation candidate only; portable image and human acceptance separate",
+  "version": "botstrike-2050-tactical-v5",
+  "nativeModel": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+  "profile": "32c42de096ebdb1730239627ccffc735c08ba9fb4af366332670b9282105fe29",
+  "sha256": {
+    "botstrike/spec.json": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+    "botstrike/src/lib.rs": "4a2f1eed45255082dcadfc9742939160176dd59bdc14dc1d10657830efaac73c",
+    "botstrike/src/inventory.rs": "814e24098a53905b2bac7b2e3d26d7c9ad85d8777663338a9e2511f7a28372c8",
+    "botstrike/src/economy.rs": "7d7b934c91474e4f8afe41a6422124292040c29235d414d36f37975967187a9c",
+    "botstrike/src/main.rs": "27e3b4522ab5551d84180e02de2fba6720012483515a97e6d339bac7e7bea477",
+    "botstrike-service/server.mjs": "c93e373460c868b3bcab349eb7658e2975bbb5818bc309be827bec288900076d",
+    "botstrike-service/tactical.mjs": "bc521705c14cc42fa9f19e44f7d1796da8f1d7963097fd8f2867c7f627357e9a",
+    "games/botstrike/client/main.mjs": "00c6c380923d2adb14e204d1cf520190f725ebbd2086a6870cd53a09909055a9",
+    "games/botstrike/client/tactical-view.mjs": "c87326c296150bc0683ff84f1869feb0a2688b14297966a2233bad2af3e82e28",
+    "games/botstrike/client/feedback.mjs": "ba4abdc29e13ee0c4c5bf9bde1a19f7940bdea55ea0514022d8ae047338a520f",
+    "release/botstrike-engine": "fa00528c35841e597234d1550a88e50badee8ec138a7ce65c3e4b0f350ce6d93",
+    "release/myelin-botstrike": "41f1d5e5e0c180446702e216beff6258bc3622f2e9cf8d7f872ceff89af0e8d2"
+  }
+}

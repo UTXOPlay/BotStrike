@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: controls avoid browser modifiers, swap conflicts and preserve validated preferences
+ok 1 - controls avoid browser modifiers, swap conflicts and preserve validated preferences
+  ---
+  duration_ms: 2.321476
+  type: 'test'
+  ...
+# Subtest: reticle follows native spread multipliers without modifying aim
+ok 2 - reticle follows native spread multipliers without modifying aim
+  ---
+  duration_ms: 0.228812
+  type: 'test'
+  ...
+# Subtest: sound discloses coarse direction and loudness, never hidden coordinates or distant shots
+ok 3 - sound discloses coarse direction and loudness, never hidden coordinates or distant shots
+  ---
+  duration_ms: 0.846202
+  type: 'test'
+  ...
+# Subtest: footsteps respect walk/crouch and reload/landing only occur on transitions
+ok 4 - footsteps respect walk/crouch and reload/landing only occur on transitions
+  ---
+  duration_ms: 0.421542
+  type: 'test'
+  ...
+# Subtest: events survive skipped snapshots but repeated state responses never play them twice
+ok 5 - events survive skipped snapshots but repeated state responses never play them twice
+  ---
+  duration_ms: 0.43575
+  type: 'test'
+  ...
+# Subtest: career excludes AI takeover, commits once, recovers and survives recording expiration
+ok 6 - career excludes AI takeover, commits once, recovers and survives recording expiration
+  ---
+  duration_ms: 14.73372
+  type: 'test'
+  ...
+# Subtest: spectator disclosure follows a living teammate and refuses an enemy viewpoint
+ok 7 - spectator disclosure follows a living teammate and refuses an enemy viewpoint
+  ---
+  duration_ms: 3.671211
+  type: 'test'
+  ...
+# Subtest: Colemak labels match physical inputs and custom keys survive layout changes
+ok 8 - Colemak labels match physical inputs and custom keys survive layout changes
+  ---
+  duration_ms: 0.472031
+  type: 'test'
+  ...
+# Subtest: visible motion is life-bound and corpses still respect walls and smoke
+ok 9 - visible motion is life-bound and corpses still respect walls and smoke
+  ---
+  duration_ms: 2.084386
+  type: 'test'
+  ...
+# Subtest: public snapshots never bypass event entitlement with raw native events
+ok 10 - public snapshots never bypass event entitlement with raw native events
+  ---
+  duration_ms: 2.296912
+  type: 'test'
+  ...
+# Subtest: confirmed damage accounting goes only to the attacker and victim, including global kills
+ok 11 - confirmed damage accounting goes only to the attacker and victim, including global kills
+  ---
+  duration_ms: 0.29849
+  type: 'test'
+  ...
+# Subtest: hidden enemy projectiles are absent; visible objects never identify their owner or inherited velocity
+ok 12 - hidden enemy projectiles are absent; visible objects never identify their owner or inherited velocity
+  ---
+  duration_ms: 3.346845
+  type: 'test'
+  ...
+# Subtest: deployed smoke uses its visible volume, including near edges and the inside
+ok 13 - deployed smoke uses its visible volume, including near edges and the inside
+  ---
+  duration_ms: 0.2409
+  type: 'test'
+  ...
+# Subtest: objective hides carrier, actor, progress and dropped location until legitimately disclosed
+ok 14 - objective hides carrier, actor, progress and dropped location until legitimately disclosed
+  ---
+  duration_ms: 1.123785
+  type: 'test'
+  ...
+# Subtest: plant announcement remains global without revealing the hidden planter
+ok 15 - plant announcement remains global without revealing the hidden planter
+  ---
+  duration_ms: 0.274258
+  type: 'test'
+  ...
+# Subtest: snapshot and animation feedback share authored head visibility samples
+ok 16 - snapshot and animation feedback share authored head visibility samples
+  ---
+  duration_ms: 0.360757
+  type: 'test'
+  ...
+# Subtest: dead seats follow living squad views and cannot use enemy or dead views, including revealed targets
+ok 17 - dead seats follow living squad views and cannot use enemy or dead views, including revealed targets
+  ---
+  duration_ms: 0.291056
+  type: 'test'
+  ...
+# Subtest: radio reveal exposes location without optical pose, motion, IFF, assistance or objective interactions
+ok 18 - radio reveal exposes location without optical pose, motion, IFF, assistance or objective interactions
+  ---
+  duration_ms: 0.533816
+  type: 'test'
+  ...
+# Subtest: world audio and personal damage point to impact rather than hidden owner and never disclose the precise origin
+ok 19 - world audio and personal damage point to impact rather than hidden owner and never disclose the precise origin
+  ---
+  duration_ms: 0.299238
+  type: 'test'
+  ...
+# Subtest: flash is equally opaque in reduced motion and follows the authorized living spectator
+ok 20 - flash is equally opaque in reduced motion and follows the authorized living spectator
+  ---
+  duration_ms: 0.334251
+  type: 'test'
+  ...
+# Subtest: tactical requires explicit private demolition and ten ready connected seats
+ok 21 - tactical requires explicit private demolition and ten ready connected seats
+  ---
+  duration_ms: 1.155927
+  type: 'test'
+  ...
+# Subtest: human selections displace placeholders but cannot duplicate a squad chassis
+ok 22 - human selections displace placeholders but cannot duplicate a squad chassis
+  ---
+  duration_ms: 0.997986
+  type: 'test'
+  ...
+# Subtest: drop and life are bounded recorded actions with old casual input compatibility
+ok 23 - drop and life are bounded recorded actions with old casual input compatibility
+  ---
+  duration_ms: 0.412897
+  type: 'test'
+  ...
+# Subtest: fresh purchase cannot reauthorize stale drops, grenades or firing
+ok 24 - fresh purchase cannot reauthorize stale drops, grenades or firing
+  ---
+  duration_ms: 0.132954
+  type: 'test'
+  ...
+# Subtest: team forecast derives rewards and replacement from source and entitled squad only
+ok 25 - team forecast derives rewards and replacement from source and entitled squad only
+  ---
+  duration_ms: 1.043328
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 144.816744

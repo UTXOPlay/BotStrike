@@ -1,23 +1,28 @@
-import {intersectsBox,canSee} from './visibility.mjs';
+import {weaponAudioEvents} from '../shared/weapon-audio-events.mjs';
+import {MovementAudioClock} from './movement-audio.mjs';
+import {intersectsBox,canSeeOptically} from './visibility.mjs';
+import {eyeHeight} from '../shared/sight-geometry.mjs';
 const globalKinds=new Set(['round','planted','defused','detonation','elimination','time','match_end','kill']);
-const personalKinds=new Set(['hit','headshot','buy','respawn','pickup','gun_pickup','ammo_pickup']);
-const audibleKinds=new Set(['shot','step','land','reload','skill','item','utility','plasma']);
+const personalKinds=new Set(['hit','headshot','buy','respawn','pickup','gun_pickup','gun_drop','ammo_pickup']);
+const audibleKinds=new Set(['shot','step','land','reload','reload_feed','reload_close','equip','skill','item','utility','plasma']);
 export function spatialCue(listener,source,map,range=1300){
- const dx=source.position[0]-listener.position[0],dz=source.position[2]-listener.position[2],distance=Math.hypot(dx,dz);
+ const eye=p=>p.world?p.position:[p.position[0],p.position[1]+eyeHeight(p),p.position[2]];
+ const a=eye(listener),b=eye(source),dx=b[0]-a[0],dz=b[2]-a[2],distance=Math.hypot(dx,b[1]-a[1],dz);
  if(distance>range)return null;
- const eye=p=>[p.position[0],p.position[1]+45,p.position[2]];
- const occluded=map.obstacles.some(box=>intersectsBox(eye(listener),eye(source),box));
+ const occluded=map.obstacles.some(box=>intersectsBox(a,b,box));
  // Direction and loudness are deliberately coarse. Never send hidden positions.
  return {bearing:Math.round(Math.atan2(dx,-dz)/(Math.PI/4))*Math.PI/4,level:(distance<range/3?1:distance<range*2/3?.6:.3)*(occluded?.35:1),muffled:occluded};
 }
-export function frameEvents(state,previous,spec){
- const events=state.events.map(e=>({...e}));
- for(const p of state.players){const old=previous?.players[p.slot];if(!old||!p.alive)continue;
-  if(p.reload>0&&!old.reload)events.push({kind:'reload',actor:p.slot,value:p.weapon});
-  if(old.position[1]>1&&p.position[1]<=.01)events.push({kind:'land',actor:p.slot});
-  const threshold=spec.heroes[p.hero].speed*(spec.weapons[p.weapon].mobility||1)*.7;
-  if(state.phase==='live'&&!p.crouch&&p.position[1]<=.01&&Math.hypot(p.velocity[0],p.velocity[2])>threshold&&(state.tick+p.slot*3)%22===0)events.push({kind:'step',actor:p.slot});
+export function frameEvents(state,previous,spec,movement=new MovementAudioClock()){
+ const pending=weaponAudioEvents(state,previous,spec),events=[];
+ for(const e of state.events){
+  // A held shot may spend the replenished round in the completion tick. Keep
+  // the mechanism close before that actor's first shot, without reordering the
+  // native events or scheduling a completion after an interrupted reload.
+  if(e.kind==='shot'){const i=pending.findIndex(a=>a.kind==='reload_close'&&a.actor===e.actor&&a.value===e.value);if(i>=0)events.push(...pending.splice(i,1));}
+  events.push({...e});
  }
+ events.push(...pending,...movement.advance(state,previous,spec));
  return events.map((e,i)=>({...e,id:state.tick+':'+i,tick:state.tick}));
 }
 export function feedbackFor(events,state,slot,spec,spectate=null){
@@ -29,26 +34,27 @@ export function feedbackFor(events,state,slot,spec,spectate=null){
  for(const e of events){
   // Motion is disclosed only for a visible subject at event time. Audible
   // cues for hidden opponents still have no actor or precise coordinates.
-  const action=e.kind==='item'&&e.value>=6?'use_item':({shot:'fire',reload:'reload',skill:'skill',item:'utility',utility:'utility',plasma:'utility',hit:'hit',headshot:'hit',land:'land'})[e.kind];
+  const action=e.kind==='item'&&e.value>=6?'use_item':({shot:'fire',reload:'reload',skill:'skill',item:'utility',hit:'hit',headshot:'hit',land:'land'})[e.kind];
   const subject=state.players[['hit','headshot'].includes(e.kind)?e.target:e.actor];
-  if(action&&subject&&canSee(state,listener,subject,map))out.push({id:e.id+':motion',tick:e.tick,kind:'motion',action,actor:subject.slot,life:subject.life,value:e.value});
-  if(globalKinds.has(e.kind)){out.push(e);continue;}
+  if(action&&subject&&(listener.team===subject.team||canSeeOptically(state,listener,subject,map,spec.hit_regions)))out.push({id:e.id+':motion',tick:e.tick,kind:'motion',action,actor:subject.slot,life:subject.life,value:e.value});
+  const {origin,...withoutOrigin}=e;
+  if(globalKinds.has(e.kind)){const {damage,...publicEvent}=withoutOrigin;if(['planted','defused'].includes(e.kind)&&subject&&subject.team!==listener.team&&!canSeeOptically(state,listener,subject,map,spec.hit_regions))delete publicEvent.actor;out.push(e.actor===slot||e.target===slot?withoutOrigin:publicEvent);continue;}
   if(personalKinds.has(e.kind)){
    if(e.actor!==slot&&e.target!==slot)continue;
-   const source=state.players[e.actor];
-   out.push({...e,...(e.target===slot&&source?{bearing:spatialCue(self,source,{obstacles:[]},Infinity).bearing}:{} )});continue;
+   const source=origin?{position:origin,world:true}:state.players[e.actor];
+   out.push({...withoutOrigin,...(e.target===slot&&source?{bearing:spatialCue(self,source,{obstacles:[]},Infinity).bearing}:{} )});continue;
   }
-  if(!audibleKinds.has(e.kind))continue;
-  const source=state.players[e.actor];if(!source)continue;
+  if(!audibleKinds.has(e.kind)||listener.alive===false)continue;
+  const source=origin?{position:origin,world:true}:state.players[e.actor];if(!source)continue;
   const sound=spatialCue(listener,source,map,['step','land'].includes(e.kind)?600:1300);if(!sound)continue;
-  out.push({id:e.id,tick:e.tick,kind:e.kind,value:e.value,self:e.actor===slot,...sound});
+  out.push({id:e.id,tick:e.tick,kind:e.kind,value:e.value,self:e.actor===slot&&!origin,...sound});
  }
  return out;
 }
 // A short rolling window survives skipped snapshots and reconnects. The client
 // deduplicates IDs and suppresses old sounds; this never changes the signed tape.
 export function collectFeedback(room,previous,spec){
- const state=room.state,events=frameEvents(state,previous,spec);room.feedback??=new Map();
+ const state=room.state;room.movementAudio??=new MovementAudioClock();const events=frameEvents(state,previous,spec,room.movementAudio);room.audioGait=room.movementAudio.view();room.feedback??=new Map();
  for(const [slot,id]of room.members.entries())if(!id.startsWith('bot-')){
   const ring=room.feedback.get(id)||[];ring.push(...feedbackFor(events,state,slot,spec,room.spectating?.[id]));
   room.feedback.set(id,ring.filter(e=>e.tick>=state.tick-128).slice(-192));

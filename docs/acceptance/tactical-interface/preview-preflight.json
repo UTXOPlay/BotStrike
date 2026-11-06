@@ -1,0 +1,9 @@
+{
+  "imageId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+  "containerId": "9d71827d41ec8737c7fdf83e6b0224439765992d3c3a7dcf35cf43de780da0e1",
+  "origin": "http://127.0.0.1:19925",
+  "healthStatus": 200,
+  "guestStatus": 200,
+  "nativeSocketStateReceived": true,
+  "roomCreated": false
+}

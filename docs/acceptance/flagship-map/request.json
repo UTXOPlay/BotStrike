@@ -1,0 +1,6636 @@
+{
+  "map": 0,
+  "anchors": [
+    {
+      "id": "attack_spawn",
+      "name": "Attack Spawn",
+      "position": [
+        -940,
+        0,
+        1050
+      ]
+    },
+    {
+      "id": "defense_spawn",
+      "name": "Defense Spawn",
+      "position": [
+        940,
+        0,
+        -1050
+      ]
+    },
+    {
+      "id": "a_pad",
+      "name": "A Plant Pad",
+      "position": [
+        -730,
+        0,
+        -680
+      ]
+    },
+    {
+      "id": "b_pad",
+      "name": "B Plant Pad",
+      "position": [
+        760,
+        0,
+        650
+      ]
+    },
+    {
+      "id": "west_gate",
+      "name": "West Lane",
+      "position": [
+        -1100,
+        0,
+        250
+      ]
+    },
+    {
+      "id": "east_gate",
+      "name": "East Lane",
+      "position": [
+        1100,
+        0,
+        -250
+      ]
+    },
+    {
+      "id": "mid_south",
+      "name": "South Mid",
+      "position": [
+        80,
+        0,
+        600
+      ]
+    },
+    {
+      "id": "mid_north",
+      "name": "North Mid",
+      "position": [
+        -80,
+        0,
+        -700
+      ]
+    },
+    {
+      "id": "mid_west",
+      "name": "West Mid",
+      "position": [
+        -200,
+        0,
+        -200
+      ]
+    },
+    {
+      "id": "mid_east",
+      "name": "East Mid",
+      "position": [
+        250,
+        0,
+        200
+      ]
+    },
+    {
+      "id": "a_entry",
+      "name": "A Approach",
+      "position": [
+        -700,
+        0,
+        -350
+      ]
+    },
+    {
+      "id": "b_entry",
+      "name": "B Approach",
+      "position": [
+        700,
+        0,
+        400
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "spawn-0-a_pad-h0-w2-run",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h0-w2-run",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h0-w2-run",
+      "slot": 1,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h0-w2-run",
+      "slot": 1,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h0-w2-run",
+      "slot": 2,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h0-w2-run",
+      "slot": 2,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h0-w2-run",
+      "slot": 3,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h0-w2-run",
+      "slot": 3,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h0-w2-run",
+      "slot": 4,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h0-w2-run",
+      "slot": 4,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h0-w2-run",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h0-w2-run",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h0-w2-run",
+      "slot": 6,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h0-w2-run",
+      "slot": 6,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h0-w2-run",
+      "slot": 7,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h0-w2-run",
+      "slot": 7,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h0-w2-run",
+      "slot": 8,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h0-w2-run",
+      "slot": 8,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h0-w2-run",
+      "slot": 9,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h0-w2-run",
+      "slot": 9,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h0-w7-run",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h0-w7-run",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h0-w7-run",
+      "slot": 1,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h0-w7-run",
+      "slot": 1,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h0-w7-run",
+      "slot": 2,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h0-w7-run",
+      "slot": 2,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h0-w7-run",
+      "slot": 3,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h0-w7-run",
+      "slot": 3,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h0-w7-run",
+      "slot": 4,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h0-w7-run",
+      "slot": 4,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h0-w7-run",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h0-w7-run",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h0-w7-run",
+      "slot": 6,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h0-w7-run",
+      "slot": 6,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h0-w7-run",
+      "slot": 7,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h0-w7-run",
+      "slot": 7,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h0-w7-run",
+      "slot": 8,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h0-w7-run",
+      "slot": 8,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h0-w7-run",
+      "slot": 9,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h0-w7-run",
+      "slot": 9,
+      "hero": 0,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h0-w11-run",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h0-w11-run",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h0-w11-run",
+      "slot": 1,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h0-w11-run",
+      "slot": 1,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h0-w11-run",
+      "slot": 2,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h0-w11-run",
+      "slot": 2,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h0-w11-run",
+      "slot": 3,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h0-w11-run",
+      "slot": 3,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h0-w11-run",
+      "slot": 4,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h0-w11-run",
+      "slot": 4,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h0-w11-run",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h0-w11-run",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h0-w11-run",
+      "slot": 6,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h0-w11-run",
+      "slot": 6,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h0-w11-run",
+      "slot": 7,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h0-w11-run",
+      "slot": 7,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h0-w11-run",
+      "slot": 8,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h0-w11-run",
+      "slot": 8,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h0-w11-run",
+      "slot": 9,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h0-w11-run",
+      "slot": 9,
+      "hero": 0,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h1-w2-run",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h1-w2-run",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h1-w2-run",
+      "slot": 1,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h1-w2-run",
+      "slot": 1,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h1-w2-run",
+      "slot": 2,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h1-w2-run",
+      "slot": 2,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h1-w2-run",
+      "slot": 3,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h1-w2-run",
+      "slot": 3,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h1-w2-run",
+      "slot": 4,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h1-w2-run",
+      "slot": 4,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h1-w2-run",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h1-w2-run",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h1-w2-run",
+      "slot": 6,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h1-w2-run",
+      "slot": 6,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h1-w2-run",
+      "slot": 7,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h1-w2-run",
+      "slot": 7,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h1-w2-run",
+      "slot": 8,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h1-w2-run",
+      "slot": 8,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h1-w2-run",
+      "slot": 9,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h1-w2-run",
+      "slot": 9,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h1-w7-run",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h1-w7-run",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h1-w7-run",
+      "slot": 1,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h1-w7-run",
+      "slot": 1,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h1-w7-run",
+      "slot": 2,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h1-w7-run",
+      "slot": 2,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h1-w7-run",
+      "slot": 3,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h1-w7-run",
+      "slot": 3,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h1-w7-run",
+      "slot": 4,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h1-w7-run",
+      "slot": 4,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h1-w7-run",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h1-w7-run",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h1-w7-run",
+      "slot": 6,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h1-w7-run",
+      "slot": 6,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h1-w7-run",
+      "slot": 7,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h1-w7-run",
+      "slot": 7,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h1-w7-run",
+      "slot": 8,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h1-w7-run",
+      "slot": 8,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h1-w7-run",
+      "slot": 9,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h1-w7-run",
+      "slot": 9,
+      "hero": 1,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h1-w11-run",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h1-w11-run",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h1-w11-run",
+      "slot": 1,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h1-w11-run",
+      "slot": 1,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h1-w11-run",
+      "slot": 2,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h1-w11-run",
+      "slot": 2,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h1-w11-run",
+      "slot": 3,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h1-w11-run",
+      "slot": 3,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h1-w11-run",
+      "slot": 4,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h1-w11-run",
+      "slot": 4,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h1-w11-run",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h1-w11-run",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h1-w11-run",
+      "slot": 6,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h1-w11-run",
+      "slot": 6,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h1-w11-run",
+      "slot": 7,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h1-w11-run",
+      "slot": 7,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h1-w11-run",
+      "slot": 8,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h1-w11-run",
+      "slot": 8,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h1-w11-run",
+      "slot": 9,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h1-w11-run",
+      "slot": 9,
+      "hero": 1,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h2-w2-run",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h2-w2-run",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h2-w2-run",
+      "slot": 1,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h2-w2-run",
+      "slot": 1,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h2-w2-run",
+      "slot": 2,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h2-w2-run",
+      "slot": 2,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h2-w2-run",
+      "slot": 3,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h2-w2-run",
+      "slot": 3,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h2-w2-run",
+      "slot": 4,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h2-w2-run",
+      "slot": 4,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h2-w2-run",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h2-w2-run",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h2-w2-run",
+      "slot": 6,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h2-w2-run",
+      "slot": 6,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h2-w2-run",
+      "slot": 7,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h2-w2-run",
+      "slot": 7,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h2-w2-run",
+      "slot": 8,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h2-w2-run",
+      "slot": 8,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h2-w2-run",
+      "slot": 9,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h2-w2-run",
+      "slot": 9,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h2-w7-run",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h2-w7-run",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h2-w7-run",
+      "slot": 1,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h2-w7-run",
+      "slot": 1,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h2-w7-run",
+      "slot": 2,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h2-w7-run",
+      "slot": 2,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h2-w7-run",
+      "slot": 3,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h2-w7-run",
+      "slot": 3,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h2-w7-run",
+      "slot": 4,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h2-w7-run",
+      "slot": 4,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h2-w7-run",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h2-w7-run",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h2-w7-run",
+      "slot": 6,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h2-w7-run",
+      "slot": 6,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h2-w7-run",
+      "slot": 7,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h2-w7-run",
+      "slot": 7,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h2-w7-run",
+      "slot": 8,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h2-w7-run",
+      "slot": 8,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h2-w7-run",
+      "slot": 9,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h2-w7-run",
+      "slot": 9,
+      "hero": 2,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h2-w11-run",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h2-w11-run",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h2-w11-run",
+      "slot": 1,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h2-w11-run",
+      "slot": 1,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h2-w11-run",
+      "slot": 2,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h2-w11-run",
+      "slot": 2,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h2-w11-run",
+      "slot": 3,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h2-w11-run",
+      "slot": 3,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h2-w11-run",
+      "slot": 4,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h2-w11-run",
+      "slot": 4,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h2-w11-run",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h2-w11-run",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h2-w11-run",
+      "slot": 6,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h2-w11-run",
+      "slot": 6,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h2-w11-run",
+      "slot": 7,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h2-w11-run",
+      "slot": 7,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h2-w11-run",
+      "slot": 8,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h2-w11-run",
+      "slot": 8,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h2-w11-run",
+      "slot": 9,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h2-w11-run",
+      "slot": 9,
+      "hero": 2,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h3-w2-run",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h3-w2-run",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h3-w2-run",
+      "slot": 1,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h3-w2-run",
+      "slot": 1,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h3-w2-run",
+      "slot": 2,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h3-w2-run",
+      "slot": 2,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h3-w2-run",
+      "slot": 3,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h3-w2-run",
+      "slot": 3,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h3-w2-run",
+      "slot": 4,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h3-w2-run",
+      "slot": 4,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h3-w2-run",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h3-w2-run",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h3-w2-run",
+      "slot": 6,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h3-w2-run",
+      "slot": 6,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h3-w2-run",
+      "slot": 7,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h3-w2-run",
+      "slot": 7,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h3-w2-run",
+      "slot": 8,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h3-w2-run",
+      "slot": 8,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h3-w2-run",
+      "slot": 9,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h3-w2-run",
+      "slot": 9,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h3-w7-run",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h3-w7-run",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h3-w7-run",
+      "slot": 1,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h3-w7-run",
+      "slot": 1,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h3-w7-run",
+      "slot": 2,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h3-w7-run",
+      "slot": 2,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h3-w7-run",
+      "slot": 3,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h3-w7-run",
+      "slot": 3,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h3-w7-run",
+      "slot": 4,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h3-w7-run",
+      "slot": 4,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h3-w7-run",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h3-w7-run",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h3-w7-run",
+      "slot": 6,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h3-w7-run",
+      "slot": 6,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h3-w7-run",
+      "slot": 7,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h3-w7-run",
+      "slot": 7,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h3-w7-run",
+      "slot": 8,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h3-w7-run",
+      "slot": 8,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h3-w7-run",
+      "slot": 9,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h3-w7-run",
+      "slot": 9,
+      "hero": 3,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h3-w11-run",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h3-w11-run",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h3-w11-run",
+      "slot": 1,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h3-w11-run",
+      "slot": 1,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h3-w11-run",
+      "slot": 2,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h3-w11-run",
+      "slot": 2,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h3-w11-run",
+      "slot": 3,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h3-w11-run",
+      "slot": 3,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h3-w11-run",
+      "slot": 4,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h3-w11-run",
+      "slot": 4,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h3-w11-run",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h3-w11-run",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h3-w11-run",
+      "slot": 6,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h3-w11-run",
+      "slot": 6,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h3-w11-run",
+      "slot": 7,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h3-w11-run",
+      "slot": 7,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h3-w11-run",
+      "slot": 8,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h3-w11-run",
+      "slot": 8,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h3-w11-run",
+      "slot": 9,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h3-w11-run",
+      "slot": 9,
+      "hero": 3,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h4-w2-run",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h4-w2-run",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h4-w2-run",
+      "slot": 1,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h4-w2-run",
+      "slot": 1,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h4-w2-run",
+      "slot": 2,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h4-w2-run",
+      "slot": 2,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h4-w2-run",
+      "slot": 3,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h4-w2-run",
+      "slot": 3,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h4-w2-run",
+      "slot": 4,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h4-w2-run",
+      "slot": 4,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h4-w2-run",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h4-w2-run",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h4-w2-run",
+      "slot": 6,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h4-w2-run",
+      "slot": 6,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h4-w2-run",
+      "slot": 7,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h4-w2-run",
+      "slot": 7,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h4-w2-run",
+      "slot": 8,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h4-w2-run",
+      "slot": 8,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h4-w2-run",
+      "slot": 9,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h4-w2-run",
+      "slot": 9,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h4-w7-run",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h4-w7-run",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h4-w7-run",
+      "slot": 1,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h4-w7-run",
+      "slot": 1,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h4-w7-run",
+      "slot": 2,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h4-w7-run",
+      "slot": 2,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h4-w7-run",
+      "slot": 3,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h4-w7-run",
+      "slot": 3,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h4-w7-run",
+      "slot": 4,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h4-w7-run",
+      "slot": 4,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h4-w7-run",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h4-w7-run",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h4-w7-run",
+      "slot": 6,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h4-w7-run",
+      "slot": 6,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h4-w7-run",
+      "slot": 7,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h4-w7-run",
+      "slot": 7,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h4-w7-run",
+      "slot": 8,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h4-w7-run",
+      "slot": 8,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h4-w7-run",
+      "slot": 9,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h4-w7-run",
+      "slot": 9,
+      "hero": 4,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h4-w11-run",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h4-w11-run",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h4-w11-run",
+      "slot": 1,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h4-w11-run",
+      "slot": 1,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h4-w11-run",
+      "slot": 2,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h4-w11-run",
+      "slot": 2,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h4-w11-run",
+      "slot": 3,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h4-w11-run",
+      "slot": 3,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h4-w11-run",
+      "slot": 4,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h4-w11-run",
+      "slot": 4,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h4-w11-run",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h4-w11-run",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h4-w11-run",
+      "slot": 6,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h4-w11-run",
+      "slot": 6,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h4-w11-run",
+      "slot": 7,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h4-w11-run",
+      "slot": 7,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h4-w11-run",
+      "slot": 8,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h4-w11-run",
+      "slot": 8,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h4-w11-run",
+      "slot": 9,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h4-w11-run",
+      "slot": 9,
+      "hero": 4,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h5-w2-run",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h5-w2-run",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h5-w2-run",
+      "slot": 1,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h5-w2-run",
+      "slot": 1,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h5-w2-run",
+      "slot": 2,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h5-w2-run",
+      "slot": 2,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h5-w2-run",
+      "slot": 3,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h5-w2-run",
+      "slot": 3,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h5-w2-run",
+      "slot": 4,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h5-w2-run",
+      "slot": 4,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h5-w2-run",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h5-w2-run",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h5-w2-run",
+      "slot": 6,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h5-w2-run",
+      "slot": 6,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h5-w2-run",
+      "slot": 7,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h5-w2-run",
+      "slot": 7,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h5-w2-run",
+      "slot": 8,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h5-w2-run",
+      "slot": 8,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h5-w2-run",
+      "slot": 9,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h5-w2-run",
+      "slot": 9,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h5-w7-run",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h5-w7-run",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h5-w7-run",
+      "slot": 1,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h5-w7-run",
+      "slot": 1,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h5-w7-run",
+      "slot": 2,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h5-w7-run",
+      "slot": 2,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h5-w7-run",
+      "slot": 3,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h5-w7-run",
+      "slot": 3,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h5-w7-run",
+      "slot": 4,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h5-w7-run",
+      "slot": 4,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h5-w7-run",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h5-w7-run",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h5-w7-run",
+      "slot": 6,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h5-w7-run",
+      "slot": 6,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h5-w7-run",
+      "slot": 7,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h5-w7-run",
+      "slot": 7,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h5-w7-run",
+      "slot": 8,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h5-w7-run",
+      "slot": 8,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h5-w7-run",
+      "slot": 9,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h5-w7-run",
+      "slot": 9,
+      "hero": 5,
+      "weapon": 7,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h5-w11-run",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h5-w11-run",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-a_pad-h5-w11-run",
+      "slot": 1,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-1-b_pad-h5-w11-run",
+      "slot": 1,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-a_pad-h5-w11-run",
+      "slot": 2,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-2-b_pad-h5-w11-run",
+      "slot": 2,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-a_pad-h5-w11-run",
+      "slot": 3,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-3-b_pad-h5-w11-run",
+      "slot": 3,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-a_pad-h5-w11-run",
+      "slot": 4,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-4-b_pad-h5-w11-run",
+      "slot": 4,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h5-w11-run",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h5-w11-run",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-a_pad-h5-w11-run",
+      "slot": 6,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-6-b_pad-h5-w11-run",
+      "slot": 6,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-a_pad-h5-w11-run",
+      "slot": 7,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-7-b_pad-h5-w11-run",
+      "slot": 7,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-a_pad-h5-w11-run",
+      "slot": 8,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-8-b_pad-h5-w11-run",
+      "slot": 8,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-a_pad-h5-w11-run",
+      "slot": 9,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-9-b_pad-h5-w11-run",
+      "slot": 9,
+      "hero": 5,
+      "weapon": 11,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h0-w2-walk",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h0-w2-crouch",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h0-w2-walk",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h0-w2-crouch",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h0-w2-walk",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h0-w2-crouch",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h0-w2-walk",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h0-w2-crouch",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h1-w2-walk",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h1-w2-crouch",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h1-w2-walk",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h1-w2-crouch",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h1-w2-walk",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h1-w2-crouch",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h1-w2-walk",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h1-w2-crouch",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h2-w2-walk",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h2-w2-crouch",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h2-w2-walk",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h2-w2-crouch",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h2-w2-walk",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h2-w2-crouch",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h2-w2-walk",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h2-w2-crouch",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h3-w2-walk",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h3-w2-crouch",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h3-w2-walk",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h3-w2-crouch",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h3-w2-walk",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h3-w2-crouch",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h3-w2-walk",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h3-w2-crouch",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h4-w2-walk",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h4-w2-crouch",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h4-w2-walk",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h4-w2-crouch",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h4-w2-walk",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h4-w2-crouch",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h4-w2-walk",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h4-w2-crouch",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h5-w2-walk",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-a_pad-h5-w2-crouch",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h5-w2-walk",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-0-b_pad-h5-w2-crouch",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h5-w2-walk",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-a_pad-h5-w2-crouch",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h5-w2-walk",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "walk",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "spawn-5-b_pad-h5-w2-crouch",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "crouch",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-mid-h0",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_west",
+        "mid_south",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-outer-h0",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_north",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-mid-h0",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "mid_east",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-outer-h0",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "attack_spawn",
+        "west_gate",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-entry-retreat-h0",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_entry"
+      ],
+      "via": [
+        "west_gate",
+        "attack_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-entry-retreat-h0",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_entry"
+      ],
+      "via": [
+        "east_gate",
+        "defense_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-lurk-h0",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "west_gate",
+        "a_entry",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-lurk-h0",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_south",
+        "mid_east",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-retake-h0",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_north",
+        "a_entry",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-retake-h0",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "east_gate",
+        "b_entry",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-hold-fallback-h0",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "a_entry",
+        "mid_north"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-hold-fallback-h0",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "b_entry",
+        "east_gate"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-mid-h1",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_west",
+        "mid_south",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-outer-h1",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_north",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-mid-h1",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "mid_east",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-outer-h1",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "attack_spawn",
+        "west_gate",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-entry-retreat-h1",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_entry"
+      ],
+      "via": [
+        "west_gate",
+        "attack_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-entry-retreat-h1",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_entry"
+      ],
+      "via": [
+        "east_gate",
+        "defense_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-lurk-h1",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "west_gate",
+        "a_entry",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-lurk-h1",
+      "slot": 0,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_south",
+        "mid_east",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-retake-h1",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_north",
+        "a_entry",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-retake-h1",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "east_gate",
+        "b_entry",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-hold-fallback-h1",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "a_entry",
+        "mid_north"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-hold-fallback-h1",
+      "slot": 5,
+      "hero": 1,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "b_entry",
+        "east_gate"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-mid-h2",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_west",
+        "mid_south",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-outer-h2",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_north",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-mid-h2",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "mid_east",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-outer-h2",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "attack_spawn",
+        "west_gate",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-entry-retreat-h2",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_entry"
+      ],
+      "via": [
+        "west_gate",
+        "attack_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-entry-retreat-h2",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_entry"
+      ],
+      "via": [
+        "east_gate",
+        "defense_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-lurk-h2",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "west_gate",
+        "a_entry",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-lurk-h2",
+      "slot": 0,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_south",
+        "mid_east",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-retake-h2",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_north",
+        "a_entry",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-retake-h2",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "east_gate",
+        "b_entry",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-hold-fallback-h2",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "a_entry",
+        "mid_north"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-hold-fallback-h2",
+      "slot": 5,
+      "hero": 2,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "b_entry",
+        "east_gate"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-mid-h3",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_west",
+        "mid_south",
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-outer-h3",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_north",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-mid-h3",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "mid_east",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-outer-h3",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "attack_spawn",
+        "west_gate",
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "a-entry-retreat-h3",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_entry"
+      ],
+      "via": [
+        "west_gate",
+        "attack_spawn"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "b-entry-retreat-h3",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_entry"
+      ],
+      "via": [
+        "east_gate",
+        "defense_spawn"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "a-lurk-h3",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "west_gate",
+        "a_entry",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "b-lurk-h3",
+      "slot": 0,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_south",
+        "mid_east",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "a-retake-h3",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_north",
+        "a_entry",
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "b-retake-h3",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "east_gate",
+        "b_entry",
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "a-hold-fallback-h3",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "a_entry",
+        "mid_north"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "b-hold-fallback-h3",
+      "slot": 5,
+      "hero": 3,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "b_entry",
+        "east_gate"
+      ],
+      "trace": true,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-mid-h4",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_west",
+        "mid_south",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-outer-h4",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_north",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-mid-h4",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "mid_east",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-outer-h4",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "attack_spawn",
+        "west_gate",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-entry-retreat-h4",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_entry"
+      ],
+      "via": [
+        "west_gate",
+        "attack_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-entry-retreat-h4",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_entry"
+      ],
+      "via": [
+        "east_gate",
+        "defense_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-lurk-h4",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "west_gate",
+        "a_entry",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-lurk-h4",
+      "slot": 0,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_south",
+        "mid_east",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-retake-h4",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_north",
+        "a_entry",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-retake-h4",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "east_gate",
+        "b_entry",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-hold-fallback-h4",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "a_entry",
+        "mid_north"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-hold-fallback-h4",
+      "slot": 5,
+      "hero": 4,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "b_entry",
+        "east_gate"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-mid-h5",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_west",
+        "mid_south",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-to-b-outer-h5",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "mid_north",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-mid-h5",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "mid_east",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-to-a-outer-h5",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "attack_spawn",
+        "west_gate",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-entry-retreat-h5",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_entry"
+      ],
+      "via": [
+        "west_gate",
+        "attack_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-entry-retreat-h5",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_entry"
+      ],
+      "via": [
+        "east_gate",
+        "defense_spawn"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-lurk-h5",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "west_gate",
+        "a_entry",
+        "mid_north",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-lurk-h5",
+      "slot": 0,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_south",
+        "mid_east",
+        "east_gate",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-retake-h5",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "mid_north",
+        "a_entry",
+        "a_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-retake-h5",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "east_gate",
+        "b_entry",
+        "b_pad"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "a-hold-fallback-h5",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "a_pad"
+      ],
+      "via": [
+        "a_entry",
+        "mid_north"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "b-hold-fallback-h5",
+      "slot": 5,
+      "hero": 5,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [
+        "b_pad"
+      ],
+      "via": [
+        "b_entry",
+        "east_gate"
+      ],
+      "trace": false,
+      "dash": false
+    },
+    {
+      "id": "dash-0-a_pad",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": true
+    },
+    {
+      "id": "dash-0-b_pad",
+      "slot": 0,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": true
+    },
+    {
+      "id": "dash-5-a_pad",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "a_pad"
+      ],
+      "trace": true,
+      "dash": true
+    },
+    {
+      "id": "dash-5-b_pad",
+      "slot": 5,
+      "hero": 0,
+      "weapon": 2,
+      "pace": "run",
+      "prelude": [],
+      "via": [
+        "b_pad"
+      ],
+      "trace": true,
+      "dash": true
+    }
+  ],
+  "tape_case": 180
+}

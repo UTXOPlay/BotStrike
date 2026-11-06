@@ -1,0 +1,1066 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "physicalOutputReviewed": false,
+  "measurements": [
+    {
+      "mode": "baseline",
+      "rate": 44100,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 6.5,
+      "channels": [
+        {
+          "peak": 6.23841667175293,
+          "rms": 0.2593611213995182,
+          "clipped": 833,
+          "onset": 0.1
+        },
+        {
+          "peak": 6.23841667175293,
+          "rms": 0.2593611213995182,
+          "clipped": 833,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 4834.975314989167,
+      "sourceCount": 32,
+      "essentialSamples": 0,
+      "bufferBytes": 377508,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 44100,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 6.300000000745058,
+      "channels": [
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14151104399613454,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14151104399613454,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 2826.9296405911446,
+      "sourceCount": 26,
+      "essentialSamples": 2,
+      "bufferBytes": 377508,
+      "before": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 26,
+        "remote": 24,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 26,
+        "buffers": 11,
+        "bufferBytes": 377508,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 11,
+        "bufferBytes": 377508,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 6.399999998509884,
+      "channels": [
+        {
+          "peak": 6.432135581970215,
+          "rms": 0.2618640414209371,
+          "clipped": 920,
+          "onset": 0.1
+        },
+        {
+          "peak": 6.432135581970215,
+          "rms": 0.2618640414209371,
+          "clipped": 920,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 1764.3846818083734,
+      "sourceCount": 32,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": true,
+      "fallback": false,
+      "renderMs": 6.399999998509884,
+      "channels": [
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14211045477445552,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.949999988079071,
+          "rms": 0.14211045477445552,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 1921.9169892072678,
+      "sourceCount": 26,
+      "essentialSamples": 2,
+      "bufferBytes": 410888,
+      "before": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 26,
+        "remote": 24,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 26,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 26,
+        "dropped": 76,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 26,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 26,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.0999999977648258,
+      "channels": [
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.13701263498719,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "baseline",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 0.9000000022351742,
+      "channels": [
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20100431144237518,
+          "rms": 0.00818325135438745,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.13701263498719,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": null,
+      "after": null,
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.3999999985098839,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "candidate",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.2999999970197678,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": false,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 188.59999999776483,
+      "channels": [
+        {
+          "peak": 0.20325922966003418,
+          "rms": 0.012500189911311525,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        },
+        {
+          "peak": 0.20325922966003418,
+          "rms": 0.012500189911311525,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        }
+      ],
+      "waveProbe": 54.44738417863846,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "hrtfNodes": 1
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 3.141592653589793,
+      "mix": false,
+      "fallback": false,
+      "renderMs": 1.699999999254942,
+      "channels": [
+        {
+          "peak": 0.19239836931228638,
+          "rms": 0.011230632366441262,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        },
+        {
+          "peak": 0.19239836931228638,
+          "rms": 0.011230632366441262,
+          "clipped": 0,
+          "onset": 0.10591666666666667
+        }
+      ],
+      "waveProbe": 56.52453690767288,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 1,
+        "stereoStarted": 0,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 1
+      },
+      "hrtfNodes": 1
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": true,
+      "renderMs": 1.3999999985098839,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 1,
+        "monoStarted": 0,
+        "routes": 0,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    },
+    {
+      "mode": "hrtf",
+      "rate": 48000,
+      "bearing": 0,
+      "mix": false,
+      "fallback": "mono",
+      "renderMs": 1.6000000014901161,
+      "channels": [
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        },
+        {
+          "peak": 0.20098793506622314,
+          "rms": 0.008183175886543815,
+          "clipped": 0,
+          "onset": 0.1
+        }
+      ],
+      "waveProbe": 55.12358969449997,
+      "sourceCount": 1,
+      "essentialSamples": 0,
+      "bufferBytes": 410888,
+      "before": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 1,
+        "remote": 1,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 0,
+        "monoStarted": 1,
+        "routes": 1,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "after": {
+        "admitted": 1,
+        "dropped": 0,
+        "expired": 0,
+        "stolen": 0,
+        "peakVoices": 1,
+        "peakPending": 0,
+        "voices": 0,
+        "remote": 0,
+        "pending": 0,
+        "hrtfStarted": 0,
+        "stereoStarted": 0,
+        "monoStarted": 1,
+        "routes": 0,
+        "buffers": 11,
+        "bufferBytes": 410888,
+        "context": "running",
+        "experimentalHrtf": true,
+        "hrtfVoices": 0
+      },
+      "hrtfNodes": 0
+    }
+  ],
+  "live": {
+    "reserved": {
+      "admitted": 26,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 0,
+      "peakVoices": 26,
+      "peakPending": 0,
+      "voices": 26,
+      "remote": 24,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 26,
+      "monoStarted": 0,
+      "routes": 26,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "retiring": {
+      "admitted": 32,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 32,
+      "remote": 24,
+      "pending": 7,
+      "hrtfStarted": 0,
+      "stereoStarted": 32,
+      "monoStarted": 0,
+      "routes": 32,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "drained": {
+      "admitted": 32,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 32,
+      "remote": 24,
+      "pending": 7,
+      "hrtfStarted": 0,
+      "stereoStarted": 32,
+      "monoStarted": 0,
+      "routes": 32,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "changed": {
+      "admitted": 32,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 32,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "anonymousSteps": {
+      "admitted": 34,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 2,
+      "remote": 2,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 34,
+      "monoStarted": 0,
+      "routes": 2,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "muted": {
+      "admitted": 34,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 34,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "suspended": {
+      "admitted": 34,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 34,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "suspended",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "resumed": {
+      "admitted": 35,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 1,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 35,
+      "monoStarted": 0,
+      "routes": 1,
+      "buffers": 11,
+      "bufferBytes": 410888,
+      "context": "running",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "disposed": {
+      "admitted": 35,
+      "dropped": 76,
+      "expired": 0,
+      "stolen": 7,
+      "peakVoices": 32,
+      "peakPending": 7,
+      "voices": 0,
+      "remote": 0,
+      "pending": 0,
+      "hrtfStarted": 0,
+      "stereoStarted": 35,
+      "monoStarted": 0,
+      "routes": 0,
+      "buffers": 0,
+      "bufferBytes": 0,
+      "context": "closed",
+      "experimentalHrtf": false,
+      "hrtfVoices": 0
+    },
+    "sourceCount": 35
+  },
+  "study": {
+    "index": 1,
+    "total": 48,
+    "active": false,
+    "report": {
+      "schema": 1,
+      "study": "botstrike-audio-baseline-v1",
+      "automated": true,
+      "manifest": {
+        "schema": 1,
+        "kind": "offline-listening-study",
+        "humanObservations": 0,
+        "liveMatchData": false,
+        "rendererSelection": "baseline first; optional candidates are unaccepted experiments",
+        "baseline": {
+          "kind": "frozen V5 listening baseline, not a new game renderer",
+          "sourceImage": "sha256:dae1966422e99b9e97f1d99ebb13e739af402479565c626b525dd652ede9eca5",
+          "copiedFrom": "games/botstrike/client/",
+          "sha256": {
+            "audio.mjs": "a85c448eb3589ff2a90734032c0150f980950e56ac53c3a2c0ca66d5525a2f03",
+            "shot-sound.mjs": "63410bbca5371180d5ff9c11e048a5eab481b881b2ced334ca4c06122f69ea6d",
+            "impact-sound.mjs": "ec4444c05803964829dbf3a01f85ab039285e32c7cf02b64511228bc7f891c28",
+            "footstep-sound.mjs": "f900db1aa994a134f99a080159e67c1039abf949dff0f3e4a8309d74da7e8ff3"
+          }
+        },
+        "bundleSha256": "2f90e3524a4cbf016bd092803cbf57b6194a9ba95f93d80a077ff4c8d3ff68d0",
+        "conditions": "8 directions × 3 distance bands × 2 occlusion states; 24 distractor trials per block; no elevation cue",
+        "nativeRulesUnchanged": true
+      },
+      "metadata": {
+        "participant": "automated-qa",
+        "output": "headphones",
+        "device": "",
+        "notes": "",
+        "sampleRate": 48000,
+        "baseLatency": 0.010666666666666666,
+        "volume": 0.6,
+        "reducedMotion": false,
+        "physicalOutputSelfReported": false,
+        "reviewerObserved": false
+      },
+      "rows": [
+        {
+          "trial": {
+            "id": "0:0",
+            "block": 0,
+            "mode": "baseline",
+            "sector": 1,
+            "range": 2,
+            "muffled": true,
+            "dense": true,
+            "bearing": 0.7853981633974483,
+            "level": 0.105
+          },
+          "effectiveMode": "baseline",
+          "valid": true,
+          "reason": null,
+          "answer": {
+            "sector": null,
+            "range": null,
+            "frontBack": null,
+            "muffled": null
+          },
+          "confidence": 0,
+          "reactionMs": 817,
+          "timing": [
+            {
+              "expectedMs": 100,
+              "actualMs": 100.39999999850988,
+              "audioTime": 0.17066666666666666
+            },
+            {
+              "expectedMs": 230,
+              "actualMs": 230.39999999850988,
+              "audioTime": 0.30933333333333335
+            },
+            {
+              "expectedMs": 360,
+              "actualMs": 360.30000000074506,
+              "audioTime": 0.43733333333333335
+            }
+          ],
+          "audioState": "running",
+          "rendererStats": null
+        }
+      ],
+      "startedAt": "2026-11-05T23:51:19.955Z",
+      "seed": 3089976838,
+      "rendererBefore": null,
+      "summary": {
+        "evidence": "AUTOMATED QA — zero human observations",
+        "output": "headphones",
+        "invalid": 0,
+        "groups": {
+          "baseline": {
+            "n": 1,
+            "unknown": 1,
+            "direction": [
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            "distance": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1
+              ]
+            ],
+            "frontBack": {
+              "front": {
+                "null": 1
+              },
+              "back": {},
+              "side": {}
+            },
+            "timedOut": 0,
+            "reactionMs": [
+              817
+            ]
+          }
+        }
+      }
+    }
+  },
+  "errors": []
+}

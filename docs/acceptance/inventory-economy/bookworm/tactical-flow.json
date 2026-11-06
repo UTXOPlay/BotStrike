@@ -1,0 +1,23 @@
+{
+  "data": "/tmp/botstrike-tactical-flow-5SYDtt",
+  "profile": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+  "ticks": 186880,
+  "score": [
+    13,
+    12
+  ],
+  "automatedClients": 10,
+  "humanParticipants": 0,
+  "readyGate": true,
+  "uniqueHeroes": true,
+  "lockedHeroes": true,
+  "shortDropPreserved": true,
+  "unarmed": true,
+  "staleLifeRejected": true,
+  "noFreeArc": true,
+  "reservedIdleReconnect": true,
+  "enemyBudgetPrivate": true,
+  "signedReplay": true,
+  "tamperRejected": true,
+  "careerMatches": 0
+}

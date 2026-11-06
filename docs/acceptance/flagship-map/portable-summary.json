@@ -1,0 +1,35 @@
+{
+  "out": "/work/output",
+  "cases": 484,
+  "failed": [],
+  "contacts": 144,
+  "anchorStancePairs": 528,
+  "replay": {
+    "case": "spawn-0-a_pad-h3-w2-run",
+    "score": [
+      0,
+      0
+    ],
+    "state_hash": "5208d4434018f5a129b66b8973cddfe8aedc492903ddfdfa6c5ff12ed377e3b0",
+    "ticks": 23040,
+    "trace_hash": "fa2859eda10029bb9d29b71715bf608f80878c6231867659db3bf91a5c396ea3",
+    "exactEngineStateMatched": true,
+    "exactEngineTraceMatched": true,
+    "profile": "b8efb5123d1dc99dcf7add70c4069f22d4a320378653c5ff67c1c0169a7d9886",
+    "signedReplayVerified": true,
+    "synthetic": true,
+    "tamperRejected": true
+  },
+  "provenance": {
+    "modelSha256": "881347ed6ce9294c91f9bb82c010b06a2302c769fd2810aef4f910b95dd888a5",
+    "pair": {
+      "botstrike-engine": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+      "myelin-botstrike": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8"
+    },
+    "exampleSha256": "b088602c9c615a2854179e91b65f2518a1473f20f36b6df2c2bca71aa8b06549",
+    "sourceSha256": "d4a74a33eabe6adf149fd4e7d0688e9bc248e0a54086ac1edfd1cda945045acc",
+    "protocolSha256": "0dba47f81006edd229835ced0de080aee19408a7432fd0ada19579a18fb2e6e3",
+    "specSha256": "230f393d72e89801bcbb9a2e078b90cad7909967e6a8bf0bfbd7496b962360b9"
+  },
+  "humanParticipants": 0
+}

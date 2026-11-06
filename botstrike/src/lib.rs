@@ -1,4 +1,20 @@
 mod ai;
+pub mod damage_contract;
+pub mod economy;
+#[cfg(test)]
+mod economy_tests;
+pub mod hit;
+mod inventory;
+#[cfg(test)]
+mod inventory_tests;
+pub mod movement;
+pub mod practice;
+pub mod projectile;
+pub mod recoil;
+pub mod sight;
+pub mod utility_effects;
+#[cfg(test)]
+mod utility_effects_tests;
 use serde::{Deserialize, Serialize};
 pub const HZ: u32 = 64;
 pub const WEAPONS: usize = 12;
@@ -30,6 +46,7 @@ pub struct Weapon {
     pub effect: String,
     pub mobility: f64,
     pub splash: f64,
+    pub recoil: recoil::Profile,
 }
 #[derive(Clone, Deserialize)]
 pub struct Item {
@@ -53,6 +70,12 @@ pub struct Map {
 }
 #[derive(Clone, Deserialize)]
 pub struct Rules {
+    pub version: String,
+    pub economy: economy::Profile,
+    pub movement: movement::Profile,
+    pub projectile: projectile::Profile,
+    pub utility_effects: utility_effects::Profile,
+    pub hit_regions: hit::Profile,
     pub heroes: Vec<Hero>,
     pub weapons: Vec<Weapon>,
     pub items: Vec<Item>,
@@ -63,22 +86,49 @@ impl Rules {
         serde_json::from_str(SPEC).unwrap()
     }
 }
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Ruleset {
+    #[default]
+    Casual,
+    Tactical,
+}
+impl Ruleset {
+    fn is_casual(&self) -> bool {
+        *self == Self::Casual
+    }
+}
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Config {
     pub map: usize,
     pub mode: String,
+    #[serde(default, skip_serializing_if = "Ruleset::is_casual")]
+    pub ruleset: Ruleset,
     pub heroes: [usize; 10],
     pub bots: [bool; 10],
     pub difficulty: u8,
     pub seed: u32,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub practice: Option<practice::Config>,
 }
 impl Config {
     pub fn validate(&self) -> Result<(), String> {
-        if self.map >= 3
-            || !matches!(self.mode.as_str(), "deathmatch" | "demolition")
+        if self.map >= 4
+            || (self.mode != "practice" && self.map >= 3)
+            || !matches!(self.mode.as_str(), "deathmatch" | "demolition" | "practice")
+            || ((self.mode == "practice") != self.practice.is_some())
+            || self.practice.as_ref().is_some_and(|p| !p.valid())
             || self.heroes.iter().any(|&h| h >= 6)
             || self.difficulty > 2
+            || (self.ruleset == Ruleset::Tactical
+                && (self.mode != "demolition"
+                    || self.bots.iter().any(|&bot| bot)
+                    || self.heroes.chunks_exact(5).any(|team| {
+                        team.iter()
+                            .enumerate()
+                            .any(|(i, hero)| team[..i].contains(hero))
+                    })))
         {
             return Err("Invalid match configuration".into());
         }
@@ -105,10 +155,15 @@ pub struct Input {
     pub ability: bool,
     pub interact: bool,
     pub scope: bool,
+    pub drop: bool,
+    pub action_life: Option<u8>,
     pub weapon: Option<usize>,
     pub buy: Option<usize>,
     pub hero: Option<usize>,
     pub item: u8,
+    pub practice: u8,
+    pub throw_mode: u8,
+    pub preview_item: u8,
 }
 impl Input {
     pub fn validate(&self) -> bool {
@@ -123,6 +178,12 @@ impl Input {
             && self.buy.map_or(true, |v| v < WEAPONS + ITEMS)
             && self.hero.map_or(true, |v| v < 6)
             && (self.item as usize) < ITEMS
+            && self.practice <= 8
+            && self.throw_mode < 3
+            && self.preview_item < ITEMS as u8
+            && self
+                .action_life
+                .map_or(true, |life| (1..=31).contains(&life))
     }
 }
 #[derive(Clone, Serialize, Deserialize)]
@@ -138,7 +199,10 @@ pub struct Player {
     pub armor: i32,
     pub alive: bool,
     pub crouch: bool,
+    pub landing: u32,
+    pub stance: f64,
     pub scoped: bool,
+    pub throw_mode: u8,
     pub weapon: usize,
     pub owned: [bool; WEAPONS],
     pub ammo: [u32; WEAPONS],
@@ -147,7 +211,8 @@ pub struct Player {
     pub fire_wait: u32,
     pub burst_remaining: u8,
     pub overclock: u32,
-    pub recoil: f64,
+    #[serde(flatten)]
+    pub weapon_recoil: recoil::State,
     pub credits: i32,
     pub kills: u32,
     pub deaths: u32,
@@ -167,6 +232,7 @@ pub struct Player {
     pub skill_held: bool,
     pub jump_held: bool,
     pub interact_held: bool,
+    pub drop_held: bool,
     pub item_held: u8,
     pub attackers: [u32; 10],
     pub life: u32,
@@ -208,17 +274,38 @@ pub struct Objective {
     pub actor: Option<usize>,
 }
 #[derive(Clone, Serialize, Deserialize)]
+#[serde(tag = "kind", content = "id", rename_all = "snake_case")]
+pub enum DamageSource {
+    Weapon(usize),
+    Splash(usize),
+    Utility(usize),
+    Other,
+}
+#[derive(Clone, Serialize, Deserialize)]
+pub struct DamageInfo {
+    pub raw: i32,
+    pub health: i32,
+    pub armor: i32,
+    pub shielded: bool,
+    pub source: DamageSource,
+}
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Event {
     pub kind: String,
     pub actor: Option<usize>,
     pub target: Option<usize>,
     pub value: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub damage: Option<DamageInfo>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub origin: Option<[f64; 3]>,
 }
 pub const MAX_REWIND: u32 = 13; // 203 ms at 64 Hz.
 #[derive(Clone)]
 struct HitPose {
     position: [f64; 3],
-    crouch: bool,
+    stance: f64,
+    look: [f64; 2],
     alive: bool,
     life: u32,
 }
@@ -230,6 +317,7 @@ pub struct Game {
     pub phase_ticks: u32,
     pub round: u32,
     pub score: [u32; 2],
+    pub loss_streak: [u8; 2],
     pub attacker: usize,
     pub winner: Option<usize>,
     pub players: Vec<Player>,
@@ -238,6 +326,8 @@ pub struct Game {
     pub drops: Vec<DroppedWeapon>,
     pub events: Vec<Event>,
     pub random: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub practice: Option<practice::State>,
     #[serde(skip)]
     history: std::collections::VecDeque<(u32, Vec<HitPose>)>,
 }
@@ -310,7 +400,7 @@ fn direction(yaw: f64, pitch: f64) -> [f64; 3] {
 fn eye(p: &Player) -> [f64; 3] {
     [
         p.position[0],
-        p.position[1] + if p.crouch { 37. } else { 56. },
+        p.position[1] + sight::eye_height(p.stance),
         p.position[2],
     ]
 }
@@ -320,12 +410,14 @@ impl Game {
         let mut g = Self {
             history: std::collections::VecDeque::new(),
             random: config.seed,
+            practice: None,
             config,
             tick: 0,
             phase: "buy".into(),
             phase_ticks: 0,
             round: 1,
             score: [0, 0],
+            loss_streak: [0, 0],
             attacker: 0,
             winner: None,
             players: vec![],
@@ -355,7 +447,10 @@ impl Game {
                 armor: 0,
                 alive: false,
                 crouch: false,
+                landing: 0,
+                stance: 0.,
                 scoped: false,
+                throw_mode: 0,
                 weapon: 0,
                 owned: [false; WEAPONS],
                 ammo: [0; WEAPONS],
@@ -364,8 +459,12 @@ impl Game {
                 fire_wait: 0,
                 burst_remaining: 0,
                 overclock: 0,
-                recoil: 0.,
-                credits: 800,
+                weapon_recoil: recoil::State::default(),
+                credits: if g.config.ruleset == Ruleset::Tactical {
+                    rules.economy.start
+                } else {
+                    800
+                },
                 kills: 0,
                 deaths: 0,
                 assists: 0,
@@ -384,6 +483,7 @@ impl Game {
                 skill_held: false,
                 jump_held: false,
                 interact_held: false,
+                drop_held: false,
                 item_held: 0,
                 attackers: [0; 10],
                 life: 0,
@@ -397,6 +497,10 @@ impl Game {
             });
         }
         g.start_round(rules);
+        if let Some(p) = g.config.practice.clone() {
+            g.practice = Some(practice::State::new(p, g.config.seed));
+            practice::reset(&mut g, rules, None);
+        }
         Ok(g)
     }
     fn event(&mut self, kind: &str, actor: Option<usize>, target: Option<usize>, value: i32) {
@@ -405,6 +509,8 @@ impl Game {
             actor,
             target,
             value,
+            damage: None,
+            origin: None,
         });
     }
     fn safe_respawn(&self, slot: usize, rules: &Rules) -> [f64; 3] {
@@ -467,7 +573,13 @@ impl Game {
         p.pitch = 0.;
         p.velocity = [0.; 3];
         p.health = h.health;
-        p.armor = if reset_loadout {
+        p.armor = if self.config.ruleset == Ruleset::Tactical {
+            if reset_loadout {
+                0
+            } else {
+                p.armor
+            }
+        } else if reset_loadout {
             h.armor
         } else {
             p.armor.max(h.armor)
@@ -480,6 +592,8 @@ impl Game {
         p.ai_path.clear();
         p.alive = true;
         p.crouch = false;
+        p.landing = 0;
+        p.stance = 0.;
         p.scoped = false;
         p.respawn = 0;
         p.protection = if self.config.mode == "deathmatch" {
@@ -491,7 +605,7 @@ impl Game {
         p.fire_wait = 0;
         p.burst_remaining = 0;
         p.overclock = 0;
-        p.recoil = 0.;
+        p.weapon_recoil = recoil::State::default();
         p.skill_wait = 0;
         p.disabled = 0;
         p.effect = 0;
@@ -501,28 +615,43 @@ impl Game {
         p.skill_held = false;
         p.jump_held = false;
         p.interact_held = false;
+        p.drop_held = false;
         p.item_held = 0;
         if reset_loadout {
             p.owned = [false; WEAPONS];
             p.owned[0] = true;
             p.weapon = 0;
             p.items = [0; ITEMS];
-            if self.config.mode == "deathmatch" {
+            if matches!(self.config.mode.as_str(), "deathmatch" | "practice") {
                 p.owned = [true; WEAPONS];
                 p.weapon = 2;
                 p.items = [1; ITEMS];
             }
         }
         for w in 0..WEAPONS {
-            p.ammo[w] = rules.weapons[w].magazine;
-            p.reserve[w] = rules.weapons[w].reserve;
+            let supplied = self.config.ruleset == Ruleset::Casual || p.owned[w];
+            p.ammo[w] = if supplied {
+                rules.weapons[w].magazine
+            } else {
+                0
+            };
+            p.reserve[w] = if supplied {
+                rules.weapons[w].reserve
+            } else {
+                0
+            };
         }
     }
     fn start_round(&mut self, rules: &Rules) {
         if self.round == 13 {
             self.attacker = 1;
+            self.loss_streak = [0, 0];
             for p in &mut self.players {
-                p.credits = 800;
+                p.credits = if self.config.ruleset == Ruleset::Tactical {
+                    rules.economy.start
+                } else {
+                    800
+                };
                 p.alive = false;
             }
         }
@@ -560,12 +689,13 @@ impl Game {
         };
         self.event("round", None, None, self.round as i32);
     }
-    fn end_round(&mut self, winner: usize, reason: &str) {
+    fn end_round(&mut self, winner: usize, reason: &str, rules: &Rules) {
+        if matches!(self.phase.as_str(), "round_end" | "finished") {
+            return;
+        }
         self.score[winner] += 1;
         self.event(reason, None, None, winner as i32);
-        for p in &mut self.players {
-            p.credits = (p.credits + if p.team == winner { 3250 } else { 1900 }).min(16000)
-        }
+        self.round_income(winner, rules);
         if self.score[winner] >= 13 || self.round >= 25 {
             self.phase = "finished".into();
             self.winner = Some(winner)
@@ -576,6 +706,10 @@ impl Game {
     }
     fn buy(&mut self, slot: usize, item: usize, rules: &Rules) {
         if self.phase != "buy" || !self.players[slot].alive {
+            return;
+        }
+        if self.config.ruleset == Ruleset::Tactical && item < WEAPONS {
+            self.buy_tactical_weapon(slot, item, rules);
             return;
         }
         let p = &mut self.players[slot];
@@ -614,8 +748,17 @@ impl Game {
         p.credits -= price;
         self.event("buy", Some(slot), None, item as i32);
     }
+    #[cfg(test)]
     fn hurt(&mut self, target: usize, attacker: usize, damage: i32, head: bool, rules: &Rules) {
-        self.hurt_piercing(target, attacker, damage, head, 0., rules);
+        self.hurt_with_source(
+            target,
+            attacker,
+            damage,
+            head,
+            0.,
+            DamageSource::Other,
+            rules,
+        );
     }
     fn hurt_piercing(
         &mut self,
@@ -626,15 +769,38 @@ impl Game {
         pierce: f64,
         rules: &Rules,
     ) {
+        self.hurt_with_source(
+            target,
+            attacker,
+            damage,
+            head,
+            pierce,
+            DamageSource::Weapon(self.players[attacker].weapon),
+            rules,
+        );
+    }
+    fn hurt_with_source(
+        &mut self,
+        target: usize,
+        attacker: usize,
+        damage: i32,
+        head: bool,
+        pierce: f64,
+        source: DamageSource,
+        rules: &Rules,
+    ) {
         if !self.players[target].alive
             || self.players[target].protection > 0
             || self.players[target].team == self.players[attacker].team
         {
             return;
         }
+        let damage_origin = eye(&self.players[attacker]);
         let p = &mut self.players[target];
-        let mut amount = damage.max(1);
-        if p.hero == 2 && p.effect > 0 {
+        let raw = damage.max(1);
+        let mut amount = raw;
+        let shielded = p.hero == 2 && p.effect > 0;
+        if shielded {
             amount = (amount + 1) / 2
         }
         let absorbed = ((amount as f64 * 0.5 * (1. - pierce.clamp(0., 1.))) as i32).min(p.armor);
@@ -650,29 +816,44 @@ impl Game {
             Some(target),
             actual,
         );
+        let accounting = DamageInfo {
+            raw,
+            health: actual,
+            armor: absorbed,
+            shielded,
+            source,
+        };
+        self.events.last_mut().unwrap().damage = Some(accounting.clone());
+        self.events.last_mut().unwrap().origin = Some(damage_origin);
         if self.players[target].health == 0 {
-            let fallen = &self.players[target];
-            let weapon = fallen.weapon;
-            if fallen.ammo[weapon] + fallen.reserve[weapon] > 0 {
-                if self.drops.len() == 8 {
-                    self.drops.remove(0);
+            if self.config.ruleset == Ruleset::Tactical {
+                self.release_tactical_inventory(target);
+            } else {
+                let fallen = &self.players[target];
+                let weapon = fallen.weapon;
+                if self.config.mode != "practice"
+                    && fallen.ammo[weapon] + fallen.reserve[weapon] > 0
+                {
+                    if self.drops.len() == 8 {
+                        self.drops.remove(0);
+                    }
+                    self.drops.push(DroppedWeapon {
+                        id: self.tick * 10 + target as u32,
+                        weapon,
+                        team: fallen.team,
+                        position: [fallen.position[0], 0., fallen.position[2]],
+                        ammo: fallen.ammo[weapon],
+                        reserve: fallen.reserve[weapon].min(rules.weapons[weapon].magazine * 2),
+                        expires: self.tick + HZ * 20,
+                    });
                 }
-                self.drops.push(DroppedWeapon {
-                    id: self.tick * 10 + target as u32,
-                    weapon,
-                    team: fallen.team,
-                    position: [fallen.position[0], 0., fallen.position[2]],
-                    ammo: fallen.ammo[weapon],
-                    reserve: fallen.reserve[weapon].min(rules.weapons[weapon].magazine * 2),
-                    expires: self.tick + HZ * 20,
-                });
             }
             self.players[target].alive = false;
             self.players[target].deaths += 1;
             self.players[target].respawn = HZ * 4;
             self.players[target].velocity = [0.; 3];
             self.players[attacker].kills += 1;
-            self.players[attacker].credits = (self.players[attacker].credits + 300).min(16000);
+            self.kill_income(attacker, &accounting.source, rules);
             for a in 0..10 {
                 if a != attacker && self.players[target].attackers[a] >= 25 {
                     self.players[a].assists += 1
@@ -691,6 +872,8 @@ impl Game {
                 Some(target),
                 self.players[attacker].weapon as i32,
             );
+            self.events.last_mut().unwrap().damage = Some(accounting);
+            self.events.last_mut().unwrap().origin = Some(damage_origin);
         }
     }
     fn skill(&mut self, slot: usize, rules: &Rules, input: &Input) {
@@ -704,6 +887,7 @@ impl Game {
         self.players[slot].skill_wait = rules.heroes[hero].cooldown * HZ;
         match hero {
             0 => {
+                self.players[slot].landing = rules.movement.landing_ticks;
                 let (yaw, x, y) = (input.yaw, input.x, input.y);
                 let norm = x.hypot(y);
                 let (x, y) = if norm < 0.1 {
@@ -722,7 +906,10 @@ impl Game {
             }
             1 => {
                 for p in &mut self.players {
-                    if p.alive && p.team == team && dist(pos, p.position) < 340. {
+                    if p.alive
+                        && p.team == team
+                        && utility_effects::distance(pos, p.position) < 340.
+                    {
                         p.health = (p.health + 45).min(rules.heroes[p.hero].health);
                     }
                 }
@@ -730,15 +917,21 @@ impl Game {
             2 => self.players[slot].effect = HZ * 5,
             3 => {
                 for p in &mut self.players {
-                    if p.alive && p.team != team && dist(pos, p.position) < 1000. {
-                        p.revealed = HZ * 4
+                    if p.alive
+                        && p.team != team
+                        && utility_effects::distance(pos, p.position) < 1000.
+                    {
+                        p.revealed = p.revealed.max(HZ * 4)
                     }
                 }
             }
             4 => {
                 for p in &mut self.players {
-                    if p.alive && p.team != team && dist(pos, p.position) < 460. {
-                        p.disabled = HZ * 6;
+                    if p.alive
+                        && p.team != team
+                        && utility_effects::distance(pos, p.position) < 460.
+                    {
+                        p.disabled = p.disabled.max(HZ * 6);
                         p.effect = 0;
                         p.overclock = 0;
                     }
@@ -755,7 +948,7 @@ impl Game {
             .map(|(_, poses)| poses.clone());
         let p = &mut self.players[slot];
         let w = &rules.weapons[p.weapon];
-        if p.fire_wait > 0 || p.reload > 0 || p.ammo[p.weapon] == 0 {
+        if !p.owned[p.weapon] || p.fire_wait > 0 || p.reload > 0 || p.ammo[p.weapon] == 0 {
             return;
         }
         p.ammo[p.weapon] -= 1;
@@ -778,27 +971,38 @@ impl Game {
         };
         let weapon = p.weapon;
         let origin = eye(p);
-        let aim = [p.yaw, p.pitch];
-        let moving = p.velocity[0].hypot(p.velocity[2]) > 40.;
+        let aim = recoil::aim(p.yaw, p.pitch, p.weapon_recoil.aim_punch);
+        let accuracy = movement::accuracy(
+            p.velocity[0].hypot(p.velocity[2]),
+            rules.heroes[p.hero].speed * w.mobility,
+            p.position[1] > 0.,
+            p.landing,
+            &rules.movement,
+        );
         let spread = w.spread
             * (if p.crouch { 0.65 } else { 1. })
             * (if w.scoped && !p.scoped { 12. } else { 1. })
-            * (if moving { 2.5 } else { 1. })
+            * accuracy
             * (if (p.hero == 5 && p.effect > 0) || p.overclock > 0 {
                 1.5
             } else {
                 1.
             })
-            + p.recoil;
+            + p.weapon_recoil.recoil;
         let team = p.team;
-        p.recoil = (p.recoil + 0.25).min(3.);
+        p.weapon_recoil.shot(&w.recoil);
         let pellets = w.pellets;
+        practice::shot(self, slot, weapon, spread, rules);
         self.event("shot", Some(slot), None, weapon as i32);
         for _ in 0..pellets {
             let angle = (rand(&mut self.random) - 0.5) * spread.to_radians();
             let pitch = aim[1] + (rand(&mut self.random) - 0.5) * spread.to_radians();
             let dir = direction(aim[0] + angle, pitch);
-            let mut nearest = 4000.;
+            let mut nearest = if dir[1] < 0. {
+                (-origin[1] / dir[1]).clamp(0., 4000.)
+            } else {
+                4000.
+            };
             for o in &rules.maps[self.config.map].obstacles {
                 if let Some(t) = ray_box(origin, dir, o.min, o.max) {
                     if t < nearest {
@@ -818,21 +1022,20 @@ impl Game {
                     continue;
                 }
                 let position = past.map_or(p.position, |pose| pose.position);
-                let crouch = past.map_or(p.crouch, |pose| pose.crouch);
-                let height = if crouch { 47. } else { 70. };
-                if let Some(t) = ray_box(
-                    origin,
-                    dir,
-                    [position[0] - 18., position[1], position[2] - 18.],
-                    [position[0] + 18., position[1] + height, position[2] + 18.],
-                ) {
-                    if t < nearest {
-                        nearest = t;
+                let stance = past.map_or(p.stance, |pose| pose.stance);
+                let look = past.map_or([p.yaw, p.pitch], |pose| pose.look);
+                if let Some(region) = rules
+                    .hit_regions
+                    .intersect(origin, dir, position, stance, look)
+                {
+                    if region.distance < nearest {
+                        nearest = region.distance;
                         hit = Some(p.slot);
-                        head = origin[1] + dir[1] * t > position[1] + height - 16.;
+                        head = region.region == hit::Region::Head;
                     }
                 }
             }
+            let mut practice_damage = 0;
             if let Some(target) = hit {
                 let falloff = (1. - (nearest - w.range).max(0.) / 5000.).max(0.55);
                 let before = self.players[target].health;
@@ -844,14 +1047,18 @@ impl Game {
                     w.pierce,
                     rules,
                 );
+                practice_damage = before - self.players[target].health;
                 if self.players[target].health < before {
                     match w.effect.as_str() {
                         "emp" => {
-                            self.players[target].disabled = HZ;
+                            self.players[target].disabled = self.players[target].disabled.max(HZ);
                             self.players[target].effect = 0;
                             self.players[target].overclock = 0;
                         }
-                        "mark" => self.players[target].revealed = HZ * 2,
+                        "mark" => {
+                            self.players[target].revealed =
+                                self.players[target].revealed.max(HZ * 2)
+                        }
                         "siphon" => {
                             let heal = (before - self.players[target].health).min(6);
                             self.players[slot].health = (self.players[slot].health + heal)
@@ -861,6 +1068,15 @@ impl Game {
                     }
                 }
             }
+            practice::impact(
+                self,
+                slot,
+                weapon,
+                std::array::from_fn(|i| origin[i] + dir[i] * nearest),
+                hit,
+                head,
+                practice_damage,
+            );
             if w.splash > 0. && nearest < 4000. {
                 // Stop just short of the hit surface so a wall shields its far side.
                 let impact = [
@@ -892,15 +1108,22 @@ impl Game {
                     {
                         continue;
                     }
-                    self.hurt(
+                    let first_event = self.events.len();
+                    self.hurt_with_source(
                         target,
                         slot,
                         (35. * (1. - distance / w.splash)) as i32,
                         false,
+                        0.,
+                        DamageSource::Splash(weapon),
                         rules,
                     );
+                    for event in &mut self.events[first_event..] {
+                        event.origin = Some(impact);
+                    }
                 }
                 self.event("plasma", Some(slot), hit, weapon as i32);
+                self.events.last_mut().unwrap().origin = Some(impact);
             }
         }
     }
@@ -918,19 +1141,15 @@ impl Game {
             if self.utilities.len() >= 40 {
                 return;
             }
-            let d = direction(p.yaw, p.pitch);
-            self.utilities.push(Utility {
-                kind: item as u8,
-                owner: slot,
-                position: eye(p),
-                velocity: [d[0] * 600., d[1] * 600. + 160., d[2] * 600.],
-                fuse: if matches!(item, 5 | 10) { HZ } else { HZ * 2 },
-                life: match item {
-                    2 => HZ * 14,
-                    5 | 10 => HZ * 8,
-                    _ => 0,
-                },
-            });
+            let utility = projectile::throw(p, item, &rules.projectile);
+            if slot == 0 {
+                if let Some(s) = self.practice.as_mut() {
+                    s.last_throw = Some(utility.clone());
+                    s.last_throw_mode = p.throw_mode;
+                    s.last_throw_tick = self.tick;
+                }
+            }
+            self.utilities.push(utility);
         } else {
             match item {
                 6 => {
@@ -982,25 +1201,7 @@ impl Game {
         let mut explosions = vec![];
         for u in &mut self.utilities {
             if u.fuse > 0 {
-                u.velocity[1] -= 500. / HZ as f64;
-                for a in 0..3 {
-                    u.position[a] += u.velocity[a] / HZ as f64
-                }
-                let before = u.position;
-                constrain(&mut u.position, &rules.maps[self.config.map]);
-                if before[0] != u.position[0] {
-                    u.velocity[0] *= -0.5
-                }
-                if before[2] != u.position[2] {
-                    u.velocity[2] *= -0.5
-                }
-                if u.position[1] < 8. {
-                    u.position[1] = 8.;
-                    u.velocity[1] = u.velocity[1].abs() * 0.4;
-                    u.velocity[0] *= 0.85;
-                    u.velocity[2] *= 0.85
-                }
-                dec(&mut u.fuse);
+                projectile::advance(u, &rules.maps[self.config.map], &rules.projectile);
                 if u.fuse == 0 {
                     explosions.push(u.clone())
                 }
@@ -1010,26 +1211,29 @@ impl Game {
         }
         for u in explosions {
             self.event("utility", Some(u.owner), None, u.kind as i32);
+            self.events.last_mut().unwrap().origin = Some(u.position);
             if matches!(u.kind, 2 | 5 | 10) {
                 continue;
             }
             for slot in 0..10 {
-                let d = dist(u.position, self.players[slot].position);
-                let max = if u.kind == 1 {
-                    650.
-                } else if u.kind == 4 {
-                    350.
-                } else {
-                    260.
-                };
-                if d > max || !self.players[slot].alive {
+                if !self.players[slot].alive {
                     continue;
                 }
                 let origin = eye(&self.players[slot]);
-                let length = ((origin[0] - u.position[0]).powi(2)
-                    + (origin[1] - u.position[1]).powi(2)
-                    + (origin[2] - u.position[2]).powi(2))
-                .sqrt();
+                let length = utility_effects::distance(origin, u.position);
+                let d = if u.kind == 1 {
+                    length
+                } else {
+                    utility_effects::distance(u.position, self.players[slot].position)
+                };
+                let max = match u.kind {
+                    1 => rules.utility_effects.flash_radius,
+                    4 => rules.utility_effects.emp_radius,
+                    _ => rules.utility_effects.fragment_radius,
+                };
+                if d >= max {
+                    continue;
+                }
                 let dir = [
                     (u.position[0] - origin[0]) / length.max(1.),
                     (u.position[1] - origin[1]) / length.max(1.),
@@ -1043,22 +1247,45 @@ impl Game {
                     continue;
                 }
                 if u.kind == 1 {
-                    let facing = direction(self.players[slot].yaw, self.players[slot].pitch);
+                    let aim = recoil::aim(
+                        self.players[slot].yaw,
+                        self.players[slot].pitch,
+                        self.players[slot].weapon_recoil.aim_punch,
+                    );
+                    let facing = direction(aim[0], aim[1]);
                     let dot = facing.iter().zip(dir).map(|(a, b)| a * b).sum::<f64>();
-                    self.players[slot].flash = if dot > 0. { HZ * 3 } else { HZ / 2 };
+                    let duration = rules
+                        .utility_effects
+                        .flash_ticks(length, if length < 1e-9 { 1. } else { dot });
+                    self.players[slot].flash = self.players[slot].flash.max(duration);
                 } else if u.kind == 4 {
                     if self.players[slot].team != self.players[u.owner].team
                         && self.players[slot].protection == 0
                     {
-                        self.players[slot].disabled = HZ * 5;
+                        self.players[slot].disabled = self.players[slot]
+                            .disabled
+                            .max(rules.utility_effects.emp_ticks);
                         self.players[slot].effect = 0;
                         self.players[slot].overclock = 0;
                     }
                 } else {
-                    self.hurt(slot, u.owner, (95. * (1. - d / max)) as i32, false, rules);
+                    let first_event = self.events.len();
+                    self.hurt_with_source(
+                        slot,
+                        u.owner,
+                        (95. * (1. - d / max)) as i32,
+                        false,
+                        0.,
+                        DamageSource::Utility(u.kind as usize),
+                        rules,
+                    );
+                    for event in &mut self.events[first_event..] {
+                        event.origin = Some(u.position);
+                    }
                 }
             }
         }
+        let mut repaired = [false; 10];
         for field in &self.utilities {
             if field.fuse > 0 || field.life == 0 {
                 continue;
@@ -1068,23 +1295,34 @@ impl Game {
                 if !p.alive {
                     continue;
                 }
-                let distance = dist(field.position, p.position);
-                if field.kind == 5 && p.team != team && distance < 450. {
-                    p.revealed = HZ / 2;
+                let distance = utility_effects::distance(field.position, p.position);
+                if field.kind == 5 && p.team != team && distance < rules.utility_effects.scan_radius
+                {
+                    p.revealed = p.revealed.max(rules.utility_effects.scan_reveal_ticks);
                 }
-                if field.kind == 10 && p.team == team && distance < 220. && self.tick % HZ == 0 {
-                    p.health = (p.health + 8).min(rules.heroes[p.hero].health);
+                if field.kind == 10
+                    && p.team == team
+                    && distance < rules.utility_effects.repair_radius
+                    && self.tick % HZ == 0
+                    && !repaired[p.slot]
+                {
+                    repaired[p.slot] = true;
+                    p.health = (p.health + rules.utility_effects.repair_per_second)
+                        .min(rules.heroes[p.hero].health);
                 }
             }
         }
         self.utilities.retain(|u| u.fuse > 0 || u.life > 0);
     }
-    pub fn step(&mut self, inputs: [Input; 10], rules: &Rules) -> Result<(), String> {
+    pub fn step(&mut self, mut inputs: [Input; 10], rules: &Rules) -> Result<(), String> {
         if self.phase == "finished" {
             return Err("Input after completed match".into());
         }
         if inputs.iter().any(|i| !i.validate()) {
             return Err("Invalid controls".into());
+        }
+        if self.practice.is_none() && inputs.iter().any(|i| i.practice > 0) {
+            return Err("Practice controls outside practice".into());
         }
         self.history.push_back((
             self.tick,
@@ -1092,7 +1330,8 @@ impl Game {
                 .iter()
                 .map(|p| HitPose {
                     position: p.position,
-                    crouch: p.crouch,
+                    stance: p.stance,
+                    look: [p.yaw, p.pitch],
                     alive: p.alive,
                     life: p.life,
                 })
@@ -1107,11 +1346,44 @@ impl Game {
         if self.tick > MAX_TICKS {
             return Err("Match exceeds time limit".into());
         }
+        if self.practice.is_some() {
+            if self.tick >= MAX_TICKS {
+                self.phase = "finished".into();
+                self.event("match_end", None, None, 0);
+                return Ok(());
+            }
+            if practice::before_step(self, &mut inputs, rules) {
+                return Ok(());
+            }
+        }
         let mut effective = inputs;
         let mut pickup_pressed = [false; 10];
         for slot in 0..10 {
-            if self.config.bots[slot] && !inputs[slot].takeover {
+            if self.practice.is_some() {
+                effective[slot] = practice::control(self, slot, rules, inputs[slot]);
+            } else if self.config.bots[slot] && !inputs[slot].takeover {
                 effective[slot] = self.bot(slot, rules);
+            }
+        }
+        if self.config.ruleset == Ruleset::Tactical {
+            for (slot, input) in effective.iter_mut().enumerate() {
+                // The authenticated transport binds actions to the observed life.
+                // Movement/aim may continue; stale combat and inventory actions cannot.
+                if !input.takeover
+                    || input.action_life.map(u32::from) != Some(self.players[slot].life)
+                {
+                    input.fire = false;
+                    input.reload = false;
+                    input.jump = false;
+                    input.ability = false;
+                    input.interact = false;
+                    input.scope = false;
+                    input.drop = false;
+                    input.weapon = None;
+                    input.buy = None;
+                    input.item = 0;
+                }
+                input.hero = None; // Lobby selection is locked for the entire match.
             }
         }
         if self.phase == "round_end" {
@@ -1126,13 +1398,29 @@ impl Game {
             if let Some(item) = input.buy {
                 self.buy(slot, item, rules)
             }
+            if self.config.ruleset == Ruleset::Tactical {
+                let pressed = input.drop && !self.players[slot].drop_held;
+                self.players[slot].drop_held = input.drop;
+                if pressed && !input.interact {
+                    self.drop_tactical_weapon(slot);
+                }
+                if let Some(weapon) = input.weapon {
+                    if self.players[slot].alive
+                        && self.phase == "buy"
+                        && self.players[slot].owned[weapon]
+                    {
+                        inventory::select(&mut self.players[slot], weapon);
+                    }
+                }
+            }
             let p = &mut self.players[slot];
             if let Some(hero) = input.hero {
                 if (self.phase == "buy" || !p.alive) && p.hero != hero {
                     p.hero = hero;
                     if p.alive {
-                        p.health = rules.heroes[hero].health;
-                        p.armor = p.armor.max(rules.heroes[hero].armor);
+                        // A buy-time selection may lower the HP cap, never heal
+                        // or mint armor by alternating chassis.
+                        p.health = p.health.min(rules.heroes[hero].health);
                     }
                 }
             }
@@ -1167,7 +1455,7 @@ impl Game {
             ] {
                 dec(v)
             }
-            p.recoil = (p.recoil - 0.035).max(0.);
+            p.weapon_recoil.recover(&rules.weapons[p.weapon].recoil);
             if p.reload > 0 {
                 dec(&mut p.reload);
                 if p.reload == 0 {
@@ -1183,14 +1471,20 @@ impl Game {
                     p.reload = 0;
                     p.burst_remaining = 0;
                     p.fire_wait = 10;
-                    p.recoil = 0.;
+                    p.weapon_recoil = recoil::State::default();
                 }
             }
+            p.throw_mode = input.throw_mode;
             p.crouch = input.crouch;
-            p.scoped = input.scope && rules.weapons[p.weapon].scoped;
+            p.stance = movement::stance(p.stance, p.crouch, &rules.movement);
+            p.scoped = input.scope && p.owned[p.weapon] && rules.weapons[p.weapon].scoped;
             let length = input.x.hypot(input.y).max(1.);
             let speed = rules.heroes[p.hero].speed
-                * rules.weapons[p.weapon].mobility
+                * if p.owned[p.weapon] {
+                    rules.weapons[p.weapon].mobility
+                } else {
+                    1.
+                }
                 * if p.crouch {
                     0.45
                 } else if input.walk || p.scoped {
@@ -1198,10 +1492,20 @@ impl Game {
                 } else {
                     1.
                 };
-            p.velocity[0] =
-                (-input.yaw.sin() * input.y + input.yaw.cos() * input.x) / length * speed;
-            p.velocity[2] =
-                (-input.yaw.cos() * input.y - input.yaw.sin() * input.x) / length * speed;
+            let wish = [
+                (-input.yaw.sin() * input.y + input.yaw.cos() * input.x) / length * speed,
+                (-input.yaw.cos() * input.y - input.yaw.sin() * input.x) / length * speed,
+            ];
+            let grounded = p.position[1] <= 0.;
+            let velocity = movement::horizontal(
+                [p.velocity[0], p.velocity[2]],
+                wish,
+                grounded,
+                &rules.movement,
+            );
+            p.velocity[0] = velocity[0];
+            p.velocity[2] = velocity[1];
+            dec(&mut p.landing);
             if input.jump && !p.jump_held && p.position[1] <= 0. {
                 p.velocity[1] = 220.
             }
@@ -1214,7 +1518,16 @@ impl Game {
                 p.position[1] = 0.;
                 p.velocity[1] = 0.;
             }
+            if !grounded && p.position[1] <= 0. {
+                p.landing = rules.movement.landing_ticks;
+            }
+            let before_collision = p.position;
             constrain(&mut p.position, &rules.maps[self.config.map]);
+            for a in [0, 2] {
+                if before_collision[a] != p.position[a] {
+                    p.velocity[a] = 0.;
+                }
+            }
             // Protection is for a safe restart, never for protected attacks.
             if input.fire || input.ability || input.item > 0 || input.interact {
                 p.protection = 0;
@@ -1222,6 +1535,7 @@ impl Game {
             let cast = input.ability && !p.skill_held;
             p.skill_held = input.ability;
             if input.reload
+                && p.owned[p.weapon]
                 && p.reload == 0
                 && p.ammo[p.weapon] < rules.weapons[p.weapon].magazine
                 && p.reserve[p.weapon] > 0
@@ -1251,6 +1565,10 @@ impl Game {
         }
         self.utilities(rules);
         self.pickup_drops(&pickup_pressed, rules);
+        if self.practice.is_some() {
+            practice::after_step(self, rules, &effective);
+            return Ok(());
+        }
         dec(&mut self.phase_ticks);
         if self.config.mode == "deathmatch" {
             if self.score.iter().any(|&s| s >= 50) || self.phase_ticks == 0 {
@@ -1287,7 +1605,12 @@ impl Game {
                     && p.team != self.attacker
                     && dist(p.position, self.objective.position) < 95.
                     || self.objective.carrier == Some(slot)
-                        && map.sites.iter().any(|&site| dist(site, p.position) < 125.))
+                        && map.sites.iter().any(|&site| dist(site, p.position) < 125.)
+                    || self.config.ruleset == Ruleset::Tactical
+                        && !self.objective.planted
+                        && self.objective.carrier.is_none()
+                        && p.team == self.attacker
+                        && dist(p.position, self.objective.position) < 60.)
             {
                 continue;
             }
@@ -1320,6 +1643,10 @@ impl Game {
             let Some(index) = choice else {
                 continue;
             };
+            if self.config.ruleset == Ruleset::Tactical {
+                self.recover_tactical_weapon(slot, index, rules);
+                continue;
+            }
             let drop = self.drops.remove(index);
             let p = &mut self.players[slot];
             let weapon = drop.weapon;
@@ -1335,7 +1662,7 @@ impl Game {
                 p.reload = 0;
                 p.burst_remaining = 0;
                 p.fire_wait = 10;
-                p.recoil = 0.;
+                p.weapon_recoil = recoil::State::default();
                 self.event("gun_pickup", Some(slot), None, weapon as i32);
             }
         }
@@ -1362,7 +1689,7 @@ impl Game {
         if self.objective.planted {
             dec(&mut self.objective.fuse);
             if self.objective.fuse == 0 {
-                self.end_round(self.attacker, "detonation");
+                self.end_round(self.attacker, "detonation", rules);
                 return;
             }
             actor = self
@@ -1408,9 +1735,14 @@ impl Game {
                 HZ * 3
             };
             if self.objective.progress >= required {
-                self.players[slot].credits = (self.players[slot].credits + 300).min(16000);
+                let reward = if self.config.ruleset == Ruleset::Tactical {
+                    rules.economy.objective_actor
+                } else {
+                    300
+                };
+                self.credit(slot, reward, rules);
                 if self.objective.planted {
-                    self.end_round(1 - self.attacker, "defused");
+                    self.end_round(1 - self.attacker, "defused", rules);
                     return;
                 } else {
                     self.objective.planted = true;
@@ -1434,7 +1766,7 @@ impl Game {
                 .count(),
         ];
         if alive[1 - self.attacker] == 0 {
-            self.end_round(self.attacker, "elimination")
+            self.end_round(self.attacker, "elimination", rules)
         } else if !self.objective.planted && (alive[self.attacker] == 0 || self.phase_ticks == 0) {
             self.end_round(
                 1 - self.attacker,
@@ -1443,6 +1775,7 @@ impl Game {
                 } else {
                     "elimination"
                 },
+                rules,
             )
         }
     }
@@ -1536,10 +1869,12 @@ mod tests {
             Config {
                 map: 0,
                 mode: mode.into(),
+                ruleset: Default::default(),
                 heroes: [0, 1, 2, 3, 4, 5, 0, 1, 2, 3],
                 bots: [false; 10],
                 difficulty: 1,
                 seed: 2050,
+                practice: None,
             },
             &r,
         )
@@ -1626,7 +1961,9 @@ mod tests {
         i[0].y = 1.;
         g.step(i, &r).unwrap();
         assert!(
-            (dist(initial, g.players[0].position) - r.heroes[0].speed / HZ as f64).abs() < 1e-8
+            (dist(initial, g.players[0].position) - r.movement.acceleration / (HZ * HZ) as f64)
+                .abs()
+                < 1e-8
         );
         for _ in 0..2000 {
             g.step(i, &r).unwrap();
@@ -1681,6 +2018,32 @@ mod tests {
         g.players[5].disabled = 0;
         g.skill(5, &r, &Input::default());
         assert!(g.players[5].effect > 0);
+    }
+    #[test]
+    fn confirmed_damage_accounts_for_shield_armor_overkill_and_the_real_source() {
+        let (r, mut g) = setup("deathmatch");
+        combat(&mut g);
+        g.players[5].hero = 2;
+        g.players[5].health = 140;
+        g.players[5].armor = 70;
+        g.players[5].effect = HZ * 5;
+        g.players[0].weapon = 3;
+        g.hurt_piercing(5, 0, 100, true, 0.4, &r);
+        let hit = g.events.last().unwrap();
+        let info = hit.damage.as_ref().unwrap();
+        assert_eq!(
+            (info.raw, info.health, info.armor, info.shielded),
+            (100, 35, 15, true)
+        );
+        assert!(matches!(info.source, DamageSource::Weapon(3)));
+        assert_eq!(hit.value, info.health);
+        g.hurt_with_source(5, 0, 1000, false, 0., DamageSource::Utility(3), &r);
+        let kill = g.events.last().unwrap();
+        assert_eq!(kill.kind, "kill");
+        let info = kill.damage.as_ref().unwrap();
+        assert!(matches!(info.source, DamageSource::Utility(3)));
+        assert_eq!((info.health, info.armor), (105, 55));
+        assert_eq!(g.players[0].damage, 140);
     }
     #[test]
     fn fire_reload_armor_and_cover_are_authoritative() {
@@ -2004,7 +2367,7 @@ mod tests {
             g.step(neutral(), &r).unwrap()
         }
         assert!(!g.players[5].alive);
-        g.end_round(0, "test");
+        g.end_round(0, "test", &r);
         for _ in 0..HZ * 5 {
             g.step(neutral(), &r).unwrap()
         }
@@ -2202,10 +2565,12 @@ mod tests {
                 let c = Config {
                     map,
                     mode: mode.into(),
+                    ruleset: Default::default(),
                     heroes: [0, 1, 2, 3, 4, 5, 0, 1, 2, 3],
                     bots: [true; 10],
                     difficulty: 1,
                     seed: 2050,
+                    practice: None,
                 };
                 let mut g = Game::new(c.clone(), &r).unwrap();
                 let mut other = Game::new(c, &r).unwrap();
@@ -2236,6 +2601,94 @@ mod tests {
         }
     }
     #[test]
+    fn rewind_restores_head_orientation_instead_of_using_the_current_look() {
+        let (mut r, mut g) = setup("deathmatch");
+        r.maps[0].obstacles.clear();
+        r.weapons[3].spread = 0.;
+        combat(&mut g);
+        g.tick = 100;
+        for p in &mut g.players {
+            if p.slot != 0 && p.slot != 5 {
+                p.alive = false;
+            }
+        }
+        g.players[0].position = [12., 0., 200.];
+        g.players[0].weapon = 3;
+        g.players[0].scoped = true;
+        g.players[0].yaw = 0.;
+        g.players[0].pitch = ((r.hit_regions.crouched.head_y - 56.) / 200.).atan();
+        g.players[5].position = [0.; 3];
+        g.players[5].crouch = true;
+        g.players[5].stance = 1.;
+        g.players[5].yaw = std::f64::consts::FRAC_PI_2;
+        g.history.push_back((
+            94,
+            g.players
+                .iter()
+                .map(|p| HitPose {
+                    position: p.position,
+                    stance: p.stance,
+                    look: [p.yaw, p.pitch],
+                    alive: p.alive,
+                    life: p.life,
+                })
+                .collect(),
+        ));
+        g.players[5].yaw = -std::f64::consts::FRAC_PI_2;
+        let health = g.players[5].health;
+        let mut current = g.clone();
+        current.fire(0, &r, None);
+        assert_eq!(current.players[5].health, health);
+        g.fire(0, &r, Some(94));
+        assert!(g.players[5].health < health);
+        assert!(g.events.iter().any(|e| e.kind == "headshot"));
+    }
+    #[test]
+    fn rewound_hit_regions_use_recorded_stance_and_report_the_nearest_region() {
+        let (mut r, mut g) = setup("deathmatch");
+        r.maps[0].obstacles.clear();
+        r.weapons[3].spread = 0.;
+        combat(&mut g);
+        g.tick = 100;
+        for p in &mut g.players {
+            if p.slot != 0 && p.slot != 5 {
+                p.alive = false;
+            }
+        }
+        g.players[0].position = [0., 0., 200.];
+        g.players[0].weapon = 3;
+        g.players[0].scoped = true;
+        g.players[0].pitch = (5_f64 / 200.).atan();
+        g.players[0].yaw = 0.;
+        g.players[5].position = [0.; 3];
+        g.players[5].stance = 0.;
+        g.history.push_back((
+            94,
+            g.players
+                .iter()
+                .map(|p| HitPose {
+                    position: p.position,
+                    stance: p.stance,
+                    look: [p.yaw, p.pitch],
+                    alive: p.alive,
+                    life: p.life,
+                })
+                .collect(),
+        ));
+        g.players[5].crouch = true;
+        g.players[5].stance = 1.;
+        let health = g.players[5].health;
+        let mut present = g.clone();
+        present.fire(0, &r, None);
+        assert_eq!(present.players[5].health, health);
+        g.fire(0, &r, Some(94));
+        assert!(g.players[5].health < health);
+        assert!(g
+            .events
+            .iter()
+            .any(|e| e.kind == "headshot" && e.target == Some(5)));
+    }
+    #[test]
     fn bounded_rewind_hits_the_rendered_pose_but_never_a_new_life_or_through_cover() {
         let (mut rules, mut game) = setup("deathmatch");
         rules.maps[0].obstacles.clear();
@@ -2255,7 +2708,8 @@ mod tests {
             .iter()
             .map(|p| HitPose {
                 position: p.position,
-                crouch: p.crouch,
+                stance: p.stance,
+                look: [p.yaw, p.pitch],
                 alive: p.alive,
                 life: p.life,
             })

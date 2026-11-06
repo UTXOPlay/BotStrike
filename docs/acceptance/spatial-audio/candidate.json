@@ -1,0 +1,37 @@
+{
+  "status": "private audio presentation candidate; no human acceptance or production deployment",
+  "baseImage": "sha256:dae1966422e99b9e97f1d99ebb13e739af402479565c626b525dd652ede9eca5",
+  "image": "sha256:8b31fe878288e7c92615feedc20363162fedb46a577ec4d3e62dd1b865849673",
+  "baseLayers": 19,
+  "candidateLayers": 20,
+  "allBaseLayersPreserved": true,
+  "pair": {
+    "botstrike-engine": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+    "myelin-botstrike": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74"
+  },
+  "profile": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+  "nativeModel": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+  "nativeRuleChanges": false,
+  "humanParticipants": 0,
+  "physicalOutputReviewed": false,
+  "defaultRenderer": "stereo",
+  "experimentalHrtf": "offline listening lab only",
+  "validationUrl": "http://127.0.0.1:19909/games/botstrike/",
+  "presentationUnitChecks": 177,
+  "hostChecks": 4,
+  "offlineAudioCases": 12,
+  "actualImageNativeGunStepsImpacts": true,
+  "actualImageSettingsViewports": 6,
+  "physicalListeningStatus": "User currently unavailable; no human data",
+  "appSha256": "d2a0a58cb8b9725db9b6ce1912a96a5dd4978197d1b4907b39e7ad463a00481e",
+  "sourceSha256": {
+    "games/botstrike/client/audio.mjs": "20989cb3de038619cd531e919023adfda4d7161b365210a363a5468d98c86eb0",
+    "games/botstrike/client/audio-budget.mjs": "4ea1acbf37b43b02285da069ea1b6e9c97a0659bebfa75c85297c6f89b7a4971",
+    "games/botstrike/client/audio-spatial.mjs": "8771bfe75ee377ead0040decfc2e8044d4816c6b54f4cba88d68989e2f4f2123",
+    "games/botstrike/client/audio-view.mjs": "19689cb8f2aac2548380edabb20ac39ceac785c51d1e7de161cb88a02b02a736",
+    "games/botstrike/client/feedback.mjs": "064a59282fb93662e255bee7136334fbc41e1ee7c46cf85adafaa87d3a092232",
+    "games/botstrike/client/preferences.mjs": "3f4355fc0a154f91bd6249ba916a44e4d0ffef24825e35c9d1163b1bc4db28bc",
+    "games/botstrike/client/main.mjs": "240164e3c3d71da936322d907e343ec426937deaece70a5afc5ef3cd24c28c3b",
+    "games/botstrike/web/style.css": "5155e1f7075728d58bfc10070c73d0df462d66e99c52a97387f088fc9d832629"
+  }
+}

@@ -1,3 +1,4 @@
+import {presentationGait} from './presentation-gait.mjs';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
@@ -46,7 +47,7 @@ function deathAxes(model,clips){
  mixer.stopAllAction();mixer.uncacheRoot(copy);return axes;
 }
 // Models and textures are shared; every actor owns an independent cloned rig.
-export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
+export function createCharacters(art,{weapons=null,heroes=null,maps=null,hit_regions=null}={}){
  const templates=[],weaponTemplates=new Map(),teamMaterials=[0x69efff,0xffae67].map(color=>new THREE.MeshBasicMaterial({color,toneMapped:false})),badgeGeometry=new THREE.BoxGeometry(.09,.025,.035);
  const stamp=document.createElement('canvas');stamp.width=stamp.height=64;const ctx=stamp.getContext('2d'),gradient=ctx.createRadialGradient(32,32,5,32,32,32);gradient.addColorStop(0,'rgba(0,0,0,.5)');gradient.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);const shadowTexture=new THREE.CanvasTexture(stamp),shadowMaterial=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false}),shadowGeometry=new THREE.PlaneGeometry(43,36);
  async function preload(progress=()=>{}){
@@ -249,8 +250,8 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
    lastCrouch=!!p.crouch;lastScoped=!!p.scoped;
    if(transition&&now>=transitionUntil){transition.fadeOut(.06);transition=null;transitionKind=null;}
    if(continuous){
-    const cycleDuration=feet?feet.plan(motionSignals,dt):advanceStridePlan(viewStride,motionSignals,dt);
-    blend.update(motionSignals,dt,{active:p.alive&&!full,reduced,phase:motionSignals.reset?gaitPhase:blend.phase,cycleDuration});
+    const gait=presentationGait(p,state.tick),cycleDuration=feet?feet.plan(motionSignals,dt,gait):gait?.cycleDuration??advanceStridePlan(viewStride,motionSignals,dt);
+    blend.update(motionSignals,dt,{active:p.alive&&!full,reduced,phase:motionSignals.reset?gaitPhase:blend.phase,cycleDuration,contactPhase:gait?.phase});
     for(let i=0;i<lowerActions.length;i++){const a=lowerActions[i],weight=blend.weights[i]*blend.gain;a.enabled=weight>1e-6;if(a.enabled)a.play();a.paused=true;a.time=blend.times[i];a.setEffectiveWeight(weight);}
     base=action(blend.dominant,'lower');gaitPhase=blend.phase;
    }
@@ -296,7 +297,7 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
     model.position.z+=springs.recoil.value[2]+springs.ready.value[0]*.012;model.rotation.x+=springs.recoil.value[0]*.35+springs.ready.value[0]*.045+springs.sway.value[1];model.rotation.z+=Math.sin(phase)*moving*.008*sway+springs.sway.value[2];
    }
    // Small tracking offsets follow the gameplay look direction after blending.
-   if(p.alive){bones.head.rotation.x+=(p.pitch||0)*.5;bones.chest.rotation.x+=(p.pitch||0)*.22;
+   if(p.alive){const chestPitch=Number.isFinite(p.stance)?hit_regions?.pitch_chest??.22:.22,headPitch=Number.isFinite(p.stance)?(hit_regions?.pitch_head??.72)-chestPitch:.5;bones.head.rotation.x+=(p.pitch||0)*headPitch;bones.chest.rotation.x+=(p.pitch||0)*chestPitch;
     if(!firstPerson&&!reduced&&now-hitAt<320){const pulse=Math.sin(Math.PI*Math.max(0,now-hitAt)/320)*hitForce;bones.chest.rotation.x-=pulse*.30;bones.head.rotation.x+=pulse*.22;}
    }
    if(hybrid&&p.alive&&!full&&motionSignals.grounded)bones.chest.updateWorldMatrix(true,true);
@@ -347,7 +348,7 @@ export function createCharacters(art,{weapons=null,heroes=null,maps=null}={}){
     const c=Math.cos(rig.rotation.y),s=Math.sin(rig.rotation.y),support=corpsePlanes?Math.max(0,...corpsePlanes.planes.filter(p=>p.face?.axis==='y').map(p=>p.face.edge)):0;
     shadow.position.set(c*corpseOffset.x-s*corpseOffset.z,.15+support-Math.max(0,p.position[1]),s*corpseOffset.x+c*corpseOffset.z);
    }
-   gun.visible=p.alive;rig.userData.motion=full?.getClip().name||base?.getClip().name;if(p.alive)lastRenderYaw=rig.rotation.y;
+   gun.visible=p.alive&&!p.unarmed&&(!p.owned||p.owned[p.weapon]);rig.userData.motion=full?.getClip().name||base?.getClip().name;if(p.alive)lastRenderYaw=rig.rotation.y;
    return {deadAt,motion:rig.userData.motion};
   }
   function invalidate(reason='visibility'){

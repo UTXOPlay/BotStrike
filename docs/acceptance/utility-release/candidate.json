@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "date": "2026-11-06",
+  "status": "unreleased candidate; not production deployed or human accepted",
+  "modelSha256": "84118774e47dd230dd2a6ebaa187d5e789a1a78b0f02d4445788b7f38b9ab0a6",
+  "version": "botstrike-2050-tactical-v3",
+  "image": "sha256:9a54daf48f45c77d167b85c5962759c0f11e1218ce43f6a93fd3c2da1fb2c663",
+  "localPair": {
+    "botstrike-engine": "2c38e3be696505ff3da466f5f9ef6146b15f3f69dc3294920ffdb8c8d5241c21",
+    "myelin-botstrike": "2f1fc30855ba351b423892ca56adaa00c4ef083d9839c103b526aba9759545fc"
+  },
+  "bookwormPair": {
+    "botstrike-engine": "aa907de2169de8bc03192ec927f3052148910214dc85de65d721d1d348cbd66c",
+    "myelin-botstrike": "7980cd7e998facd126129ff84c04021f0965ba3cb96d93c86202c8cf77b14cfb"
+  },
+  "nativeTests": 56,
+  "unitTests": 154,
+  "fixedReleaseCases": 810,
+  "sightFixtures": 2004,
+  "damageCases": 6048,
+  "bookwormDamageRowsMatchLocal": true,
+  "observedReleaseTrials": 9,
+  "localTrajectorySnapshots": 792,
+  "bookwormTrajectorySnapshots": 866,
+  "reconnectedReleaseMatched": true,
+  "historicalProductionProfilesVerified": 5,
+  "retainedPortablePreviewPairs": 2,
+  "remainingGates": [
+    "Actual 120 FPS browser assertion failed in the current software-rendered environment.",
+    "Human throw usability, recognition/cohort and flagship-map approval remain pending.",
+    "Utility volume disclosure is bounded sampling; exact aperture/reference-camera and full #16 interaction/impact-audio acceptance remain pending.",
+    "Local GPG signature unlocking is still required before commits/push."
+  ],
+  "previousImage": "sha256:b2b2edff4333d84e4e4930b043503b4bf0536885d4fad1305e65c97e4bcbb60d",
+  "frozenSourceReceiptSha256": "c9b85e8c56a56715d0a08f832d5044151a7dda891cae59dfb7b0c623bf01fd70",
+  "hostTests": 4,
+  "bookwormTrajectorySnapshotsCurrent": 872,
+  "browserOnCurrentImage": "browser-current-image.json",
+  "controllerOnCurrentImage": "controller-current-image.json",
+  "renderCadence": {
+    "artifact": "render-cadence.json",
+    "actualFps": {
+      "30": [
+        29,
+        30,
+        30
+      ],
+      "60": [
+        61,
+        60,
+        59
+      ],
+      "120": [
+        61,
+        61,
+        60
+      ]
+    },
+    "target120Passed": false,
+    "physicalDisplayAccepted": false
+  }
+}

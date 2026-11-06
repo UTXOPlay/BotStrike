@@ -1,0 +1,20 @@
+{
+  "context": "/tmp/botstrike-interface-final-d2_tup0n",
+  "sourceSha256": {
+    "games/botstrike/client/main.mjs": "c71c055201570593b84747868b8e8cb355c2a976f565f9aeba040d1d057a87aa",
+    "games/botstrike/client/practice.mjs": "f5b582e23bf670a970d2cb1b9c21d4755af0d2c8c4b7b074f9e1d36a3dfae3c6",
+    "games/botstrike/client/quick-communications.mjs": "34123d4958e30d5a66b565425f5400ba4dd313620d658cbc86e51fa44c7eb86a",
+    "games/botstrike/client/tactical-view.mjs": "22bd1288fdfd490458932741239586c7754bb6f6b21e3f2b34574592a3771a13",
+    "games/botstrike/client/armory-interface.mjs": "65618d7ceaa86b25165dc99955416a4d2673c3e31cd7073150226e129c54e872",
+    "games/botstrike/client/interface-layout.mjs": "60ec04c308e2eaaebf354f22837c70a39c940937b584d62e719dfaa2bacf2487",
+    "games/botstrike/client/menu-focus.mjs": "48cd271e4f239cde2881616188c424832bcb2ca9715dd5434363c30cc21230ee",
+    "games/botstrike/client/dialogs.mjs": "422cb35540df2e8c70a44c33379000d372aa01e016cf162e86b8406cc1211208",
+    "games/botstrike/web/index.html": "aaeb0c8f90d521ebcf81c94d144a494bfdece7e59e5d76080327ee827cf384f8",
+    "games/botstrike/web/style.css": "a16029275b8406a3204fa122bd18b93fe095650b0a4e742937b1a2d68b5693fe",
+    "games/botstrike/web/tactical-interface.css": "25cfb60c66195443a0fd318193646473eafd1ef9a09dabb9567b971afc9d3879",
+    "games/botstrike/web/app.js": "447986c66937bf07b1f1d5bf351ca12941dbcfdffa252269a43d6f1b834c3cb9",
+    "tests/botstrike-tactical-ui-browser.mjs": "c37f0565d51589ab4f2dfb8932c3f2a3b9fc2481fc8fae7b0469bb58bc4be9e5",
+    "tests/botstrike-comms-browser.mjs": "12adc45f6a5c31c0da3466553f9c4e67960bfd0186a15d94e78d30ad9a356302",
+    "tests/botstrike-menu-focus-browser.mjs": "00a2acb06015e0d3238bd326e3b416b97363ce1b664572890077cd5a08bfd6fd"
+  }
+}

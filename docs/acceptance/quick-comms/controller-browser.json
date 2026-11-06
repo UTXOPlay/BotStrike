@@ -1,0 +1,13 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "cohort": "controller",
+  "results": [],
+  "keyboard": true,
+  "controller": true,
+  "touch": false,
+  "heldInputsCleared": true,
+  "reducedMotion": true,
+  "renderFps": 30,
+  "errors": []
+}

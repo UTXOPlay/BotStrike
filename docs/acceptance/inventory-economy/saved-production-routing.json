@@ -1,0 +1,30 @@
+{
+  "rawExportsRetainedPrivately": true,
+  "records": [
+    {
+      "savedProductionVersion": "arsenal-v2",
+      "verifier": "arsenal-v2",
+      "verified": true
+    },
+    {
+      "savedProductionVersion": "network-v3",
+      "verifier": "network-v3",
+      "verified": true
+    },
+    {
+      "savedProductionVersion": "readability-v5",
+      "verifier": "readability-v5",
+      "verified": true
+    },
+    {
+      "savedProductionVersion": "salvage-v1",
+      "verifier": "salvage-v1",
+      "verified": true
+    },
+    {
+      "savedProductionVersion": "tactics-v4",
+      "verifier": "tactics-v4",
+      "verified": true
+    }
+  ]
+}

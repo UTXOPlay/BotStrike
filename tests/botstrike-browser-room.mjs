@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 
 export async function leaveBrowserRoom(page,surface=page){
@@ -16,6 +17,6 @@ export async function leaveBrowserRoom(page,surface=page){
   surface.locator('#leave').evaluate(button=>button.click())
  ]);
  assert.equal(departure.status(),200);
- await surface.waitForFunction(()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(value=>value.room===null),undefined,{timeout:5000});
+ await waitBrowserCondition(surface,()=>fetch('/games/botstrike/api/state').then(response=>response.json()).then(value=>value.room===null),undefined,{timeout:5000});
  return true;
 }

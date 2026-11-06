@@ -1,0 +1,436 @@
+[
+  {
+    "view": "training",
+    "w": 1920,
+    "h": 1080,
+    "layout": [
+      {
+        "s": "#radar",
+        "x": 24,
+        "y": 130,
+        "w": 240,
+        "h": 240,
+        "font": 14,
+        "text": ""
+      },
+      {
+        "s": "#practice-hud",
+        "x": 24,
+        "y": 260,
+        "w": 290,
+        "h": 166.1875,
+        "font": 18,
+        "text": "TARGET RANGE · UNRANKED0 rounds · 0 damaging impacts (0 head) · 0 HP · 0 kills · 0 moving shotsRESETDRILL MENU"
+      },
+      {
+        "s": ".match-score",
+        "x": 849,
+        "y": 16,
+        "w": 222,
+        "h": 93,
+        "font": 14,
+        "text": "ALLY0SOLO TRAINING2:59UNRANKED · NO CAREER0ENEMY"
+      },
+      {
+        "s": "#comms-open",
+        "x": 272,
+        "y": 130,
+        "w": 155.203125,
+        "h": 44,
+        "font": 16.32,
+        "text": "PING / COMMS"
+      },
+      {
+        "s": "#vitals-state",
+        "x": 28,
+        "y": 942,
+        "w": 228.3984375,
+        "h": 114,
+        "font": 14,
+        "text": "VECTOR / RUNNER90HP25ARMOR"
+      },
+      {
+        "s": ".loadout",
+        "x": 1601,
+        "y": 873.796875,
+        "w": 291,
+        "h": 182.203125,
+        "font": 14,
+        "text": "ION-530/ 90STANDARD · CARBON VEIL × 1 · GSTEADY · BASE SPREAD"
+      },
+      {
+        "s": "#accuracy-state",
+        "x": 1616,
+        "y": 1017.796875,
+        "w": 261,
+        "h": 26.203125,
+        "font": 12.48,
+        "text": "STEADY · BASE SPREAD"
+      }
+    ]
+  },
+  {
+    "view": "training",
+    "w": 2560,
+    "h": 1080,
+    "layout": [
+      {
+        "s": "#radar",
+        "x": 24,
+        "y": 130,
+        "w": 240,
+        "h": 240,
+        "font": 14,
+        "text": ""
+      },
+      {
+        "s": "#practice-hud",
+        "x": 24,
+        "y": 260,
+        "w": 290,
+        "h": 166.1875,
+        "font": 18,
+        "text": "TARGET RANGE · UNRANKED0 rounds · 0 damaging impacts (0 head) · 0 HP · 0 kills · 0 moving shotsRESETDRILL MENU"
+      },
+      {
+        "s": ".match-score",
+        "x": 1169,
+        "y": 16,
+        "w": 222,
+        "h": 93,
+        "font": 14,
+        "text": "ALLY0SOLO TRAINING2:57UNRANKED · NO CAREER0ENEMY"
+      },
+      {
+        "s": "#comms-open",
+        "x": 272,
+        "y": 130,
+        "w": 198.28125,
+        "h": 47,
+        "font": 21.76,
+        "text": "PING / COMMS"
+      },
+      {
+        "s": "#vitals-state",
+        "x": 28,
+        "y": 942,
+        "w": 228.3984375,
+        "h": 114,
+        "font": 14,
+        "text": "VECTOR / RUNNER90HP25ARMOR"
+      },
+      {
+        "s": ".loadout",
+        "x": 2201.9765625,
+        "y": 868.5,
+        "w": 330.0234375,
+        "h": 187.5,
+        "font": 14,
+        "text": "ION-530/ 90STANDARD · CARBON VEIL × 1 · GSTEADY · BASE SPREAD"
+      },
+      {
+        "s": "#accuracy-state",
+        "x": 2216.9765625,
+        "y": 1012.5,
+        "w": 300.0234375,
+        "h": 31.5,
+        "font": 15,
+        "text": "STEADY · BASE SPREAD"
+      }
+    ]
+  },
+  {
+    "view": "training",
+    "w": 2560,
+    "h": 1440,
+    "layout": [
+      {
+        "s": "#radar",
+        "x": 24,
+        "y": 130,
+        "w": 240,
+        "h": 240,
+        "font": 14,
+        "text": ""
+      },
+      {
+        "s": "#practice-hud",
+        "x": 24,
+        "y": 260,
+        "w": 290,
+        "h": 166.1875,
+        "font": 18,
+        "text": "TARGET RANGE · UNRANKED0 rounds · 0 damaging impacts (0 head) · 0 HP · 0 kills · 0 moving shotsRESETDRILL MENU"
+      },
+      {
+        "s": ".match-score",
+        "x": 1169,
+        "y": 16,
+        "w": 222,
+        "h": 93,
+        "font": 14,
+        "text": "ALLY0SOLO TRAINING2:55UNRANKED · NO CAREER0ENEMY"
+      },
+      {
+        "s": "#comms-open",
+        "x": 272,
+        "y": 130,
+        "w": 198.28125,
+        "h": 60,
+        "font": 21.76,
+        "text": "PING / COMMS"
+      },
+      {
+        "s": "#vitals-state",
+        "x": 28,
+        "y": 1302,
+        "w": 228.3984375,
+        "h": 114,
+        "font": 14,
+        "text": "VECTOR / RUNNER90HP25ARMOR"
+      },
+      {
+        "s": ".loadout",
+        "x": 2201.9765625,
+        "y": 1228.5,
+        "w": 330.0234375,
+        "h": 187.5,
+        "font": 14,
+        "text": "ION-530/ 90STANDARD · CARBON VEIL × 1 · GSTEADY · BASE SPREAD"
+      },
+      {
+        "s": "#accuracy-state",
+        "x": 2216.9765625,
+        "y": 1372.5,
+        "w": 300.0234375,
+        "h": 31.5,
+        "font": 15,
+        "text": "STEADY · BASE SPREAD"
+      }
+    ]
+  },
+  {
+    "view": "training",
+    "w": 3840,
+    "h": 2160,
+    "layout": [
+      {
+        "s": "#radar",
+        "x": 60,
+        "y": 200,
+        "w": 360,
+        "h": 360,
+        "font": 14,
+        "text": ""
+      },
+      {
+        "s": "#practice-hud",
+        "x": 24,
+        "y": 260,
+        "w": 290,
+        "h": 166.1875,
+        "font": 18,
+        "text": "TARGET RANGE · UNRANKED0 rounds · 0 damaging impacts (0 head) · 0 HP · 0 kills · 0 moving shotsRESETDRILL MENU"
+      },
+      {
+        "s": ".match-score",
+        "x": 1749.800048828125,
+        "y": 16,
+        "w": 340.39990234375,
+        "h": 142.59999084472656,
+        "font": 14,
+        "text": "ALLY0SOLO TRAINING2:53UNRANKED · NO CAREER0ENEMY"
+      },
+      {
+        "s": "#comms-open",
+        "x": 428,
+        "y": 200,
+        "w": 231.921875,
+        "h": 60,
+        "font": 26,
+        "text": "PING / COMMS"
+      },
+      {
+        "s": "#vitals-state",
+        "x": 28,
+        "y": 1961.199951171875,
+        "w": 350.2109375,
+        "h": 174.800048828125,
+        "font": 14,
+        "text": "VECTOR / RUNNER90HP25ARMOR"
+      },
+      {
+        "s": ".loadout",
+        "x": 3305.964111328125,
+        "y": 1848.5,
+        "w": 506.035888671875,
+        "h": 287.5,
+        "font": 14,
+        "text": "ION-530/ 90STANDARD · CARBON VEIL × 1 · GSTEADY · BASE SPREAD"
+      },
+      {
+        "s": "#accuracy-state",
+        "x": 3328.964111328125,
+        "y": 2069.300048828125,
+        "w": 460.035888671875,
+        "h": 48.300048828125,
+        "font": 15,
+        "text": "STEADY · BASE SPREAD"
+      }
+    ]
+  },
+  {
+    "view": "training-menu",
+    "layout": [
+      {
+        "s": "#radar",
+        "x": 24,
+        "y": 130,
+        "w": 240,
+        "h": 240,
+        "font": 14,
+        "text": ""
+      },
+      {
+        "s": ".match-score",
+        "x": 849,
+        "y": 16,
+        "w": 222,
+        "h": 93,
+        "font": 14,
+        "text": "ALLY0SOLO TRAINING2:48UNRANKED · NO CAREER0ENEMY"
+      },
+      {
+        "s": "#vitals-state",
+        "x": 28,
+        "y": 942,
+        "w": 228.3984375,
+        "h": 114,
+        "font": 14,
+        "text": "VECTOR / RUNNER90HP25ARMOR"
+      },
+      {
+        "s": ".loadout",
+        "x": 1601,
+        "y": 873.796875,
+        "w": 291,
+        "h": 182.203125,
+        "font": 14,
+        "text": "ION-530/ 90STANDARD · CARBON VEIL × 1 · GSTEADY · BASE SPREAD"
+      },
+      {
+        "s": "#accuracy-state",
+        "x": 1616,
+        "y": 1017.796875,
+        "w": 261,
+        "h": 26.203125,
+        "font": 12.48,
+        "text": "STEADY · BASE SPREAD"
+      },
+      {
+        "s": "#practice-panel",
+        "x": 240,
+        "y": 738.46875,
+        "w": 960,
+        "h": 388.3125,
+        "font": 14,
+        "text": "SOLO TRAINING · UNRANKEDTarget range · Compare body and head damage. Cycle distance, chassis and armor.Attempt 1 · in progress · 0 rounds · 0 damaging"
+      }
+    ]
+  },
+  {
+    "view": "armory",
+    "layout": [
+      {
+        "s": "#radar",
+        "x": 24,
+        "y": 130,
+        "w": 240,
+        "h": 240,
+        "font": 14,
+        "text": ""
+      },
+      {
+        "s": "#practice-hud",
+        "x": 24,
+        "y": 260,
+        "w": 290,
+        "h": 166.1875,
+        "font": 18,
+        "text": "TARGET RANGE · UNRANKED0 rounds · 0 damaging impacts (0 head) · 0 HP · 0 kills · 0 moving shotsRESETDRILL MENU"
+      },
+      {
+        "s": ".match-score",
+        "x": 849,
+        "y": 16,
+        "w": 222,
+        "h": 93,
+        "font": 14,
+        "text": "ALLY0SOLO TRAINING2:48UNRANKED · NO CAREER0ENEMY"
+      },
+      {
+        "s": "#comms-open",
+        "x": 272,
+        "y": 130,
+        "w": 155.203125,
+        "h": 44,
+        "font": 16.32,
+        "text": "PING / COMMS"
+      },
+      {
+        "s": "#vitals-state",
+        "x": 28,
+        "y": 942,
+        "w": 228.3984375,
+        "h": 114,
+        "font": 14,
+        "text": "VECTOR / RUNNER90HP25ARMOR"
+      },
+      {
+        "s": ".loadout",
+        "x": 1601,
+        "y": 873.796875,
+        "w": 291,
+        "h": 182.203125,
+        "font": 14,
+        "text": "ION-530/ 90STANDARD · CARBON VEIL × 1 · GSTEADY · BASE SPREAD"
+      },
+      {
+        "s": "#accuracy-state",
+        "x": 1616,
+        "y": 1017.796875,
+        "w": 261,
+        "h": 26.203125,
+        "font": 12.48,
+        "text": "STEADY · BASE SPREAD"
+      },
+      {
+        "s": "#buy-menu .dialog-content",
+        "x": 510,
+        "y": 30,
+        "w": 900,
+        "h": 1020,
+        "font": 14,
+        "text": "ROBOTICS / FIELD SYSTEMSTHE ARMORYFIELD LOADOUT · SELECT A WEAPON OR DEPLOY EQUIPMENTDROP CURRENT · ION-5ACTIVE EQUIPMENTPHOTON FLASHCARBON VEILSHARD "
+      },
+      {
+        "s": "#buy-items",
+        "x": 542,
+        "y": 412.5,
+        "w": 836,
+        "h": 940,
+        "font": 14,
+        "text": "ARC-9EQUIPA compact ion sidearm with reliable single pulses.NEEDLEEQUIPA rapid flechette accelerator for close-range chassis combat.ION-5EQUIPPEDAn in"
+      },
+      {
+        "s": "#armory-tabs",
+        "x": 542,
+        "y": 268.5,
+        "w": 836,
+        "h": 60,
+        "font": 14,
+        "text": "WEAPONS / 12EQUIPMENT / 12"
+      }
+    ]
+  }
+]

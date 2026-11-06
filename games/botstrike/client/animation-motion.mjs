@@ -25,7 +25,8 @@ export class AnimationMotion{
   out.speed=speed;out.grounded=isGrounded(player);out.rising=vy>0;out.crouch=!!player.crouch;out.scoped=!!player.scoped;out.reset=reason;
   out.flightContinuity=!!(reason&&['visibility','gap','correction'].includes(reason)&&!out.grounded&&continuesFlight(this.flight,player,map,time,tick));
   const crouchFrom=out.flightContinuity?this.flight.crouchAmount:out.crouchAmount;
-  out.crouchAmount=reason&&!out.flightContinuity?Number(out.crouch):crouchFrom+(Number(out.crouch)-crouchFrom)*-Math.expm1(-seconds/.07);
+  out.stanceAuthoritative=Number.isFinite(player.stance);
+  out.crouchAmount=out.stanceAuthoritative?Math.max(0,Math.min(1,player.stance)):reason&&!out.flightContinuity?Number(out.crouch):crouchFrom+(Number(out.crouch)-crouchFrom)*-Math.expm1(-seconds/.07);
   out.takeoff=!reason&&this.grounded&&!out.grounded&&out.rising;
   Object.assign(out,flightPhase(vy));
   const unchanged=this.flight?.life===player.life&&this.flight?.map===map&&this.flight?.vertical===vy&&(!Number.isInteger(tick)||tick===this.flight.tick);

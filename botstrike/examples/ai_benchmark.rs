@@ -8,6 +8,7 @@ fn main() {
                 let config = Config {
                     map,
                     mode: mode.into(),
+                    ruleset: Default::default(),
                     heroes: [0, 1, 2, 3, 4, 5, 0, 1, 2, 3],
                     bots: [true; 10],
                     difficulty,
@@ -15,6 +16,7 @@ fn main() {
                         .ok()
                         .and_then(|v| v.parse().ok())
                         .unwrap_or(2050),
+                    practice: None,
                 };
                 let mut g = Game::new(config, &rules).unwrap();
                 let (mut shots, mut hits, mut kills, mut plants, mut defuses) = (0, 0, 0, 0, 0);

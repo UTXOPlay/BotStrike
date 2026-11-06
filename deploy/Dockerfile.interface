@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1
+# UI-only overlay on the exact tested V5 application and historical verifiers.
+ARG APPLICATION_IMAGE=botstrike:comms-v5-4cb119b7
+FROM ${APPLICATION_IMAGE} AS bound
+FROM bound AS ui
+USER root
+WORKDIR /work
+COPY package.json package-lock.json ./
+RUN npm ci --include=dev --ignore-scripts --no-audit --no-fund
+COPY botstrike ./botstrike
+COPY botstrike-myelin ./botstrike-myelin
+COPY botstrike-service ./botstrike-service
+COPY host ./host
+COPY shared ./shared
+COPY games ./games
+COPY assets ./assets
+COPY public ./public
+COPY game-host.json ./game-host.json
+COPY tools ./tools
+COPY tests ./tests
+COPY docs/acceptance/tactical-interface/binding.json ./interface-binding.json
+COPY docs/acceptance/arsenal-audio/gait-calibration.json ./docs/acceptance/arsenal-audio/gait-calibration.json
+COPY --from=bound /app/release ./release
+# Keep the exact portable oracle/header with its retained engine, not the
+# workstation-generated guide present in the source checkout.
+COPY --from=bound /app/dist/botstrike/damage-contract.json ./games/botstrike/web/damage-contract.json
+RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{modelDigest}from'./tools/damage-contract-source.mjs';const m=JSON.parse(readFileSync('interface-binding.json'));if(modelDigest()!==m.nativeModelSha256)throw Error('Native model changed');for(const[p,h]of Object.entries(m.protectedFiles)){if(p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected runtime changed: '+p)}"
+RUN mkdir interface-validation && (node --test --test-concurrency=4 tests/*.test.mjs > interface-validation/unit.tap || { cat interface-validation/unit.tap; exit 1; }) && (npm run test:host > interface-validation/host.tap || { cat interface-validation/host.tap; exit 1; }) && npm run build
+RUN node --input-type=module -e "import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const m=JSON.parse(readFileSync('interface-binding.json'));for(const[p,h]of Object.entries(m.protectedFiles)){if(!p.startsWith('dist/'))continue;if(createHash('sha256').update(readFileSync(p)).digest('hex')!==h)throw Error('Protected web contract changed: '+p)}"
+FROM bound
+COPY --from=ui /work/dist /app/dist
+COPY --from=ui /work/interface-validation /app/build-validation/interface

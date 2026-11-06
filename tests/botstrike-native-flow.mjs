@@ -19,7 +19,7 @@ try{
  const denied=await fetch(base+'/api/action',{method:'POST',headers:headers(accounts[1]),body:JSON.stringify({type:'start'})});assert.equal(denied.status,400);
  for(const account of accounts){const socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(account)});const control=new Promise(resolve=>socket.on('message',raw=>{const message=JSON.parse(raw);if(message.type==='control'&&message.active)resolve(message.token)}));await new Promise((resolve,reject)=>{socket.on('open',resolve);socket.on('error',reject)});controlTokens.set(account,await control);ws.push(socket)}
  await request(accounts[0],{type:'start',controlToken:controlTokens.get(accounts[0])});
- let state=null;for(let attempt=0;attempt<100&&!state;attempt++){state=(await request(accounts[0])).room.state;if(!state)await new Promise(r=>setTimeout(r,20))}assert.ok(state,'native room becomes ready');assert.equal(state.players.length,10);
+ let state=null;for(let attempt=0;attempt<100&&!state;attempt++){state=(await request(accounts[0])).room.state;if(!state)await new Promise(r=>setTimeout(r,20))}assert.ok(state,'native room becomes ready');assert.equal(state.players.length,10);assert.deepEqual(state.events,[],'raw native events never appear in the public snapshot');
  ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:100,x:1,fire:true,viewTick:Math.max(0,state.tick-6)}}));await new Promise(r=>setTimeout(r,50));state=(await request(accounts[0])).room.state;assert.equal(state.players[0].last_seq,100,'native accepts authenticated human input');
  ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:101,ability:true}}));
  ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:102}}));await new Promise(r=>setTimeout(r,80));state=(await request(accounts[0])).room.state;assert.ok(state.players[0].skill_wait>0,'a short press between ticks is retained');
@@ -44,5 +44,5 @@ try{
  await new Promise(r=>setTimeout(r,25));
  assert.equal((await request(accounts[1])).room.slot,5,'reconnected pilot keeps their balanced slot');
  reconnect.close();
- console.log(JSON.stringify({data,ticks:end.state.tick,score:end.state.score,players:10,privateJoin:true,publicMatchmaking:true,reconnect:true,balancedTeams:true,humanInput:true,respawns:true,signedReplay:true,tamperRejected:true},null,2));
+ console.log(JSON.stringify({data,profile:end.proof.profile,ticks:end.state.tick,score:end.state.score,players:10,privateJoin:true,publicMatchmaking:true,reconnect:true,balancedTeams:true,humanInput:true,respawns:true,signedReplay:true,tamperRejected:true},null,2));
 }finally{ws.forEach(s=>s.terminate());await service.close();}

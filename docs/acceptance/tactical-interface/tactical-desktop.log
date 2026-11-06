@@ -1,0 +1,166 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "readyGate": true,
+  "privateRuleset": true,
+  "keyboardDrop": true,
+  "touchDrop": false,
+  "unarmedPresentation": true,
+  "nativeRecovery": true,
+  "teamBudgetPrivate": true,
+  "results": [
+    {
+      "view": "lobby-readiness",
+      "stage": "initial",
+      "nativeConnectedPilots": 1,
+      "nativeReadyPilots": 0,
+      "room": "86dcedc9963905abc23e5a12",
+      "progress": {
+        "max": 10,
+        "value": 0,
+        "position": 0,
+        "label": "Ready pilots"
+      }
+    },
+    {
+      "view": "lobby-readiness",
+      "stage": "peers-ready",
+      "nativeConnectedPilots": 10,
+      "nativeReadyPilots": 9,
+      "room": "86dcedc9963905abc23e5a12",
+      "progress": {
+        "max": 10,
+        "value": 9,
+        "position": 0.9,
+        "label": "Ready pilots"
+      }
+    },
+    {
+      "view": "lobby-readiness",
+      "stage": "all-ready",
+      "nativeConnectedPilots": 10,
+      "nativeReadyPilots": 10,
+      "room": "86dcedc9963905abc23e5a12",
+      "progress": {
+        "max": 10,
+        "value": 10,
+        "position": 1,
+        "label": "Ready pilots"
+      }
+    },
+    {
+      "view": "match-entry-controls",
+      "mobile": false,
+      "controls": {
+        "buy-open": {
+          "x": 928.7999877929688,
+          "y": 205,
+          "width": 62.4000244140625,
+          "height": 62.399993896484375,
+          "uncovered": true,
+          "font": 13.824
+        },
+        "comms-open": {
+          "x": 272,
+          "y": 129.59375,
+          "width": 120.65625,
+          "height": 44,
+          "uncovered": true,
+          "font": 12.288
+        }
+      },
+      "simulatedCssInsets": null
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "dropButton": {
+        "x": 1588.015625,
+        "y": 156.171875,
+        "width": 118.984375,
+        "height": 53.921875
+      }
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "dropButton": {
+        "x": 1876.859375,
+        "y": 178.671875,
+        "width": 150.140625,
+        "height": 66.59375
+      }
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "dropButton": {
+        "x": 1864.546875,
+        "y": 179.390625,
+        "width": 162.453125,
+        "height": 71.1875
+      }
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "dropButton": {
+        "x": 2791,
+        "y": 270.21875,
+        "width": 200,
+        "height": 91.59375
+      }
+    },
+    {
+      "view": "use-recovery",
+      "mobile": false,
+      "cpuThrottleRate": 1,
+      "nativeRecoveryAcknowledged": true,
+      "releaseInputObserved": true,
+      "pointerEvents": [],
+      "inputs": [
+        {
+          "seq": 144,
+          "interact": false,
+          "observedAt": 1793988118648
+        },
+        {
+          "seq": 145,
+          "interact": false,
+          "observedAt": 1793988118689
+        },
+        {
+          "seq": 146,
+          "interact": true,
+          "observedAt": 1793988118773
+        },
+        {
+          "seq": 147,
+          "interact": true,
+          "observedAt": 1793988118907
+        },
+        {
+          "seq": 148,
+          "interact": false,
+          "observedAt": 1793988119032
+        },
+        {
+          "seq": 149,
+          "interact": false,
+          "observedAt": 1793988119315
+        },
+        {
+          "seq": 150,
+          "interact": false,
+          "observedAt": 1793988119315
+        },
+        {
+          "seq": 151,
+          "interact": false,
+          "observedAt": 1793988119487
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

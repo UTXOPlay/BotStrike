@@ -1,0 +1,12 @@
+{
+  "cases": 484,
+  "timingDifferences": [],
+  "maxPositionDifference": 0.0,
+  "contactResultsIdentical": true,
+  "visibilityResultsIdentical": true,
+  "recordedStateHashIdentical": true,
+  "recordedTraceHashIdentical": true,
+  "localProfile": "ecc7a7390587866a790d61f71dde87765088f85935eb54e4f637ac9e21fa56bd",
+  "portableProfile": "b8efb5123d1dc99dcf7add70c4069f22d4a320378653c5ff67c1c0169a7d9886",
+  "allCaseMeasurementsIdentical": true
+}

@@ -1,0 +1,14 @@
+desktop initialized
+mobile initialized
+browser failure context { playing: 'false', status: 'Connected · 1 ms' } {"sent":[{"seq":9447,"viewTick":9147,"x":0,"y":0,"yaw":1.038763409324292,"pitch":-0.0031424167088063806,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":9448,"viewTick":9147,"x":0,"y":0,"yaw":1.038763409324292,"pitch":-0.0031424167088063806,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0},{"seq":9449,"viewTick":9147,"x":0,"y":0,"yaw":1.038763409324292,"pitch":-0.0031424167088063806,"fire":false,"reload":false,"walk":false,"crouch":false,"jump":false,"ability":false,"interact":false,"scope":false,"weapon":null,"item":0}],"native":[{"seq":9445,"alive":false,"yaw":1.038763,"skill":151},{"seq":9448,"alive":false,"yaw":1.038763,"skill":151}]}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 60000ms exceeded.
+    at /home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-browser.mjs:26:10 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.1

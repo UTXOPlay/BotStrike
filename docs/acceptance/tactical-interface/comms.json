@@ -1,0 +1,209 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "cohort": "all",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2856703228166
+      ],
+      "actualPointer": {
+        "x": 144,
+        "y": 213.8937530517578,
+        "left": 25,
+        "top": 130.59375,
+        "width": 238,
+        "height": 238
+      },
+      "reportId": "8dab59fb70bc20746afe33ff:0:1",
+      "excludedPriorReportIds": [],
+      "wheel": {
+        "x": 620,
+        "y": 231.2109375,
+        "width": 680,
+        "height": 617.578125
+      },
+      "button": {
+        "x": 272,
+        "y": 129.59375,
+        "width": 120.65625,
+        "height": 44
+      },
+      "room": "8dab59fb70bc20746afe33ff"
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.285681382665
+      ],
+      "actualPointer": {
+        "x": 184,
+        "y": 241.8937530517578,
+        "left": 25,
+        "top": 130.59375,
+        "width": 318,
+        "height": 318
+      },
+      "reportId": "8dab59fb70bc20746afe33ff:0:2",
+      "excludedPriorReportIds": [
+        "8dab59fb70bc20746afe33ff:0:1"
+      ],
+      "wheel": {
+        "x": 940,
+        "y": 194.59375,
+        "width": 680,
+        "height": 690.8125
+      },
+      "button": {
+        "x": 352,
+        "y": 129.59375,
+        "width": 152.359375,
+        "height": 44
+      },
+      "room": "8dab59fb70bc20746afe33ff"
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2858458979109
+      ],
+      "actualPointer": {
+        "x": 184,
+        "y": 285.09686279296875,
+        "left": 25,
+        "top": 173.796875,
+        "width": 318,
+        "height": 318
+      },
+      "reportId": "8dab59fb70bc20746afe33ff:0:3",
+      "excludedPriorReportIds": [
+        "8dab59fb70bc20746afe33ff:0:1",
+        "8dab59fb70bc20746afe33ff:0:2"
+      ],
+      "wheel": {
+        "x": 940,
+        "y": 349.5,
+        "width": 680,
+        "height": 741
+      },
+      "button": {
+        "x": 352,
+        "y": 172.796875,
+        "width": 180.328125,
+        "height": 60
+      },
+      "room": "8dab59fb70bc20746afe33ff"
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mobile": false,
+      "point": [
+        0,
+        0,
+        -514.2858311926376
+      ],
+      "actualPointer": {
+        "x": 204,
+        "y": 326.29998779296875,
+        "left": 25,
+        "top": 201,
+        "width": 358,
+        "height": 358
+      },
+      "reportId": "8dab59fb70bc20746afe33ff:0:4",
+      "excludedPriorReportIds": [
+        "8dab59fb70bc20746afe33ff:0:3",
+        "8dab59fb70bc20746afe33ff:0:1",
+        "8dab59fb70bc20746afe33ff:0:2"
+      ],
+      "wheel": {
+        "x": 1460,
+        "y": 639,
+        "width": 920,
+        "height": 882
+      },
+      "button": {
+        "x": 392,
+        "y": 200,
+        "width": 242.0625,
+        "height": 60
+      },
+      "room": "8dab59fb70bc20746afe33ff"
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "mobile": true,
+      "point": [
+        0,
+        0,
+        -514.285643588622
+      ],
+      "actualPointer": {
+        "x": 52,
+        "y": 36.900001525878906,
+        "left": 15,
+        "top": 11,
+        "width": 74,
+        "height": 74
+      },
+      "reportId": "39d560138dd5bc91718cbfb1:0:1",
+      "excludedPriorReportIds": [],
+      "wheel": {
+        "x": 112,
+        "y": 16,
+        "width": 620,
+        "height": 358
+      },
+      "button": {
+        "x": 150,
+        "y": 10,
+        "width": 110,
+        "height": 44
+      },
+      "room": "39d560138dd5bc91718cbfb1"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "portraitGate": true,
+      "instancePreserved": true
+    }
+  ],
+  "keyboard": true,
+  "controller": true,
+  "touch": true,
+  "heldInputsCleared": true,
+  "dialogNavigation": {
+    "locationTabContained": true,
+    "enemySelectTabContained": true,
+    "closedMuteInputSkipped": true,
+    "closedMuteInputFixture": "inert DOM-only checkbox, removed after assertions; no native/network state injected",
+    "focusWrapsBothDirections": true,
+    "controllerInputActuallySampled": true,
+    "controllerDpadPulseOneSample": true,
+    "controllerConfirmHeldUntilClose": true,
+    "controllerSelectInline": true,
+    "controllerSelectDoesNotOpenNativePopup": true,
+    "controllerCommandReachedByDpad": true,
+    "controllerConfirmDoesNotJump": true
+  },
+  "reducedMotion": true,
+  "renderFps": 30,
+  "errors": []
+}

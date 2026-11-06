@@ -1,0 +1,12 @@
+{
+  "immutableImage": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+  "origin": "http://127.0.0.1:19925",
+  "container": "botstrike-interface-final-v3-20261107",
+  "softwareRendering": true,
+  "humanParticipants": 0,
+  "noUiOrNativeStateInjection": true,
+  "captureScriptSha256": "35f4286c45c01ca162bc94fb3653cb0e70c10875a1b8b5baedc485f35beac63d",
+  "layoutHarnessSha256": "2443cb6ce6116c169fb73e10fc31e044934fe7744bb0f6d31daff5217a2f15bd",
+  "layoutHarness": "tests/botstrike-tactical-ui-browser.mjs",
+  "fixtureNote": "Two requestAnimationFrame callbacks after final CDP portrait-to-landscape rotation; all held-input and same-room assertions retained."
+}

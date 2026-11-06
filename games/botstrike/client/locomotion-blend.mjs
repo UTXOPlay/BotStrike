@@ -8,6 +8,12 @@ const duration=[3,1,.66,1.1,1,1,2,1.2,.5,1];
 
 export function locomotionTargets(motion,out=new Float64Array(locomotionClips.length)){
  out.fill(0);
+ if(motion.stanceAuthoritative){
+  const t=clamp(motion.crouchAmount,0,1),amount=motion.grounded?smooth(0,24,motion.speed):0;
+  locomotionTargets({...motion,stanceAuthoritative:false,crouch:false},out);
+  for(let i=0;i<out.length;i++)out[i]*=1-t;
+  out[6]=t*(1-amount);out[7]=t*amount;return out;
+ }
  if(!motion.grounded){out[motion.crouch?6:motion.rising?8:9]=1;return out;}
  const amount=smooth(0,24,motion.speed),run=runningAmount(motion);
  if(motion.crouch){out[6]=1-amount;out[7]=amount;return out;}
@@ -23,13 +29,22 @@ export function locomotionTargets(motion,out=new Float64Array(locomotionClips.le
 export class LocomotionBlend{
  constructor(durations=duration){this.durations=durations;this.weights=new Float64Array(10);this.targets=new Float64Array(10);this.times=new Float64Array(10);this.clear();}
  clear(phase=0){this.ready=false;this.phase=((phase%1)+1)%1;this.idleTime=this.phase*this.durations[0];this.airTime=0;this.airKind=null;this.gain=1;this.orientation=0;this.cadenceScale=1;this.dominant='idle';this.weights.fill(0);this.weights[0]=1;}
- update(motion,dt,{active=true,reduced=false,phase=this.phase,cycleDuration=null}={}){
+ update(motion,dt,{active=true,reduced=false,phase=this.phase,cycleDuration=null,contactPhase=null}={}){
   const seconds=Number.isFinite(dt)?clamp(dt,0,.1):0;
   locomotionTargets(motion,this.targets);
   if(!this.ready||motion.reset&&!motion.flightContinuity){this.clear(phase);this.weights.set(this.targets);this.ready=true;if(!active)this.gain=0;}
   else{
    const blend=-Math.expm1(-seconds/.07);
    for(let i=0;i<this.weights.length;i++)this.weights[i]+=(this.targets[i]-this.weights[i])*blend;
+  }
+  // Native stance already has its own response clock. Preserve that group's
+  // exact weight, while retaining gait/direction blending inside each group.
+  if(motion.stanceAuthoritative){
+   const crouch=clamp(motion.crouchAmount,0,1);
+   for(const [indices,total]of [[[6,7],crouch],[[0,1,2,3,4,5,8,9],1-crouch]]){
+    const sum=indices.reduce((s,i)=>s+this.weights[i],0),target=indices.reduce((s,i)=>s+this.targets[i],0);
+    for(const i of indices)this.weights[i]=sum>1e-12?this.weights[i]/sum*total:target>1e-12?this.targets[i]/target*total:0;
+   }
   }
   let sum=0,travel=0,reference=0,cycle=0,largest=-1;
   for(let i=0;i<this.weights.length;i++){sum+=this.weights[i];if(this.weights[i]>largest){largest=this.weights[i];this.dominant=locomotionClips[i];}}
@@ -39,6 +54,7 @@ export class LocomotionBlend{
   this.cadenceScale=travel>1e-5?clamp(motion.speed/(reference/travel),.6,1.6):1;
   if(Number.isFinite(cycleDuration)&&cycleDuration>0&&travel>1e-5)this.cadenceScale=(cycle/travel)/clamp(cycleDuration,.18,1.25);
   if(active&&motion.grounded&&motion.speed>1&&travel>1e-5)this.phase=(this.phase+seconds*this.cadenceScale/(cycle/travel))%1;
+  if(Number.isFinite(contactPhase))this.phase=((contactPhase%1)+1)%1;
   this.idleTime+=seconds;
   const airKind=motion.grounded?null:motion.rising?'jump':'fall';
   if(airKind!==this.airKind){this.airKind=airKind;this.airTime=0;}else this.airTime+=seconds;

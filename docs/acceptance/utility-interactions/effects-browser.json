@@ -1,0 +1,26 @@
+{
+  "automated": true,
+  "humanAcceptance": false,
+  "results": [
+    {
+      "smokeHidden": true,
+      "radarRevealOnly": true,
+      "hiddenTriangles": 7895,
+      "radioTriangles": 7895
+    },
+    {
+      "nativeFlash": 88,
+      "reducedMotionOpaque": true,
+      "overlay": {
+        "parent": "game-content",
+        "opacity": "1",
+        "background": "rgb(24, 36, 49)",
+        "text": "OPTICS JAMMED · 1.1s"
+      }
+    },
+    {
+      "normalMotionOpaque": true
+    }
+  ],
+  "errors": []
+}

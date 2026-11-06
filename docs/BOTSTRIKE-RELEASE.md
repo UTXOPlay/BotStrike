@@ -144,3 +144,86 @@ profiling are deferred under the maintainer's advisory policy. These software
 browser checks are not a physical-device performance pass. See the
 [release evidence](acceptance/hybrid-animation/audit-deployment.json) and
 [audit follow-up](animation-audit-follow-up.md).
+
+
+## Tactical candidate portable build
+
+Build from a frozen, reviewed source context with `deploy/Dockerfile`. The
+multi-stage build compiles the engine with Rust 1.97.1 on Bookworm before
+compiling its exact-bound adapter. It generates the damage contract from that
+engine and runs native/browser contract tests, host tests and a complete signed
+native flow with tamper rejection. Do not copy a workstation binary into the
+Bookworm runtime: workstation GLIBC requirements can exceed the runtime ABI.
+
+Retain the exact five production legacy pairs under `release/legacy`; the image
+copies only those allowlisted pairs and excludes local checkpoints. Save the
+image digest and the files under `/app/build-validation`, and verify historical
+exports using the built runtime before rollout. The candidate gunplay image was
+checked locally; training changes require a fresh immutable build and report.
+
+If Docker's configured proxy is a host-loopback address, use the build's host
+network option on that workstation so BuildKit can reach it. Do not bake a
+workstation proxy or credentials into the image. Deploy the tested image digest
+with retained production data and the existing rollback procedure.
+
+## Isolated remote Tactical candidate — 2026-11-06
+
+The integrated V5 audio/communication candidate is staged on the deployment
+server in `botstrike-tactical-preview-c1a486aa`. This is an operator-only stage,
+not a public cohort link or a production switch. The source is still uncommitted
+and unpushed; the full review patch and its SHA are recorded separately. Human
+gunplay, map, economy, hero, listening and communication gates remain open.
+
+Release directory:
+`/data/utxoplay/releases/20261106-botstrike-tactical-preview-c1a486aa`.
+Its `stage.compose.json` uses an independent internal Docker network, writable
+preview-only data directory, generated server-only secrets, a separate guest
+cookie namespace, read-only root, 4 GiB memory limit and one-CPU ceiling. There
+is no published server port. `preview-host.json` changes only the host name used
+for session cookies; native rules/profile and the image's files are unchanged.
+Keep `stage.env` private (0600); it and raw match exports are excluded from the
+repository evidence. Stopping this preview does not stop production.
+
+The workstation reports image ID
+`c1a486aad6b0c3e7c9315335c301004a90a799f1052569dfc535d161bb753842`;
+the server reports
+`7a25d7c1cf9a4511c426bd7d7d2a2e850f342e549f461528d1948d25f6a5c7d0`.
+The IDs are not asserted equal. All 27 ordered rootfs layer digests, runtime
+configuration, architecture, OS and creation metadata compare equal after
+transfer. Twenty-four current/native/historical-verifier/spec/guide/browser
+files independently match their expected SHA-256 values. Compose pins the
+server's verified local ID with pull disabled; do not replace this guard with a
+mutable-tag assumption.
+
+Access uses an authenticated SSH tunnel to the current preview container's
+internal address. Inspect that address again after recreation. With the current
+address, the operator tunnel is:
+
+```sh
+ssh -N -L 127.0.0.1:19919:172.22.0.2:8080 root@8.217.101.26
+```
+
+Then open `http://127.0.0.1:19919/games/botstrike/`. The configured origin is exactly
+`http://127.0.0.1:19919`; a different local port/hostname requires a corresponding
+preview-only origin update. Teammates do not receive server operator credentials;
+a later cohort-access route remains to be configured before remote recruitment.
+
+The remote host passes the native three-client communication flow and a finished
+training-session signed replay, exact profile verification and result-tamper
+rejection. Six viewport browser checks pass over the tunnel, including touch,
+controller confirmation, held-input cleanup and exact radar mapping. These are
+controlled clients, zero humans, and software-rendered browser checks. The first
+disposable validation run correctly hit the service's 2 GiB free-storage guard
+because its data lived on a 256 MiB tmpfs; the passing fixture uses disposable
+disk-backed data without changing the guard. Those test data and temporary
+validation containers were removed after the checks.
+
+The runtime's WebSocket heartbeat metrics measure the host-proxy/runtime hop.
+They are not end-to-end browser RTT. A separate 12-sample application ping crosses
+the SSH tunnel, host and service (observed p50 36.3 ms / p95 38.3 ms); it is not
+physical input or audio latency. Thirty-eight pre-existing container IDs/images,
+including the healthy production BotStrike and Store, remain unchanged. Production
+still runs `myelin-botstrike:hybrid-646ec4c` against its original data and secrets.
+See `acceptance/remote-tactical-preview/` for image/file binding, isolation,
+validation, browser and transport receipts. No issue closure or production
+acceptance is implied.

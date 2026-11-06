@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "date": "2026-11-06",
+  "status": "local candidate, not deployed or human-approved",
+  "base": "52d770134a5c47f02c56c29b56b3f552b0b18ede",
+  "mergedAnimation": "0d8b15130c70ac1f203d0e985d32aca542ddafdb",
+  "modelSha256": "e4e83daf03d9cb8a331ce77265c3b2505a92525a6ecc613bce8d24cee87b36a0",
+  "binaries": {
+    "botstrike-engine": "81537c59756d4c88d052896884a1f2228309878c8f2ce7f110949a65132c4542",
+    "myelin-botstrike": "00186cc4edae285d5b64d62d8874e68f191900fb629f0529c3e21c67814ca644"
+  },
+  "nativeFlow": {
+    "ticks": 21066,
+    "score": [
+      50,
+      32
+    ],
+    "players": 10,
+    "privateJoin": true,
+    "publicMatchmaking": true,
+    "reconnect": true,
+    "balancedTeams": true,
+    "humanInput": true,
+    "respawns": true,
+    "signedReplay": true,
+    "tamperRejected": true,
+    "profile": "b14741da3bdd9a4a2bd4a9372ce57b5335cc16c1c5ba871344e3533592290c85",
+    "nature": "synthetic authenticated API/socket clients, then native AI; not a human playtest",
+    "exportSha256": "29e6cd018195ef4977e6882270a46012aa77ff5497debd6501bcd57d928943cd"
+  },
+  "automated": {
+    "rustTests": 43,
+    "jsUnitTests": 125,
+    "hostTests": 4,
+    "compositionCases": 144,
+    "compositionFramesPerCase": 420,
+    "compositionLifecycleCases": 12,
+    "nativeAuthoritativeStance": true,
+    "cameraCases": 72,
+    "nativeOverlayCases": 54,
+    "nativeOverlayHeadRayTolerance": 1e-06,
+    "geometryFixtureCases": 501,
+    "geometryTolerance": 1e-09,
+    "damageMatrixCases": 6048,
+    "viewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "desktopFunctionalDpr": 0.5,
+    "mobileEmulated": true,
+    "inactiveDesktopPausedBeforePhoneChecks": true
+  },
+  "historicalVerification": {
+    "synthetic": true,
+    "freshFixturesOnExactProductionPairs": true,
+    "candidateRejectsEveryOldProfile": true,
+    "exactRoutingVerified": [
+      {
+        "verifier": "salvage-v1",
+        "sha256": {
+          "botstrike-engine": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+          "myelin-botstrike": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575"
+        },
+        "profile": "642acc7500efb2635dfa6aca1603b31a6624f3101ccdf5f6986da75c22419cf9",
+        "ticks": 23040,
+        "exactRouting": true,
+        "newProfileRejected": true,
+        "verified": true,
+        "synthetic": true
+      },
+      {
+        "verifier": "readability-v5",
+        "sha256": {
+          "botstrike-engine": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+          "myelin-botstrike": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30"
+        },
+        "profile": "159d503a8985334fecbf4089559db373d5ce646d4f348a63f72591cd3eda25a3",
+        "ticks": 23040,
+        "exactRouting": true,
+        "newProfileRejected": true,
+        "verified": true,
+        "synthetic": true
+      },
+      {
+        "verifier": "tactics-v4",
+        "sha256": {
+          "botstrike-engine": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+          "myelin-botstrike": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7"
+        },
+        "profile": "972f845952785eda8074239042f63fe5781d1071a14311f8afefc7442ddcc39b",
+        "ticks": 23040,
+        "exactRouting": true,
+        "newProfileRejected": true,
+        "verified": true,
+        "synthetic": true
+      },
+      {
+        "verifier": "network-v3",
+        "sha256": {
+          "botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+          "myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+        },
+        "profile": "15a835f40bb0890b672fb85c1b30d90db335534e0f3b931b1b6865e066f490ee",
+        "ticks": 23040,
+        "exactRouting": true,
+        "newProfileRejected": true,
+        "verified": true,
+        "synthetic": true
+      },
+      {
+        "verifier": "arsenal-v2",
+        "sha256": {
+          "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+          "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+        },
+        "profile": "5c08047108c56301a34039cccd9bfc7aaeaa1f634f8e6501fc0b43c5014b3404",
+        "ticks": 23040,
+        "exactRouting": true,
+        "newProfileRejected": true,
+        "verified": true,
+        "synthetic": true
+      }
+    ]
+  },
+  "limitations": [
+    "Host adapter requires GLIBC 2.39; do not deploy this local pair into Bookworm. Portable image build and same-image validation are separate pending work.",
+    "Native/viewport/camera/overlay checks are not physical GPU/Android timing or a physical touchpad-delivery test.",
+    "Retained full-backing and concurrent software-rendered browser failures are not performance passes.",
+    "Human gunplay/control-feel, moving/ambiguous silhouette and damage-comprehension checks remain open.",
+    "Training and the remaining tactical/audio/communication issues are not completed by this checkpoint."
+  ],
+  "artifacts": {
+    "camera.json.gz": "e6992c8a4186496649bf5e1768b61cad3cb4919c0c6b975202c1cd9e3880ccd9",
+    "damage-contract.json.gz": "90fa62cf56ee1e67269abee18cc7556c175c00f57ab54597197fdec8824333c3",
+    "head-calibration.json.gz": "4ce79801cb93dc5cb26870afb73f958feb44444415ee85042b81785cb1ae76df",
+    "native-stance-composition.json.gz": "c83393bec7726d087a66791ef644db7e59176354882c040df34e0781b47db7e5"
+  },
+  "browserAsyncWaitCorrection": {
+    "status": "passed after explicitly awaiting each poll",
+    "report": "phase-one-polled-browser.txt",
+    "runtime": "Bookworm phase-one image 28b5e7f41337\u2026 served at configured staging origin",
+    "sizes": [
+      "1920x1080",
+      "2560x1080",
+      "2560x1440",
+      "3840x2160",
+      "390x844 portrait gate",
+      "844x390 touch"
+    ],
+    "hardwarePerformancePass": false,
+    "replacesPriorAsyncWaitEvidence": true
+  }
+}

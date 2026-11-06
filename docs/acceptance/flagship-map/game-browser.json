@@ -1,0 +1,101 @@
+{
+  "automated": true,
+  "functionalOnly": true,
+  "desktopDpr": 0.5,
+  "mobileDpr": 1,
+  "map": "neon-docks",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "mobile": false,
+      "backing": [
+        960,
+        540
+      ],
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 1920,
+        "h": 1080
+      },
+      "drawCalls": "96",
+      "triangles": "77671"
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "mobile": false,
+      "backing": [
+        1280,
+        540
+      ],
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 2560,
+        "h": 1080
+      },
+      "drawCalls": "96",
+      "triangles": "77671"
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "mobile": false,
+      "backing": [
+        1280,
+        720
+      ],
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 2560,
+        "h": 1440
+      },
+      "drawCalls": "96",
+      "triangles": "77671"
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mobile": false,
+      "backing": [
+        1920,
+        1080
+      ],
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 3840,
+        "h": 2160
+      },
+      "drawCalls": "96",
+      "triangles": "77671"
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "mobile": true,
+      "backing": [
+        633,
+        292
+      ],
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 844,
+        "h": 390
+      },
+      "drawCalls": "67",
+      "triangles": "77671"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "portraitEntryGate": true,
+      "preservedInstanceAfterFullscreenExit": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,1583 @@
+{
+  "version": "botstrike-2050-tactical-v5",
+  "specSha256": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+  "status": "conditional proposal; not reviewed, not a human outcome distribution",
+  "humanParticipants": 0,
+  "assumptions": [
+    "Inputs fix wins, survival and planted outcomes; purchases do not predict wins.",
+    "No kills or actor rewards; utility is held rather than used. Armor stays full only in the declared survival block.",
+    "No halftime within these six-round blocks; native tests cover half reset.",
+    "Policies purchase their entire requested bundle only when affordable; failed affordability keeps the current gear.",
+    "No per-ammunition purchases; native round resupply applies to owned weapons."
+  ],
+  "trajectories": [
+    {
+      "block": "six-losses",
+      "policy": "save-two-then-rifle-kit",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2700,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 4900
+        },
+        {
+          "round": 3,
+          "creditsBefore": 4900,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 1050,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2500,
+          "nextCredits": 3550
+        },
+        {
+          "round": 4,
+          "creditsBefore": 3550,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 3550,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 4,
+          "roundIncome": 2800,
+          "nextCredits": 6350
+        },
+        {
+          "round": 5,
+          "creditsBefore": 6350,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 2500,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 5600
+        },
+        {
+          "round": 6,
+          "creditsBefore": 5600,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 1750,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 4850
+        }
+      ]
+    },
+    {
+      "block": "six-losses",
+      "policy": "force-smg",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 1500,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 3700
+        },
+        {
+          "round": 3,
+          "creditsBefore": 3700,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 2500,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2500,
+          "nextCredits": 5000
+        },
+        {
+          "round": 4,
+          "creditsBefore": 5000,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 3800,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 4,
+          "roundIncome": 2800,
+          "nextCredits": 6600
+        },
+        {
+          "round": 5,
+          "creditsBefore": 6600,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 5400,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 8500
+        },
+        {
+          "round": 6,
+          "creditsBefore": 8500,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 7300,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 10400
+        }
+      ]
+    },
+    {
+      "block": "six-losses",
+      "policy": "rifle-armor",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2700,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 4900
+        },
+        {
+          "round": 3,
+          "creditsBefore": 4900,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 1550,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2500,
+          "nextCredits": 4050
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4050,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 700,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 4,
+          "roundIncome": 2800,
+          "nextCredits": 3500
+        },
+        {
+          "round": 5,
+          "creditsBefore": 3500,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 150,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 3250
+        },
+        {
+          "round": 6,
+          "creditsBefore": 3250,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 3250,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 6350
+        }
+      ]
+    },
+    {
+      "block": "six-losses",
+      "policy": "rifle-only",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 0,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 2200
+        },
+        {
+          "round": 3,
+          "creditsBefore": 2200,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2200,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2500,
+          "nextCredits": 4700
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4700,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 2000,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 4,
+          "roundIncome": 2800,
+          "nextCredits": 4800
+        },
+        {
+          "round": 5,
+          "creditsBefore": 4800,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 2100,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 5200
+        },
+        {
+          "round": 6,
+          "creditsBefore": 5200,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 2500,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 5,
+          "roundIncome": 3100,
+          "nextCredits": 5600
+        }
+      ]
+    },
+    {
+      "block": "recover-after-two",
+      "policy": "save-two-then-rifle-kit",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2700,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 4900
+        },
+        {
+          "round": 3,
+          "creditsBefore": 4900,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 1050,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 4300
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4300,
+          "buys": [
+            "photon"
+          ],
+          "spent": 300,
+          "creditsRetained": 4000,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 5900
+        },
+        {
+          "round": 5,
+          "creditsBefore": 5900,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 2050,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 5300
+        },
+        {
+          "round": 6,
+          "creditsBefore": 5300,
+          "buys": [
+            "photon"
+          ],
+          "spent": 300,
+          "creditsRetained": 5000,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 8250
+        }
+      ]
+    },
+    {
+      "block": "recover-after-two",
+      "policy": "force-smg",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 1500,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 3700
+        },
+        {
+          "round": 3,
+          "creditsBefore": 3700,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 2500,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 5750
+        },
+        {
+          "round": 4,
+          "creditsBefore": 5750,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 5750,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 7650
+        },
+        {
+          "round": 5,
+          "creditsBefore": 7650,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 6450,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 9700
+        },
+        {
+          "round": 6,
+          "creditsBefore": 9700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 9700,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 12950
+        }
+      ]
+    },
+    {
+      "block": "recover-after-two",
+      "policy": "rifle-armor",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2700,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 4900
+        },
+        {
+          "round": 3,
+          "creditsBefore": 4900,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 1550,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 4800
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 4800,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 6700
+        },
+        {
+          "round": 5,
+          "creditsBefore": 6700,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 3350,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 6600
+        },
+        {
+          "round": 6,
+          "creditsBefore": 6600,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 6600,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 9850
+        }
+      ]
+    },
+    {
+      "block": "recover-after-two",
+      "policy": "rifle-only",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 0,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 2200
+        },
+        {
+          "round": 3,
+          "creditsBefore": 2200,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2200,
+          "primary": null,
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 5450
+        },
+        {
+          "round": 4,
+          "creditsBefore": 5450,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 2750,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 4650
+        },
+        {
+          "round": 5,
+          "creditsBefore": 4650,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 1950,
+          "primary": "ion",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 5200
+        },
+        {
+          "round": 6,
+          "creditsBefore": 5200,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 5200,
+          "primary": "ion",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 8450
+        }
+      ]
+    },
+    {
+      "block": "planted-losses",
+      "policy": "save-two-then-rifle-kit",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 2900
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2900,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2900,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2400,
+          "nextCredits": 5300
+        },
+        {
+          "round": 3,
+          "creditsBefore": 5300,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 1450,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2700,
+          "nextCredits": 4150
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4150,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 300,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 3550
+        },
+        {
+          "round": 5,
+          "creditsBefore": 3550,
+          "buys": [
+            "photon"
+          ],
+          "spent": 300,
+          "creditsRetained": 3250,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 5350
+        },
+        {
+          "round": 6,
+          "creditsBefore": 5350,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 1500,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 4750
+        }
+      ]
+    },
+    {
+      "block": "planted-losses",
+      "policy": "force-smg",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 2900
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2900,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 1700,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2400,
+          "nextCredits": 4100
+        },
+        {
+          "round": 3,
+          "creditsBefore": 4100,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 2900,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2700,
+          "nextCredits": 5600
+        },
+        {
+          "round": 4,
+          "creditsBefore": 5600,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 4400,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 7650
+        },
+        {
+          "round": 5,
+          "creditsBefore": 7650,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 7650,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 9750
+        },
+        {
+          "round": 6,
+          "creditsBefore": 9750,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 8550,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 11800
+        }
+      ]
+    },
+    {
+      "block": "planted-losses",
+      "policy": "rifle-armor",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 2900
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2900,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2900,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2400,
+          "nextCredits": 5300
+        },
+        {
+          "round": 3,
+          "creditsBefore": 5300,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 1950,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2700,
+          "nextCredits": 4650
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4650,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 1300,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 4550
+        },
+        {
+          "round": 5,
+          "creditsBefore": 4550,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 4550,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 6650
+        },
+        {
+          "round": 6,
+          "creditsBefore": 6650,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 3300,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 6550
+        }
+      ]
+    },
+    {
+      "block": "planted-losses",
+      "policy": "rifle-only",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 2900
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2900,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 200,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 2,
+          "roundIncome": 2400,
+          "nextCredits": 2600
+        },
+        {
+          "round": 3,
+          "creditsBefore": 2600,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2600,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 3,
+          "roundIncome": 2700,
+          "nextCredits": 5300
+        },
+        {
+          "round": 4,
+          "creditsBefore": 5300,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 2600,
+          "primary": "ion",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 5850
+        },
+        {
+          "round": 5,
+          "creditsBefore": 5850,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 5850,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": false,
+          "lossTier": 1,
+          "roundIncome": 2100,
+          "nextCredits": 7950
+        },
+        {
+          "round": 6,
+          "creditsBefore": 7950,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 5250,
+          "primary": "ion",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 8500
+        }
+      ]
+    },
+    {
+      "block": "survive-and-save",
+      "policy": "save-two-then-rifle-kit",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2700,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 4900
+        },
+        {
+          "round": 3,
+          "creditsBefore": 4900,
+          "buys": [
+            "ion",
+            "armor",
+            "smoke",
+            "photon"
+          ],
+          "spent": 3850,
+          "creditsRetained": 1050,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 4300
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4300,
+          "buys": [
+            "photon"
+          ],
+          "spent": 300,
+          "creditsRetained": 4000,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 5900
+        },
+        {
+          "round": 5,
+          "creditsBefore": 5900,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 5900,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 9150
+        },
+        {
+          "round": 6,
+          "creditsBefore": 9150,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 9150,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 12400
+        }
+      ]
+    },
+    {
+      "block": "survive-and-save",
+      "policy": "force-smg",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [
+            "needle"
+          ],
+          "spent": 1200,
+          "creditsRetained": 1500,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 3700
+        },
+        {
+          "round": 3,
+          "creditsBefore": 3700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 3700,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 6950
+        },
+        {
+          "round": 4,
+          "creditsBefore": 6950,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 6950,
+          "primary": "needle",
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 8850
+        },
+        {
+          "round": 5,
+          "creditsBefore": 8850,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 8850,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 12100
+        },
+        {
+          "round": 6,
+          "creditsBefore": 12100,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 12100,
+          "primary": "needle",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 15350
+        }
+      ]
+    },
+    {
+      "block": "survive-and-save",
+      "policy": "rifle-armor",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2700,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 4900
+        },
+        {
+          "round": 3,
+          "creditsBefore": 4900,
+          "buys": [
+            "ion",
+            "armor"
+          ],
+          "spent": 3350,
+          "creditsRetained": 1550,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 4800
+        },
+        {
+          "round": 4,
+          "creditsBefore": 4800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 4800,
+          "primary": "ion",
+          "armor": 100,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 6700
+        },
+        {
+          "round": 5,
+          "creditsBefore": 6700,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 6700,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 9950
+        },
+        {
+          "round": 6,
+          "creditsBefore": 9950,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 9950,
+          "primary": "ion",
+          "armor": 100,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 13200
+        }
+      ]
+    },
+    {
+      "block": "survive-and-save",
+      "policy": "rifle-only",
+      "rounds": [
+        {
+          "round": 1,
+          "creditsBefore": 800,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 800,
+          "primary": null,
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 2700
+        },
+        {
+          "round": 2,
+          "creditsBefore": 2700,
+          "buys": [
+            "ion"
+          ],
+          "spent": 2700,
+          "creditsRetained": 0,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 2,
+          "roundIncome": 2200,
+          "nextCredits": 2200
+        },
+        {
+          "round": 3,
+          "creditsBefore": 2200,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 2200,
+          "primary": "ion",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 5450
+        },
+        {
+          "round": 4,
+          "creditsBefore": 5450,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 5450,
+          "primary": "ion",
+          "armor": 0,
+          "win": false,
+          "survive": true,
+          "lossTier": 1,
+          "roundIncome": 1900,
+          "nextCredits": 7350
+        },
+        {
+          "round": 5,
+          "creditsBefore": 7350,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 7350,
+          "primary": "ion",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 10600
+        },
+        {
+          "round": 6,
+          "creditsBefore": 10600,
+          "buys": [],
+          "spent": 0,
+          "creditsRetained": 10600,
+          "primary": "ion",
+          "armor": 0,
+          "win": true,
+          "survive": true,
+          "lossTier": 0,
+          "roundIncome": 3250,
+          "nextCredits": 13850
+        }
+      ]
+    }
+  ]
+}

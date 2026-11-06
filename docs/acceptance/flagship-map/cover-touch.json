@@ -1,0 +1,100 @@
+{
+  "cohort": "touch mobile batching",
+  "nativeDetailed": {
+    "map": "neon-docks",
+    "rays": 7392,
+    "tolerance": 3,
+    "nativeOnly": 0,
+    "visualOnly": 0,
+    "edgeMismatch": 0,
+    "examples": []
+  },
+  "sampled": [
+    {
+      "reference": "native obstacle AABBs and movement floor plane; outside-playfield scenery excluded",
+      "map": "neon-docks",
+      "samples": 24,
+      "rays": 384,
+      "tolerance": 3,
+      "nativeOnly": 0,
+      "visualOnly": 0,
+      "edgeMismatch": 0,
+      "visualHits": 197,
+      "meshCount": 34,
+      "rootChildren": 34,
+      "rawHits": 388,
+      "examples": []
+    },
+    {
+      "reference": "native obstacle AABBs and movement floor plane; outside-playfield scenery excluded",
+      "map": "skyline",
+      "samples": 24,
+      "rays": 384,
+      "tolerance": 3,
+      "nativeOnly": 0,
+      "visualOnly": 0,
+      "edgeMismatch": 0,
+      "visualHits": 196,
+      "meshCount": 30,
+      "rootChildren": 30,
+      "rawHits": 256,
+      "examples": []
+    },
+    {
+      "reference": "native obstacle AABBs and movement floor plane; outside-playfield scenery excluded",
+      "map": "reactor",
+      "samples": 24,
+      "rays": 384,
+      "tolerance": 3,
+      "nativeOnly": 0,
+      "visualOnly": 0,
+      "edgeMismatch": 0,
+      "visualHits": 213,
+      "meshCount": 31,
+      "rootChildren": 31,
+      "rawHits": 322,
+      "examples": []
+    }
+  ],
+  "manifest": {
+    "schema": 1,
+    "kind": "offline-development-recognition-study",
+    "livePlayerData": false,
+    "nativeEngineSha256": "0cc6cc97ea507c6512cc342074277243939729e929d3a776f26a3ec250c4447a",
+    "nativeStateSource": "exact candidate engine; study cameras/actors are explicitly repositioned offline",
+    "sha256": {
+      "/recognition.js": "57adb4c320c2fdc4a0a032f6e4792cf41bc55d330abaaeb134bb6073628d4874",
+      "/spec.json": "a215ac654c506b0fae5d3b5160212d210fc14104a3702a44f5690ad03e9eeeb9",
+      "/models/vector.glb": "483b89368b171c8dc219ddea4e58c5498ba7069f8248ff5d3939e5085c71ba47",
+      "/models/patch.glb": "1c5aa2608304f7ae98cf3d07abe7d05160da46716d186aa4d0040b88f422e3f5",
+      "/models/bastion.glb": "3db7a4fa1ce7cdae914854ca74268ff24bfe0a693f596a2130fe19a326b83515",
+      "/models/spectre.glb": "e756bb935673ccdc15d74399dcaa381865115b17646f1d0fabdc30874e260d87",
+      "/models/glitch.glb": "7393085068cf455bb1a04f2e76804d63d8a33d6870c0a2b3dab98f1ed6924336",
+      "/models/forge.glb": "87e08a6c0084fa639eaf52200a441dfdb66e10b527514e5f75cd42670c4ec910",
+      "/models/textures/bastion-0-e5830fe3548e.webp": "e5830fe3548ebf39e46fd47020a713d8f3ef7ed56f67d7e26814eba41826dfcd",
+      "/models/textures/bastion-1-4b759774fc29.webp": "4b759774fc29c9b9832e8896ecefe034f23bbfe5fea7739e3100ae36bf8d7254",
+      "/models/textures/bastion-2-1053022f7a5d.webp": "1053022f7a5df39dd3acec20b545d7252e60de708d20f7b30e28edf28ac3d596",
+      "/models/textures/forge-0-8a674e42a64e.webp": "8a674e42a64ef53d4d194b9faa291b3d7a455c1e34a0281c0eca0ab590e35cab",
+      "/models/textures/forge-1-00ab5250b694.webp": "00ab5250b694d679c2dc95682faf13a7cf169e91bc51c4d01ca720198ca668a7",
+      "/models/textures/forge-2-6fdccd1d2807.webp": "6fdccd1d2807e639df0a73dbb0813a22879d9348d36ba860a6a4b3331663660c",
+      "/models/textures/glitch-0-e4da2e253cde.webp": "e4da2e253cde20ab234c09829334f9f00f5a676ae7699bc60dd52b1bbbf77fcb",
+      "/models/textures/glitch-1-3860ff8a8316.webp": "3860ff8a83164668cda5fbd1696688b2ce227ea5fe52bcb0c1d39fae105641e8",
+      "/models/textures/glitch-2-7c8850b3dcee.webp": "7c8850b3dcee22fd76c647143d5e769d1d54f7ca867dd4f286c2d1ff91c79b3b",
+      "/models/textures/patch-0-f1528d198c7d.webp": "f1528d198c7dc059ff8f18e638b5e2758cfdf4cad2440ad86c42ab37e4ace3e6",
+      "/models/textures/patch-1-0e1cede2f849.webp": "0e1cede2f84973f5b5207a37d253ed4011d0b2731dfbeccd688b7c3e29b28ec2",
+      "/models/textures/patch-2-0c6f5925cc12.webp": "0c6f5925cc121d193949bdff3c56a43b50515b8274ad3e069a3eb2fd76b18d22",
+      "/models/textures/spectre-0-808ef4d2c0b4.webp": "808ef4d2c0b45aa7676043b51a50ac01842eec1cd2c49694f355431d75124661",
+      "/models/textures/spectre-1-8b81ddfdeba7.webp": "8b81ddfdeba7abac63c5295ae29a0f7354705c3e405054113674790b185e2e4e",
+      "/models/textures/spectre-2-a03d9623f3ec.webp": "a03d9623f3ecbbee9f6ee77c669b451fd85d5db1417fe7dfb142fd028eba9211",
+      "/models/textures/vector-0-f9aa51043c3f.webp": "f9aa51043c3fddf4ca8fba4c6957ab881de75249ec07a3885d3894194f288397",
+      "/models/textures/vector-1-340c045158c6.webp": "340c045158c64493550c6888f816c5b82cd9078362870fa91616a91f75125e85",
+      "/models/textures/vector-2-7ed334676905.webp": "7ed334676905fbfb4098097c41776ae7b02e630a1f017843d9d5b39fbcfc7f7d",
+      "/states.json": "d8d3ae4f4c12e3be764c93e97bdc9bd94903e3c403cd5924e179b3ca8d549039"
+    }
+  },
+  "errors": [],
+  "humanParticipants": 0,
+  "limitations": [
+    "Geometric mesh/ray comparison, not pixel recognition or human map balance."
+  ]
+}

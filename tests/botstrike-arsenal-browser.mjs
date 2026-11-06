@@ -1,3 +1,4 @@
+import {waitBrowserCondition} from './browser-condition.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
@@ -44,7 +45,7 @@ try{
  assert.equal(await desk.locator('#rack-choices .rack-choice:visible').count(),2);
  const choice=Number(await desk.locator('#rack-choices .rack-choice').first().getAttribute('data-weapon'));
  await desk.locator('#rack-choices .rack-choice').first().click();
- await desk.waitForFunction(async index=>{const response=await fetch('/games/botstrike/api/state'),{room}=await response.json();return room.state.players[room.slot].weapon===index},choice);
+ await waitBrowserCondition(desk,async index=>{const response=await fetch('/games/botstrike/api/state'),{room}=await response.json();return room.state.players[room.slot].weapon===index},choice);
  for(const [width,height] of [[1920,1080],[2560,1080],[2560,1440],[3840,2160],[390,844]]){
   await desk.setViewportSize({width,height});
   const boxes=await desk.evaluate(()=>Object.fromEntries(['#weapon-rack','.loadout'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height}]})));
@@ -69,13 +70,13 @@ try{
  assert.equal(await phone.locator('#rack-next small').textContent(),`EQUIP · ${me.ammo[(me.weapon+1)%12]} / ${me.reserve[(me.weapon+1)%12]}`);
  const next=Number(await phone.locator('#rack-next').getAttribute('data-weapon'));
  await phone.locator('#rack-next').click();
- await phone.waitForFunction(async index=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].weapon===index},next);
+ await waitBrowserCondition(phone,async index=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].weapon===index},next);
  await phone.waitForFunction(name=>document.querySelector('#weapon-label').textContent===name,spec.weapons[next].name);
  assert.equal(await phone.locator('#weapon-label').textContent(),spec.weapons[next].name);
  await phone.locator('#rack-open').click();
  await phone.locator('#buy-menu').waitFor({state:'visible'});
  await phone.locator('#buy-items button[data-item="11"]').click();
- await phone.waitForFunction(async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].weapon===11});
+ await waitBrowserCondition(phone,async()=>{const r=await(await fetch('/games/botstrike/api/state')).json();return r.room.state.players[0].weapon===11});
  await phone.waitForFunction(name=>document.querySelector('#weapon-label').textContent===name,spec.weapons[11].name);
  assert.equal((await state(touch)).players[0].weapon,11);
  await phone.screenshot({path:out+'/mobile-arsenal.png'});

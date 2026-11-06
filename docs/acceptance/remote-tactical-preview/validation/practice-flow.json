@@ -1,0 +1,10 @@
+{
+  "case": "practice",
+  "exit": 0,
+  "elapsedSeconds": 0.913,
+  "stdout": "{\n  \"data\": \"/validation-temp/botstrike-practice-flow-v30JEl\",\n  \"room\": \"d9d4b11c3f7781915111ccb5\",\n  \"ticks\": 83,\n  \"attempt\": 2,\n  \"practiceVerified\": true,\n  \"profile\": \"c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d\",\n  \"publicCommandRejected\": true,\n  \"joinsRejected\": true,\n  \"heldResetCleared\": true,\n  \"shortUtilityRetained\": true,\n  \"tamperRejected\": true,\n  \"careerMatches\": 0\n}\n",
+  "stderr": "",
+  "humanParticipants": 0,
+  "containerRemovedAfterRun": true,
+  "scratchUsesDiskBackedDisposableDirectory": true
+}

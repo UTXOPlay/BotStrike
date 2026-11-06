@@ -76,8 +76,9 @@ export class FootIK{
   this.drop=0;this.pelvisReady=false;this.stepReady=false;this.speedEnvelope=this.runEnvelope=this.continuityTime=0;this.wasMoving=this.wasCrouching=this.previousRun=this.previousSpeed=null;
   for(const f of this.feet){f.status='inactive';f.reason=reason;f.locked=f.feasible=f.ready=f.wasStance=f.released=f.recoverPending=f.adjusted=f.tracking=false;f.cooldown=0;f.error=f.bend=0;f.plantId=0;f.velocity.set(0,0,0);f.recovery.clear();}
  }
- plan(motion,dt){
+ plan(motion,dt,gait=null){
   advanceStridePlan(this,motion,dt);
+  if(gait){this.cycleDuration=gait.cycleDuration;this.duty=gait.duty;this.supportTravel=motion.speed*this.cycleDuration*this.duty;}
   const lateral=motion.speed>1?Math.abs(motion.side)/motion.speed:0;
   // A model's wide bind pose is not a walking stance. Keep forward steps under
   // the visible hip lanes, opening only as much as lateral travel needs.

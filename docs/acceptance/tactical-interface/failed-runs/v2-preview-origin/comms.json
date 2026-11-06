@@ -1,0 +1,12 @@
+{
+  "error": "TimeoutError: page.waitForFunction: Timeout 120000ms exceeded.",
+  "results": [],
+  "errors": [],
+  "diagnostics": [
+    {
+      "wire": [],
+      "sent": [],
+      "inputs": []
+    }
+  ]
+}

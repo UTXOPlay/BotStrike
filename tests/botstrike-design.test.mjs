@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {readFileSync} from 'node:fs';
 import {publicState} from '../botstrike-service/visibility.mjs';
+import {MovementAudioClock} from '../botstrike-service/movement-audio.mjs';
 import {feedbackFor,frameEvents,collectFeedback} from '../botstrike-service/feedback.mjs';
 import {trackHumanFrame,CareerStore} from '../botstrike-service/career.mjs';
 import {pruneReplays} from '../botstrike-service/retention.mjs';
@@ -19,7 +20,7 @@ test('controls avoid browser modifiers, swap conflicts and preserve validated pr
  assert.ok(aimScale(prefs,true)<aimScale(prefs,false));
 });
 test('reticle follows native spread multipliers without modifying aim',()=>{
- const player={crouch:false,scoped:false,velocity:[0,0,0],hero:0,effect:0,overclock:0,recoil:.5},w={spread:2,scoped:true};assert.equal(spreadDegrees(player,w),24.5);player.scoped=true;player.crouch=true;player.velocity=[200,0,0];assert.equal(spreadDegrees(player,w),2*.65*2.5+.5);
+ const player={crouch:false,scoped:false,velocity:[0,0,0],hero:0,effect:0,overclock:0,recoil:.5},w={spread:2,scoped:true};assert.equal(spreadDegrees(player,w),24.5);player.scoped=true;player.crouch=true;player.velocity=[200,0,0];const moving=spreadDegrees(player,w);player.velocity=[0,0,0];const settled=spreadDegrees(player,w);assert.ok(moving>settled);player.position=[0,20,0];assert.ok(spreadDegrees(player,w)>moving);player.position=[0,0,0];player.landing=18;assert.ok(spreadDegrees(player,w)>settled);player.landing=0;assert.equal(spreadDegrees(player,w),settled);
 });
 test('sound discloses coarse direction and loudness, never hidden coordinates or distant shots',()=>{
  const s=state(),rules={...spec,maps:[{obstacles:[{min:[100,0,-100],max:[200,100,100]}]}]},shot={kind:'shot',actor:5,value:2,id:'22:0',tick:22};
@@ -29,7 +30,7 @@ test('sound discloses coarse direction and loudness, never hidden coordinates or
  assert.ok(feedbackFor([{kind:'hit',actor:5,target:1,value:16}],s,0,rules).every(e=>e.kind==='motion'&&e.actor===1&&!('position' in e)));
 });
 test('footsteps respect walk/crouch and reload/landing only occur on transitions',()=>{
- const before=state(),after=structuredClone(before);after.players[0].velocity=[250,0,0];after.players[0].reload=80;assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='step'));assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='reload'));
+ const before=state(),after=structuredClone(before);after.players[0].velocity=[250,0,0];after.players[0].reload=80;const clock=new MovementAudioClock();let stepped=false;for(let tick=0;tick<64;tick++){after.tick=tick;stepped ||= frameEvents(after,before,spec,clock).some(e=>e.kind==='step');}assert.ok(stepped);assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='reload'));
  after.players[0].velocity=[120,0,0];assert.ok(!frameEvents(after,before,spec).some(e=>e.kind==='step'));after.players[0].velocity=[250,0,0];after.players[0].crouch=true;assert.ok(!frameEvents(after,before,spec).some(e=>e.kind==='step'));
  before.players[0].reload=90;assert.ok(!frameEvents(after,before,spec).some(e=>e.kind==='reload'));before.players[0].position[1]=5;assert.ok(frameEvents(after,before,spec).some(e=>e.kind==='land'));
 });
@@ -71,4 +72,17 @@ test('visible motion is life-bound and corpses still respect walls and smoke',()
  s.players[5].alive=false;assert.deepEqual(publicState(s,0,rules).players[5].position,[300,0,0]);
  rules.maps[0].obstacles=[{min:[100,0,-100],max:[200,100,100]}];assert.equal(publicState(s,0,rules).players[5].position,null);assert.ok(feedbackFor([shot],s,0,rules).every(e=>e.kind!=='motion'));
  s.players[0].ai_last_seen=[4,5,6];s.players[0].ai_destination=[7,8,9];assert.equal(publicState(s,0,rules).players[0].ai_last_seen,undefined);assert.equal(publicState(s,0,rules).players[0].ai_destination,undefined);
+});
+
+test('public snapshots never bypass event entitlement with raw native events',()=>{
+ const s=state();s.events=[{kind:'shot',actor:5,value:3},{kind:'headshot',actor:5,target:6,value:92,damage:{armor:20,raw:230}}];
+ const view=publicState(s,0,spec);assert.deepEqual(view.events,[]);assert.equal(s.events.length,2);
+ const unrelated=feedbackFor(s.events.map((e,i)=>({...e,id:'22:'+i,tick:22})),s,1,spec);
+ assert.ok(unrelated.every(e=>!e.damage),'unrelated players must not receive hit accounting');
+});
+
+test('confirmed damage accounting goes only to the attacker and victim, including global kills',()=>{
+ const s=state(),damage={health:30,armor:12,raw:84,shielded:true,source:{kind:'utility',id:3}},events=[{kind:'hit',actor:0,target:5,value:30,damage},{kind:'kill',actor:0,target:5,value:2,damage}];
+ for(const slot of [0,5])assert.equal(feedbackFor(events,s,slot,spec).filter(e=>e.damage).length,2);
+ const other=feedbackFor(events,s,1,spec);assert.ok(other.some(e=>e.kind==='kill'));assert.ok(other.every(e=>!e.damage));
 });

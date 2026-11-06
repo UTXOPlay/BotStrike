@@ -1,0 +1,112 @@
+{
+  "profiles": [
+    {
+      "verifier": "tactical-gunplay-v2",
+      "sha256": {
+        "botstrike-engine": "f36e32f21ecc6bc8cbf5b78982effc2f7ff0e4a9edccf8f46bc53d4f82fa0741",
+        "myelin-botstrike": "50400185393902b49c86ced12c67f43b3e9107822e2066c3225725ee5c5e02e9"
+      },
+      "profile": "faf34751951c74813d4893671c6dd0e71c0727e1e3405ed5643994e5cae5e679",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    },
+    {
+      "verifier": "tactical-training-v2",
+      "sha256": {
+        "botstrike-engine": "35dc15e7b591a3843ce805e43b4d6378c6e20992db8a1399aa6d669c3492453f",
+        "myelin-botstrike": "e8cc623681b78f3a8a6c4d194fcd0df6c42375581d3bb8a9eb54e618166d19d2"
+      },
+      "profile": "bd05a9df9e84d3d6f4f1ebd4b97e4f038bb6afee47ed26da0bd083e20d70dc53",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    },
+    {
+      "verifier": "tactical-v3",
+      "sha256": {
+        "botstrike-engine": "aa907de2169de8bc03192ec927f3052148910214dc85de65d721d1d348cbd66c",
+        "myelin-botstrike": "7980cd7e998facd126129ff84c04021f0965ba3cb96d93c86202c8cf77b14cfb"
+      },
+      "profile": "fcf982bb7885747d73985f4f00cd27d040a05802ea3a395d8e3e4e23dabe63f5",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    },
+    {
+      "verifier": "salvage-v1",
+      "sha256": {
+        "botstrike-engine": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+        "myelin-botstrike": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575"
+      },
+      "profile": "642acc7500efb2635dfa6aca1603b31a6624f3101ccdf5f6986da75c22419cf9",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    },
+    {
+      "verifier": "readability-v5",
+      "sha256": {
+        "botstrike-engine": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+        "myelin-botstrike": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30"
+      },
+      "profile": "159d503a8985334fecbf4089559db373d5ce646d4f348a63f72591cd3eda25a3",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    },
+    {
+      "verifier": "tactics-v4",
+      "sha256": {
+        "botstrike-engine": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+        "myelin-botstrike": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7"
+      },
+      "profile": "972f845952785eda8074239042f63fe5781d1071a14311f8afefc7442ddcc39b",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    },
+    {
+      "verifier": "network-v3",
+      "sha256": {
+        "botstrike-engine": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+        "myelin-botstrike": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+      },
+      "profile": "15a835f40bb0890b672fb85c1b30d90db335534e0f3b931b1b6865e066f490ee",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    },
+    {
+      "verifier": "arsenal-v2",
+      "sha256": {
+        "botstrike-engine": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+        "myelin-botstrike": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+      },
+      "profile": "5c08047108c56301a34039cccd9bfc7aaeaa1f634f8e6501fc0b43c5014b3404",
+      "ticks": 23040,
+      "exactRouting": true,
+      "newProfileRejected": true,
+      "verified": true,
+      "synthetic": true
+    }
+  ],
+  "summary": {
+    "dir": "/tmp/botstrike-tactical-historical-4nUbM4",
+    "profiles": 8
+  }
+}

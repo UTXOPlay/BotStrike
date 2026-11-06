@@ -1,0 +1,9 @@
+{
+  "case": "comms",
+  "exit": 1,
+  "elapsedSeconds": 0.382,
+  "stdout": "",
+  "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: {\"error\":\"Match storage is temporarily full\"}\n\n400 !== 200\n\n    at call (file:///app/tests/botstrike-comms-flow.mjs:5:186)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async file:///app/tests/botstrike-comms-flow.mjs:10:70 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 400,\n  expected: 200,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.4\n",
+  "humanParticipants": 0,
+  "containerRemovedAfterRun": true
+}

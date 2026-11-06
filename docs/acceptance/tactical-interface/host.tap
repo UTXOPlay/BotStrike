@@ -1,0 +1,38 @@
+
+> botstrike@1.4.2 test:host
+> node --test host/*.test.mjs
+
+TAP version 13
+# Subtest: standalone guests persist and cannot inject another player identity
+ok 1 - standalone guests persist and cannot inject another player identity
+  ---
+  duration_ms: 39.357905
+  type: 'test'
+  ...
+# Subtest: trusted gateways bind the exact account; invalid credentials never fall back to cookies
+ok 2 - trusted gateways bind the exact account; invalid credentials never fall back to cookies
+  ---
+  duration_ms: 17.247748
+  type: 'test'
+  ...
+# Subtest: gateway accounts have separate quotas; arbitrary forwarding headers cannot select an identity
+ok 3 - gateway accounts have separate quotas; arbitrary forwarding headers cannot select an identity
+  ---
+  duration_ms: 6.415458
+  type: 'test'
+  ...
+# Subtest: signed exports retain their exact body and download headers through the streaming proxy
+ok 4 - signed exports retain their exact body and download headers through the streaming proxy
+  ---
+  duration_ms: 3.038329
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 139.504343

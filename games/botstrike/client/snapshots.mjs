@@ -1,3 +1,4 @@
+import {presentationGait} from './presentation-gait.mjs';
 // Render remote players on a bounded server-tick timeline. Local prediction stays
 // immediate; hidden/new-life actors never interpolate from stale positions.
 export class SnapshotBuffer {
@@ -17,11 +18,13 @@ export class SnapshotBuffer {
   const fraction=after.state.tick===before.state.tick?1:Math.max(0,Math.min(1,(this.renderTick-before.state.tick)/(after.state.tick-before.state.tick)));
   const current=latest.state;
   return {...current,players:current.players.map((p,i)=>{
-   if(i===slot||p.hidden||!p.position)return p;
+   if(i===slot){const gait=presentationGait(p,current.tick),elapsed=current.phase==='live'&&p.alive&&p.position?.[1]<=.001&&p.velocity?.[1]<=0&&Math.hypot(p.velocity[0],p.velocity[2])>1?Math.min(4,Math.max(0,now-latest.now)*.064):0;return gait?{...p,gait:{...gait,phase:gait.phase+elapsed/(64*gait.cycleDuration)}}:p;}
+   if(p.hidden||p.optical===false||!p.position)return p;
    const a=before.state.players[i],b=after.state.players[i];
-   if(!a?.position||!b?.position||a.hidden||b.hidden||a.life!==p.life||b.life!==p.life||a.alive!==p.alive||b.alive!==p.alive||Math.hypot(...b.position.map((v,j)=>v-a.position[j]))>200)return p;
+   if(!a?.position||!b?.position||a.hidden||b.hidden||a.optical===false||b.optical===false||a.life!==p.life||b.life!==p.life||a.alive!==p.alive||b.alive!==p.alive||Math.hypot(...b.position.map((v,j)=>v-a.position[j]))>200)return p;
    const angle=Math.atan2(Math.sin(b.yaw-a.yaw),Math.cos(b.yaw-a.yaw));
-   return {...p,position:a.position.map((v,j)=>v+(b.position[j]-v)*fraction),yaw:a.yaw+angle*fraction,pitch:a.pitch+(b.pitch-a.pitch)*fraction};
+   const ga=presentationGait(a,before.state.tick),gb=presentationGait(b,after.state.tick),gait=ga&&gb&&gb.phase>=ga.phase?{phase:ga.phase+(gb.phase-ga.phase)*fraction,cycleDuration:ga.cycleDuration+(gb.cycleDuration-ga.cycleDuration)*fraction,duty:ga.duty+(gb.duty-ga.duty)*fraction,tick:ga.tick+(gb.tick-ga.tick)*fraction,life:p.life}:null;
+   return {...p,...(gait?{gait}:{}),...(Number.isFinite(a.stance)&&Number.isFinite(b.stance)?{stance:a.stance+(b.stance-a.stance)*fraction}:{}),position:a.position.map((v,j)=>v+(b.position[j]-v)*fraction),yaw:a.yaw+angle*fraction,pitch:a.pitch+(b.pitch-a.pitch)*fraction};
   })};
  }
  viewTick(){return Math.max(0,Math.floor(this.renderTick));}

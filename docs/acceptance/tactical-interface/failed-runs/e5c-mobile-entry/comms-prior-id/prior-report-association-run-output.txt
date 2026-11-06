@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(Math.abs(event.position[2]-expected[1])<1e-7)
+
+    at check (file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-comms-browser.mjs:49:381)
+    at async file:///home/arthur/.codex/worktrees/botstrike-tactical-core/BotStrike/tests/botstrike-comms-browser.mjs:55:148 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.1

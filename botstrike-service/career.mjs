@@ -2,6 +2,7 @@ import {mkdir,readFile,writeFile,rename,readdir,stat,utimes} from 'node:fs/promi
 import path from 'node:path';
 const valid=id=>/^[a-f0-9]{64}$/.test(id||'');
 export function trackHumanFrame(room,state){
+ if((room.config?.mode==='practice'||room.config?.ruleset==='tactical'))return;
  room.participants??={};
  for(const [slot,id]of (room.controlled||[]).entries())if(valid(id)){
   const p=room.participants[id]??={kills:0,deaths:0,damage:0,ticks:0,lastTick:0,team:Math.floor(slot/5)};
@@ -18,7 +19,7 @@ export class CareerStore{
  async read(id){if(!valid(id))throw Error('Invalid career account');try{return JSON.parse(await readFile(path.join(this.directory,id+'.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return empty();throw e;}}
  async view(id){await this.chain;const {applied,...view}=await this.read(id);return view;}
  commit(room){const job=async()=>{
-  if(room.status!=='finished'||!room.proof?.verified)return;
+  if((room.config?.mode==='practice'||room.config?.ruleset==='tactical')||room.status!=='finished'||!room.proof?.verified)return;
   await mkdir(this.directory,{recursive:true,mode:0o700});
   for(const [id,p]of Object.entries(room.participants||{})){
    if(!valid(id)||!p.ticks)continue;

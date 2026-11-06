@@ -1,3 +1,5 @@
+import {stanceOf} from '../../../shared/sight-geometry.mjs';
+import {hitVolumes} from './hit-regions.mjs';
 import * as THREE from 'three';
 import {blocked,smoke} from './aim-assist.mjs';
 
@@ -13,8 +15,8 @@ export function drawSignal(ctx,relation,x,y,size){
  const path=new Path2D(signalPaths[relation]);ctx.lineJoin='miter';ctx.strokeStyle='#07151f';ctx.lineWidth=4.5;ctx.stroke(path);ctx.strokeStyle=signalColors[relation];ctx.lineWidth=1.8;ctx.stroke(path);ctx.restore();
 }
 export function signalVisible(player,viewer,eye,map,utilities=[]){
- if(!viewer?.alive||viewer.flash>0||!player?.alive||player.hidden||!player.position||player.slot===viewer.slot)return false;
- const target=[player.position[0],player.position[1]+(player.crouch?32:52),player.position[2]];
+ if(!viewer?.alive||viewer.flash>0||!player?.alive||player.hidden||player.optical===false||!player.position||player.slot===viewer.slot)return false;
+ const target=hitVolumes(player.position,stanceOf(player),[player.yaw||0,player.pitch||0]).upper;
  return !map.obstacles.some(box=>blocked(eye,target,box))&&!utilities.some(u=>smoke(eye,target,u));
 }
 export function createTeamSignals(scene,count=10){
@@ -33,7 +35,7 @@ export function createTeamSignals(scene,count=10){
   const pixels=Math.max(20,Math.min(36,height*.023));
   for(const player of state.players){
    const sprite=sprites[player.slot];if(!sprite||!signalVisible(player,viewer,eye,map,state.utilities))continue;
-   sprite.position.fromArray(player.position);sprite.position.y+=player.crouch?57:85;
+   const volume=hitVolumes(player.position,stanceOf(player),[player.yaw||0,player.pitch||0]);sprite.position.fromArray(volume.head);sprite.position.y+=Math.abs(Math.cos(volume.head_pitch))*volume.head_half_extents[1]+Math.abs(Math.sin(volume.head_pitch))*volume.head_half_extents[2]+12;
    cameraSpace.copy(sprite.position).applyMatrix4(camera.matrixWorldInverse);const depth=-cameraSpace.z;if(depth<=camera.near)continue;
    // Bounded screen size, including scoped views; no billboard growth near the camera.
    const size=pixels*2*depth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/height;

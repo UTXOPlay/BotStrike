@@ -1,0 +1,51 @@
+{
+  "privateExportsCommitted": false,
+  "rows": [
+    {
+      "name": "salvage-v1",
+      "verified": true,
+      "candidateRejected": true,
+      "sha256": "7163c8de0498c6071c060851819459c10d862d8a5996a0f34e4522621cf94e09",
+      "source": "retained production export; input provenance is not human attestation",
+      "ticks": 23040,
+      "moveInputs": 17572,
+      "fireInputs": 5052,
+      "takeoverInputs": 23011
+    },
+    {
+      "name": "readability-v5",
+      "verified": true,
+      "candidateRejected": true,
+      "sha256": "e6e97b4a91c15305cae44649c9fe795179556f1d528d2d6ddd10b0b2a48f3362",
+      "source": "retained production export; input provenance is not human attestation",
+      "ticks": 23040,
+      "moveInputs": 7822,
+      "fireInputs": 3181,
+      "takeoverInputs": 23011
+    },
+    {
+      "name": "network-v3",
+      "verified": true,
+      "candidateRejected": true,
+      "verifier": "network-v3",
+      "sha256": "583bcdda051e44185369238c76537588dd43364d6768d4cebb63d319e1f79b81",
+      "source": "retained production export; input provenance is not human attestation"
+    },
+    {
+      "name": "tactics-v4",
+      "verified": true,
+      "candidateRejected": true,
+      "verifier": "tactics-v4",
+      "sha256": "570a79a270ff1f0a58528c4c918f97c8d07b82aa7c5a97d051e217071d5ca455",
+      "source": "retained production export; input provenance is not human attestation"
+    },
+    {
+      "name": "arsenal-v2",
+      "verified": true,
+      "candidateRejected": true,
+      "verifier": "arsenal-v2",
+      "sha256": "6fbd837a6a09bdcfbbec4dff04f6e713cd35c395a6c6011dfdfbc36f95cc3515",
+      "source": "retained production export; input provenance is not human attestation"
+    }
+  ]
+}

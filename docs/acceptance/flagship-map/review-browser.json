@@ -1,0 +1,71 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "backing": [
+        1920,
+        1080
+      ],
+      "pointerInverse": true,
+      "controlsReachable": true
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "backing": [
+        2560,
+        1080
+      ],
+      "pointerInverse": true,
+      "controlsReachable": true
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "backing": [
+        2560,
+        1440
+      ],
+      "pointerInverse": true,
+      "controlsReachable": true
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "backing": [
+        2560,
+        1440
+      ],
+      "pointerInverse": true,
+      "controlsReachable": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "backing": [
+        390,
+        844
+      ],
+      "pointerInverse": true,
+      "controlsReachable": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "backing": [
+        844,
+        390
+      ],
+      "pointerInverse": true,
+      "controlsReachable": true
+    }
+  ],
+  "routeFilter": true,
+  "tickScrubber": true,
+  "snapshotDownload": true,
+  "noLiveEndpoints": true,
+  "errors": []
+}

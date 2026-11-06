@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-06",
+  "status": "unaccepted flagship candidate; human 5v5/recognition and balance gates remain open",
+  "version": "botstrike-2050-tactical-v4",
+  "modelSha256": "881347ed6ce9294c91f9bb82c010b06a2302c769fd2810aef4f910b95dd888a5",
+  "map": "neon-docks",
+  "mapObjectCanonicalSha256": "31c9e2124710e7d895df0fb67498a57264be29cee3d68287f2be4bcb058845bf",
+  "mapUnchangedFromMain": "0d8b15130c70ac1f203d0e985d32aca542ddafdb",
+  "routeConfigurations": 484,
+  "nativeReached": 484,
+  "humanParticipants": 0,
+  "stanceSightlinePairs": 528,
+  "referenceCameraPairs": 144,
+  "nativeDetailedRaysPerCohort": 7392,
+  "cohorts": [
+    "desktop",
+    "touch material batching"
+  ],
+  "beforeEdgeMismatches": 30,
+  "afterEdgeMismatchesPerCohort": 0,
+  "extraMapSampleRaysPerCohort": 1152,
+  "unitTests": 159,
+  "hostTestsInPresentationBuild": 4,
+  "presentationImage": "sha256:115780e4753870d1c2fb7a94203daf2ca6ef7f3b1744b85de9272e60b270bb6a",
+  "baseImage": "sha256:79c5d17e4ba4b35ab7f1b93a4b6b88149746ac88889cc7f66d5195800ff9008f",
+  "preservedBaseLayers": 19,
+  "newPresentationLayers": 1,
+  "nativePair": {
+    "botstrike-engine": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+    "myelin-botstrike": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8"
+  },
+  "presentationChanges": [
+    "Opaque native-box core for every solid cover type.",
+    "Decorative vertices confined to native boxes; cached coplanar depth-biased materials, including mobile batching."
+  ],
+  "remainingGates": [
+    "Ten-human demolition sessions by side/skill/chassis/weapon; no bot or synthetic inputs count.",
+    "Human readability and physical-device/high-refresh acceptance.",
+    "Review first-contact/spawn-slot/site timing and each anchor counterplay; candidate is not an approved layout.",
+    "Git GPG unlock remains needed for signed commits/push; production has not received this candidate."
+  ]
+}

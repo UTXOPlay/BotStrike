@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "kind": "offline-arsenal-identity-study",
+  "humanObservations": 0,
+  "liveMatchData": false,
+  "nativeRulesUnchanged": true,
+  "renderer": "shipping createAudio, default stereo; no HRTF experiment",
+  "sha256": {
+    "games/botstrike/client/audio-budget.mjs": "4ea1acbf37b43b02285da069ea1b6e9c97a0659bebfa75c85297c6f89b7a4971",
+    "games/botstrike/client/audio-spatial.mjs": "8771bfe75ee377ead0040decfc2e8044d4816c6b54f4cba88d68989e2f4f2123",
+    "games/botstrike/client/weapon-action-sound.mjs": "b8f6a1f2744a262a517859acfe8becbd0b4b4320654ba6e31252de81c0fecf66",
+    "games/botstrike/client/shot-sound.mjs": "87a39c38f2b685903c072972366b670bf9a7e448c5d3255651dde1182325e0d7",
+    "games/botstrike/client/impact-sound.mjs": "ec4444c05803964829dbf3a01f85ab039285e32c7cf02b64511228bc7f891c28",
+    "games/botstrike/client/footstep-sound.mjs": "71af13f7b7755b55c2bf866e7e7b6512638d390bec51c793f297f6a1930cb73c",
+    "games/botstrike/client/audio.mjs": "9cd3ad3d6bda23d0f1951f9b630aff57b16b825a739c91114183bb22a0ac48ec",
+    "tools/arsenal-listening-protocol.mjs": "9b961c702f3a3960432c7ad1c252df907d1e874df673c34b73d302297b06e40c",
+    "tools/arsenal-listening-lab.mjs": "182653235924d516af3c0661449ade68544d07f8b0f08e818ebfd3b2d7246808",
+    "botstrike/spec.json": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6"
+  },
+  "bundleSha256": "ea0e7f2f1af1a00e0f195bebc9f0533ca0a221e06e095ae6da7e8e356d00ad01",
+  "conditions": "12 weapons + 5 actions + 3 materials; 8 contexts per class; 160 trials/output; optional counterbalanced paired outputs",
+  "nuisanceFactors": "fractional action weapon and step/landing variants; isolated fixed lab timing"
+}

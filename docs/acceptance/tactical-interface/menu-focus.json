@@ -1,0 +1,47 @@
+{
+  "automated": true,
+  "humanParticipants": 0,
+  "fixture": "real Chromium DOM and shipping menu-focus/dialogs modules; no native or network state",
+  "sources": {
+    "games/botstrike/client/menu-focus.mjs": "48cd271e4f239cde2881616188c424832bcb2ca9715dd5434363c30cc21230ee",
+    "games/botstrike/client/dialogs.mjs": "422cb35540df2e8c70a44c33379000d372aa01e016cf162e86b8406cc1211208"
+  },
+  "initial": {
+    "ids": [
+      "plain",
+      "link",
+      "input",
+      "select",
+      "textarea",
+      "visibility-override",
+      "legend-enabled",
+      "fieldset-link",
+      "closed-summary",
+      "summary-button",
+      "summary-link",
+      "open-summary",
+      "open-content"
+    ],
+    "closedContentRects": 1,
+    "closedSubroot": [],
+    "custom": [
+      "custom-row"
+    ],
+    "outside": false,
+    "nullElement": false,
+    "nullRoot": [],
+    "fieldsetDisabled": true,
+    "legendDisabled": false
+  },
+  "summaryAndSummaryDescendantsFocusableWhenClosed": true,
+  "nestedClosedDetailsExcluded": true,
+  "hiddenInertDisabledAndVisibilityExcluded": true,
+  "customResultRowsSupported": true,
+  "shippingDialogTabReachesBudgetSummary": true,
+  "enterExpandsBudget": true,
+  "expandedBudgetContentReachable": true,
+  "dialogFocusWraps": true,
+  "dialogRestoresValidPreviousFocus": true,
+  "hiddenReturnTargetNotFocused": true,
+  "errors": []
+}

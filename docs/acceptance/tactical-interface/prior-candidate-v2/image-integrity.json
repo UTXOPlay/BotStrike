@@ -1,0 +1,963 @@
+{
+  "schema": 1,
+  "auditedAt": "2026-11-06T17:37:25.968443+00:00",
+  "classification": "independent immutable image/file integrity audit; no fresh replay or physical UI acceptance",
+  "baseImage": "sha256:c1a486aad6b0c3e7c9315335c301004a90a799f1052569dfc535d161bb753842",
+  "candidateImage": "sha256:29a483f16f3aa0f28ae337fd805332c607e911ff76e1fcd875e1e2be4618fb5e",
+  "runningContainer": "botstrike-interface-final-20261107",
+  "runningContainerUsesCandidate": true,
+  "baseLayerCount": 27,
+  "candidateLayerCount": 29,
+  "inheritedLayerPrefixExact": true,
+  "baseLayers": [
+    "sha256:1d7b9dd8778ebc4d9bf2f64436dd358640718cb349f5640b33bebaea4ffd62c2",
+    "sha256:e597c47e115a320990201d8c37e21c6a41a739f901c93686c3f73aabe1e4f6c3",
+    "sha256:0e1faafd1d11dd793a3eb58a862e50f675dba83256b366243299f018ea23f876",
+    "sha256:ce67f65846ad6e526c5f9e127a761680c76dea4bc3990218589ccd7c4fe90933",
+    "sha256:33226972b872a353657b544d699b29a0675ebc9d8fbd284f718f188cff7b42ce",
+    "sha256:1ccabdf2e7d35effb3bf17389a105be9367cda112199bd22ecab791711788c88",
+    "sha256:53c2684c5a3f3dd42691f3164533ba6ab341e094a82f4f1431d36c3752a5e62c",
+    "sha256:d9233b019b8b13a249af12cfcba8eb5e67ee74cd8796e1d848857703e99fc28b",
+    "sha256:9f02066d2f928152904de37fefbc944e3adcccba2702af08c4e68e53c4c165e6",
+    "sha256:74d50b3d4eb43463cad5436e8e1663a372b330706f323c92c31df129ee5699d5",
+    "sha256:94dbf13910f2af02aa7d2989101b015053088060ef3125fc6fc2397d14cbf4c7",
+    "sha256:32d18c652f3458e15be02f69c1aa5bcf4c8e80813ed6eb09b2c1bde7da12de0c",
+    "sha256:a98944ea8f8f4b952e8eb79ba610a2739a1297b0dccb7b644fb2f88b1b3f879e",
+    "sha256:9796a307728778d3e3892d41e41081f6d4cf2e8a0bfcc7f854c8f935b81ce14f",
+    "sha256:5be3a194fac0b638a5c17c02e3a2ad9cadd0aa224314a1121825293c354b0f8f",
+    "sha256:08f8d419edcf0022d7eeab71586a51b98a25445357f4fbf74cc8a583eb6c6557",
+    "sha256:b1723a8ebd816b5a04eac8e5500c2cb2b104a6ca588835de813feb7f413d9816",
+    "sha256:1893d859bc5e9b46db09e776f4c10166dc0bcbf1f0799b6bb153af4da7d01fc8",
+    "sha256:f5e13a149470708d0d282793ee900c234fefe13cf056a3c572e5c78cde352b7b",
+    "sha256:61f602531941786bc1773bcdb5c2431d9355d7ddb36ac0abbdb46aa1f86fba10",
+    "sha256:094217260cb1b20c19f5ba545bd9caba1b090def2cdc9c04db278a299c496dc0",
+    "sha256:2674dee8ee350de0537e9e620809c1861cf4876587c8e6fae0ca34b997e3e9cf",
+    "sha256:e2f20fbfa504baec16d1734d2aba0c39fa81f6edf060270dd21dbfd4a1bf0b6f",
+    "sha256:7a1e70fbf2ea526bb8230bc4ee793aca3d9ef3c0f03a682eab13d88cc21eb9f8",
+    "sha256:10895f33c2f4c5b9c35b592c301dd7ea1d9492b89975dd9680a36da7019987d9",
+    "sha256:684322336a2a2a6edf9128a6a6c10b712b6eb3f744d05f7f456d772838db6232",
+    "sha256:3c0af76983eb332e3698b09be47b85ab92a5d4528d7d86ab986e84638c635b87"
+  ],
+  "newLayers": [
+    "sha256:c47ced9b355247e0909c0b1576cd3203be4f524aeda9faed91707ea04c2dc801",
+    "sha256:fc07484f4d9fc9519ffeef22815714c6104a513ddc6db446e1b6d50b9ede2747"
+  ],
+  "runtimeImageConfigurationUnchanged": true,
+  "protectedFileCount": 113,
+  "protectedFileMismatches": [],
+  "protectedFiles": {
+    "botstrike-service/career.mjs": {
+      "expected": "a1f606f7a3f3c7a9dd2ebe3ee3418e5829ff6f07c7cb604d268242a154d8dacc",
+      "base": "a1f606f7a3f3c7a9dd2ebe3ee3418e5829ff6f07c7cb604d268242a154d8dacc",
+      "candidate": "a1f606f7a3f3c7a9dd2ebe3ee3418e5829ff6f07c7cb604d268242a154d8dacc",
+      "running": "a1f606f7a3f3c7a9dd2ebe3ee3418e5829ff6f07c7cb604d268242a154d8dacc"
+    },
+    "botstrike-service/communications.mjs": {
+      "expected": "ce681e1140da05e1116f21f8bb848a9c39361273fb33acaeb1b45dde176565e8",
+      "base": "ce681e1140da05e1116f21f8bb848a9c39361273fb33acaeb1b45dde176565e8",
+      "candidate": "ce681e1140da05e1116f21f8bb848a9c39361273fb33acaeb1b45dde176565e8",
+      "running": "ce681e1140da05e1116f21f8bb848a9c39361273fb33acaeb1b45dde176565e8"
+    },
+    "botstrike-service/feedback.mjs": {
+      "expected": "7d9f1684b07338a798870863593952dbb479bd55fe75d829f39377c1a4efa9bc",
+      "base": "7d9f1684b07338a798870863593952dbb479bd55fe75d829f39377c1a4efa9bc",
+      "candidate": "7d9f1684b07338a798870863593952dbb479bd55fe75d829f39377c1a4efa9bc",
+      "running": "7d9f1684b07338a798870863593952dbb479bd55fe75d829f39377c1a4efa9bc"
+    },
+    "botstrike-service/io.mjs": {
+      "expected": "229d8fbccfce9cda41cf8d222244af8b19b4b73b3bfcec1e615f3aa30ae7c649",
+      "base": "229d8fbccfce9cda41cf8d222244af8b19b4b73b3bfcec1e615f3aa30ae7c649",
+      "candidate": "229d8fbccfce9cda41cf8d222244af8b19b4b73b3bfcec1e615f3aa30ae7c649",
+      "running": "229d8fbccfce9cda41cf8d222244af8b19b4b73b3bfcec1e615f3aa30ae7c649"
+    },
+    "botstrike-service/movement-audio.mjs": {
+      "expected": "355fcfdd1c79a1e6b680b1452b9cfb44ee307bda30a020ff5792ef80cf051278",
+      "base": "355fcfdd1c79a1e6b680b1452b9cfb44ee307bda30a020ff5792ef80cf051278",
+      "candidate": "355fcfdd1c79a1e6b680b1452b9cfb44ee307bda30a020ff5792ef80cf051278",
+      "running": "355fcfdd1c79a1e6b680b1452b9cfb44ee307bda30a020ff5792ef80cf051278"
+    },
+    "botstrike-service/retention.mjs": {
+      "expected": "c43d500b9bd2d4f64c13ac6d594d344890dd520eabe82529aa39e08acb898237",
+      "base": "c43d500b9bd2d4f64c13ac6d594d344890dd520eabe82529aa39e08acb898237",
+      "candidate": "c43d500b9bd2d4f64c13ac6d594d344890dd520eabe82529aa39e08acb898237",
+      "running": "c43d500b9bd2d4f64c13ac6d594d344890dd520eabe82529aa39e08acb898237"
+    },
+    "botstrike-service/seal-worker.mjs": {
+      "expected": "9e3179ee7a57bc500f5c3bb917b146fcba524c318f8f46bdfe0b76746b176b40",
+      "base": "9e3179ee7a57bc500f5c3bb917b146fcba524c318f8f46bdfe0b76746b176b40",
+      "candidate": "9e3179ee7a57bc500f5c3bb917b146fcba524c318f8f46bdfe0b76746b176b40",
+      "running": "9e3179ee7a57bc500f5c3bb917b146fcba524c318f8f46bdfe0b76746b176b40"
+    },
+    "botstrike-service/server.mjs": {
+      "expected": "aa85291412f338f61029ab4817ff2c017c4f0cd54e4fa27776f325accb0ed183",
+      "base": "aa85291412f338f61029ab4817ff2c017c4f0cd54e4fa27776f325accb0ed183",
+      "candidate": "aa85291412f338f61029ab4817ff2c017c4f0cd54e4fa27776f325accb0ed183",
+      "running": "aa85291412f338f61029ab4817ff2c017c4f0cd54e4fa27776f325accb0ed183"
+    },
+    "botstrike-service/tactical.mjs": {
+      "expected": "bc521705c14cc42fa9f19e44f7d1796da8f1d7963097fd8f2867c7f627357e9a",
+      "base": "bc521705c14cc42fa9f19e44f7d1796da8f1d7963097fd8f2867c7f627357e9a",
+      "candidate": "bc521705c14cc42fa9f19e44f7d1796da8f1d7963097fd8f2867c7f627357e9a",
+      "running": "bc521705c14cc42fa9f19e44f7d1796da8f1d7963097fd8f2867c7f627357e9a"
+    },
+    "botstrike-service/visibility.mjs": {
+      "expected": "5514d3d0eb82e1e7c8a2344d408cb9fb1880ab3db06edc6e9291c6a0e263eb2c",
+      "base": "5514d3d0eb82e1e7c8a2344d408cb9fb1880ab3db06edc6e9291c6a0e263eb2c",
+      "candidate": "5514d3d0eb82e1e7c8a2344d408cb9fb1880ab3db06edc6e9291c6a0e263eb2c",
+      "running": "5514d3d0eb82e1e7c8a2344d408cb9fb1880ab3db06edc6e9291c6a0e263eb2c"
+    },
+    "botstrike/spec.json": {
+      "expected": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+      "base": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+      "candidate": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+      "running": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6"
+    },
+    "dist/botstrike/damage-contract.json": {
+      "expected": "010f3b777056c67ce28ed4603808a06dfc01ac3de5ea6e274e12bbb960eba14e",
+      "base": "010f3b777056c67ce28ed4603808a06dfc01ac3de5ea6e274e12bbb960eba14e",
+      "candidate": "010f3b777056c67ce28ed4603808a06dfc01ac3de5ea6e274e12bbb960eba14e",
+      "running": "010f3b777056c67ce28ed4603808a06dfc01ac3de5ea6e274e12bbb960eba14e"
+    },
+    "dist/botstrike/spec.json": {
+      "expected": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+      "base": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+      "candidate": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+      "running": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6"
+    },
+    "game-host.json": {
+      "expected": "4fdbed1d35dadfcdabe497390a7529e551c38f418218e9cd0d455a9f24fe0c88",
+      "base": "4fdbed1d35dadfcdabe497390a7529e551c38f418218e9cd0d455a9f24fe0c88",
+      "candidate": "4fdbed1d35dadfcdabe497390a7529e551c38f418218e9cd0d455a9f24fe0c88",
+      "running": "4fdbed1d35dadfcdabe497390a7529e551c38f418218e9cd0d455a9f24fe0c88"
+    },
+    "host/server.mjs": {
+      "expected": "a4ec3a267275a67272588188689cc0d28a15c5cb6af46c1b89fde583c6d3466b",
+      "base": "a4ec3a267275a67272588188689cc0d28a15c5cb6af46c1b89fde583c6d3466b",
+      "candidate": "a4ec3a267275a67272588188689cc0d28a15c5cb6af46c1b89fde583c6d3466b",
+      "running": "a4ec3a267275a67272588188689cc0d28a15c5cb6af46c1b89fde583c6d3466b"
+    },
+    "host/server.test.mjs": {
+      "expected": "67d0782a754585652e9283414dbfd0c7954fd249e9a98e4d76d78ec85abf7d68",
+      "base": "67d0782a754585652e9283414dbfd0c7954fd249e9a98e4d76d78ec85abf7d68",
+      "candidate": "67d0782a754585652e9283414dbfd0c7954fd249e9a98e4d76d78ec85abf7d68",
+      "running": "67d0782a754585652e9283414dbfd0c7954fd249e9a98e4d76d78ec85abf7d68"
+    },
+    "host/socket-proxy.mjs": {
+      "expected": "3f7fd99774e86475e3207f21121c41b67d867db87e384218e2b253fb48e3525e",
+      "base": "3f7fd99774e86475e3207f21121c41b67d867db87e384218e2b253fb48e3525e",
+      "candidate": "3f7fd99774e86475e3207f21121c41b67d867db87e384218e2b253fb48e3525e",
+      "running": "3f7fd99774e86475e3207f21121c41b67d867db87e384218e2b253fb48e3525e"
+    },
+    "host/start.mjs": {
+      "expected": "0195146491e31167198e8dd1d6ab376173c90c17fcc5fd3c7ffeb1df33022817",
+      "base": "0195146491e31167198e8dd1d6ab376173c90c17fcc5fd3c7ffeb1df33022817",
+      "candidate": "0195146491e31167198e8dd1d6ab376173c90c17fcc5fd3c7ffeb1df33022817",
+      "running": "0195146491e31167198e8dd1d6ab376173c90c17fcc5fd3c7ffeb1df33022817"
+    },
+    "host/static.mjs": {
+      "expected": "c2dd5ce6e8e905e3c45752922ac3d4ae0552de6d24c0003436b57c52402ae223",
+      "base": "c2dd5ce6e8e905e3c45752922ac3d4ae0552de6d24c0003436b57c52402ae223",
+      "candidate": "c2dd5ce6e8e905e3c45752922ac3d4ae0552de6d24c0003436b57c52402ae223",
+      "running": "c2dd5ce6e8e905e3c45752922ac3d4ae0552de6d24c0003436b57c52402ae223"
+    },
+    "release/botstrike-engine": {
+      "expected": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+      "base": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+      "candidate": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+      "running": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b"
+    },
+    "release/legacy/arsenal-v2/botstrike-engine": {
+      "expected": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+      "base": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+      "candidate": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718",
+      "running": "30902191aa3472453ff10786cf5681278c52a02e563fab3267e64102213d3718"
+    },
+    "release/legacy/arsenal-v2/myelin-botstrike": {
+      "expected": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84",
+      "base": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84",
+      "candidate": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84",
+      "running": "5e6c6d84e74ecfdd41b805d7711639dd641a95825b7889a01e00b2b7b4722d84"
+    },
+    "release/legacy/network-v3/botstrike-engine": {
+      "expected": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+      "base": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+      "candidate": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b",
+      "running": "9d58faf6d4e1941dee133ad90070807d0ac37473b1a4941036a7c81783fcf19b"
+    },
+    "release/legacy/network-v3/myelin-botstrike": {
+      "expected": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d",
+      "base": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d",
+      "candidate": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d",
+      "running": "7bd422e840074406088009520ab8d732e305564885bfd875faed72fe09a1230d"
+    },
+    "release/legacy/readability-v5/botstrike-engine": {
+      "expected": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+      "base": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+      "candidate": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe",
+      "running": "05477d7cf3932bc29671e859b2acc3daf5c1618f222c71f90f64b6bed327ecbe"
+    },
+    "release/legacy/readability-v5/myelin-botstrike": {
+      "expected": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30",
+      "base": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30",
+      "candidate": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30",
+      "running": "e29dec6c1e7f97f3aa583f4e499f844e73c128ddd035d5d2d5d0fbcbea3f5d30"
+    },
+    "release/legacy/salvage-v1/botstrike-engine": {
+      "expected": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+      "base": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+      "candidate": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+      "running": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a"
+    },
+    "release/legacy/salvage-v1/myelin-botstrike": {
+      "expected": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575",
+      "base": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575",
+      "candidate": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575",
+      "running": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575"
+    },
+    "release/legacy/tactical-gunplay-v2/botstrike-engine": {
+      "expected": "f36e32f21ecc6bc8cbf5b78982effc2f7ff0e4a9edccf8f46bc53d4f82fa0741",
+      "base": "f36e32f21ecc6bc8cbf5b78982effc2f7ff0e4a9edccf8f46bc53d4f82fa0741",
+      "candidate": "f36e32f21ecc6bc8cbf5b78982effc2f7ff0e4a9edccf8f46bc53d4f82fa0741",
+      "running": "f36e32f21ecc6bc8cbf5b78982effc2f7ff0e4a9edccf8f46bc53d4f82fa0741"
+    },
+    "release/legacy/tactical-gunplay-v2/myelin-botstrike": {
+      "expected": "50400185393902b49c86ced12c67f43b3e9107822e2066c3225725ee5c5e02e9",
+      "base": "50400185393902b49c86ced12c67f43b3e9107822e2066c3225725ee5c5e02e9",
+      "candidate": "50400185393902b49c86ced12c67f43b3e9107822e2066c3225725ee5c5e02e9",
+      "running": "50400185393902b49c86ced12c67f43b3e9107822e2066c3225725ee5c5e02e9"
+    },
+    "release/legacy/tactical-training-v2/botstrike-engine": {
+      "expected": "35dc15e7b591a3843ce805e43b4d6378c6e20992db8a1399aa6d669c3492453f",
+      "base": "35dc15e7b591a3843ce805e43b4d6378c6e20992db8a1399aa6d669c3492453f",
+      "candidate": "35dc15e7b591a3843ce805e43b4d6378c6e20992db8a1399aa6d669c3492453f",
+      "running": "35dc15e7b591a3843ce805e43b4d6378c6e20992db8a1399aa6d669c3492453f"
+    },
+    "release/legacy/tactical-training-v2/myelin-botstrike": {
+      "expected": "e8cc623681b78f3a8a6c4d194fcd0df6c42375581d3bb8a9eb54e618166d19d2",
+      "base": "e8cc623681b78f3a8a6c4d194fcd0df6c42375581d3bb8a9eb54e618166d19d2",
+      "candidate": "e8cc623681b78f3a8a6c4d194fcd0df6c42375581d3bb8a9eb54e618166d19d2",
+      "running": "e8cc623681b78f3a8a6c4d194fcd0df6c42375581d3bb8a9eb54e618166d19d2"
+    },
+    "release/legacy/tactical-v3/botstrike-engine": {
+      "expected": "aa907de2169de8bc03192ec927f3052148910214dc85de65d721d1d348cbd66c",
+      "base": "aa907de2169de8bc03192ec927f3052148910214dc85de65d721d1d348cbd66c",
+      "candidate": "aa907de2169de8bc03192ec927f3052148910214dc85de65d721d1d348cbd66c",
+      "running": "aa907de2169de8bc03192ec927f3052148910214dc85de65d721d1d348cbd66c"
+    },
+    "release/legacy/tactical-v3/myelin-botstrike": {
+      "expected": "7980cd7e998facd126129ff84c04021f0965ba3cb96d93c86202c8cf77b14cfb",
+      "base": "7980cd7e998facd126129ff84c04021f0965ba3cb96d93c86202c8cf77b14cfb",
+      "candidate": "7980cd7e998facd126129ff84c04021f0965ba3cb96d93c86202c8cf77b14cfb",
+      "running": "7980cd7e998facd126129ff84c04021f0965ba3cb96d93c86202c8cf77b14cfb"
+    },
+    "release/legacy/tactical-v4/botstrike-engine": {
+      "expected": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+      "base": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+      "candidate": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2",
+      "running": "0e744aa1bf32e50e76a110b6299f28896995f6e878c05d3f0b8c0ed014df13e2"
+    },
+    "release/legacy/tactical-v4/myelin-botstrike": {
+      "expected": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8",
+      "base": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8",
+      "candidate": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8",
+      "running": "d199fbd43e96cdb23f3cfb6f1e2a52a92a6deb8acbd1e022b2e039f969a1ddc8"
+    },
+    "release/legacy/tactics-v4/botstrike-engine": {
+      "expected": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+      "base": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+      "candidate": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec",
+      "running": "5eb1982c1464a4dd18d83fbdbae2ba134db27f32497afea85bd54a7caefdfbec"
+    },
+    "release/legacy/tactics-v4/myelin-botstrike": {
+      "expected": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7",
+      "base": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7",
+      "candidate": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7",
+      "running": "3013659618edf68e879fcd48d7d05773a6a88de639f323164fc34965b14bd9d7"
+    },
+    "release/myelin-botstrike": {
+      "expected": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74",
+      "base": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74",
+      "candidate": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74",
+      "running": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74"
+    },
+    "release/verifiers.json": {
+      "expected": "c0577b090ca7345f52bc598cbf035c23ca92a443fcb51bda76bd668d3f79422a",
+      "base": "c0577b090ca7345f52bc598cbf035c23ca92a443fcb51bda76bd668d3f79422a",
+      "candidate": "c0577b090ca7345f52bc598cbf035c23ca92a443fcb51bda76bd668d3f79422a",
+      "running": "c0577b090ca7345f52bc598cbf035c23ca92a443fcb51bda76bd668d3f79422a"
+    },
+    "shared/gait-geometry.mjs": {
+      "expected": "b2af5e91b3699ce7e9fadb8f059e2e21183eb8adf27f33497f92877d1601536c",
+      "base": "b2af5e91b3699ce7e9fadb8f059e2e21183eb8adf27f33497f92877d1601536c",
+      "candidate": "b2af5e91b3699ce7e9fadb8f059e2e21183eb8adf27f33497f92877d1601536c",
+      "running": "b2af5e91b3699ce7e9fadb8f059e2e21183eb8adf27f33497f92877d1601536c"
+    },
+    "shared/gait-plan.mjs": {
+      "expected": "9dcf655e1efe43045849fdd9aca066721162b39700e085ef7ca22a807bfc3f0e",
+      "base": "9dcf655e1efe43045849fdd9aca066721162b39700e085ef7ca22a807bfc3f0e",
+      "candidate": "9dcf655e1efe43045849fdd9aca066721162b39700e085ef7ca22a807bfc3f0e",
+      "running": "9dcf655e1efe43045849fdd9aca066721162b39700e085ef7ca22a807bfc3f0e"
+    },
+    "shared/game-performance.mjs": {
+      "expected": "c82f1d9e49d6897b87327a3c3e0891a1bb8a5e06e5c04de908b707edced4aecc",
+      "base": "c82f1d9e49d6897b87327a3c3e0891a1bb8a5e06e5c04de908b707edced4aecc",
+      "candidate": "c82f1d9e49d6897b87327a3c3e0891a1bb8a5e06e5c04de908b707edced4aecc",
+      "running": "c82f1d9e49d6897b87327a3c3e0891a1bb8a5e06e5c04de908b707edced4aecc"
+    },
+    "shared/game-viewport.mjs": {
+      "expected": "6b0bb40de0ad6d07fea688411266da5746f912179c084d0d1879d4c08d68928e",
+      "base": "6b0bb40de0ad6d07fea688411266da5746f912179c084d0d1879d4c08d68928e",
+      "candidate": "6b0bb40de0ad6d07fea688411266da5746f912179c084d0d1879d4c08d68928e",
+      "running": "6b0bb40de0ad6d07fea688411266da5746f912179c084d0d1879d4c08d68928e"
+    },
+    "shared/ground-surfaces.mjs": {
+      "expected": "edb79a096eda3236bf7d9a11e7ed5a68d5b8646c1bf55159534d843fac184f24",
+      "base": "edb79a096eda3236bf7d9a11e7ed5a68d5b8646c1bf55159534d843fac184f24",
+      "candidate": "edb79a096eda3236bf7d9a11e7ed5a68d5b8646c1bf55159534d843fac184f24",
+      "running": "edb79a096eda3236bf7d9a11e7ed5a68d5b8646c1bf55159534d843fac184f24"
+    },
+    "shared/hit-volumes.mjs": {
+      "expected": "e54e4d750fd096603033d32478d44048e01ce99e76a38cb9f7e8d0497c416b27",
+      "base": "e54e4d750fd096603033d32478d44048e01ce99e76a38cb9f7e8d0497c416b27",
+      "candidate": "e54e4d750fd096603033d32478d44048e01ce99e76a38cb9f7e8d0497c416b27",
+      "running": "e54e4d750fd096603033d32478d44048e01ce99e76a38cb9f7e8d0497c416b27"
+    },
+    "shared/ping-geometry.mjs": {
+      "expected": "ce5085b1b6fa17a17bb98ad9ebb2141bda8e35341c3cd3670003c05b1a98b7b6",
+      "base": "ce5085b1b6fa17a17bb98ad9ebb2141bda8e35341c3cd3670003c05b1a98b7b6",
+      "candidate": "ce5085b1b6fa17a17bb98ad9ebb2141bda8e35341c3cd3670003c05b1a98b7b6",
+      "running": "ce5085b1b6fa17a17bb98ad9ebb2141bda8e35341c3cd3670003c05b1a98b7b6"
+    },
+    "shared/sight-geometry.mjs": {
+      "expected": "c0b05a4dc0384bf05bef979be287b3dae5e9f1d6062ce7941ea5e8da0980f30c",
+      "base": "c0b05a4dc0384bf05bef979be287b3dae5e9f1d6062ce7941ea5e8da0980f30c",
+      "candidate": "c0b05a4dc0384bf05bef979be287b3dae5e9f1d6062ce7941ea5e8da0980f30c",
+      "running": "c0b05a4dc0384bf05bef979be287b3dae5e9f1d6062ce7941ea5e8da0980f30c"
+    },
+    "shared/tactical-callouts.mjs": {
+      "expected": "db3742b6814aa111c8f11c8634dfbe80f27534c8947100ca17972c3ff9e1caf2",
+      "base": "db3742b6814aa111c8f11c8634dfbe80f27534c8947100ca17972c3ff9e1caf2",
+      "candidate": "db3742b6814aa111c8f11c8634dfbe80f27534c8947100ca17972c3ff9e1caf2",
+      "running": "db3742b6814aa111c8f11c8634dfbe80f27534c8947100ca17972c3ff9e1caf2"
+    },
+    "shared/weapon-audio-events.mjs": {
+      "expected": "2c8ff0d66b66c9f1df24a7d17df90be9bcda780b205d91b7e1d931ecd36a46bf",
+      "base": "2c8ff0d66b66c9f1df24a7d17df90be9bcda780b205d91b7e1d931ecd36a46bf",
+      "candidate": "2c8ff0d66b66c9f1df24a7d17df90be9bcda780b205d91b7e1d931ecd36a46bf",
+      "running": "2c8ff0d66b66c9f1df24a7d17df90be9bcda780b205d91b7e1d931ecd36a46bf"
+    },
+    "dist/botstrike/_shared/favicon.svg": {
+      "expected": "1cd23ca0b9e25e2d9bcb872332518e2970cadebb1e8239046c05d950261152e0",
+      "base": "1cd23ca0b9e25e2d9bcb872332518e2970cadebb1e8239046c05d950261152e0",
+      "candidate": "1cd23ca0b9e25e2d9bcb872332518e2970cadebb1e8239046c05d950261152e0",
+      "running": "1cd23ca0b9e25e2d9bcb872332518e2970cadebb1e8239046c05d950261152e0"
+    },
+    "dist/botstrike/_shared/fonts.css": {
+      "expected": "d5ae846e3c36985175a02054bc70abb5df8aca3cfba822a6371975a82776fdb1",
+      "base": "d5ae846e3c36985175a02054bc70abb5df8aca3cfba822a6371975a82776fdb1",
+      "candidate": "d5ae846e3c36985175a02054bc70abb5df8aca3cfba822a6371975a82776fdb1",
+      "running": "d5ae846e3c36985175a02054bc70abb5df8aca3cfba822a6371975a82776fdb1"
+    },
+    "dist/botstrike/_shared/licenses/lucide.txt": {
+      "expected": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc",
+      "base": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc",
+      "candidate": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc",
+      "running": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc"
+    },
+    "dist/botstrike/art/equipment-0.webp": {
+      "expected": "b4ed063a5c722ef5763250b349fd8c5241949c7c93f0ec5336fc2427287d0047",
+      "base": "b4ed063a5c722ef5763250b349fd8c5241949c7c93f0ec5336fc2427287d0047",
+      "candidate": "b4ed063a5c722ef5763250b349fd8c5241949c7c93f0ec5336fc2427287d0047",
+      "running": "b4ed063a5c722ef5763250b349fd8c5241949c7c93f0ec5336fc2427287d0047"
+    },
+    "dist/botstrike/art/equipment-1.webp": {
+      "expected": "a181e6fe1a49b88ad410d8be10ad56f1aad165b4c3b2353899fb24776aa4f018",
+      "base": "a181e6fe1a49b88ad410d8be10ad56f1aad165b4c3b2353899fb24776aa4f018",
+      "candidate": "a181e6fe1a49b88ad410d8be10ad56f1aad165b4c3b2353899fb24776aa4f018",
+      "running": "a181e6fe1a49b88ad410d8be10ad56f1aad165b4c3b2353899fb24776aa4f018"
+    },
+    "dist/botstrike/art/equipment-10.webp": {
+      "expected": "06fe3d22adc4e5469abfb4f0a7cdb14becc48b9f192a38a2a5e31eb2fa0443af",
+      "base": "06fe3d22adc4e5469abfb4f0a7cdb14becc48b9f192a38a2a5e31eb2fa0443af",
+      "candidate": "06fe3d22adc4e5469abfb4f0a7cdb14becc48b9f192a38a2a5e31eb2fa0443af",
+      "running": "06fe3d22adc4e5469abfb4f0a7cdb14becc48b9f192a38a2a5e31eb2fa0443af"
+    },
+    "dist/botstrike/art/equipment-11.webp": {
+      "expected": "c01b4c1b71b172880898c12a07bc044cb7784c0e310ea5d3049fd795dac84c88",
+      "base": "c01b4c1b71b172880898c12a07bc044cb7784c0e310ea5d3049fd795dac84c88",
+      "candidate": "c01b4c1b71b172880898c12a07bc044cb7784c0e310ea5d3049fd795dac84c88",
+      "running": "c01b4c1b71b172880898c12a07bc044cb7784c0e310ea5d3049fd795dac84c88"
+    },
+    "dist/botstrike/art/equipment-2.webp": {
+      "expected": "c851fde83db1f218ae9861e45cc3cbf5f33ce99f38d11fa317e8cae68a07c422",
+      "base": "c851fde83db1f218ae9861e45cc3cbf5f33ce99f38d11fa317e8cae68a07c422",
+      "candidate": "c851fde83db1f218ae9861e45cc3cbf5f33ce99f38d11fa317e8cae68a07c422",
+      "running": "c851fde83db1f218ae9861e45cc3cbf5f33ce99f38d11fa317e8cae68a07c422"
+    },
+    "dist/botstrike/art/equipment-3.webp": {
+      "expected": "db2f01cc43811254e1fa15588831173cecd5f2a237fed3d6ab66998f0c33bf5c",
+      "base": "db2f01cc43811254e1fa15588831173cecd5f2a237fed3d6ab66998f0c33bf5c",
+      "candidate": "db2f01cc43811254e1fa15588831173cecd5f2a237fed3d6ab66998f0c33bf5c",
+      "running": "db2f01cc43811254e1fa15588831173cecd5f2a237fed3d6ab66998f0c33bf5c"
+    },
+    "dist/botstrike/art/equipment-4.webp": {
+      "expected": "4766eb6f268905fc5c275786c79cf7b7fd3593fd3f459f5437599d6b295395d2",
+      "base": "4766eb6f268905fc5c275786c79cf7b7fd3593fd3f459f5437599d6b295395d2",
+      "candidate": "4766eb6f268905fc5c275786c79cf7b7fd3593fd3f459f5437599d6b295395d2",
+      "running": "4766eb6f268905fc5c275786c79cf7b7fd3593fd3f459f5437599d6b295395d2"
+    },
+    "dist/botstrike/art/equipment-5.webp": {
+      "expected": "e43bbe58469b0988ac4b028d7f8353f483d35238b7daeb7dad9023483f65eb95",
+      "base": "e43bbe58469b0988ac4b028d7f8353f483d35238b7daeb7dad9023483f65eb95",
+      "candidate": "e43bbe58469b0988ac4b028d7f8353f483d35238b7daeb7dad9023483f65eb95",
+      "running": "e43bbe58469b0988ac4b028d7f8353f483d35238b7daeb7dad9023483f65eb95"
+    },
+    "dist/botstrike/art/equipment-6.webp": {
+      "expected": "c6884f002c4d4dbdbe6176d92d52795ba95b73557328d5da843f2308f5a1822e",
+      "base": "c6884f002c4d4dbdbe6176d92d52795ba95b73557328d5da843f2308f5a1822e",
+      "candidate": "c6884f002c4d4dbdbe6176d92d52795ba95b73557328d5da843f2308f5a1822e",
+      "running": "c6884f002c4d4dbdbe6176d92d52795ba95b73557328d5da843f2308f5a1822e"
+    },
+    "dist/botstrike/art/equipment-7.webp": {
+      "expected": "9604c5821b99a0e400870e33b730b49ae93c55e81ed5cdc44db108d7e7dce775",
+      "base": "9604c5821b99a0e400870e33b730b49ae93c55e81ed5cdc44db108d7e7dce775",
+      "candidate": "9604c5821b99a0e400870e33b730b49ae93c55e81ed5cdc44db108d7e7dce775",
+      "running": "9604c5821b99a0e400870e33b730b49ae93c55e81ed5cdc44db108d7e7dce775"
+    },
+    "dist/botstrike/art/equipment-8.webp": {
+      "expected": "2543397ad773257abe520dc970f0b9cb7ccae61769b0dbd78c16c14595822e9f",
+      "base": "2543397ad773257abe520dc970f0b9cb7ccae61769b0dbd78c16c14595822e9f",
+      "candidate": "2543397ad773257abe520dc970f0b9cb7ccae61769b0dbd78c16c14595822e9f",
+      "running": "2543397ad773257abe520dc970f0b9cb7ccae61769b0dbd78c16c14595822e9f"
+    },
+    "dist/botstrike/art/equipment-9.webp": {
+      "expected": "3a40ae4890cf3c4583a6e506fc1366e41d63d3c0e37c7183711d6b48a5251727",
+      "base": "3a40ae4890cf3c4583a6e506fc1366e41d63d3c0e37c7183711d6b48a5251727",
+      "candidate": "3a40ae4890cf3c4583a6e506fc1366e41d63d3c0e37c7183711d6b48a5251727",
+      "running": "3a40ae4890cf3c4583a6e506fc1366e41d63d3c0e37c7183711d6b48a5251727"
+    },
+    "dist/botstrike/art/hero-0.webp": {
+      "expected": "599d4be14c37ac3e961d07e064ccf15643d5ed971fce2569ae55a739e53ba43c",
+      "base": "599d4be14c37ac3e961d07e064ccf15643d5ed971fce2569ae55a739e53ba43c",
+      "candidate": "599d4be14c37ac3e961d07e064ccf15643d5ed971fce2569ae55a739e53ba43c",
+      "running": "599d4be14c37ac3e961d07e064ccf15643d5ed971fce2569ae55a739e53ba43c"
+    },
+    "dist/botstrike/art/hero-1.webp": {
+      "expected": "77914de4d8452fa610237f781ec619501a050f1a5d867681e5f457d6a537839c",
+      "base": "77914de4d8452fa610237f781ec619501a050f1a5d867681e5f457d6a537839c",
+      "candidate": "77914de4d8452fa610237f781ec619501a050f1a5d867681e5f457d6a537839c",
+      "running": "77914de4d8452fa610237f781ec619501a050f1a5d867681e5f457d6a537839c"
+    },
+    "dist/botstrike/art/hero-2.webp": {
+      "expected": "9ba3ebd15d2159785a81f45c85bd497494c257dcf8e05221e3dbc4f110956ca1",
+      "base": "9ba3ebd15d2159785a81f45c85bd497494c257dcf8e05221e3dbc4f110956ca1",
+      "candidate": "9ba3ebd15d2159785a81f45c85bd497494c257dcf8e05221e3dbc4f110956ca1",
+      "running": "9ba3ebd15d2159785a81f45c85bd497494c257dcf8e05221e3dbc4f110956ca1"
+    },
+    "dist/botstrike/art/hero-3.webp": {
+      "expected": "ad51bf615e09d9243ef3b3e19e4486b6ddf7952b59af647542fead10067dc175",
+      "base": "ad51bf615e09d9243ef3b3e19e4486b6ddf7952b59af647542fead10067dc175",
+      "candidate": "ad51bf615e09d9243ef3b3e19e4486b6ddf7952b59af647542fead10067dc175",
+      "running": "ad51bf615e09d9243ef3b3e19e4486b6ddf7952b59af647542fead10067dc175"
+    },
+    "dist/botstrike/art/hero-4.webp": {
+      "expected": "db6c77d3dbaab372203982a3bb8a4a053109d7de40094232dc80273c2f76bf4c",
+      "base": "db6c77d3dbaab372203982a3bb8a4a053109d7de40094232dc80273c2f76bf4c",
+      "candidate": "db6c77d3dbaab372203982a3bb8a4a053109d7de40094232dc80273c2f76bf4c",
+      "running": "db6c77d3dbaab372203982a3bb8a4a053109d7de40094232dc80273c2f76bf4c"
+    },
+    "dist/botstrike/art/hero-5.webp": {
+      "expected": "187960ec52d9dec29e770bfd2b086ac128a773499455fe6bce4d6f06d7701280",
+      "base": "187960ec52d9dec29e770bfd2b086ac128a773499455fe6bce4d6f06d7701280",
+      "candidate": "187960ec52d9dec29e770bfd2b086ac128a773499455fe6bce4d6f06d7701280",
+      "running": "187960ec52d9dec29e770bfd2b086ac128a773499455fe6bce4d6f06d7701280"
+    },
+    "dist/botstrike/art/keyart.webp": {
+      "expected": "798f342e9a4642ad2ac29d183b62a9969fbc670249165ac370878fde377499b5",
+      "base": "798f342e9a4642ad2ac29d183b62a9969fbc670249165ac370878fde377499b5",
+      "candidate": "798f342e9a4642ad2ac29d183b62a9969fbc670249165ac370878fde377499b5",
+      "running": "798f342e9a4642ad2ac29d183b62a9969fbc670249165ac370878fde377499b5"
+    },
+    "dist/botstrike/art/map-0.webp": {
+      "expected": "de8b8728287aed435bde85301439110c2613883f2bedf8e8c2216a4a98ca1ea3",
+      "base": "de8b8728287aed435bde85301439110c2613883f2bedf8e8c2216a4a98ca1ea3",
+      "candidate": "de8b8728287aed435bde85301439110c2613883f2bedf8e8c2216a4a98ca1ea3",
+      "running": "de8b8728287aed435bde85301439110c2613883f2bedf8e8c2216a4a98ca1ea3"
+    },
+    "dist/botstrike/art/map-1.webp": {
+      "expected": "40f26a9a906f59e10ecf0440585be8ce1c863a68a6c4d8432ae1c76f3c8ac135",
+      "base": "40f26a9a906f59e10ecf0440585be8ce1c863a68a6c4d8432ae1c76f3c8ac135",
+      "candidate": "40f26a9a906f59e10ecf0440585be8ce1c863a68a6c4d8432ae1c76f3c8ac135",
+      "running": "40f26a9a906f59e10ecf0440585be8ce1c863a68a6c4d8432ae1c76f3c8ac135"
+    },
+    "dist/botstrike/art/map-2.webp": {
+      "expected": "564990332fccd6bc5a7972a9d061adc419f29678ec6b23e14a3509e99900d0be",
+      "base": "564990332fccd6bc5a7972a9d061adc419f29678ec6b23e14a3509e99900d0be",
+      "candidate": "564990332fccd6bc5a7972a9d061adc419f29678ec6b23e14a3509e99900d0be",
+      "running": "564990332fccd6bc5a7972a9d061adc419f29678ec6b23e14a3509e99900d0be"
+    },
+    "dist/botstrike/art/weapon-0.webp": {
+      "expected": "11ac4e95143524f0b4d71a36ac86800300b6ec2d61347b08ebcc244840c84805",
+      "base": "11ac4e95143524f0b4d71a36ac86800300b6ec2d61347b08ebcc244840c84805",
+      "candidate": "11ac4e95143524f0b4d71a36ac86800300b6ec2d61347b08ebcc244840c84805",
+      "running": "11ac4e95143524f0b4d71a36ac86800300b6ec2d61347b08ebcc244840c84805"
+    },
+    "dist/botstrike/art/weapon-1.webp": {
+      "expected": "aca76845cba1e7fadf76872b2387429c3fecd20c95dda840c32bc8b3c41f0a1b",
+      "base": "aca76845cba1e7fadf76872b2387429c3fecd20c95dda840c32bc8b3c41f0a1b",
+      "candidate": "aca76845cba1e7fadf76872b2387429c3fecd20c95dda840c32bc8b3c41f0a1b",
+      "running": "aca76845cba1e7fadf76872b2387429c3fecd20c95dda840c32bc8b3c41f0a1b"
+    },
+    "dist/botstrike/art/weapon-10.webp": {
+      "expected": "21a0605d3b715d108d70fb0226825aedd156976badbcaf90fd10b1d83127f6e8",
+      "base": "21a0605d3b715d108d70fb0226825aedd156976badbcaf90fd10b1d83127f6e8",
+      "candidate": "21a0605d3b715d108d70fb0226825aedd156976badbcaf90fd10b1d83127f6e8",
+      "running": "21a0605d3b715d108d70fb0226825aedd156976badbcaf90fd10b1d83127f6e8"
+    },
+    "dist/botstrike/art/weapon-11.webp": {
+      "expected": "9a4d03387313124db877856472a16960bbacbd1d3dc3732fd63eac247161d672",
+      "base": "9a4d03387313124db877856472a16960bbacbd1d3dc3732fd63eac247161d672",
+      "candidate": "9a4d03387313124db877856472a16960bbacbd1d3dc3732fd63eac247161d672",
+      "running": "9a4d03387313124db877856472a16960bbacbd1d3dc3732fd63eac247161d672"
+    },
+    "dist/botstrike/art/weapon-2.webp": {
+      "expected": "54ee99fcdf92a83594992f62f82d931ea11be40e2cc7a77e0550df31265dc4b4",
+      "base": "54ee99fcdf92a83594992f62f82d931ea11be40e2cc7a77e0550df31265dc4b4",
+      "candidate": "54ee99fcdf92a83594992f62f82d931ea11be40e2cc7a77e0550df31265dc4b4",
+      "running": "54ee99fcdf92a83594992f62f82d931ea11be40e2cc7a77e0550df31265dc4b4"
+    },
+    "dist/botstrike/art/weapon-3.webp": {
+      "expected": "a067222d5792b0b38cbeb8d05f9f4039ed63fbd7cd3f99776c7cec85775028a3",
+      "base": "a067222d5792b0b38cbeb8d05f9f4039ed63fbd7cd3f99776c7cec85775028a3",
+      "candidate": "a067222d5792b0b38cbeb8d05f9f4039ed63fbd7cd3f99776c7cec85775028a3",
+      "running": "a067222d5792b0b38cbeb8d05f9f4039ed63fbd7cd3f99776c7cec85775028a3"
+    },
+    "dist/botstrike/art/weapon-4.webp": {
+      "expected": "93897f1bf48462f11068fa276b8b0dfc57ad3fe2a6db6dcd47823b1940154561",
+      "base": "93897f1bf48462f11068fa276b8b0dfc57ad3fe2a6db6dcd47823b1940154561",
+      "candidate": "93897f1bf48462f11068fa276b8b0dfc57ad3fe2a6db6dcd47823b1940154561",
+      "running": "93897f1bf48462f11068fa276b8b0dfc57ad3fe2a6db6dcd47823b1940154561"
+    },
+    "dist/botstrike/art/weapon-5.webp": {
+      "expected": "ddb068f1993580598501c64e3da0693bb065015c588c9b75f8cbaa940b407cda",
+      "base": "ddb068f1993580598501c64e3da0693bb065015c588c9b75f8cbaa940b407cda",
+      "candidate": "ddb068f1993580598501c64e3da0693bb065015c588c9b75f8cbaa940b407cda",
+      "running": "ddb068f1993580598501c64e3da0693bb065015c588c9b75f8cbaa940b407cda"
+    },
+    "dist/botstrike/art/weapon-6.webp": {
+      "expected": "da3f6273f4440861f9b7d145f1ccd23e295c75fe4c56624ae75dc748da4d7b2f",
+      "base": "da3f6273f4440861f9b7d145f1ccd23e295c75fe4c56624ae75dc748da4d7b2f",
+      "candidate": "da3f6273f4440861f9b7d145f1ccd23e295c75fe4c56624ae75dc748da4d7b2f",
+      "running": "da3f6273f4440861f9b7d145f1ccd23e295c75fe4c56624ae75dc748da4d7b2f"
+    },
+    "dist/botstrike/art/weapon-7.webp": {
+      "expected": "7bab1a288a7f0f8a637a7196d7c6bb0ac2120a3d9bfe02c0c0be9e10dd1d8e1d",
+      "base": "7bab1a288a7f0f8a637a7196d7c6bb0ac2120a3d9bfe02c0c0be9e10dd1d8e1d",
+      "candidate": "7bab1a288a7f0f8a637a7196d7c6bb0ac2120a3d9bfe02c0c0be9e10dd1d8e1d",
+      "running": "7bab1a288a7f0f8a637a7196d7c6bb0ac2120a3d9bfe02c0c0be9e10dd1d8e1d"
+    },
+    "dist/botstrike/art/weapon-8.webp": {
+      "expected": "78eaa7492148e8f19f4cbc8ca43262f0c61dc528c983fae0e846c5d603938fbb",
+      "base": "78eaa7492148e8f19f4cbc8ca43262f0c61dc528c983fae0e846c5d603938fbb",
+      "candidate": "78eaa7492148e8f19f4cbc8ca43262f0c61dc528c983fae0e846c5d603938fbb",
+      "running": "78eaa7492148e8f19f4cbc8ca43262f0c61dc528c983fae0e846c5d603938fbb"
+    },
+    "dist/botstrike/art/weapon-9.webp": {
+      "expected": "ba4241b46884b4da673d787e755011043f2cb52d7b8102c7a1d2a15782122bc8",
+      "base": "ba4241b46884b4da673d787e755011043f2cb52d7b8102c7a1d2a15782122bc8",
+      "candidate": "ba4241b46884b4da673d787e755011043f2cb52d7b8102c7a1d2a15782122bc8",
+      "running": "ba4241b46884b4da673d787e755011043f2cb52d7b8102c7a1d2a15782122bc8"
+    },
+    "dist/botstrike/immersive.js": {
+      "expected": "bea0753075de47ec1fb1144d4e45620d8ec32a60d8ee6750e5f9ab5aa4372cc5",
+      "base": "bea0753075de47ec1fb1144d4e45620d8ec32a60d8ee6750e5f9ab5aa4372cc5",
+      "candidate": "bea0753075de47ec1fb1144d4e45620d8ec32a60d8ee6750e5f9ab5aa4372cc5",
+      "running": "bea0753075de47ec1fb1144d4e45620d8ec32a60d8ee6750e5f9ab5aa4372cc5"
+    },
+    "dist/botstrike/models/bastion.glb": {
+      "expected": "3db7a4fa1ce7cdae914854ca74268ff24bfe0a693f596a2130fe19a326b83515",
+      "base": "3db7a4fa1ce7cdae914854ca74268ff24bfe0a693f596a2130fe19a326b83515",
+      "candidate": "3db7a4fa1ce7cdae914854ca74268ff24bfe0a693f596a2130fe19a326b83515",
+      "running": "3db7a4fa1ce7cdae914854ca74268ff24bfe0a693f596a2130fe19a326b83515"
+    },
+    "dist/botstrike/models/forge.glb": {
+      "expected": "87e08a6c0084fa639eaf52200a441dfdb66e10b527514e5f75cd42670c4ec910",
+      "base": "87e08a6c0084fa639eaf52200a441dfdb66e10b527514e5f75cd42670c4ec910",
+      "candidate": "87e08a6c0084fa639eaf52200a441dfdb66e10b527514e5f75cd42670c4ec910",
+      "running": "87e08a6c0084fa639eaf52200a441dfdb66e10b527514e5f75cd42670c4ec910"
+    },
+    "dist/botstrike/models/glitch.glb": {
+      "expected": "7393085068cf455bb1a04f2e76804d63d8a33d6870c0a2b3dab98f1ed6924336",
+      "base": "7393085068cf455bb1a04f2e76804d63d8a33d6870c0a2b3dab98f1ed6924336",
+      "candidate": "7393085068cf455bb1a04f2e76804d63d8a33d6870c0a2b3dab98f1ed6924336",
+      "running": "7393085068cf455bb1a04f2e76804d63d8a33d6870c0a2b3dab98f1ed6924336"
+    },
+    "dist/botstrike/models/patch.glb": {
+      "expected": "1c5aa2608304f7ae98cf3d07abe7d05160da46716d186aa4d0040b88f422e3f5",
+      "base": "1c5aa2608304f7ae98cf3d07abe7d05160da46716d186aa4d0040b88f422e3f5",
+      "candidate": "1c5aa2608304f7ae98cf3d07abe7d05160da46716d186aa4d0040b88f422e3f5",
+      "running": "1c5aa2608304f7ae98cf3d07abe7d05160da46716d186aa4d0040b88f422e3f5"
+    },
+    "dist/botstrike/models/spectre.glb": {
+      "expected": "e756bb935673ccdc15d74399dcaa381865115b17646f1d0fabdc30874e260d87",
+      "base": "e756bb935673ccdc15d74399dcaa381865115b17646f1d0fabdc30874e260d87",
+      "candidate": "e756bb935673ccdc15d74399dcaa381865115b17646f1d0fabdc30874e260d87",
+      "running": "e756bb935673ccdc15d74399dcaa381865115b17646f1d0fabdc30874e260d87"
+    },
+    "dist/botstrike/models/textures/bastion-0-e5830fe3548e.webp": {
+      "expected": "e5830fe3548ebf39e46fd47020a713d8f3ef7ed56f67d7e26814eba41826dfcd",
+      "base": "e5830fe3548ebf39e46fd47020a713d8f3ef7ed56f67d7e26814eba41826dfcd",
+      "candidate": "e5830fe3548ebf39e46fd47020a713d8f3ef7ed56f67d7e26814eba41826dfcd",
+      "running": "e5830fe3548ebf39e46fd47020a713d8f3ef7ed56f67d7e26814eba41826dfcd"
+    },
+    "dist/botstrike/models/textures/bastion-1-4b759774fc29.webp": {
+      "expected": "4b759774fc29c9b9832e8896ecefe034f23bbfe5fea7739e3100ae36bf8d7254",
+      "base": "4b759774fc29c9b9832e8896ecefe034f23bbfe5fea7739e3100ae36bf8d7254",
+      "candidate": "4b759774fc29c9b9832e8896ecefe034f23bbfe5fea7739e3100ae36bf8d7254",
+      "running": "4b759774fc29c9b9832e8896ecefe034f23bbfe5fea7739e3100ae36bf8d7254"
+    },
+    "dist/botstrike/models/textures/bastion-2-1053022f7a5d.webp": {
+      "expected": "1053022f7a5df39dd3acec20b545d7252e60de708d20f7b30e28edf28ac3d596",
+      "base": "1053022f7a5df39dd3acec20b545d7252e60de708d20f7b30e28edf28ac3d596",
+      "candidate": "1053022f7a5df39dd3acec20b545d7252e60de708d20f7b30e28edf28ac3d596",
+      "running": "1053022f7a5df39dd3acec20b545d7252e60de708d20f7b30e28edf28ac3d596"
+    },
+    "dist/botstrike/models/textures/forge-0-8a674e42a64e.webp": {
+      "expected": "8a674e42a64ef53d4d194b9faa291b3d7a455c1e34a0281c0eca0ab590e35cab",
+      "base": "8a674e42a64ef53d4d194b9faa291b3d7a455c1e34a0281c0eca0ab590e35cab",
+      "candidate": "8a674e42a64ef53d4d194b9faa291b3d7a455c1e34a0281c0eca0ab590e35cab",
+      "running": "8a674e42a64ef53d4d194b9faa291b3d7a455c1e34a0281c0eca0ab590e35cab"
+    },
+    "dist/botstrike/models/textures/forge-1-00ab5250b694.webp": {
+      "expected": "00ab5250b694d679c2dc95682faf13a7cf169e91bc51c4d01ca720198ca668a7",
+      "base": "00ab5250b694d679c2dc95682faf13a7cf169e91bc51c4d01ca720198ca668a7",
+      "candidate": "00ab5250b694d679c2dc95682faf13a7cf169e91bc51c4d01ca720198ca668a7",
+      "running": "00ab5250b694d679c2dc95682faf13a7cf169e91bc51c4d01ca720198ca668a7"
+    },
+    "dist/botstrike/models/textures/forge-2-6fdccd1d2807.webp": {
+      "expected": "6fdccd1d2807e639df0a73dbb0813a22879d9348d36ba860a6a4b3331663660c",
+      "base": "6fdccd1d2807e639df0a73dbb0813a22879d9348d36ba860a6a4b3331663660c",
+      "candidate": "6fdccd1d2807e639df0a73dbb0813a22879d9348d36ba860a6a4b3331663660c",
+      "running": "6fdccd1d2807e639df0a73dbb0813a22879d9348d36ba860a6a4b3331663660c"
+    },
+    "dist/botstrike/models/textures/glitch-0-e4da2e253cde.webp": {
+      "expected": "e4da2e253cde20ab234c09829334f9f00f5a676ae7699bc60dd52b1bbbf77fcb",
+      "base": "e4da2e253cde20ab234c09829334f9f00f5a676ae7699bc60dd52b1bbbf77fcb",
+      "candidate": "e4da2e253cde20ab234c09829334f9f00f5a676ae7699bc60dd52b1bbbf77fcb",
+      "running": "e4da2e253cde20ab234c09829334f9f00f5a676ae7699bc60dd52b1bbbf77fcb"
+    },
+    "dist/botstrike/models/textures/glitch-1-3860ff8a8316.webp": {
+      "expected": "3860ff8a83164668cda5fbd1696688b2ce227ea5fe52bcb0c1d39fae105641e8",
+      "base": "3860ff8a83164668cda5fbd1696688b2ce227ea5fe52bcb0c1d39fae105641e8",
+      "candidate": "3860ff8a83164668cda5fbd1696688b2ce227ea5fe52bcb0c1d39fae105641e8",
+      "running": "3860ff8a83164668cda5fbd1696688b2ce227ea5fe52bcb0c1d39fae105641e8"
+    },
+    "dist/botstrike/models/textures/glitch-2-7c8850b3dcee.webp": {
+      "expected": "7c8850b3dcee22fd76c647143d5e769d1d54f7ca867dd4f286c2d1ff91c79b3b",
+      "base": "7c8850b3dcee22fd76c647143d5e769d1d54f7ca867dd4f286c2d1ff91c79b3b",
+      "candidate": "7c8850b3dcee22fd76c647143d5e769d1d54f7ca867dd4f286c2d1ff91c79b3b",
+      "running": "7c8850b3dcee22fd76c647143d5e769d1d54f7ca867dd4f286c2d1ff91c79b3b"
+    },
+    "dist/botstrike/models/textures/patch-0-f1528d198c7d.webp": {
+      "expected": "f1528d198c7dc059ff8f18e638b5e2758cfdf4cad2440ad86c42ab37e4ace3e6",
+      "base": "f1528d198c7dc059ff8f18e638b5e2758cfdf4cad2440ad86c42ab37e4ace3e6",
+      "candidate": "f1528d198c7dc059ff8f18e638b5e2758cfdf4cad2440ad86c42ab37e4ace3e6",
+      "running": "f1528d198c7dc059ff8f18e638b5e2758cfdf4cad2440ad86c42ab37e4ace3e6"
+    },
+    "dist/botstrike/models/textures/patch-1-0e1cede2f849.webp": {
+      "expected": "0e1cede2f84973f5b5207a37d253ed4011d0b2731dfbeccd688b7c3e29b28ec2",
+      "base": "0e1cede2f84973f5b5207a37d253ed4011d0b2731dfbeccd688b7c3e29b28ec2",
+      "candidate": "0e1cede2f84973f5b5207a37d253ed4011d0b2731dfbeccd688b7c3e29b28ec2",
+      "running": "0e1cede2f84973f5b5207a37d253ed4011d0b2731dfbeccd688b7c3e29b28ec2"
+    },
+    "dist/botstrike/models/textures/patch-2-0c6f5925cc12.webp": {
+      "expected": "0c6f5925cc121d193949bdff3c56a43b50515b8274ad3e069a3eb2fd76b18d22",
+      "base": "0c6f5925cc121d193949bdff3c56a43b50515b8274ad3e069a3eb2fd76b18d22",
+      "candidate": "0c6f5925cc121d193949bdff3c56a43b50515b8274ad3e069a3eb2fd76b18d22",
+      "running": "0c6f5925cc121d193949bdff3c56a43b50515b8274ad3e069a3eb2fd76b18d22"
+    },
+    "dist/botstrike/models/textures/spectre-0-808ef4d2c0b4.webp": {
+      "expected": "808ef4d2c0b45aa7676043b51a50ac01842eec1cd2c49694f355431d75124661",
+      "base": "808ef4d2c0b45aa7676043b51a50ac01842eec1cd2c49694f355431d75124661",
+      "candidate": "808ef4d2c0b45aa7676043b51a50ac01842eec1cd2c49694f355431d75124661",
+      "running": "808ef4d2c0b45aa7676043b51a50ac01842eec1cd2c49694f355431d75124661"
+    },
+    "dist/botstrike/models/textures/spectre-1-8b81ddfdeba7.webp": {
+      "expected": "8b81ddfdeba7abac63c5295ae29a0f7354705c3e405054113674790b185e2e4e",
+      "base": "8b81ddfdeba7abac63c5295ae29a0f7354705c3e405054113674790b185e2e4e",
+      "candidate": "8b81ddfdeba7abac63c5295ae29a0f7354705c3e405054113674790b185e2e4e",
+      "running": "8b81ddfdeba7abac63c5295ae29a0f7354705c3e405054113674790b185e2e4e"
+    },
+    "dist/botstrike/models/textures/spectre-2-a03d9623f3ec.webp": {
+      "expected": "a03d9623f3ecbbee9f6ee77c669b451fd85d5db1417fe7dfb142fd028eba9211",
+      "base": "a03d9623f3ecbbee9f6ee77c669b451fd85d5db1417fe7dfb142fd028eba9211",
+      "candidate": "a03d9623f3ecbbee9f6ee77c669b451fd85d5db1417fe7dfb142fd028eba9211",
+      "running": "a03d9623f3ecbbee9f6ee77c669b451fd85d5db1417fe7dfb142fd028eba9211"
+    },
+    "dist/botstrike/models/textures/vector-0-f9aa51043c3f.webp": {
+      "expected": "f9aa51043c3fddf4ca8fba4c6957ab881de75249ec07a3885d3894194f288397",
+      "base": "f9aa51043c3fddf4ca8fba4c6957ab881de75249ec07a3885d3894194f288397",
+      "candidate": "f9aa51043c3fddf4ca8fba4c6957ab881de75249ec07a3885d3894194f288397",
+      "running": "f9aa51043c3fddf4ca8fba4c6957ab881de75249ec07a3885d3894194f288397"
+    },
+    "dist/botstrike/models/textures/vector-1-340c045158c6.webp": {
+      "expected": "340c045158c64493550c6888f816c5b82cd9078362870fa91616a91f75125e85",
+      "base": "340c045158c64493550c6888f816c5b82cd9078362870fa91616a91f75125e85",
+      "candidate": "340c045158c64493550c6888f816c5b82cd9078362870fa91616a91f75125e85",
+      "running": "340c045158c64493550c6888f816c5b82cd9078362870fa91616a91f75125e85"
+    },
+    "dist/botstrike/models/textures/vector-2-7ed334676905.webp": {
+      "expected": "7ed334676905fbfb4098097c41776ae7b02e630a1f017843d9d5b39fbcfc7f7d",
+      "base": "7ed334676905fbfb4098097c41776ae7b02e630a1f017843d9d5b39fbcfc7f7d",
+      "candidate": "7ed334676905fbfb4098097c41776ae7b02e630a1f017843d9d5b39fbcfc7f7d",
+      "running": "7ed334676905fbfb4098097c41776ae7b02e630a1f017843d9d5b39fbcfc7f7d"
+    },
+    "dist/botstrike/models/vector.glb": {
+      "expected": "483b89368b171c8dc219ddea4e58c5498ba7069f8248ff5d3939e5085c71ba47",
+      "base": "483b89368b171c8dc219ddea4e58c5498ba7069f8248ff5d3939e5085c71ba47",
+      "candidate": "483b89368b171c8dc219ddea4e58c5498ba7069f8248ff5d3939e5085c71ba47",
+      "running": "483b89368b171c8dc219ddea4e58c5498ba7069f8248ff5d3939e5085c71ba47"
+    },
+    "dist/botstrike/startup.js": {
+      "expected": "461640afc2392d6fa104f7628018cb4a2d69e70cb6d991bf4e92d2f577d75db0",
+      "base": "461640afc2392d6fa104f7628018cb4a2d69e70cb6d991bf4e92d2f577d75db0",
+      "candidate": "461640afc2392d6fa104f7628018cb4a2d69e70cb6d991bf4e92d2f577d75db0",
+      "running": "461640afc2392d6fa104f7628018cb4a2d69e70cb6d991bf4e92d2f577d75db0"
+    }
+  },
+  "backendNativeHostSharedFileCount": 48,
+  "backendNativeHostSharedAllUnchanged": true,
+  "fullAppTree": {
+    "baseFileOrSymlinkCount": 746,
+    "candidateFileOrSymlinkCount": 749,
+    "unchangedCount": 744,
+    "changedOrAddedCount": 5,
+    "differences": {
+      "build-validation/interface/host.tap": {
+        "base": null,
+        "candidate": {
+          "type": "file",
+          "sha256": "6ca68c162bfc39a6d59320f8cdd7c9ff3bb647c59e57d43ad9466e97d925edb1",
+          "size": 1133,
+          "mode": 420
+        }
+      },
+      "build-validation/interface/unit.tap": {
+        "base": null,
+        "candidate": {
+          "type": "file",
+          "sha256": "23cda6a5656f5dc543caef7a1eefa7f8be690e3e63f868c420e0447609ed6fbd",
+          "size": 50699,
+          "mode": 420
+        }
+      },
+      "dist/botstrike/app.js": {
+        "base": {
+          "type": "file",
+          "sha256": "611897259d53fc51c6fdca642bb1fb6c6478ceccd2fdb58727af25cb1cbe31dc",
+          "size": 967026,
+          "mode": 420
+        },
+        "candidate": {
+          "type": "file",
+          "sha256": "447986c66937bf07b1f1d5bf351ca12941dbcfdffa252269a43d6f1b834c3cb9",
+          "size": 979521,
+          "mode": 420
+        }
+      },
+      "dist/botstrike/index.html": {
+        "base": {
+          "type": "file",
+          "sha256": "a171e23fc38d94fe84c279a946d19176651d786ac8f880a881a7e966061bac1e",
+          "size": 18105,
+          "mode": 420
+        },
+        "candidate": {
+          "type": "file",
+          "sha256": "aaeb0c8f90d521ebcf81c94d144a494bfdece7e59e5d76080327ee827cf384f8",
+          "size": 18129,
+          "mode": 420
+        }
+      },
+      "dist/botstrike/tactical-interface.css": {
+        "base": null,
+        "candidate": {
+          "type": "file",
+          "sha256": "7c362e5fad18220f30bddf8fb85b78a83f00137152a65c6d8186035638921bb1",
+          "size": 22173,
+          "mode": 420
+        }
+      }
+    }
+  },
+  "dist": {
+    "baseFileCount": 68,
+    "candidateFileCount": 69,
+    "unchangedFileCount": 66,
+    "expectedDifferences": [
+      "dist/botstrike/app.js",
+      "dist/botstrike/index.html",
+      "dist/botstrike/tactical-interface.css"
+    ],
+    "removedFiles": []
+  },
+  "native": {
+    "modelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "profileProof": "Exact same active engine/adapter bytes and unchanged retained build-validation/practice-flow.json; this audit does not perform a fresh replay",
+    "engineSha256": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+    "adapterSha256": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74",
+    "verifierPairCount": 10,
+    "historicalVerifierPairCount": 9,
+    "allVerifierManifestFilesMatch": true
+  },
+  "runningContainerMounts": [
+    {
+      "destination": "/app/data",
+      "readOnly": false
+    },
+    {
+      "destination": "/app/preview-host.json",
+      "readOnly": true
+    }
+  ],
+  "distBindMountPresent": false,
+  "frozenContext": "/tmp/botstrike-interface-final-v2-m7fbocwo",
+  "frozenManifestPath": "/tmp/botstrike-interface-final-v2-sources.json",
+  "frozenSourceCount": 18,
+  "frozenSources": {
+    "games/botstrike/client/main.mjs": {
+      "expected": "c71c055201570593b84747868b8e8cb355c2a976f565f9aeba040d1d057a87aa",
+      "context": "c71c055201570593b84747868b8e8cb355c2a976f565f9aeba040d1d057a87aa",
+      "workingTreeAtAudit": "c71c055201570593b84747868b8e8cb355c2a976f565f9aeba040d1d057a87aa",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/client/practice.mjs": {
+      "expected": "f5b582e23bf670a970d2cb1b9c21d4755af0d2c8c4b7b074f9e1d36a3dfae3c6",
+      "context": "f5b582e23bf670a970d2cb1b9c21d4755af0d2c8c4b7b074f9e1d36a3dfae3c6",
+      "workingTreeAtAudit": "f5b582e23bf670a970d2cb1b9c21d4755af0d2c8c4b7b074f9e1d36a3dfae3c6",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/client/quick-communications.mjs": {
+      "expected": "34123d4958e30d5a66b565425f5400ba4dd313620d658cbc86e51fa44c7eb86a",
+      "context": "34123d4958e30d5a66b565425f5400ba4dd313620d658cbc86e51fa44c7eb86a",
+      "workingTreeAtAudit": "34123d4958e30d5a66b565425f5400ba4dd313620d658cbc86e51fa44c7eb86a",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/client/tactical-view.mjs": {
+      "expected": "22bd1288fdfd490458932741239586c7754bb6f6b21e3f2b34574592a3771a13",
+      "context": "22bd1288fdfd490458932741239586c7754bb6f6b21e3f2b34574592a3771a13",
+      "workingTreeAtAudit": "22bd1288fdfd490458932741239586c7754bb6f6b21e3f2b34574592a3771a13",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/client/armory-interface.mjs": {
+      "expected": "65618d7ceaa86b25165dc99955416a4d2673c3e31cd7073150226e129c54e872",
+      "context": "65618d7ceaa86b25165dc99955416a4d2673c3e31cd7073150226e129c54e872",
+      "workingTreeAtAudit": "65618d7ceaa86b25165dc99955416a4d2673c3e31cd7073150226e129c54e872",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/client/interface-layout.mjs": {
+      "expected": "60ec04c308e2eaaebf354f22837c70a39c940937b584d62e719dfaa2bacf2487",
+      "context": "60ec04c308e2eaaebf354f22837c70a39c940937b584d62e719dfaa2bacf2487",
+      "workingTreeAtAudit": "60ec04c308e2eaaebf354f22837c70a39c940937b584d62e719dfaa2bacf2487",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/client/menu-focus.mjs": {
+      "expected": "48cd271e4f239cde2881616188c424832bcb2ca9715dd5434363c30cc21230ee",
+      "context": "48cd271e4f239cde2881616188c424832bcb2ca9715dd5434363c30cc21230ee",
+      "workingTreeAtAudit": "48cd271e4f239cde2881616188c424832bcb2ca9715dd5434363c30cc21230ee",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/client/dialogs.mjs": {
+      "expected": "422cb35540df2e8c70a44c33379000d372aa01e016cf162e86b8406cc1211208",
+      "context": "422cb35540df2e8c70a44c33379000d372aa01e016cf162e86b8406cc1211208",
+      "workingTreeAtAudit": "422cb35540df2e8c70a44c33379000d372aa01e016cf162e86b8406cc1211208",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/web/index.html": {
+      "expected": "aaeb0c8f90d521ebcf81c94d144a494bfdece7e59e5d76080327ee827cf384f8",
+      "context": "aaeb0c8f90d521ebcf81c94d144a494bfdece7e59e5d76080327ee827cf384f8",
+      "workingTreeAtAudit": "aaeb0c8f90d521ebcf81c94d144a494bfdece7e59e5d76080327ee827cf384f8",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/web/style.css": {
+      "expected": "a16029275b8406a3204fa122bd18b93fe095650b0a4e742937b1a2d68b5693fe",
+      "context": "a16029275b8406a3204fa122bd18b93fe095650b0a4e742937b1a2d68b5693fe",
+      "workingTreeAtAudit": "a16029275b8406a3204fa122bd18b93fe095650b0a4e742937b1a2d68b5693fe",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/web/tactical-interface.css": {
+      "expected": "7c362e5fad18220f30bddf8fb85b78a83f00137152a65c6d8186035638921bb1",
+      "context": "7c362e5fad18220f30bddf8fb85b78a83f00137152a65c6d8186035638921bb1",
+      "workingTreeAtAudit": "7c362e5fad18220f30bddf8fb85b78a83f00137152a65c6d8186035638921bb1",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "games/botstrike/web/app.js": {
+      "expected": "447986c66937bf07b1f1d5bf351ca12941dbcfdffa252269a43d6f1b834c3cb9",
+      "context": "447986c66937bf07b1f1d5bf351ca12941dbcfdffa252269a43d6f1b834c3cb9",
+      "workingTreeAtAudit": "447986c66937bf07b1f1d5bf351ca12941dbcfdffa252269a43d6f1b834c3cb9",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "tests/botstrike-tactical-ui-browser.mjs": {
+      "expected": "c37f0565d51589ab4f2dfb8932c3f2a3b9fc2481fc8fae7b0469bb58bc4be9e5",
+      "context": "c37f0565d51589ab4f2dfb8932c3f2a3b9fc2481fc8fae7b0469bb58bc4be9e5",
+      "workingTreeAtAudit": "c37f0565d51589ab4f2dfb8932c3f2a3b9fc2481fc8fae7b0469bb58bc4be9e5",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "tests/botstrike-comms-browser.mjs": {
+      "expected": "e608de3c85bd1f4b3dd8b1659ff9eba83d249f39cb899ea1063e00713b48ecbb",
+      "context": "e608de3c85bd1f4b3dd8b1659ff9eba83d249f39cb899ea1063e00713b48ecbb",
+      "workingTreeAtAudit": "e608de3c85bd1f4b3dd8b1659ff9eba83d249f39cb899ea1063e00713b48ecbb",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "tests/botstrike-menu-focus-browser.mjs": {
+      "expected": "00a2acb06015e0d3238bd326e3b416b97363ce1b664572890077cd5a08bfd6fd",
+      "context": "00a2acb06015e0d3238bd326e3b416b97363ce1b664572890077cd5a08bfd6fd",
+      "workingTreeAtAudit": "00a2acb06015e0d3238bd326e3b416b97363ce1b664572890077cd5a08bfd6fd",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "tests/botstrike-armory-ui.test.mjs": {
+      "expected": "d82c640b8cfcabda82e791e6480d438a86054fe5cdf625d17eee328de0373aa5",
+      "context": "d82c640b8cfcabda82e791e6480d438a86054fe5cdf625d17eee328de0373aa5",
+      "workingTreeAtAudit": "d82c640b8cfcabda82e791e6480d438a86054fe5cdf625d17eee328de0373aa5",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "tests/botstrike-practice-ui.test.mjs": {
+      "expected": "f31a79c1c19070cece0d515de47c55cbfeae1009448a753ef27294a70c055902",
+      "context": "f31a79c1c19070cece0d515de47c55cbfeae1009448a753ef27294a70c055902",
+      "workingTreeAtAudit": "f31a79c1c19070cece0d515de47c55cbfeae1009448a753ef27294a70c055902",
+      "workingTreeMatchesFrozenBuild": true
+    },
+    "tests/botstrike-tactical-browser.mjs": {
+      "expected": "2617c44f2c69453e4cc0f6d2089b91d0d74515d5d2fa82e09e4db2581310f609",
+      "context": "2617c44f2c69453e4cc0f6d2089b91d0d74515d5d2fa82e09e4db2581310f609",
+      "workingTreeAtAudit": "2617c44f2c69453e4cc0f6d2089b91d0d74515d5d2fa82e09e4db2581310f609",
+      "workingTreeMatchesFrozenBuild": true
+    }
+  },
+  "postBuildBrowserFixtureDifferences": {},
+  "guardReview": {
+    "dockerfileSha256": "1c7dc87fd6bef41003ce3026978447dfa2f03fdbe2bce892d7f5ef1b3241a47b",
+    "sourceNativeDigestGuard": true,
+    "protectedNonDistFileGuard": true,
+    "postBuildDistContractGuard": true,
+    "finalCopyDestinations": [
+      "/app/dist",
+      "/app/build-validation/interface"
+    ],
+    "baseReferenceUsesMutableTagInDockerfile": true,
+    "baseIdentityIndependentlyVerifiedForThisBuild": true
+  },
+  "method": {
+    "fileInventory": "SHA-256 plus permission mode for regular files; target plus permission mode for symlinks; recursive /app excluding /app/data",
+    "baseAndCandidate": "Separate ephemeral --read-only --network none containers with Node entrypoint; no game service started",
+    "livePreview": "Same static inventory through docker exec; /app/data excluded; no environment or secret values output",
+    "sourceHashScope": "frozenSources records build-time hashes; current test-only differences are explicitly reported as post-build fixtures and are not asserted to be part of the image build"
+  },
+  "limitations": [
+    "No new signed replay was run by this integrity audit; exact profile preservation follows byte-identical retained artifacts and receipt.",
+    "The Dockerfile defaults to a mutable base tag. Future builds must independently pin/verify the expected image/layer identity as done here.",
+    "This audit does not establish physical-device frame pacing, human UI usability or remaining tactical acceptance.",
+    "A post-build browser harness can revise event observation without changing runtime/image bytes. Frozen build-source hashes are not hashes of those later browser runs; retain a separate fixture manifest for them."
+  ]
+}

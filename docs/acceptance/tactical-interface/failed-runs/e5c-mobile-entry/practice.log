@@ -1,0 +1,44 @@
+{
+  "out": "/tmp/botstrike-ui-final-practice",
+  "results": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "insideViewport": true
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "insideViewport": true
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "insideViewport": true
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "insideViewport": true
+    },
+    {
+      "controller": "standard API emulation",
+      "startAccepted": true,
+      "resetAccepted": true,
+      "leaveAccepted": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "portraitGate": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "touchFire": true,
+      "touchReset": true,
+      "fullscreenInstancePreserved": true
+    }
+  ],
+  "errors": []
+}

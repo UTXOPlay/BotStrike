@@ -1,14 +1,39 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync,existsSync} from 'node:fs';
+import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {constrain,velocity} from '../games/botstrike/client/motion.mjs';
+import {advanceMotion} from '../games/botstrike/client/prediction.mjs';
 const spec=JSON.parse(readFileSync(new URL('../botstrike/spec.json',import.meta.url)));
-test('browser movement and collision match native trajectories on every map and hero',{skip:!existsSync('release/botstrike-engine')},()=>{
- for(let map=0;map<3;map++)for(let hero=0;hero<6;hero++)for(const weapon of [2,7,9,11]){
-  const config={map,mode:'deathmatch',heroes:Array(10).fill(hero),bots:Array(10).fill(false),difficulty:1,seed:2050};const controls={x:.7,y:1,yaw:hero%2?-.25:0,pitch:0,crouch:hero===2,walk:hero===1,scope:spec.weapons[weapon].scoped,weapon};const frame=JSON.stringify({inputs:[controls,...Array(9).fill(null)]})+'\n';
-  const lines=execFileSync('release/botstrike-engine',[],{input:JSON.stringify({config})+'\n'+frame.repeat(180),maxBuffer:8e6}).toString().trim().split('\n').map(JSON.parse);const final=lines.at(-2).state.players[0];const p=[...spec.maps[map].spawns[0][0]],v=velocity(controls,spec.heroes[hero],spec.weapons[controls.weapon]);for(let tick=0;tick<180;tick++){p[0]+=v[0]/64;p[2]+=v[2]/64;constrain(p,spec.maps[map])}assert.ok(p.every((n,i)=>Math.abs(n-final.position[i])<1e-7),JSON.stringify({map,hero,weapon,p,native:final.position}));
+const engine=process.env.BOTSTRIKE_TEST_ENGINE||'release/botstrike-engine';
+function trace(map,hero,weapon,controls){
+ const config={map,mode:'deathmatch',heroes:Array(10).fill(hero),bots:Array(10).fill(false),difficulty:1,seed:2050};
+ const out=execFileSync(engine,[],{input:JSON.stringify({config})+'\n'+controls.map(c=>JSON.stringify({inputs:[{...c,weapon},...Array(9).fill(null)]})).join('\n')+'\n',maxBuffer:32e6}).toString().trim().split('\n').map(JSON.parse);
+ return {initial:out[0].state.players[0],frames:out.filter(v=>v.type==='frame')};
+}
+test('fixed-step browser motion matches every native tick on all maps, chassis and weapons',()=>{
+ for(let map=0;map<3;map++)for(let hero=0;hero<6;hero++)for(let weapon=0;weapon<12;weapon++){
+  const controls=Array.from({length:360},(_,t)=>({seq:t+1,x:t>=140&&t<176?.7:0,
+   y:t<40||t>=72&&t<112||t>=176&&t<256?1:t>=112&&t<140?-1:0,
+   yaw:hero%2?-.25:0,pitch:0,crouch:t>=176&&t<200,walk:t>=200&&t<225,
+   scope:t>=225&&t<256,jump:t>=256&&t<280||t>=330&&t<350}));
+  const {initial,frames}=trace(map,hero,weapon,controls),visual={position:[...initial.position],velocity:[...initial.velocity],vy:0,jumpHeld:false};
+  for(let tick=0;tick<controls.length;tick++){
+   advanceMotion(visual,controls[tick],1/64,spec.maps[map],spec.heroes[hero],spec.weapons[weapon]);
+   const p=frames[tick].state.players[0],context=JSON.stringify({map,hero,weapon,tick});
+   assert.ok(visual.position.every((v,a)=>Math.abs(v-p.position[a])<1e-7),context+' position');
+   assert.ok([0,2].every(a=>Math.abs(visual.velocity[a]-p.velocity[a])<1e-7),context+' velocity');
+   assert.equal(visual.landing,p.landing,context+' landing recovery');assert.ok(Math.abs(visual.stance-p.stance)<1e-12,context+' native stance');
+  }
  }
 });
-
-test('predicted jump and landing follow native gravity and held-button edges',async()=>{const {advanceMotion}=await import('../games/botstrike/client/prediction.mjs');const map=1,hero=2,weapon=2,config={map,mode:'deathmatch',heroes:Array(10).fill(hero),bots:Array(10).fill(false),difficulty:1,seed:2050};const controls=Array.from({length:180},(_,i)=>({seq:i+1,x:.3,y:.2,yaw:.3,pitch:0,jump:i<25||i>=90&&i<115,weapon}));const lines=execFileSync('release/botstrike-engine',[],{input:JSON.stringify({config})+'\n'+controls.map(c=>JSON.stringify({inputs:[c,...Array(9).fill(null)]})+'\n').join(''),maxBuffer:8e6}).toString().trim().split('\n').map(JSON.parse).filter(v=>v.type==='frame');const visual={position:[...spec.maps[map].spawns[0][0]],vy:0,jumpHeld:false};for(let tick=0;tick<180;tick++){advanceMotion(visual,controls[tick],1/64,spec.maps[map],spec.heroes[hero],spec.weapons[weapon]);assert.ok(visual.position.every((v,i)=>Math.abs(v-lines[tick].state.players[0].position[i])<1e-7),String(tick));}});
+test('30/60/120 Hz and jitter integrate the same acceleration, jump, boundary and stop ticks',()=>{
+ const map={extent:130,obstacles:[]},hero=spec.heroes[0],weapon=spec.weapons[2];
+ const paths=[Array(300).fill(1000/30),Array(600).fill(1000/60),Array(1200).fill(1000/120),Array.from({length:1000},(_,i)=>[7,13,9,11][i%4])];
+ const results=[];
+ for(const timeline of paths){const state={position:[0,0,0],velocity:[0,0,0],vy:0,jumpHeld:false};
+  for(const dt of timeline)advanceMotion(state,{x:1,y:1,yaw:0,jump:true},dt/1000,map,hero,weapon);
+  results.push({position:state.position,velocity:state.velocity,vy:state.vy,landing:state.landing,jumpHeld:state.jumpHeld});
+ }
+ for(const result of results)assert.deepEqual(result,results[0]);
+ assert.ok(results[0].position.every(Number.isFinite));assert.ok(results[0].position[0]<=110);assert.equal(results[0].velocity[0],0);assert.equal(results[0].position[1],0);
+});

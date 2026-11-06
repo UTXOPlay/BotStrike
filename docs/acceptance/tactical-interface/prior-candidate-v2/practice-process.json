@@ -1,0 +1,7 @@
+{
+  "processExitCode": 0,
+  "imageId": "sha256:29a483f16f3aa0f28ae337fd805332c607e911ff76e1fcd875e1e2be4618fb5e",
+  "command": "node tests/botstrike-practice-browser.mjs",
+  "automated": true,
+  "humanParticipants": 0
+}

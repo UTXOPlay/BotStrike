@@ -1,0 +1,34 @@
+{
+  "baseImage": "sha256:8b31fe878288e7c92615feedc20363162fedb46a577ec4d3e62dd1b865849673",
+  "modelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+  "pair": {
+    "botstrike-engine": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+    "myelin-botstrike": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74"
+  },
+  "sourceSha256": {
+    "botstrike-myelin/Cargo.lock": "52e00b9790e02ecc6bdab1854ce397e9966b703c2e592fc046e9ae951c9fab79",
+    "botstrike-myelin/Cargo.toml": "c78ac1270fdf9cbc4eabe4557b40d0d48c836a1b7da17e7a1c9bbd8ef63a9598",
+    "botstrike-myelin/src/game.rs": "5fae11a4648b1bcac409220bc76bf034eac31cebc0e20f05ef58b4d8a2ef965e",
+    "botstrike-myelin/src/session.rs": "846cdf55b96cec79a8ffc2fd1b4479e7766bf866eac83f4d407a664777d7167f",
+    "botstrike-service/career.mjs": "a1f606f7a3f3c7a9dd2ebe3ee3418e5829ff6f07c7cb604d268242a154d8dacc",
+    "botstrike-service/feedback.mjs": "dbeb6d90ff60c464306103b6e20d1beba03cb56a60f17e8a3ecb28c10fb55f72",
+    "botstrike-service/io.mjs": "229d8fbccfce9cda41cf8d222244af8b19b4b73b3bfcec1e615f3aa30ae7c649",
+    "botstrike-service/retention.mjs": "c43d500b9bd2d4f64c13ac6d594d344890dd520eabe82529aa39e08acb898237",
+    "botstrike-service/seal-worker.mjs": "9e3179ee7a57bc500f5c3bb917b146fcba524c318f8f46bdfe0b76746b176b40",
+    "botstrike-service/server.mjs": "abd2b4fe8b2ef53bab8eeb2ed63759e7bfcce52b2c477093076d4f16ecea12f2",
+    "botstrike-service/visibility.mjs": "5514d3d0eb82e1e7c8a2344d408cb9fb1880ab3db06edc6e9291c6a0e263eb2c",
+    "host/server.mjs": "a4ec3a267275a67272588188689cc0d28a15c5cb6af46c1b89fde583c6d3466b",
+    "host/socket-proxy.mjs": "3f7fd99774e86475e3207f21121c41b67d867db87e384218e2b253fb48e3525e",
+    "host/start.mjs": "0195146491e31167198e8dd1d6ab376173c90c17fcc5fd3c7ffeb1df33022817",
+    "host/static.mjs": "c2dd5ce6e8e905e3c45752922ac3d4ae0552de6d24c0003436b57c52402ae223",
+    "shared/hit-volumes.mjs": "e54e4d750fd096603033d32478d44048e01ce99e76a38cb9f7e8d0497c416b27",
+    "shared/sight-geometry.mjs": "c0b05a4dc0384bf05bef979be287b3dae5e9f1d6062ce7941ea5e8da0980f30c",
+    "botstrike-service/tactical.mjs": "bc521705c14cc42fa9f19e44f7d1796da8f1d7963097fd8f2867c7f627357e9a",
+    "botstrike-service/movement-audio.mjs": "355fcfdd1c79a1e6b680b1452b9cfb44ee307bda30a020ff5792ef80cf051278",
+    "shared/gait-plan.mjs": "9dcf655e1efe43045849fdd9aca066721162b39700e085ef7ca22a807bfc3f0e",
+    "shared/gait-geometry.mjs": "b2af5e91b3699ce7e9fadb8f059e2e21183eb8adf27f33497f92877d1601536c",
+    "shared/ground-surfaces.mjs": "edb79a096eda3236bf7d9a11e7ed5a68d5b8646c1bf55159534d843fac184f24",
+    "shared/weapon-audio-events.mjs": "2c8ff0d66b66c9f1df24a7d17df90be9bcda780b205d91b7e1d931ecd36a46bf"
+  },
+  "classification": "Presentation and service-owned audio metadata only. Native spec, rules, engine, adapter, old verifier routing and signed tape bytes unchanged."
+}

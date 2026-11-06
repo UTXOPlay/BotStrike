@@ -1,5 +1,5 @@
 export function shotTrailEnd(origin,direction,obstacles,maxDistance=245){
- let end=maxDistance;
+ let end=direction[1]<0?Math.min(maxDistance,Math.max(0,-origin[1]/direction[1])):maxDistance;
  for(const box of obstacles){
   let near=0,far=end;
   for(let axis=0;axis<3;axis++){

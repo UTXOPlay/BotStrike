@@ -1,0 +1,6 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+const spec=JSON.parse(readFileSync(new URL('../botstrike/spec.json',import.meta.url))),matrix=JSON.parse(readFileSync(new URL('../games/botstrike/web/damage-contract.json',import.meta.url)));
+if(matrix.version!==spec.version||!matrix.ideal_hits)throw Error('Use the current native damage matrix');
+const heroes=spec.heroes.map((h,hero)=>({id:h.id,health:h.health,speed:h.speed,cooldownSeconds:h.cooldown,tacticalStartingArmor:0,casualStartingArmor:h.armor,ability:h.ability,
+ breakpoints:matrix.rows.filter(row=>row.hero===hero&&[0,2,3].includes(row.weapon)&&[0,100].includes(row.armor)&&[100,600,1500].includes(row.distance)&&row.boost===0&&(!row.shield||hero===2)).map(row=>({weapon:spec.weapons[row.weapon].id,armor:row.armor,head:row.head,distance:row.distance,shield:row.shield,firstHealth:row.first_health_damage,firstArmor:row.first_armor_damage,rounds:row.rounds,ttkTicks:row.ttk_ticks}))}));
+writeFileSync(process.argv[2]||'/dev/stdout',JSON.stringify({status:'native ideal-hit baseline; not a human matchup report',version:spec.version,nativeModel:matrix.model_sha256,engineSha256:matrix.engine_sha256,humanParticipants:0,humanDuels:0,humanMatches:0,uncertainty:'No human observations; no win-rate estimate or confidence interval is justified.',heroes},null,2)+'\n');

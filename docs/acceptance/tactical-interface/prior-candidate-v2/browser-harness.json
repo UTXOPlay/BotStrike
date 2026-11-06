@@ -1,0 +1,20 @@
+{
+  "imageId": "sha256:29a483f16f3aa0f28ae337fd805332c607e911ff76e1fcd875e1e2be4618fb5e",
+  "baseUrl": "http://127.0.0.1:19925",
+  "playwrightEntry": "/opt/codex-desktop/resources/cua_node/lib/node_modules/playwright/index.mjs",
+  "chromiumPath": "/home/arthur/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell",
+  "harnessSha256": {
+    "tests/botstrike-tactical-ui-browser.mjs": "2443cb6ce6116c169fb73e10fc31e044934fe7744bb0f6d31daff5217a2f15bd",
+    "tests/botstrike-comms-browser.mjs": "e608de3c85bd1f4b3dd8b1659ff9eba83d249f39cb899ea1063e00713b48ecbb",
+    "tests/botstrike-practice-browser.mjs": "5eb64b8f00617a924e689daefebd1062f710654f0814d3825c92c66369f7eb1e",
+    "tests/botstrike-tactical-browser.mjs": "2617c44f2c69453e4cc0f6d2089b91d0d74515d5d2fa82e09e4db2581310f609",
+    "tests/botstrike-menu-focus-browser.mjs": "00a2acb06015e0d3238bd326e3b416b97363ce1b664572890077cd5a08bfd6fd",
+    "tests/mobile-viewport.mjs": "75fe53558cc117238c1ff187c170eb64281dd7c599e8516cbaa97b8b241c7c48",
+    "tests/browser-native-state.mjs": "7e3147aa553eba06f545f76fcf9beefb4c8067c0825d6d28ac02987cc226c3cd",
+    "tests/botstrike-browser-room.mjs": "9f53a5d7bf8c68ec18eb33d80743cba6d3a2601c4a89c8cbffe6600693384350"
+  },
+  "standaloneFocusFixture": "DOM-only; directly imports shared focus helper and actual dialogs; does not use a Native room or inject Native/network state",
+  "postBuildFixtureChanges": {
+    "tests/botstrike-tactical-ui-browser.mjs": "Await two animation frames after final CDP portrait-to-landscape rotation before reading gate visibility; runtime/image unchanged."
+  }
+}

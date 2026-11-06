@@ -1,0 +1,10 @@
+{
+  "case": "comms",
+  "exit": 0,
+  "elapsedSeconds": 7.404,
+  "stdout": "{\"nativeEngine\":true,\"players\":3,\"teamIsolation\":true,\"privateRevisions\":true,\"controllerToken\":true,\"spoofRejected\":true,\"rateLimited\":true,\"mute\":true,\"disconnect\":true,\"expired\":true,\"metadataAbsentFromSignedInputTape\":true,\"humanParticipants\":0}\n",
+  "stderr": "",
+  "humanParticipants": 0,
+  "containerRemovedAfterRun": true,
+  "scratchUsesDiskBackedDisposableDirectory": true
+}

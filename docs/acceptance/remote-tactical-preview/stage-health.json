@@ -1,0 +1,35 @@
+{
+  "container": "botstrike-tactical-preview-c1a486aa",
+  "id": "e99d9f870877b1503c7c90f9ba555cb1b4dcb2b8d17a837aa9482ad9b8fa0bf8",
+  "image": "sha256:7a25d7c1cf9a4511c426bd7d7d2a2e850f342e549f461528d1948d25f6a5c7d0",
+  "health": {
+    "ok": true,
+    "service": "botstrike-tactical-preview"
+  },
+  "ports": {
+    "8080/tcp": null
+  },
+  "networks": [
+    "botstrike-tactical-preview-c1a486aa"
+  ],
+  "containerIp": "172.22.0.2",
+  "readOnly": true,
+  "memoryLimit": 4294967296,
+  "verifiedFiles": 24,
+  "mismatches": [],
+  "dataMounts": [
+    {
+      "source": "/data/utxoplay/shared/botstrike-tactical-preview-c1a486aa",
+      "destination": "/app/data",
+      "rw": true
+    },
+    {
+      "source": "/data/utxoplay/releases/20261106-botstrike-tactical-preview-c1a486aa/preview-host.json",
+      "destination": "/app/preview-host.json",
+      "rw": false
+    }
+  ],
+  "cookieNamespace": "botstrike-tactical-preview",
+  "productionRouteChanged": false,
+  "access": "SSH tunnel to isolated container address; no published server port"
+}
