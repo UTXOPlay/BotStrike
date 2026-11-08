@@ -68,6 +68,29 @@ async function one(mode){
     const first=observation.inputs.find(input=>input.room===next.id);assert.ok(first&&neutral(first),'New-room first input must clear previous gameplay intent');report.sameSocketNewRoomNeutralBarrier={passed:true,ackSeq:proof.inputAck.seq,ackTick:proof.inputAck.tick};
    }
   }
+  if(mode==='legacy-server'){
+   report.phase='legacy-local-watchdog';
+   const before=await state(page),epoch=await page.locator('html').getAttribute('data-control-recovery-epoch'),from=observation.inputs.at(-1)?.seq??0;
+   assert.ok(epoch!==null&&Number.isSafeInteger(Number(epoch)),'This path tests the actual D3 client against the pre-protocol server');
+   await page.keyboard.down('KeyW');
+   try{
+    await until(()=>observation.inputs.some(input=>input.seq>from&&input.y>0),{label:'Legacy movement before the explicitly injected browser task'});
+    const task=await page.evaluate(()=>{const from=performance.now();while(performance.now()-from<800){}return{from,to:performance.now(),injection:'one synchronous browser task; no network fault'};});
+    await page.waitForFunction(old=>document.documentElement.getAttribute('data-control-paused')==='1'&&Number(document.documentElement.getAttribute('data-control-recovery-epoch'))>old,Number(epoch));
+    assert.equal(await page.locator('html').getAttribute('data-playing'),'false');
+    const after=await state(page);assert.equal(after.id,before.id);assert.ok(after.state.tick>before.state.tick,'Legacy online simulation continues during the local task/pause');
+    await until(()=>observation.inputs.at(-1)&&neutral(observation.inputs.at(-1)),{label:'Legacy local latch sends neutral controls after the task'});
+    await page.waitForFunction(()=>!document.querySelector('#resume').disabled);
+    assert.match(await page.locator('#status').textContent(),/explicit input confirmation.*unavailable|legacy server has no explicit input confirmation/i);
+    await page.waitForTimeout(200);assert.equal(await page.locator('html').getAttribute('data-playing'),'false','Fresh legacy state must not resume play automatically');
+    report.legacyWatchdog={task,onlineMatchContinued:true,heldIntentCleared:true,explicitConfirmationAvailable:false,manualResumeRequired:true};
+   }finally{await page.keyboard.up('KeyW');}
+   const resumedFrom=observation.inputs.at(-1)?.seq??0;await page.locator('#resume').click();await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');
+   await page.keyboard.down('KeyW');
+   try{await until(()=>observation.snapshots.some(snapshot=>observation.inputs.some(input=>input.seq>resumedFrom&&input.y>0&&input.seq===snapshot.lastSeq&&input.room===snapshot.room)),{label:'New legacy movement after manual Resume; sequence observation only'});}
+   finally{await page.keyboard.up('KeyW');}
+   report.legacyWatchdog.manualResumeAndNewMovement=true;
+  }
   report.errors=observation.errors;assert.deepEqual(observation.errors,[]);assert.equal(observation.dropped,0);report.status='passed';
  }catch(error){failed=error;report.status='failed';report.error={message:error.message,stack:error.stack};report.intercepted=intercepted;if(page&&!page.isClosed())report.window=await page.evaluate(()=>({status:document.querySelector('#status')?.textContent,playing:document.documentElement.dataset.playing,inputProtocol:document.documentElement.dataset.inputProtocol})).catch(()=>null);if(page&&!page.isClosed())await page.screenshot({path:path.join(lab.root,'compat-failure.png')}).catch(()=>{});}
  finally{
@@ -76,4 +99,5 @@ async function one(mode){
  }
  if(failed)throw Object.assign(failed,{report:path.join(lab.root,'delivery-compat.json')});return report;
 }
-const results=[];try{for(const mode of ['cached-client','cached-receipt-v1-client','receipt-v1-server','legacy-server'])results.push(await one(mode));console.log(JSON.stringify({status:'passed',results:results.map(({mode,root,development})=>({mode,root,development})),humanParticipants:0,networkAcceptance:false}));}catch(error){console.error(JSON.stringify({status:'failed',message:error.message,report:error.report??null}));process.exitCode=1;}
+const modes=['cached-client','cached-receipt-v1-client','receipt-v1-server','legacy-server'],results=[];
+try{const args=process.argv.slice(2);assert.ok(!args.length||args.length===2&&args[0]==='--mode'&&modes.includes(args[1]),'Use no arguments or --mode with a named compatibility case');for(const mode of args.length?[args[1]]:modes)results.push(await one(mode));console.log(JSON.stringify({status:'passed',results:results.map(({mode,root,development})=>({mode,root,development})),humanParticipants:0,networkAcceptance:false}));}catch(error){console.error(JSON.stringify({status:'failed',message:error.message,report:error.report??null}));process.exitCode=1;}

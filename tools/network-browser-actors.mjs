@@ -3,6 +3,8 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createHash,randomBytes} from 'node:crypto';
 import {performance} from 'node:perf_hooks';
+import {installLocalRecoveryPageCapture} from './local-recovery-fence.mjs';
+import {NetworkLocalFenceObservation,matchNetworkLocalNeutral} from './network-local-fence.mjs';
 
 export const NETWORK_GAME_ORIGIN='http://botstrike.localhost:8080';
 export const NETWORK_GAME_URL=NETWORK_GAME_ORIGIN+'/games/botstrike/';
@@ -59,8 +61,9 @@ export class ActorTrace{
 }
 
 export class NetworkBrowserActor{
- constructor(id,browser,context,page,trace,{timeout=60000,drainMs=100,touch=false,launchProfile={},requireHardware=false}={}){
+ constructor(id,browser,context,page,trace,{timeout=60000,drainMs=100,touch=false,launchProfile={},requireHardware=false,localRecoveryFence=false}={}){
   this.id=id;this.browser=browser;this.context=context;this.page=page;this.trace=trace;this.timeout=timeout;this.drainMs=drainMs;this.touchEnabled=touch;this.index=0;this.socketGeneration=0;this.roomGeneration=0;this.nextRoomGeneration=0;this.roomGenerations=new Map();this.currentRoom=null;this.control={active:false,nextSeq:null};this.recent=new Map();this.errors=[];this.capture=null;this.drainTimer=null;this.drainInFlight=null;this.captureDropped=0;this.closed=false;this.closing=false;this.heldKeys=new Set();this.heldMouse=new Set();this.mouseAt={x:0,y:0};this.gamepadHandle=null;this.cpuRate=1;this.departed=new Set();
+  this.localFenceEnabled=localRecoveryFence===true;this.localFence=new NetworkLocalFenceObservation({record:(kind,data)=>this.record(kind,data)});
   page.setDefaultTimeout(timeout);page.on('pageerror',error=>{const message=safeText(error.message);this.errors.push(message);if(this.errors.length>32)this.errors.shift();this.record('page_error',{message});});
   this.launchProfile=launchProfile;this.requireHardware=requireHardware;this.browserVersion=null;this.graphics=null;this.ownerGeneration=0;this.proofGeneration=1;this.proofRoom=null;this.proofLife=null;
   page.on('websocket',socket=>this.watchSocket(socket));
@@ -81,7 +84,7 @@ export class NetworkBrowserActor{
   const url=new URL(socket.url());if(url.origin!==NETWORK_GAME_ORIGIN.replace(/^http/,'ws')||url.pathname!=='/games/botstrike/api/socket')return;
   const generation=++this.socketGeneration;let ownerToken=null;this.record('socket_opening',{generation});
   socket.on('framesent',({payload})=>{let value;try{value=JSON.parse(String(payload));}catch{return;}
-   if(value.type==='input')this.record('input',{socketGeneration:generation,ownerGeneration:this.ownerGeneration,proofGeneration:this.proofGeneration,roomGeneration:this.generationFor(value.room),life:this.currentRoom?.state?.players[this.currentRoom.slot]?.life??null,minTick:this.currentRoom?.state?.tick??null,deliveryAttached:!!value.delivery,protocolVersion:value.delivery?.version??null,input:fields(value.input,inputKeys)});
+   if(value.type==='input'){if(this.localFenceEnabled)this.localFence.observeFrame(generation,payload);this.record('input',{socketGeneration:generation,ownerGeneration:this.ownerGeneration,proofGeneration:this.proofGeneration,roomGeneration:this.generationFor(value.room),life:this.currentRoom?.state?.players[this.currentRoom.slot]?.life??null,minTick:this.currentRoom?.state?.tick??null,deliveryAttached:!!value.delivery,protocolVersion:value.delivery?.version??null,input:fields(value.input,inputKeys)});}
    else if(value.type==='quality')this.record('shared_summary',{socketGeneration:generation,summary:{version:value.version,windowMs:value.windowMs,metrics:value.metrics,counts:value.counts}});
   });
   socket.on('framereceived',({payload})=>{let value;try{value=JSON.parse(String(payload));}catch{return;}
@@ -92,6 +95,7 @@ export class NetworkBrowserActor{
   socket.on('close',()=>{if(generation===this.socketGeneration){this.control={...this.control,active:false};this.proofGeneration++;}this.record('socket_close',{generation,proofGeneration:this.proofGeneration});});
  }
  async boot(){
+  if(this.localFenceEnabled)await this.page.addInitScript({content:'('+installLocalRecoveryPageCapture.toString()+')(globalThis,{wireJoin:true});'});
   const response=await this.page.goto(NETWORK_GAME_URL);if(response?.status()!==200)throw Error('Actor game entry is unavailable.');
   await this.page.waitForFunction(()=>window.BotStrikeQuality&&(document.querySelector('#status')?.textContent.includes('Choose your chassis')||!document.querySelector('#room-info')?.hidden||document.querySelector('#fatal')?.hidden===false));
   if(await this.page.locator('#fatal').isVisible())throw Error('Actor game startup failed: '+safeText(await this.page.locator('#fatal').textContent()));
@@ -102,7 +106,7 @@ export class NetworkBrowserActor{
   this.record('boot',{origin:NETWORK_GAME_ORIGIN,guestCookiePresent:cookies.some(cookie=>cookie.name.startsWith('game_')),humanParticipants:0,browserVersion:this.browserVersion,graphics:this.graphics,launchProfile:this.launchProfile,initialWindow:initial.window,controllerApi:'real browser events; optional simulated standard Gamepad API',clockDefinitions:{atMs:'browser performance.now at actual render callback entry',animationAtMs:'RAF animation timestamp used by the unchanged game renderer',nodeAtMs:'driver performance.now at CDP event/drain observation; not network arrival',unix:'wall-clock anchors are correlation estimates, not one-way latency'}});return this;
  }
  async installCapture(){
-  this.capture=await this.page.evaluateHandle(()=>{
+  this.capture=await this.page.evaluateHandle(({localFenceEnabled})=>{
    const api=window.BotStrikeQuality,queue=[],limit=512,listeners=[];let dropped=0,windowInfo;const mouse={serial:0,x:0,y:0,untrusted:0};
    const canvas=document.querySelector('#arena'),gl=canvas.getContext('webgl2')||canvas.getContext('webgl'),debug=gl?.getExtension('WEBGL_debug_renderer_info'),graphics=gl?{measuredAtMs:performance.now(),version:gl.getParameter(gl.VERSION),renderer:gl.getParameter(gl.RENDERER),vendor:gl.getParameter(gl.VENDOR),unmaskedRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):null,unmaskedVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):null,method:'read-only actual canvas WebGL parameters; no renderer override'}:null;
    const initialCoarse=matchMedia('(pointer: coarse)').matches,sourceConfiguredShadow={width:initialCoarse?512:1024,height:initialCoarse?512:1024,basis:'scene.mjs fixed mapSize branch and observed initial coarse media; not a GPU texture readback'};
@@ -115,15 +119,18 @@ export class NetworkBrowserActor{
    for(const name of ['blur','focus'])listen(window,name,()=>push('lifecycle',{event:name,atMs:performance.now(),window:view()}));
    listen(window,'mousemove',event=>{if(event.target!==canvas)return;mouse.serial++;mouse.x+=event.movementX;mouse.y+=event.movementY;if(!event.isTrusted)mouse.untrusted++;push('pointer_mouse',{serial:mouse.serial,atMs:performance.now(),trusted:event.isTrusted,movementX:event.movementX,movementY:event.movementY,clientX:event.clientX,clientY:event.clientY,buttons:event.buttons,pointerLocked:document.pointerLockElement===canvas});});
    const offScalar=api.subscribe(sample=>push('scalar',{atMs:sample.atMs,metric:sample.kind,value:sample.value})),offPresentation=api.subscribePresentation(frame=>push('presentation',{...frame,window:view()}));
-   return {mouse(){return {...mouse};},drain(){const events=queue.splice(0);const lost=dropped;dropped=0;return {events,dropped:lost};},sample(){return {browserNowMs:performance.now(),browserTimeOriginMs:performance.timeOrigin,browserUnixMs:Date.now(),graphics,window:view(),quality:api.read(),status:document.querySelector('#status')?.textContent??''};},stop(){offScalar();offPresentation();for(const remove of listeners)remove();}};
-  });
+   return {mouse(){return {...mouse};},drain(){const events=queue.splice(0);const lost=dropped;dropped=0;return {events,dropped:lost,localFence:localFenceEnabled?globalThis.__botstrikeLocalFenceCapture?.read()??null:null};},sample(){return {browserNowMs:performance.now(),browserTimeOriginMs:performance.timeOrigin,browserUnixMs:Date.now(),graphics,window:view(),quality:api.read(),status:document.querySelector('#status')?.textContent??''};},stop(){offScalar();offPresentation();for(const remove of listeners)remove();if(localFenceEnabled)globalThis.__botstrikeLocalFenceCapture?.stop();}};
+  },{localFenceEnabled:this.localFenceEnabled});
   this.drainTimer=setInterval(()=>{void this.drain().catch(error=>{this.record('capture_error',{message:safeText(error.message)});});},this.drainMs);this.drainTimer.unref();
  }
  async drain(){
   if(!this.capture||this.closed)return;if(this.drainInFlight)return this.drainInFlight;
-  this.drainInFlight=(async()=>{const batch=await this.capture.evaluate(capture=>capture.drain());this.captureDropped+=batch.dropped;if(batch.dropped)this.record('capture_drop',{count:batch.dropped});for(const event of batch.events)this.record(event.kind,event.data);})();
+  this.drainInFlight=(async()=>{const batch=await this.capture.evaluate(capture=>capture.drain());this.captureDropped+=batch.dropped;if(batch.dropped)this.record('capture_drop',{count:batch.dropped});for(const event of batch.events)this.record(event.kind,event.data);if(this.localFenceEnabled)this.localFence.ingest(batch.localFence);})();
   try{await this.drainInFlight;}finally{this.drainInFlight=null;}
  }
+ // Fresh page read, never a CDP callback-time DOM relabel. Unknown is explicit.
+ async readLocalRecovery(){if(!this.localFenceEnabled)return{localFenceRequired:true,currentContext:null,unavailableReason:'local_capture_not_enabled'};if(this.closed||this.closing){this.localFence.invalid='actor_closed';return this.localFence.read();}let timer;try{await Promise.race([(async()=>{const previous=this.drainInFlight;if(previous)await previous;await this.drain();})(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Local recovery read timed out')),5000);})]);}catch(error){this.localFence.invalid='local_refresh_unavailable';}finally{clearTimeout(timer);}return this.localFence.read();}
+ async currentLocalNeutral(options={}){return matchNetworkLocalNeutral(await this.readLocalRecovery(),options);}
  async clock(){const before={nodeAtMs:performance.now(),unixMs:Date.now()},browser=await this.page.evaluate(()=>({nowMs:performance.now(),timeOriginMs:performance.timeOrigin,unixMs:Date.now()})),after={nodeAtMs:performance.now(),unixMs:Date.now()};return {before,browser,after,meaning:'CDP evaluation bracket; no synchronized-clock or one-way-network assertion'};}
  async sample(){await this.drain();const snapshot=await this.capture.evaluate(capture=>capture.sample());return {id:this.id,index:this.index,clock:await this.clock(),...snapshot,graphics:{...(snapshot.graphics||{}),classification:classifyWebGLRenderer(snapshot.graphics)},browserVersion:this.browserVersion,launchProfile:clone(this.launchProfile),control:clone(this.control),roomGeneration:this.roomGeneration,lastPresentation:this.lastPresentation,lastInput:this.lastInput,lastSnapshot:this.lastSnapshot,captureDropped:this.captureDropped,trace:this.trace.receipt(),errors:[...this.errors],cpuThrottleRate:this.cpuRate};}
  async room({refresh=false}={}){if(refresh){const value=await this.page.evaluate(async()=>{const response=await fetch('/games/botstrike/api/state',{signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('Public state request failed');return response.json();});this.trackRoom(value.room);}return clone(this.currentRoom);}
@@ -188,7 +195,7 @@ export class NetworkBrowserActor{
  }
 }
 
-export async function createBrowserActors({actors,directory,viewport={width:1280,height:720},deviceScaleFactor=.5,renderFps=30,presentationCohort='desktop',gpuMode='hardware',headless=true,chromiumArgs=[],launchEnv={},requireHardware=false,timeout=60000,maxBytes=64*1024*1024,playwrightEntry,executablePath}={}){
+export async function createBrowserActors({actors,directory,viewport={width:1280,height:720},deviceScaleFactor=.5,renderFps=30,presentationCohort='desktop',gpuMode='hardware',headless=true,chromiumArgs=[],launchEnv={},requireHardware=false,localRecoveryFence=false,timeout=60000,maxBytes=64*1024*1024,playwrightEntry,executablePath}={}){
  const runtime=browserRuntimePaths();if(playwrightEntry===undefined)playwrightEntry=runtime.playwrightEntry;if(executablePath===undefined)executablePath=runtime.executablePath;
  if(!Array.isArray(actors)||actors.length<1||actors.length>2||new Set(actors.map(actor=>actor.id)).size!==actors.length)throw Error('Use one or two uniquely named actors.');if(![30,60,120].includes(renderFps))throw Error('Unsupported initial render cap.');directory=path.resolve(directory);privateDirectory(directory);
  if(!['desktop','mobile-keyboard'].includes(presentationCohort)||!['hardware','software'].includes(gpuMode)||!Array.isArray(chromiumArgs)||chromiumArgs.length>32||chromiumArgs.some(arg=>typeof arg!=='string'||arg.length>1000||/[\0\r\n]/.test(arg)))throw Error('Use an explicit bounded browser launch profile.');
@@ -199,7 +206,7 @@ export async function createBrowserActors({actors,directory,viewport={width:1280
   for(const definition of actors){
    if(!Number.isInteger(definition.proxyPort)||definition.proxyPort<1||definition.proxyPort>65535)throw Error('Each actor needs an explicit local lab proxy port.');
    const trace=new ActorTrace(directory,definition.id,{maxBytes});let browser;
-   try{browser=await chromium.launch({headless,...(executablePath?{executablePath}:{}),args:launchProfile.args,env:{...process.env,...launchEnv}});const mobile=definition.touch===true||presentationCohort==='mobile-keyboard',context=await browser.newContext({viewport,deviceScaleFactor,reducedMotion:'reduce',isMobile:mobile,hasTouch:mobile,proxy:{server:'http://127.0.0.1:'+definition.proxyPort,bypass:'<-loopback>'}});await context.addInitScript(({fps,keyboardMobile})=>localStorage.setItem('botstrike:settings',JSON.stringify({renderFps:fps,sound:false,motion:false,aimAssist:0,gamepadAimAssist:0,sensitivity:1,ads:.65,fov:80,invertY:false,keyboardLayout:'qwerty',...(keyboardMobile?{touch:false}:{})})),{fps:renderFps,keyboardMobile:presentationCohort==='mobile-keyboard'});const page=await context.newPage(),actor=new NetworkBrowserActor(definition.id,browser,context,page,trace,{timeout,touch:mobile,launchProfile,requireHardware});created[definition.id]=actor;list.push(actor);await actor.boot();}catch(error){if(!list.some(actor=>actor.trace===trace)){await browser?.close();trace.close({startupFailed:true,error:safeText(error.message)});}throw error;}
+   try{browser=await chromium.launch({headless,...(executablePath?{executablePath}:{}),args:launchProfile.args,env:{...process.env,...launchEnv}});const mobile=definition.touch===true||presentationCohort==='mobile-keyboard',context=await browser.newContext({viewport,deviceScaleFactor,reducedMotion:'reduce',isMobile:mobile,hasTouch:mobile,proxy:{server:'http://127.0.0.1:'+definition.proxyPort,bypass:'<-loopback>'}});await context.addInitScript(({fps,keyboardMobile})=>localStorage.setItem('botstrike:settings',JSON.stringify({renderFps:fps,sound:false,motion:false,aimAssist:0,gamepadAimAssist:0,sensitivity:1,ads:.65,fov:80,invertY:false,keyboardLayout:'qwerty',...(keyboardMobile?{touch:false}:{})})),{fps:renderFps,keyboardMobile:presentationCohort==='mobile-keyboard'});const page=await context.newPage(),actor=new NetworkBrowserActor(definition.id,browser,context,page,trace,{timeout,touch:mobile,launchProfile,requireHardware,localRecoveryFence});created[definition.id]=actor;list.push(actor);await actor.boot();}catch(error){if(!list.some(actor=>actor.trace===trace)){await browser?.close();trace.close({startupFailed:true,error:safeText(error.message)});}throw error;}
   }
   return {actors:created,origin:NETWORK_GAME_ORIGIN,directory,async flush(){return Promise.all(list.map(actor=>actor.flush()));},async close(options){const results=await Promise.allSettled(list.map(actor=>actor.close(options)));const failure=results.find(result=>result.status==='rejected');if(failure)throw failure.reason;}};
  }catch(error){await Promise.allSettled(list.map(actor=>actor.close({leave:false})));throw error;}

@@ -217,20 +217,78 @@ Private raw captures can contain hidden Native state and synthetic credentials;
 only reviewed, redacted summaries belong in public issues or PRs. Myelin remains
 verification of the exact recorded off-chain host replay, not CKB settlement.
 
-## D3 working tree: control watchdog, acceptance pending
+## D3 immutable candidate: targeted watchdog acceptance pending
 
-The client watchdog is now applied to the working tree for a proposed D3. It
-uses 400 ms state-age and scheduler-gap limits, plus a 1,000 ms live/alive
-exact-ACK limit anchored to the acknowledged input's **original send time**.
-A trip clears held intent, forces neutral input and latches a manual Resume;
-a fresh proof alone does not resume play. These are local control-pause
-policies, not new Native rules, a longer server receipt lease or a network SLO.
+The client watchdog is now in immutable D3 image
+`sha256:ffdbcf9311ec578d3a9b136f195fe660efc8c0ec33497f6adf4443ef994152a4`,
+source tree `ebd18edf00215059768bf306a0ec9cf70b6213fe`. Its local state-age
+and scheduler-gap limits are 400 ms; the live/alive exact-ACK limit is 1,000 ms
+from the acknowledged input's **original send time**. A trip clears held intent,
+forces neutral and requires fresh proof followed by manual Resume. These client
+pause policies do not change Native rules or extend the server receipt lease.
 
-The applied changes passed 35 focused pure checks and the web build.
-Real-browser watchdog acceptance has not passed. No immutable D3 image has been
-built, and these working-tree changes have not been pushed, filed as a new PR
-or deployed. Pure checks/build success are not browser or D3 release evidence;
-the immutable D2 results above do not validate this new client.
+The image build passed 502 unit and 24 host checks. Actual-image checks preserved
+105 protected files, all 21 release files (184,371,322 bytes and original modes),
+ten exact engine/verifier pairs and the D2 Native model/profile. The original
+static-audit process remains exit 1 because its cleanup text guard rejected a
+lower-case absence message. The actual JSON checks passed; an independent
+specific-container supplement confirmed both owned inspection containers gone.
+The original failed audit was not rewritten as exit 0.
+
+Four immutable-image compatibility modes passed with driver exit 0: legacy
+server, cached receipt-v1 client, receipt-v1 server and cached client. All 24 owned
+containers, four networks and browser processes were confirmed gone.
+
+The Store recovery trial also exited 0. It applied an actual 1,076 ms TCP
+blackhole with nine kernel drops. A **local recovery-epoch barrier**, rather than
+requiring a server `input_resync`, fenced old evidence. Fresh current-context
+neutral ACK preceded one trusted manual Resume and new movement. All 999 raw
+Native frames were retained without capture loss, expired control or obsolete
+held-input frames. The same iframe, room and sandbox attributes survived; this
+is not opaque browser-game sandbox acceptance or a no-AI claim.
+
+Those browser runs used separately hashed, post-build host observers. The
+recorded revision passed 47 pure checks, separately from the image's 502/24.
+Later host-only overflow counterexamples retained their original two failures
+among 15 checks; the minimal fixture correction then passed 49 related pure
+checks. The completed Store run did not reach that overflow boundary and was not
+rewritten or presented as an overflow rerun. The subsequent full repository unit
+run passed 531 checks, with zero failures or skips. This external host-follow-up
+result is separate from the image-baked 502/24 checks. Local proof supplements
+the wire ACK and changes no server protocol.
+
+A separate legacy-server follow-up exited 0 using the exact D3 client bundle
+against the fixed legacy server. One synchronous 800 ms browser task, **not a
+network fault**, exercised held-intent clearing, local pause while the match
+continued, fresh legacy state, manual Resume and observed new movement. Legacy
+has no exact applied-input ACK; that fallback observation does not satisfy the
+receipt-v2 targeted checks. Its six owned containers, network and browsers were
+confirmed gone. The earlier four-mode receipts remain unchanged.
+
+The D3 six-size UI regression failed. Its first attempt supplied the Store outer
+page to a standalone fixture and exited before any six-size or Native-input
+assertions. With the corrected standalone entry, seven assertion groups completed
+across 1920×1080, 2560×1080 and 2560×1440 training/armory views. The run then
+exited 1 during 3840×2160 training because the HUD became hidden while a HUD
+button was awaited. The failure snapshot had `playing:false`; the screenshot
+showed READY/RESUME and a local pause latch. The exact watchdog reason was not
+captured, so GPU or network causation is undetermined. The screenshot also showed
+the status reason below the first screen. Both failures and the screenshot remain
+preserved; each attempt's six owned containers, network and browsers were gone.
+This is not a complete six-size pass.
+
+A subsequent UI-only working-tree change moves the existing status message near
+Resume, resets menu scroll on reopen and bounds its type size to 12–20 CSS px.
+It is reserved for a new D4 candidate, with no wire or Native-rule change; it does
+not change D3's failed result or establish a D4 browser pass.
+
+Targeted 800 ms main-thread blocking on the receipt-v2 service and exact-ACK
+omission checks are still pending. D3 release/network/issue acceptance remains
+false; human A/B, WAN, physical-device and capacity gates are unpassed. D2
+evidence and its failed matrix classifications remain unchanged. See the strictly allowlisted
+[partial D3 checkpoint](acceptance/network-quality-D3.json) for redacted receipt
+digests and the distinction between the original audit failure and its cleanup
+supplement.
 
 ## Single V3 profiler supplement: diagnostic incomplete
 

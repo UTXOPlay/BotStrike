@@ -1,5 +1,7 @@
 // Private Store QA observations. No Native input, camera or receipt is assigned.
 import assert from 'node:assert/strict';
+import {localRecoveryProofMatches} from '../tools/local-recovery-fence.mjs';
+export {installStoreLocalRecoveryCapture,storeLocalFenceObservation} from '../tools/local-recovery-fence.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createReadStream} from 'node:fs';
@@ -18,7 +20,8 @@ export function writePrivate(file,value){fs.writeFileSync(file,JSON.stringify(va
 export async function until(predicate,{timeout=15000,label='Store observation'}={}){
  const end=performance.now()+timeout;while(performance.now()<end){const value=await predicate();if(value)return value;await pause(20);}throw Error(label+' timed out');
 }
-export function observeStoreProtocol(page,origin,{limit=16384}={}){
+export function observeStoreProtocol(page,origin,{limit=16384,localFenceRequired=false}={}){
+ if(localFenceRequired)throw Error('D3 local fence requires synchronous page-side send capture and the live DOM selector');
  let nextSocketGeneration=0,current=null;const observation={inputs:[],controls:[],resyncs:[],snapshots:[],buys:[],socketCloses:[],errors:[],dropped:0,get currentContext(){return current?{...current}:null;}};let eventIndex=0;
  const keep=(key,value)=>{if(observation[key].length>=limit){observation.dropped++;return;}observation[key].push({eventIndex:++eventIndex,nodeAtMs:performance.now(),nodeUnixMs:Date.now(),...value});};
  page.on('websocket',socket=>{
@@ -47,10 +50,11 @@ export function observeStoreProtocol(page,origin,{limit=16384}={}){
  page.on('pageerror',error=>keep('errors',{code:error.name||'PageError'}));return observation;
 }
 export function storeInputAck(snapshot,input,{requireNeutral=false,current}={}){
+ if(!localRecoveryProofMatches(snapshot,input,current,{requireNeutral}))return false;
  const ack=snapshot?.inputAck;return!!current&&current.connected===true&&current.controller===true&&current.protocolVersion===2&&current.maxAgeMs===400&&['socketGeneration','ownerEpoch','proofGeneration'].every(key=>Number.isSafeInteger(current[key])&&current[key]>0)&&!!ack&&ack.version===1&&Object.keys(ack).sort().join(',')==='life,neutral,seq,tick,version'&&['seq','tick','life'].every(key=>Number.isSafeInteger(ack[key])&&ack[key]>0)&&typeof ack.neutral==='boolean'&&!!input&&Number.isSafeInteger(input.nativeTick)&&input.nativeTick>=0&&snapshot.currentSocket!==false&&snapshot.currentContext!==false&&input.currentSocket!==false&&snapshot.deliveryAttached&&input.deliveryAttached&&input.protocolVersion===2&&snapshot.socketGeneration===input.socketGeneration&&snapshot.ownerEpoch===input.ownerEpoch&&snapshot.proofGeneration===input.proofGeneration&&snapshot.socketGeneration===current.socketGeneration&&snapshot.ownerEpoch===current.ownerEpoch&&snapshot.proofGeneration===current.proofGeneration&&snapshot.room===current.room&&snapshot.life===current.life&&snapshot.room===input.room&&snapshot.life===input.life&&ack.life===input.life&&ack.seq===input.seq&&ack.seq===snapshot.lastSeq&&ack.tick>input.nativeTick&&ack.tick<=snapshot.tick&&(!requireNeutral||ack.neutral&&neutral(input));
 }
 export async function assertReceiptProtocol(game,observation){
- await until(()=>observation.controls.some(control=>control.active&&control.inputProtocol?.version===2&&control.inputProtocol.maxAgeMs===400),{label:'Store receipt control handshake'});
+ await until(async()=>{if(observation.refreshLocalFence)await observation.refreshLocalFence();return observation.controls.some(control=>control.active&&control.inputProtocol?.version===2&&control.inputProtocol.maxAgeMs===400);},{label:'Store receipt control handshake'});
  await until(async()=>await game.locator('html').getAttribute('data-input-protocol')==='receipt',{label:'Actual Store iframe receipt protocol UI'});
  assert.ok(observation.inputs.every(input=>input.deliveryAttached),'Every modern Store input carries the outer delivery envelope');
 }
@@ -85,10 +89,12 @@ export async function trustedStoreAim({page,game,native,observation}){
   }finally{await page.keyboard.up('KeyW');}
  }finally{await capture.evaluate(handle=>handle.close());await capture.dispose();}
 }
-export async function installRecoveryUiObserver(game){return game.locator('body').evaluateHandle(()=>{
- const rows=[];let signature,dropped=0;const sample=()=>{const resume=document.querySelector('#resume'),value={atMs:performance.now(),playing:document.documentElement.dataset.playing==='true',disabled:resume.disabled,resume:resume.textContent,status:document.querySelector('#status').textContent};const next=JSON.stringify([value.playing,value.disabled,value.resume,value.status]);if(next!==signature){signature=next;if(rows.length<256)rows.push(value);else dropped++;}};
+export async function installRecoveryUiObserver(game,{localFenceRequired=false}={}){return game.locator('body').evaluateHandle(required=>{
+ const rows=[];let signature,dropped=0;const sample=()=>{const resume=document.querySelector('#resume'),root=document.documentElement,value={atMs:performance.now(),playing:root.dataset.playing==='true',disabled:resume.disabled,resume:resume.textContent,status:document.querySelector('#status').textContent};
+ if(required){const epoch=root.getAttribute('data-control-recovery-epoch'),paused=root.getAttribute('data-control-paused'),valid=typeof epoch==='string'&&/^(0|[1-9][0-9]{0,15})$/.test(epoch)&&Number.isSafeInteger(Number(epoch))&&(paused==='0'||paused==='1');Object.assign(value,{localFenceAvailable:valid,localRecoveryEpoch:valid?Number(epoch):null,localPaused:valid?paused==='1':null});}
+ const next=JSON.stringify([value.playing,value.disabled,value.resume,value.status,value.localFenceAvailable,value.localRecoveryEpoch,value.localPaused]);if(next!==signature){signature=next;if(rows.length<256)rows.push(value);else dropped++;}};
  const observer=new MutationObserver(sample);for(const el of [document.documentElement,document.querySelector('#resume'),document.querySelector('#status')])observer.observe(el,{attributes:true,childList:true,subtree:el!==document.documentElement});sample();return{read(){return rows.slice();},dropped(){return dropped;},close(){observer.disconnect();}};
- });}
+ },localFenceRequired);}
 export function kernelCDrops(stats){return [...stats.server.qdisc.filter(row=>row.kind==='netem'&&row.dev==='ifbuC'),...stats.actors.C.qdisc.filter(row=>row.kind==='netem'&&row.dev==='ifbdC')].reduce((sum,row)=>sum+(row.drops||0),0);}
 
 // Exact raw frames stay private. AI cover is identified from the corresponding

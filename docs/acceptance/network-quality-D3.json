@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "candidate": "D3",
+  "kind": "partial-engineering-checkpoint",
+  "acceptanceComplete": false,
+  "networkAcceptance": false,
+  "humanParticipants": 0,
+  "issueAcceptance": {
+    "30": false,
+    "12": false,
+    "26": false
+  },
+  "provenance": {
+    "applicationImageId": "sha256:ffdbcf9311ec578d3a9b136f195fe660efc8c0ec33497f6adf4443ef994152a4",
+    "sourceTree": "ebd18edf00215059768bf306a0ec9cf70b6213fe",
+    "sourceKind": "git_tree",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "nativeRulesChanged": false
+  },
+  "buildChecks": {
+    "scope": "Image-baked checks only",
+    "unitPassed": 502,
+    "hostPassed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "integrity": {
+    "protectedFiles": 105,
+    "releaseFiles": 21,
+    "releaseBytes": 184371322,
+    "releaseBytesAndModesUnchanged": true,
+    "retainedEngineVerifierPairs": 10,
+    "modelAndProfileSameAsD2": true
+  },
+  "staticAudit": {
+    "actualImageChecks": "passed",
+    "originalRunnerStatus": "failed",
+    "originalRunnerExitCode": 1,
+    "originalFailurePreserved": true,
+    "failureCause": "Case-sensitive cleanup text guard rejected lower-case absence diagnostic after removal",
+    "independentSupplement": "passed",
+    "ownedContainersIndependentlyConfirmedGone": 2
+  },
+  "browserCompatibility": {
+    "status": "passed",
+    "driverExitCode": 0,
+    "automated": true,
+    "modes": [
+      {
+        "mode": "legacy-server",
+        "receiptSha256": "8be1c4063aaaa75c298eefe09a04e31fec24206944b216c87cf8b0311f858b9c"
+      },
+      {
+        "mode": "cached-receipt-v1-client",
+        "receiptSha256": "6ab080cf8dce8ba6d908f2072519279b5bbc3cab95d8f9b4f11750e66777fcb8"
+      },
+      {
+        "mode": "receipt-v1-server",
+        "receiptSha256": "2d071c367ddee2caab32dce7c1083061113619cdd4c68b0f19612e717f94c0d6"
+      },
+      {
+        "mode": "cached-client",
+        "receiptSha256": "471e24797908b8b92c71447351922b4980f27f1b578ce57455377676e30ec768"
+      }
+    ],
+    "ownedContainersGone": 24,
+    "ownedNetworksGone": 4,
+    "ownedChromeRemaining": 0,
+    "scope": "Four recorded compatibility paths before the later legacy-server 800 ms assertion",
+    "laterLegacy800msAssertionIncluded": false
+  },
+  "storeRecovery": {
+    "status": "passed",
+    "driverExitCode": 0,
+    "automated": true,
+    "prototype": false,
+    "applicationSourceBind": false,
+    "actualTcpBlackholeMs": 1076,
+    "kernelDrops": 9,
+    "recoveryBarrier": "local_epoch",
+    "serverResyncRequired": false,
+    "serverResyncObservedAtSelectedBarrier": false,
+    "freshCurrentContextNeutralBeforeManualResume": true,
+    "trustedManualResumeGestures": 1,
+    "automaticResume": false,
+    "newMovementKnownApplied": true,
+    "rawNativeFrames": 999,
+    "captureDrops": 0,
+    "obsoleteHeldFrames": 0,
+    "expiredControlFrames": 0,
+    "missingAdmissionFrames": 0,
+    "sameIframe": true,
+    "sameRoom": true,
+    "sameSandboxAttributes": true,
+    "opaqueBrowserGameSandboxAcceptance": false,
+    "casualBotsCapable": true,
+    "aiCoverSeparatedFromObsoleteHumanInput": true,
+    "ownedContainersGone": 6,
+    "ownedNetworkGone": true,
+    "ownedChromeRemaining": 0,
+    "historyOverflowBoundaryCovered": false
+  },
+  "postBuildHostObserver": {
+    "execution": "external_host_fixture",
+    "applicationRebuiltForObserver": false,
+    "entryDiffersFromBaked": true,
+    "pureChecksPassed": 47,
+    "pureChecksFailed": 0,
+    "pureTapSha256": "1e718d74d5eaa73b5d417c08536a3c56f057bd88367dc3aa003c8e4405802cb0",
+    "localFenceSchema": "botstrike-local-send-fence-1",
+    "serverWireChangedByObserver": false,
+    "localProofIsSupplementOnly": true,
+    "hostSourceSha256": {
+      "tests/botstrike-store-delivery-browser.mjs": "ece3ff0cf3393763357f0f1eb4322299acdd3230ddb2cef5bf3b4a19295ce3e6",
+      "tests/botstrike-store-recovery-selection.mjs": "cf5f1d757676a39ebc5193f61a17b08a40c695407c51a9487e46acdb79a6c467",
+      "tests/botstrike-store-observations.mjs": "c30cd5904ea2eba7ef90a74b1a9fae8b653c7d99335de6612ec2299ccbdfdb31",
+      "tools/local-recovery-fence.mjs": "49fc1f837340c158be75b376b3c6a40ee1618ca6f262e605887878fe39ab94d6",
+      "tests/botstrike-store-local-barrier.mjs": "474d3a39c192dda388f3bc0add7ebf3a1d515327036ff9631dee6682ad8c7617"
+    },
+    "recordedRevisionCoveredByImageBuildChecks": false,
+    "passedChecksScope": "Recorded observer revision used for the completed Store recovery; separate from later host-only checks"
+  },
+  "pending": {
+    "mainThread800ms": "pending",
+    "exactAckOmission": "pending",
+    "targetedWatchdogAcceptanceComplete": false
+  },
+  "receiptSha256": {
+    "originalBuildAuditFailed": "c87549e080a3e22ddc0c9d949864335419068b25eb4ef201eb096b178186c5c8",
+    "actualImageAudit": "0a8ebe4615c62e5e896dfd334d32c717fc3d8eab5b1426a9dace9f4b950f25bd",
+    "binding": "7e0bed60131c67ba38a40d1d98beb25ce8e769ce5f36fb731a0532ed5981f52f",
+    "independentStaticCleanupSupplement": "f7a142a10b6c8cedfc90119a4501b1aca43e9d8cbe93d89d462b212d41cf3d18",
+    "compatibilityCompletion": "1e2827306ee11d914e2df7ae193785720e2205531e2fa44b626cd33fc378e209",
+    "storeRecovery": "e38ec082ec45c2b420dcd0e5c7901e6940ae4e0045781a400cd9d51c139fd489",
+    "storeRecoveryCompletion": "deba516ec131846144e4aa30dacf677af858c3aac65abe01279fed4ffbaecbe4"
+  },
+  "limitations": [
+    "Selected immutable-image browser passes do not establish complete D3 watchdog or issue acceptance.",
+    "Targeted 800 ms main-thread and exact-ACK omission checks remain pending.",
+    "No human A/B, public-WAN, physical-device or capacity acceptance is claimed.",
+    "Same sandbox attributes are not opaque browser-game sandbox validation.",
+    "Post-build host observer checks are separate from the image-baked 502/24 checks.",
+    "D2 matrix failures and original failed audit classifications remain unchanged.",
+    "Myelin verifies exact off-chain host replay, not CKB settlement.",
+    "The corrected standalone six-size UI run failed during 4K training; its watchdog cause was not captured and no full six-size pass is claimed."
+  ],
+  "postCheckHostOnlyChanges": {
+    "storeHistoryOverflowFence": {
+      "status": "fixed_related_pure_checks_passed",
+      "counterexampleChecks": 15,
+      "failedCounterexampleChecks": 2,
+      "originalCounterexampleFailuresPreserved": true,
+      "relatedPureChecksPassed": 49,
+      "relatedPureChecksFailed": 0,
+      "productChanged": false,
+      "recordedStoreRunReachedOverflowBoundary": false,
+      "overflowBoundaryBrowserRerunPerformed": false,
+      "oldPassingReceiptChanged": false,
+      "receiptSha256": "1fc0edffd486d856acaed08b1a9a588f227153fbbb4f38566cf33fabc7713890",
+      "afterFixTapSha256": "81cb9bbec74bbdb737db004b35cfcf7e6792928169cc508aa68f1a8c45e85930"
+    },
+    "legacyServer800msAssertion": {
+      "status": "passed_separate_external_fixture_revision",
+      "driverExitCode": 0,
+      "synchronousBrowserTaskMs": 800,
+      "stimulusIsNetworkFault": false,
+      "D3ClientBundleSha256": "951dfd7745c4b591c61cf222d76a75707bcb5386aaeab3168b183861c243a127",
+      "fixedLegacyServerImageId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+      "legacySourceRevision": "01dee05170c84c3e5d4fde9887c2d10282229f21",
+      "heldIntentCleared": true,
+      "onlineMatchContinued": true,
+      "freshLegacyStateBeforeManualResume": true,
+      "manualResumeRequired": true,
+      "newMovementObserved": true,
+      "exactAckAvailable": false,
+      "movementProofScope": "legacy state/sequence observation only",
+      "oldFourModePassingReceiptChanged": false,
+      "productChanged": false,
+      "ownedContainersGone": 6,
+      "ownedNetworkGone": true,
+      "ownedChromeRemaining": 0,
+      "receiptSha256": "8fd36b810f5fdb7b3876d4c1f2ae39062036c84cf459c1619ab95513662e0786",
+      "completionSha256": "56e82ca971d7b315dc8a6abb7cdb7b065346e4e0a4d1906b2cb1cac3f04fddf1"
+    },
+    "targetedWatchdogFixtures": {
+      "status": "private_implementation_in_progress",
+      "actualRunPassed": false
+    }
+  },
+  "postBuildHostUnitChecks": {
+    "status": "passed",
+    "scope": "Current repository with post-build host follow-ups; not image-baked checks",
+    "tests": 531,
+    "passed": 531,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "driverExitCode": 0,
+    "tapSha256": "94d33ebc1eb63981132019f3815268db5e85a89f84083a6ab03ba257c206cbd4"
+  },
+  "sixSizeUiRegression": {
+    "status": "failed",
+    "completeSixSizeAcceptance": false,
+    "entryMismatchAttempt": {
+      "driverExitCode": 1,
+      "failureClass": "standalone_fixture_received_store_outer_page",
+      "sixSizeAssertionsReached": false,
+      "nativeInputAssertionsReached": false,
+      "ownedContainersGone": 6,
+      "ownedNetworkGone": true,
+      "ownedChromeRemaining": 0,
+      "originalFailurePreserved": true,
+      "receiptSha256": "816eeb0e89efb2ab34f5725d07a92c96772f7df68b286c4af54f3f7eb5379af7"
+    },
+    "correctedStandaloneAttempt": {
+      "driverExitCode": 1,
+      "completedAssertionGroups": 7,
+      "assertionViewports": [
+        {
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "width": 2560,
+          "height": 1080
+        },
+        {
+          "width": 2560,
+          "height": 1440
+        }
+      ],
+      "viewsIncluded": [
+        "training",
+        "armory"
+      ],
+      "failedViewport": {
+        "width": 3840,
+        "height": 2160
+      },
+      "failedStage": "training",
+      "observedFailure": "HUD became hidden while waiting for a HUD button",
+      "snapshotPlaying": false,
+      "readyResumeLocalLatchVisible": true,
+      "exactWatchdogReasonCaptured": false,
+      "causalAttribution": "undetermined",
+      "statusReasonOutsideFirstScreen": true,
+      "originalFailureAndScreenshotPreserved": true,
+      "ownedContainersGone": 6,
+      "ownedNetworkGone": true,
+      "ownedChromeRemaining": 0,
+      "receiptSha256": "0c9b0f3905aca8136c46472df3cf10ddf66c5aa831c6383253fc37a8239b643b",
+      "originalFailureSha256": "01db5f6b3241d2dfe55263b6121535ead49ec399793a06d391779987de9d3b7a",
+      "screenshotSha256": "c27f8d67b391033de05aa925a728caabdab56cfacc6c2159908827dccf176cf4"
+    }
+  },
+  "subsequentUiOnlyFollowup": {
+    "candidate": "D4",
+    "status": "ui_only_followup_applied_in_working_tree",
+    "existingStatusNodeReused": true,
+    "runningStatusPlacement": "after Resume",
+    "nonRunningStatusPlacement": "home marker",
+    "menuScrollResetOnOpen": true,
+    "statusFontCssPxMin": 12,
+    "statusFontCssPxMax": 20,
+    "wireProtocolChanged": false,
+    "nativeRulesChanged": false,
+    "newImmutableImageRecordedHere": false,
+    "browserAcceptanceClaimed": false,
+    "D3ResultReclassified": false
+  }
+}

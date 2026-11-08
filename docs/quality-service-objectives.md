@@ -135,6 +135,16 @@ precondition before generation B; these results do not complete deployment or
 backout acceptance. The reporter's 17 pure checks cover boundaries, count/window
 integrity, unavailable data, active errors and safe file handling.
 
+The final successful normal-host rehearsal also meets all three budgets. Its
+original bound post-seal response supplies 7,680 Native response observations,
+7,680 lateness observations and 120 event-loop reporting windows across two
+complete minutes, with zero observations above the respective limits. The
+offline report SHA-256 is
+`1a421050555d8632ecd9e6ec70a528ee537a946c28c72c79366af6c02cdf39c7`.
+The [normal-host procedure](quality-operations.md) records the separate successful
+deploy/restore/backout exercise. These two-minute component budgets still do not
+establish room capacity, Internet latency or competitive acceptance.
+
 The launcher must supply the actual inspected image ID and the Native profile
 from the verified image build guard, alongside its baked source revision.
 The deployment rehearsal checks the original guard digest, source tree and

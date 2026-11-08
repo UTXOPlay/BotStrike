@@ -115,6 +115,37 @@ complete it. The pre-protocol server remains an explicit legacy mode without
 these guarantees; receipt-v1 and unknown advertised protocols require an update
 and cannot silently downgrade to that mode.
 
+## Local browser pause policy
+
+The browser independently pauses owned active controls when a relevant state is
+over 400 ms old, its dedicated 50 ms scheduler sentinel has a gap over 400 ms, or
+live/alive receipt-v2 control has no validated application confirmation within
+1,000 ms of the original send-time anchor. These are conservative local pause
+limits, separate from the server's 400 ms authority and two-second idle policy.
+Render intervals and Native tick progress remain separate observations; slow
+rendering alone does not trigger this policy. Buy phases, round end, death,
+practice outcomes, passive tabs and the initial menu do not universally require
+active-input acknowledgements.
+
+The first wake checks old clocks before refreshing them. A trip clears held
+inputs, predictions, pending entry and delivery proof before publishing its new
+local recovery epoch. Neutral traffic continues while the play menu stays open;
+weapon, item, practice and purchase intent also stays blocked. A receipt-v2
+Resume needs an exact originally neutral input sent after the trip in the current
+context, still no more than 1,000 ms old, followed by a new explicit Resume
+action. Queued or repeated ACK callbacks retain the original local send time.
+Server resync, ownership, socket, room and life boundaries cannot carry old
+recovery proof forward. The online match continues throughout the pause.
+
+A legacy server has no exact application proof: the client discloses this,
+waits for a subsequent fresh local state callback and requires manual Resume.
+Unsupported advertised protocols always require Reload. Two non-visible DOM
+attributes, `data-control-recovery-epoch` and `data-control-paused`, let opt-in
+test observers bind synchronous sends to the current local pause. They contain
+no credentials or wire authority and do not enter Native input or signed tapes.
+Missing or invalid observation data is unknown; observers must not reconstruct
+an original send epoch by reading the DOM later in a CDP callback.
+
 ## Recording boundary
 
 Each new tape is opened exclusively with append semantics. The service writes
