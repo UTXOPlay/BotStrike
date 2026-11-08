@@ -6,7 +6,7 @@ export function installWatchdogPageFaults(env){
  const Native=env.WebSocket,rows=[],uiRows=[],delivered=[];let serial=0,dropped=0,invalid=null,bytes=0,socketCount=0,current=null,usedOmission=false,usedTask=false,usedReplay=false,active=false,until=null,startedAt=null,endedAt=null,frozen=null,lastOriginal=null,lastUi;
  const now=()=>env.performance.now(),limits={rows:4096,ui:512,delivered:1024,totalBytes:2*1024*1024,maxMessageBytes:65536,maxSockets:8};
  const keep=(kind,data)=>{const row={kind,index:++serial,atMs:now(),...data},size=new env.TextEncoder().encode(JSON.stringify(row)).length;if(rows.length>=limits.rows||bytes+size>limits.totalBytes){dropped++;invalid='fault_journal_cap';return;}bytes+=size;rows.push(row);};
- const fence=()=>{const root=env.document.documentElement,e=root.getAttribute('data-control-recovery-epoch'),p=root.getAttribute('data-control-paused');return{epoch:typeof e==='string'&&/^(0|[1-9][0-9]{0,15})$/.test(e)&&Number.isSafeInteger(Number(e))?Number(e):null,paused:p==='1'?true:p==='0'?false:null,playing:root.getAttribute('data-playing')==='true'};};
+ const fence=()=>{const root=env.document.documentElement,e=root?.getAttribute('data-control-recovery-epoch'),p=root?.getAttribute('data-control-paused');return{epoch:typeof e==='string'&&/^(0|[1-9][0-9]{0,15})$/.test(e)&&Number.isSafeInteger(Number(e))?Number(e):null,paused:p==='1'?true:p==='0'?false:null,playing:root?root.getAttribute('data-playing')==='true':null};};
  const ui=()=>{const f=fence(),resume=env.document.getElementById('resume'),buy=env.document.getElementById('buy-open'),status=env.document.getElementById('status');return{atMs:now(),...f,resumeDisabled:resume?.disabled??null,buyDisabled:buy?.disabled??null,resume:String(resume?.textContent??'').slice(0,100),status:String(status?.textContent??'').slice(0,400)};};
  const sampleUi=()=>{const v=ui(),signature=JSON.stringify({...v,atMs:0});if(signature===lastUi)return;lastUi=signature;if(uiRows.length>=limits.ui){dropped++;invalid='ui_journal_cap';return;}uiRows.push(v);};
  const end=reason=>{if(active){active=false;endedAt=now();keep('omission_end',{reason,startedAt,endedAt});}};
@@ -35,7 +35,7 @@ export function installWatchdogPageFaults(env){
  };
  const Wrapped=new Proxy(Native,{construct(target,args,newTarget){return attach(Reflect.construct(target,args,newTarget));}});env.WebSocket=Wrapped;
  const click=event=>{if(event.target?.closest?.('#resume'))keep('resume_click',{trusted:event.isTrusted===true,...fence()});};env.document.addEventListener('click',click,true);
- const observer=new env.MutationObserver(sampleUi);observer.observe(env.document.documentElement,{attributes:true,childList:true,characterData:true,subtree:true});sampleUi();
+ const observer=new env.MutationObserver(sampleUi);observer.observe(env.document,{attributes:true,childList:true,characterData:true,subtree:true});sampleUi();
  const api={
   beginOmission(){if(usedOmission||!current||!lastOriginal)throw Error('One omission needs an original actual ACK state');usedOmission=true;frozen=lastOriginal;startedAt=now();until=startedAt+1600;active=true;keep('omission_start',{requestedMs:1600,classification:'synthetic app-message inputAck omission; original wire unchanged',frozenOriginalAck:frozen.safe.originalAck,frozenOriginalTick:frozen.safe.tick,...fence()});return{startedAt,until,frozenOriginalAck:{...frozen.safe.originalAck},frozenOriginalTick:frozen.safe.tick};},
   endOmission(){end('explicit_stop');return endedAt;},

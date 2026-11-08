@@ -321,3 +321,51 @@ Public evidence identities are limited to redacted digests:
 Raw traces, hidden state, credentials and private artifact locations remain
 private. Neither this supplement nor the D3 work in progress changes any prior
 failed classification or establishes human, Internet or capacity acceptance.
+
+## D4 immutable candidate: targeted watchdog and six-size UI checks passed
+
+D4 image `sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd`
+was built from source tree `cb9ab9bc02352763aed9b3302b9a071fa4be3420`.
+The existing status message now appears near Resume during a running match,
+menu reopen resets scrolling, and status text is bounded to 12–20 CSS px.
+No Native rule, model/profile or delivery-protocol change accompanies this UI fix.
+
+The build and static-audit processes both exited 0. The image passed 545 unit
+and 24 host checks. Actual-image inspection preserved 105 protected files,
+21 release files (184,371,322 bytes and original modes), ten exact retained
+engine/verifier pairs and the unchanged Native model/profile. Actual static web
+assets also matched the archived source.
+
+The standalone six-size UI suite passed 15 assertion groups at 1920×1080,
+2560×1080, 2560×1440, 3840×2160, 390×844 and 844×390. It used a measured
+Intel hardware renderer, desktop DPR 0.5 and mobile DPR 1. Independent review of
+all 20 PNGs found no layout blocker in the captured states. This was not a Store
+entry or physical-device performance test; the desktop 4K CSS viewport was not
+a native 4K screenshot-pixel or physical-legibility test.
+
+The final supervised watchdog run confirmed both supervisor and direct Node
+exit 0. One case ran an explicit 800 ms browser task after a known-applied
+original-neutral baseline. The other omitted client-visible application ACKs
+for a fixed 1,600 ms while state delivery continued: the original-send age
+reached about 1,008.1 ms after 35 continuous prerequisite states. These were
+synthetic client stimuli, not network impairment. Both cases required fresh
+current-context neutral proof, one trusted software-generated manual Resume and
+an ACK for new active input. Recovery notices were visible and uncovered with
+panel scrollTop 0. All 405 actual/source replay frames matched exactly, with
+zero unconfirmed tail or capture drops; 12 owned containers, two networks and
+all owned Chrome processes were gone.
+
+Earlier targeted attempts remain unchanged. The first failed on a document-start
+observer before either intended stimulus; each case still had 21 exact replay
+frames. A minimal two-file external-host fix passed 15 pure checks separately
+from the image build. The next attempt passed both functional cases over 410
+exact frames but its observed command exit was 143 and direct Node exit remained
+unknown. It is not credited as exit 0 or attributed to an external cause. The
+final independently supervised run supplies the clean-exit evidence without
+reclassifying either earlier record.
+
+The [D4 checkpoint](acceptance/network-quality-D4.json) records redacted evidence
+digests. D2's failed matrix and D3's failed UI run remain historical results.
+Human A/B, public-WAN, physical-device, capacity and competitive gates remain
+false; issues #30, #12 and #26 remain open. This is a local engineering checkpoint,
+not merge, deployment or full network acceptance.

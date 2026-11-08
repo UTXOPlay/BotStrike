@@ -329,3 +329,36 @@ strict expiry assertion failed and its replay was not run. It provides size
 evidence, not v2 protocol acceptance or a completed Tactical match.
 The 4 GiB run cap, 2 GiB reserve, 512 MiB file bound and overflow-fails-evidence
 policy remain in force.
+
+## Targeted client recovery checks
+
+`tools/botstrike-watchdog-browser.mjs` runs two short, independent practice
+cases against an explicit immutable application image. One injects an 800 ms
+browser task after an exact applied neutral baseline. The other omits only
+`inputAck` from messages delivered to the app for 1,600 ms while retaining the
+original wire observations. These are explicitly synthetic client faults.
+Both require a new local pause, visible recovery guidance, a fresh original-send
+neutral confirmation, a trusted software Resume click and subsequent new input.
+Each captured Native frame is compared with source and retained replay.
+
+Use a new mode-0700 private `qa_dir`, the image's actual source tree, and explicit
+local Chrome/Playwright paths. Preparation writes only the host binding; it does
+not launch a browser or lab. The application never uses a development source
+mount. Host helpers may have separately bound corrections after the image build.
+
+```sh
+node tools/botstrike-watchdog-browser.mjs --prepare-binding \
+  --image "$qa_image" --source-tree "$qa_tree" --repo "$PWD" \
+  --artifacts-base "$qa_dir" --output "$qa_dir/source-binding.json" \
+  --chrome "$qa_chrome" --playwright-entry "$qa_playwright_entry"
+node tools/botstrike-watchdog-browser.mjs --run \
+  --image "$qa_image" --source-tree "$qa_tree" \
+  --binding "$qa_dir/source-binding.json"
+```
+
+The driver binds actual browser and host source hashes, bounds the two cases and
+their captures, and checks exact owned-object cleanup before continuing. Record
+the command exit status separately from case status; a completed case receipt
+alone does not establish a clean process exit. These checks supplement the full
+matrix and do not replace its failed cases, human A/B encounters or physical
+device and Internet acceptance.
