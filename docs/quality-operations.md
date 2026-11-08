@@ -1,5 +1,8 @@
 # Disposable operations rehearsal
 
+See [service objectives and operator response](quality-service-objectives.md)
+for integrity gates, alert actions and the limits of the current baselines.
+
 ## Candidate image construction
 
 `deploy/Dockerfile.network-quality` overlays the service/UI on the retained
@@ -206,3 +209,101 @@ for #12/#26 or replace production rollout approval.
 Helper guard tests run with
 `node --test tests/botstrike-quality-ops.test.mjs`; these tests do not launch native
 matches. The complete opt-in tool supplies the operations integration evidence.
+
+## Normal host/start Docker deployment rehearsal
+
+`tools/botstrike-host-deployment-rehearsal.mjs` is a separate **external host QA**
+runner. The preceding drill starts an isolated runtime with accelerated wall-clock
+scheduling; this runner preserves the image's default `node host/start.mjs`, its
+normal runtime child command and `1000/64` ms scheduling. Native rules/profile
+are unchanged. It accepts only its fixed D2 candidate and fixed base image IDs,
+verifies their actual runtime source closures against the recorded Git tree and
+`01dee05`, and never mounts application source into a running container.
+
+Run it from the real local repository with Node dependencies, Docker access on
+the local Unix socket, both source references available, and the two immutable
+images already present. Supply an explicitly approved, passed operations-fixture
+directory containing the original current and nine retained exports. The report
+SHA and every original export SHA must match; missing or damaged fixtures fail.
+For the recorded acceptance, the approved report SHA is
+`4b1e1e1e86d23be48b7bb3e24246a8bb13070bee56ad8bc2b406717deebfff5e`.
+Keep its directory and all run output private. Use an owned HOME evidence root
+and temp directory; coordinate the exclusive Native lane before `--run`:
+
+```sh
+BOTSTRIKE_NETWORK_LAB_ROOT="$PRIVATE_EVIDENCE_ROOT" \
+HOST_REHEARSAL_FIXTURES="$APPROVED_OPS_FIXTURE_DIRECTORY" \
+HOST_REHEARSAL_FIXTURE_REPORT_SHA256="$APPROVED_OPS_REPORT_SHA256" \
+TMPDIR="$OWNED_HOME_TMPDIR" \
+node tools/botstrike-host-deployment-rehearsal.mjs --run
+```
+
+The runner creates fresh synthetic secrets/guest cookies, an owned ordinary
+bridge with loopback-only published ports, and individually labelled containers.
+It checks actual port publication, not just requested bindings. A separate
+sentinel preserves its HTTP identity, process/container lifecycle and zero
+restart count throughout the game-container replacements. Only exact owned IDs
+are stopped/removed. Application limits are two CPUs, 4 GiB and 256 PIDs, with a
+read-only root, bounded temporary filesystem and owned writable data directory.
+Temporary secret files are deleted;
+a cleanup or diagnostic failure cannot produce a passed run.
+
+The accepted run completed these stages:
+
+- Generation A: two software-controlled guest pilots and eight AI seats completed
+  a normally scheduled 23,040-tick Casual match, sealed it and verified the
+  unchanged profile. All 12,119 observed controller ACKs joined their exact taped
+  tick, original payload and view tick; 12,117 were active ACKs. Public guest
+  authentication and the ordinary host HTTP/WebSocket proxy were used.
+- Live drain rejected new creation/join, let the match finish, then required zero
+  waiting/running/sealing rooms, `pendingIO:0`, `sealingJobs:0` and explicit
+  `drainReady:true`. Cold backup followed confirmed stop. Stop timing must remain
+  strictly below 2,900 ms, excluding this host's three-second child-kill fallback.
+- Generation B: a new D2 container reopened persistent data with the same guest
+  identities, unchanged career/finished export and no duplicate career award.
+  Eleven exports were verified using ten exact pairs: the approved current plus
+  nine retained fixtures, and the newly completed current export. A distinct new
+  match proved fresh neutral and active ACKs, then was explicitly left/cancelled;
+  this startup probe is not a second full sealed match. B drained/stopped before
+  the latest coherent backup was copied for backout.
+- Generation C: the actual fixed base image, with its independently checked
+  `01dee05` source closure, read that latest backup with the same guests, career
+  and finished export. The same eleven exports dispatched to their exact pairs.
+  Old-base `pendingIO/drainReady` are unsupported, not fabricated as zero; no new
+  live match or coherent-backup claim is made on that old implementation.
+
+Actual A/B/C stop times were 192.197/182.492/177.718 ms. The sentinel passed 386
+observations with zero restarts. External terminal inspection confirmed all six
+owned containers and the owned network gone. The accepted run also retained
+normal-clock running, steady, sealing and post-seal scalar quality/resource
+windows. Their source/image/profile provenance is bound to the actual D2 guard;
+the launcher supplies the validated existing profile as operator metadata.
+Earlier samples with unknown profile provenance remain unknown. Runtime, gateway,
+Native and verifier components retain their distinct measurement boundaries;
+clients and this QA driver are outside the application resource limit. These
+windows do not establish a capacity SLO, browser FPS or physical latency.
+
+The final host driver is post-build SHA
+`a9c1faf434aab08d0dead2ee0ee86103da160fdb89241467a9e3f7f5dc092eb7`;
+its 23 focused pure checks and integration receipt are separate from D2's baked
+CI totals. See `normalHostExercise` in
+[the redacted D2 checkpoint](acceptance/network-quality-D2.json) for receipt
+digests. Private input journals retain bounded sent/context/ACK evidence without
+cookies, control tokens or receipt nonces. Historical ACKs remain valid only at
+their already joined tick; later life-fence neutral fallback creates no new ACK
+or active credit. All active payload/view checks remain literal.
+
+The original internal-network attempt remains failed before Native: this local
+Docker configuration retained requested bindings but did not publish a host
+port. A controlled sentinel probe recorded the difference. Two subsequent
+complete-A attempts remain failed at over-strict audit contracts for life-fence
+neutralisation and prior historical ACKs. Their original exits/receipts were not
+rewritten; independent guard reanalysis is separately labelled. The successful
+full chain used fresh identities and the final reviewed guard.
+
+This is disposable local standalone-host orchestration, not a production rollout,
+Parent Store deployment, no-downtime migration, human/WAN/physical-device or
+capacity acceptance. Retained exports are original-engine synthetic fixtures,
+not historical customer saves. Run the lightweight guard tests with
+`node --test tests/botstrike-host-deployment-rehearsal.test.mjs`; they do not start
+Docker or Native. Full integration remains explicitly opt-in.

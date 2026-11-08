@@ -6,6 +6,10 @@ freshness, recovery and inspection work for #30, #12 and #26. Those issues remai
 open. No production rollout, capacity certification or human acceptance follows
 from the engineering results below.
 
+The [redacted D2 evidence checkpoint](acceptance/network-quality-D2.json) records
+the immutable image/tree, per-case outcomes and independent replay supplement.
+It deliberately keeps network and issue acceptance false.
+
 The current follow-up replaces receipt-v1 recovery with envelope version 2 and
 an explicit, controller-bound Native application acknowledgement. The previous
 `last_seq >= neutralSeq` check could accept an AI sequence before a fresh neutral
@@ -66,23 +70,145 @@ navigation. Those two selected trials do not replace the original 31-case matrix
 or establish version 2 acceptance. Source-mounted version 2 browser compatibility
 checks are likewise development evidence until repeated against a frozen image.
 
+## Immutable candidate D2
+
+Receipt version 2 binds source tree
+`839bdb9c5b9783cba6885f441b0729baa982b5c8` to application image
+`sha256:09eadfd30a716fefd53a35b35362bad0831d0fc8cd1c46cc1e81a020553dd3d9`.
+Its Bookworm build passed 423 unit and 24 host checks without skips or failures.
+Actual-image inspection matched the archived source and build guard, preserved
+all 21 release files byte-for-byte and mode-for-mode, and retained all ten exact
+engine/profile pairs. The Native model and portable profile above are unchanged.
+The signed commit `d776050` records the earlier C checkpoint, not this D2 tree.
+
+- The healthy ten-controller Tactical exercise completed 13 rounds, 13:0, over
+  30,643 ticks. Every actual/source-built/retained state hash, full replay trace,
+  final state and spec matched, and the signed export verified. All ten sockets
+  stayed open to completion, with at least 1,395 distinct active applications per
+  seat and no resync or unexpected close. This automated strategy is not a map
+  balance or human-match result.
+- A separate full Tactical exercise applied a real 1,002.53 ms loopback TCP
+  blackhole, with 231 kernel drops and 53 retransmissions. Software held intent
+  was released 670.65 ms after the cut. All ten fresh neutral proofs matched
+  actual Native tick 1,895; a second explicit software signal introduced new
+  intent. The complete 32,203-tick match then sealed, with every actual/source/
+  retained state, trace, final state and signature verified. Actual restore-start
+  was audited with a bounded backlog and ongoing checks; no released old action
+  passed the check. The 400 ms freshness, 2-second activity and 20-second recovery
+  limits were not widened. This is one shared-kernel cohort, not independent WAN
+  fairness, physical input or a human Resume gesture.
+- Fourteen operations stages passed with current plus nine historical exact-pair
+  restore, drain with zero pending I/O, fixed `01dee05` source backout, durable
+  career recovery and protection. Both software pilots had 1,469 verified
+  known-sent acknowledgements. A separate real 65,536-byte career tmpfs produced
+  ENOSPC, protected the only old verified source, committed once after recovery
+  and stayed idempotent. The original HOME source and an independent 795,725,105
+  byte snapshot matched before and after the disk drill. These are disposable
+  data and bounded component measurements, not production capacity certification.
+- Four-way cached-client/legacy-server compatibility, same-socket new-room
+  neutral gating, two-way tab ownership, browser diagnostics and communications
+  passed against the immutable application. Actual Store launch/fullscreen/
+  rotation/input-mapping checks covered all six required sizes. True 4K/DPR1
+  screenshots were reviewed without a layout blocker. Physical touchpads,
+  notches, refresh-rate and gamepad hardware remain separate gates.
+- The Store recovery trial applied a real 1,078 ms TCP outage with ten kernel
+  drops. Its first neutral proof was retained as history; after reconnect, a new
+  current-socket neutral proof preceded one trusted software Resume gesture and
+  new movement. All 1,037 raw Native frames were retained without drops; no old
+  held or expired action was observed. The same iframe, room and sandbox
+  attributes survived. This does not establish opaque browser-game sandbox or
+  human-input acceptance.
+
+The fault host runner, Store multi-barrier selector and matrix analyser received
+separately hashed host-only corrections after the immutable application build.
+They do not change D2 application, Native, profile or replay bytes. Their own
+focused checks and actual-run identities are separate from the build's 423/24
+counts. Namespace IDs alone are not clock identity: the external fault runner
+verifies actual zero monotonic/boottime offsets and live host-bracketed samples
+before changing any qdisc. Earlier precondition failures remain failed records.
+The original Store trial whose marker crossed a reconnect remains failed, too.
+
+The first D2 matrix run was stopped after three completed failed cases and one
+in-flight case when the analyser was shown to reject valid floating-point
+`issuedAt + 400` deadlines and conservative non-neutral ACKs for an original
+no-op weapon request. Corrections preserve the exact deadline construction and
+original-intent-plus-final-packed neutral rule, without an epsilon or longer
+lease. Independent reanalysis used new output directories; original reports,
+archives and failed classifications were not edited. The new full 31-case run
+with the corrected, separately bound host analyser completed with **12 passes,
+19 failures, zero unsupported and zero pending cases**. Its final matrix SHA-256
+is `eba9deb0774d9ea18eb3a5e8b1a27ed644a622083442f0302eee136d85099ec7`.
+The driver exited with status 1, as expected for failed assertions; the original
+failed classifications remain intact. All 31 owned container/network cohorts,
+browser profiles and the driver were confirmed gone, and the 16 bound runtime
+source files stayed unchanged.
+
+The run captured 159,767 Native frames without capture loss. Thirty cases
+confirmed 154,625 actual/source/retained frame hashes and complete tape replay;
+seven unsent shutdown-tail frames are explicitly unconfirmed. The remaining
+5,142-frame render/CPU case exited its checks before replay. A separate
+independent audit verified all twelve original archives, all 5,142 actual/source/
+retained frame hashes, trace/final/spec and its two available shot witnesses,
+with no additional tail. Its completion receipt SHA-256 is
+`bf00145853f6109ef838836be5b3aebd0172e6578e3a32b9735d1bc1b190ee60`.
+All 159,767 captured frames therefore have exact replay evidence across the
+original reports and independent supplement. The original failed render case,
+its missing replay field and all original files remain unchanged.
+
+Passing cases included the full required ARC/ION/RAIL and new-life action
+catalog, with six available shot witnesses matching RNG and Native damage;
+actual three-second bidirectional outage recovery; real bridge IP change;
+and the Tactical expiry/ownership/life/purchase/departure/capacity sequence.
+The latter held an actually acknowledged same-context receipt for 601 ms with
+nine new challenges and observed a real expired HTTP rejection. Its separate
+obsolete outage purchase was classified independently. That matrix case ends
+by cancellation; the complete Tactical match/sealing evidence is supplied by
+the separate immutable D2 exercises above.
+
+Failures include actual pauses, exact-ACK observation timeouts, route failures,
+missing takeover and unmet action/measurement prerequisites. Four navigation
+failures occurred before shaping. Another case changed qdiscs but failed to
+sample the settled condition before its requested long outage was triggered.
+Two cases failed while reading TCP state; matching daemon time windows contain
+OCI `procReady not received` errors. That association is temporal, without an
+independently bound ExecID, and the precise PID/OOM cause is unknown. The suspended-tab case
+did execute its neutral/manual/new-intent recovery, but its later observation
+error keeps the whole case failed. These are not evidence that every requested
+fault occurred or that every failure was caused by transport.
+
+One alleged three-shot ARC outcome was independently shown to use HELIX-3:
+the three actual frames had controller takeover and the original three-round,
+four-tick burst semantics. The fixture's expected ARC assumption had become
+stale. The earlier missing-takeover interval remains a separate failure; neither
+that interval nor a missing first-sequence witness proves those three shots were
+AI-origin or a duplicated input. No Native firing rule was changed.
+
+No competitive network envelope or Internet SLO follows from this run. A
+separate live/alive browser interval with fresh states but about three seconds
+without a new matched controller ACK exposes a client control-status gap that
+requires a client follow-up; D2 results cannot validate that future candidate.
+
 ## Remaining acceptance work
 
-- Freeze and build version 2 with exact source/image/profile binding; run the full
-  unit/host checks and preserve the unchanged Native rules and retained pairs.
-- Re-run all 31 impairment cases with exact public application ACKs, independent
-  same-tick private Native proof, corrected navigation and the rigorous purchase
-  expiration test. Retain failures and actual kernel counters.
-- Complete an actual TCP-fault/release/fresh-neutral/new-intent sequence with all
-  ten continuously controlled Tactical slots, then finish, seal and compare every
-  state against both source and retained replay. A same-namespace cohort is not
-  independent A/B WAN fairness or a human recovery trial.
-- Re-run final immutable Store delivery/fullscreen/input mapping and all six
-  viewport checks, compatibility, operations/restore/rollback and real ENOSPC as
-  required by the changed service/client paths. Prior C results remain distinct.
-- Document the measured transport envelope and availability limits. Keep real
-  internet, physical input/refresh-rate and human peek/cover/strafe/listening/map
-  judgments separate. Automated browsers are not human participants.
+- Inspect the failed conditions, kernel counters and authoritative/rendered
+  action timelines. Keep original failures and unconfirmed shutdown tails
+  explicit. Address the demonstrated client control-status gap as a separately
+  built and verified candidate.
+- Finish the supported transport envelope and failed-condition analysis.
+  [Service objectives](quality-service-objectives.md) documents integrity
+  objectives, operator actions, the interim preview WebSocket decision and
+  measured normal-clock engineering budgets. The private offline reporter has
+  17 pure checks and actual unknown/bound-snapshot checks; those component
+  budgets do not establish an Internet or competitive-play SLO.
+- Exercise actual normal `host/start.mjs` container drain, cold backup,
+  recreation and fixed-image read backout, with an independent unrelated-service
+  sentinel. The component-level code-backout drill above does not prove that
+  deployment sequence.
+- Review and commit the final host-only tool fixes and redacted evidence; keep
+  their identity distinct from the immutable application build.
+- Obtain the human A/B encounters required by #12. Keep real-internet, physical
+  input/refresh-rate and human peek/cover/strafe/listening/map judgments separate.
+  Automated browsers are not human participants. PR #46 remains a separate draft.
 
 Metrics remain bounded, private and source/image/profile bound. Browser sharing
 is opt-in and scalar-only. Runtime peer RTT, gateway outer RTT and browser app RTT
@@ -90,3 +216,50 @@ are different observations. Unknown process/resource measurements stay unknown.
 Private raw captures can contain hidden Native state and synthetic credentials;
 only reviewed, redacted summaries belong in public issues or PRs. Myelin remains
 verification of the exact recorded off-chain host replay, not CKB settlement.
+
+## D3 working tree: control watchdog, acceptance pending
+
+The client watchdog is now applied to the working tree for a proposed D3. It
+uses 400 ms state-age and scheduler-gap limits, plus a 1,000 ms live/alive
+exact-ACK limit anchored to the acknowledged input's **original send time**.
+A trip clears held intent, forces neutral input and latches a manual Resume;
+a fresh proof alone does not resume play. These are local control-pause
+policies, not new Native rules, a longer server receipt lease or a network SLO.
+
+The applied changes passed 35 focused pure checks and the web build.
+Real-browser watchdog acceptance has not passed. No immutable D3 image has been
+built, and these working-tree changes have not been pushed, filed as a new PR
+or deployed. Pure checks/build success are not browser or D3 release evidence;
+the immutable D2 results above do not validate this new client.
+
+## Single V3 profiler supplement: diagnostic incomplete
+
+One separately bound profiled navigation supplement used the unchanged D2
+image/source. Navigation completed with zero resyncs. All 3,449 captured
+actual/source-built/retained state hashes matched, with 3,449 taped frames and
+no unconfirmed tail. This was an unfinished navigation diagnostic, not a newly
+sealed match. Its original result remains `diagnostic_incomplete`, exit 1.
+
+The CPU profile validated with 79,340 samples and 2,643 nodes. The trace hit its
+unchanged 128 MiB (134,217,728-byte) local output cap and retained only an exact
+prefix; full-window tracing remained incomplete. Chrome's internal
+`dataLossOccurred:false` does not remove that local truncation. The original
+failed capture was preserved; no retry, enlarged cap or reduced category set
+was used to turn it into a pass.
+
+Observed maximum long tasks were 68 ms and 76 ms for the two browsers. The
+820 ms stall did not reproduce. Valid CPU samples and partial trace observations
+do not establish a GPU, shader, JavaScript, GC or OS root cause, or an application
+optimization. Observer overhead remains part of this diagnostic cohort; owned
+resources were cleaned up.
+
+Public evidence identities are limited to redacted digests:
+
+- V3 fixture SHA-256: `4cf7afa9d241fbc98a20a97ad358d2f6cd4f11ec73dcf868858223d034ee42fe`.
+- Original summary SHA-256: `18f74a2bb31970372aed713c817fb3d7bc7222fd66d2427ab290f8ffac05ab9a`.
+- Independent all-state check SHA-256: `3a58c7919c8b8812c36c3dff466e02d4ebfb00a6cf35f22e3b181e792298e2ef`.
+- Truncated trace-prefix SHA-256: `b777dd3f6b3199f1aea0a942fe6844c4f568f8779001d1e40ceae9656a6fdf31`.
+
+Raw traces, hidden state, credentials and private artifact locations remain
+private. Neither this supplement nor the D3 work in progress changes any prior
+failed classification or establishes human, Internet or capacity acceptance.

@@ -124,7 +124,7 @@ test('absolute delivery expiry rejects delayed high-sequence held input and does
  try{
   const made=await f.action(0,training),room=f.service.rooms.get(made.body.room.id);await until(()=>room.state?.tick>0);const owner=await f.connect(0);await owner.delivery.ready(room.id);
   const staleDelivery=owner.delivery.get(room.id);owner.send({type:'input',room:room.id,delivery:staleDelivery,input:{...neutral(),seq:1,x:1,fire:true}});await until(()=>room.state.players[0].last_seq===1);
-  const ticket=room.inputDelivery[0],admission=f.events.findLast(e=>e.type==='input_arrival'&&e.seq===1).admission;assert.ok(ticket.deadlineAt>admission.issuedAt);assert.equal(ticket.deadlineAt-admission.issuedAt,400);
+  const ticket=room.inputDelivery[0],admission=f.events.findLast(e=>e.type==='input_arrival'&&e.seq===1).admission;assert.ok(ticket.deadlineAt>admission.issuedAt);assert.equal(ticket.deadlineAt,admission.issuedAt+400);
   await until(()=>performance.now()>ticket.deadlineAt+40);const beforeSeq=room.inputs[0].seq,beforeSeen=room.seen[0];
   owner.rawSend({type:'input',room:room.id,delivery:staleDelivery,input:{...neutral(),seq:200,x:-1,fire:true,jump:true,item:3,weapon:3}});
   await until(()=>f.events.some(e=>e.type==='input_rejected'&&e.seq===200&&e.reason==='expired'));

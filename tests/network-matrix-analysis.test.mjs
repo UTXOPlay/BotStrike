@@ -62,3 +62,40 @@ test('the live recovery waiter cannot use AI progression or a historical exact A
  inputs.push({...input,index:3,proofGeneration:2,nodeUnixMs:1100,minTick:45,input:{seq:11,x:0,y:0,throw_mode:2}});snapshots.push({...snapshot,index:4,proofGeneration:2,tick:49,players:[{slot:0,life:1,last_seq:11}],inputAck:{version:1,seq:11,tick:48,life:1,neutral:true}});assert.equal((await waitBrowserAppliedInput(actor,{afterAt:1050,neutral:true,timeout:15})).ack.seq,11);
  actor.control.active=false;await assert.rejects(waitBrowserAppliedInput(actor,{afterAt:1050,neutral:true,timeout:15}),/exact Native input ACK/);
 });
+
+const boundaryIssued=7823.925204;
+function nextFloat(value,direction=1n){const buffer=new ArrayBuffer(8),view=new DataView(buffer);view.setFloat64(0,value);view.setBigUint64(0,view.getBigUint64(0)+direction);return view.getFloat64(0);}
+function boundaryAckRows(deadline=boundaryIssued+400,applied=boundaryIssued+20){
+ const room='boundary',frame=(tick,seq)=>({type:'native_frame',room,at:20000+tick,state:{tick,players:[{last_seq:seq,life:1}],events:[]}});
+ return [{type:'room_started',room,config:{bots:Array(10).fill(false)}},frame(1,0),{type:'input_arrival',room,slot:0,seq:7,at:10010,input:{seq:7,x:0,y:0,preview_item:2},admission:{generation:3,issuedAt:boundaryIssued,deadlineAt:deadline}},{type:'native_input',room,tick:2,at:10020,monotonicMs:applied,inputs:[[7,0,0,0,0,256,null,null,0,0,1,0,6]]},{type:'input_ack',room,slot:0,seq:7,tick:2,life:1,neutral:true,generation:3},frame(2,7)];
+}
+test('ACK TTL uses the exact issued-plus-400 construction across8192 and rejects a one-ULP extension',()=>{
+ const deadline=boundaryIssued+400;assert.notEqual(deadline-boundaryIssued,400,'Subtraction must expose the actual cancellation boundary');
+ const options={roomId:'boundary',requiredInputAcks:[{slot:0,seq:7,tick:2,life:1}]},valid=analyzeRuntimeRows(boundaryAckRows(),options);assert.deepEqual(valid.failures,[]);assert.equal(valid.requiredInputAckProofs[0].verified,true);
+ const invalid=analyzeRuntimeRows(boundaryAckRows(nextFloat(deadline)),options);assert.ok(invalid.failures.some(row=>row.code==='invalid_authoritative_input_ack'));assert.equal(invalid.requiredInputAckProofs[0].verified,false);
+});
+test('pulse TTL accepts exact construction at8192 boundary but a one-ULP extended original ticket is invalid',()=>{
+ function rows(deadline){return[{type:'room_started',room:'pulse-boundary',config:{bots:Array(10).fill(false)}},{type:'input_arrival',room:'pulse-boundary',slot:0,seq:7,input:{fire:true},admission:{issuedAt:boundaryIssued,deadlineAt:deadline,generation:3}},{type:'native_input',room:'pulse-boundary',tick:1,monotonicMs:boundaryIssued+20,inputs:[[7,0,0,0,0,257,null,null,0,0,1]],pulseTickets:[{slot:0,field:'fire',sourceSeq:7,issuedAt:boundaryIssued,deadlineAt:deadline,generation:3,life:1}]}];}
+ const valid=analyzeRuntimeRows(rows(boundaryIssued+400),{roomId:'pulse-boundary',requirePulseTickets:true});assert.deepEqual(valid.failures,[]);assert.equal(valid.pulseSummary.observed,1);const invalid=analyzeRuntimeRows(rows(nextFloat(boundaryIssued+400)),{roomId:'pulse-boundary',requirePulseTickets:true});assert.ok(invalid.failures.some(row=>row.code==='pulse_receipt_correlation_missing'));
+});
+test('HTTP purchase TTL retains its independent exact construction and rejects a one-ULP extension',()=>{
+ function rows(deadline){const ticket={slot:0,requestId:1,item:12,life:1,issuedAt:boundaryIssued,deadlineAt:deadline,generation:3};return[{type:'room_started',room:'buy-boundary',config:{bots:Array(10).fill(false)}},{type:'purchase_arrival',room:'buy-boundary',...ticket,accepted:true},{type:'native_input',room:'buy-boundary',tick:1,monotonicMs:boundaryIssued+20,inputs:[[7,0,0,0,0,256,null,12,0,0,1]],purchaseTickets:[ticket]},{type:'native_frame',room:'buy-boundary',state:{tick:1,players:[{last_seq:7,life:1}],events:[{kind:'buy',actor:0,value:12}]}}];}
+ const valid=analyzeRuntimeRows(rows(boundaryIssued+400),{roomId:'buy-boundary'});assert.deepEqual(valid.failures,[]);assert.equal(valid.purchases[0].nativeConfirmed,true);const invalid=analyzeRuntimeRows(rows(nextFloat(boundaryIssued+400)),{roomId:'buy-boundary'});assert.ok(invalid.failures.some(row=>row.code==='purchase_receipt_correlation_missing'));
+});
+test('exact construction does not extend authority: send at deadline fails while the immediately preceding float is valid',()=>{
+ const deadline=boundaryIssued+400,before=analyzeRuntimeRows(boundaryAckRows(deadline,nextFloat(deadline,-1n)),{roomId:'boundary'});assert.deepEqual(before.failures,[]);assert.equal(before.inputAckCount,1);
+ const at=analyzeRuntimeRows(boundaryAckRows(deadline,deadline),{roomId:'boundary'});assert.ok(at.failures.some(row=>row.code==='invalid_authoritative_input_ack'));assert.equal(at.inputAckCount,0,'A later frame receipt must not renew the original send deadline');
+});
+
+test('ACK neutral is the exact conjunction of the original request and final packed input, including repeated weapon0',()=>{
+ const repeated=boundaryAckRows();repeated[2].input.weapon=0;repeated[4].neutral=false;
+ const valid=analyzeRuntimeRows(repeated,{roomId:'boundary'});assert.deepEqual(valid.failures,[]);assert.equal(valid.inputAckCount,1,'A filtered repeat selection is observable as an ordinary false ACK');
+ repeated[4].neutral=true;assert.ok(analyzeRuntimeRows(repeated,{roomId:'boundary'}).failures.some(row=>row.code==='invalid_authoritative_input_ack'),'A repeat weapon request cannot become a recovery-neutral proof');
+ const latched=boundaryAckRows();latched[3].inputs[0][5]|=1;latched[4].neutral=false;assert.deepEqual(analyzeRuntimeRows(latched,{roomId:'boundary'}).failures,[],'A neutral base with a final latched action can only have a false ACK');latched[4].neutral=true;assert.ok(analyzeRuntimeRows(latched,{roomId:'boundary'}).failures.some(row=>row.code==='invalid_authoritative_input_ack'));
+});
+
+test('private ACK requires an existing immediately previous player in the same life, matching backend construction',()=>{
+ const valid=boundaryAckRows();assert.deepEqual(analyzeRuntimeRows(valid,{roomId:'boundary'}).failures,[]);
+ const crossLife=structuredClone(valid);crossLife[1].state.players[0].life=2;
+ for(const rows of [crossLife,valid.filter((_,index)=>index!==1)]){const result=analyzeRuntimeRows(rows,{roomId:'boundary',requiredInputAcks:[{slot:0,seq:7,tick:2,life:1}]});assert.ok(result.failures.some(row=>row.code==='invalid_authoritative_input_ack'));assert.equal(result.inputAckCount,0);assert.equal(result.requiredInputAckProofs[0].verified,false);}
+});

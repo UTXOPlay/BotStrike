@@ -217,10 +217,13 @@ ports and automatic Node socket recovery without starting a Native match. These
 checks do not establish that the 31-case engineering matrix has passed.
 
 Even an all-passed engineering matrix keeps `acceptanceComplete:false`,
-`networkAcceptance:false` and `humanParticipants:0`. Remaining mandatory work is
-complete ten-controller Tactical match/sealing, human A/B peek/cover latency
-dispute review, physical mouse/controller/mobile and 60/120/144 Hz display cohorts,
-real Internet conditions, and the operator's supported-threshold decision.
+`networkAcceptance:false` and `humanParticipants:0`. Its cancellation-based
+Tactical case requires separate complete ten-controller match/sealing receipts;
+immutable D2's independent healthy and fault-completion receipts are recorded in
+[network quality progress](network-quality-progress.md). Human A/B peek/cover
+latency dispute review, physical mouse/controller/mobile and 60/120/144 Hz
+display cohorts, real Internet conditions and the operator's supported-threshold
+decision remain separate gates.
 Neither #12 nor #26 is closed by generating this tool or by green helper tests.
 
 ```sh
