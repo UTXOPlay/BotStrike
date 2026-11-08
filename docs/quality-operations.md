@@ -79,8 +79,18 @@ chain at a time. Coordinate with other native experiments before starting it.
    Changed/missing bytes, duplicate names and escaping paths fail before matches.
 2. An actual `createBotStrike` runtime process runs two authenticated automated
    combat clients with eight native bots through a complete match and successful
-   seal. The clients continuously submit movement/fire inputs; native acknowledgements
-   and human-frame career attribution are checked. These clients are not humans.
+   seal. The clients continuously submit movement/fire inputs. Each pilot's
+   progress requires a canonical controller-only `inputAck` for an exact input
+   in its bounded 256-entry known-sent map, in the same owner/room/life context.
+   Its ACK tick must follow the send-time Native tick and not exceed the snapshot
+   tick; ACK sequence must equal that snapshot's Native sequence. Owner/control,
+   resync, room/life change and socket close clear pending proof. Scalar Native
+   `last_seq` remains separately labelled diagnostic data and never authorizes
+   progress. The current envelope must advertise receipt protocol v2; neither a
+   missing wire ACK nor an AI sequence collision counts. The pre-close pilot
+   evidence and human-frame career attribution are checked. These clients are
+   not humans. Historical rollback remains a separate read-only HTTP exercise;
+   it does not silently downgrade the current pilots to an older protocol.
 3. The private drain endpoint is requested while that match is running. New match
    creation is rejected; the existing match completes; running/waiting/sealing
    occupancy reaches zero and private `pendingIO` is zero with `drainReady:true`

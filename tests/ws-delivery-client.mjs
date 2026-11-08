@@ -8,13 +8,14 @@ export function trackSocketDelivery(socket){
   else if(message.type==='input_resync')current=null;
   else if(message.type==='state'){
    const room=message.room,delivery=message.delivery,life=room?.state?.players[room.slot]?.life;
-   current=active&&room?.id&&Number.isSafeInteger(life)&&delivery?.version===1&&typeof delivery.nonce==='string'?{room:room.id,life,tick:room.state.tick,delivery:Object.freeze({...delivery})}:null;
+   const ack=message.inputAck,inputAck=ack?.version===1&&Number.isSafeInteger(ack.seq)&&ack.seq>0&&Number.isSafeInteger(ack.tick)&&ack.tick>0&&ack.life===life&&typeof ack.neutral==='boolean'?Object.freeze({...ack}):null;
+   current=active&&room?.id&&Number.isSafeInteger(life)&&delivery?.version===2&&typeof delivery.nonce==='string'?{room:room.id,life,tick:room.state.tick,delivery:Object.freeze({...delivery}),inputAck}:null;
   }
  });
  socket.on('close',()=>{active=false;current=null;});
  const get=(room,life)=>current?.room===room&&(life===undefined||current.life===life)?current.delivery:undefined;
  return{
-  get,snapshot:()=>current?{...current}:null,
+  get,ack:room=>current?.room===room?current.inputAck:null,snapshot:()=>current?{...current}:null,
   async ready(room,{life,timeout=5000}={}){const end=performance.now()+timeout;while(performance.now()<end){const delivery=get(room,life);if(delivery)return delivery;await new Promise(resolve=>setTimeout(resolve,5));}throw Error('A current delivery receipt did not arrive on this client WebSocket');},
   envelope(room,input){const delivery=get(room);if(!delivery)throw Error('Input requires an actual current-context WebSocket state receipt');return{type:'input',room,input,delivery};},
  };

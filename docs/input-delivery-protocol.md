@@ -7,8 +7,8 @@ a cooperating client returned state bytes; it does not prove a rendered pose,
 human attention, or a human source for an input.
 
 Every WebSocket `control` message advertises
-`inputProtocol: {version: 1, maxAgeMs: 400}`. A controller's `state` message carries
-an outer `delivery: {version: 1, nonce}` once its room has a Native state and life.
+`inputProtocol: {version: 2, maxAgeMs: 400}`. A controller's `state` message carries
+an outer `delivery: {version: 2, nonce}` once its room has a Native state and life.
 Other connections receive `delivery: null`. The nonce is a random 16-byte value,
 belongs to that socket's control epoch, room, and Native life, and is kept in a
 bounded 24-entry store. A successful state-send callback marks that receipt
@@ -18,7 +18,7 @@ establish client receipt.
 The client echoes the exact outer delivery object on every input:
 
 ```json
-{"type":"input","room":"<room>","delivery":{"version":1,"nonce":"<nonce>"},"input":{"seq":1,"...":"normal input fields"}}
+{"type":"input","room":"<room>","delivery":{"version":2,"nonce":"<nonce>"},"input":{"seq":1,"...":"normal input fields"}}
 ```
 
 The authenticated `POST /api/action` purchase body also carries outer `delivery`,
@@ -27,7 +27,7 @@ The owner token alone cannot authorize a purchase. Native phase, life, and
 `action_life` checks continue to apply. Spectating, hero selection, readiness,
 and the existing two-second idle takeover policy retain their previous rules.
 
-An input ACK must identify a written, current-generation receipt. Its absolute
+A receipt echo must identify a written, current-generation receipt. Its absolute
 deadline is **400 ms after the runtime issued the state**, measured with the
 runtime monotonic clock. Arrival time, reusing a nonce, and ACKing later receipts
 cannot extend that deadline. The service retains the exact nonce, deadline, and
@@ -80,6 +80,41 @@ receives `control` with `active: false` followed by
 state messages are suppressed, and `claim` repeats the update error. The room
 and Native process continue. There is no direct-runtime compatibility bypass.
 
+## Explicit Native application acknowledgement
+
+A controller's WebSocket state also contains `inputAck`, either `null` or exactly
+`{version: 1, seq, tick, life, neutral}`. This is separate from the version 2
+receipt envelope. HTTP state and other tabs do not carry controller-bound proof.
+The service constructs it only after pairing an actual final packed input with
+its Native frame: takeover must be set, the original base ticket must still be
+fresh at dispatch and belong to the current socket/owner/room/life, and the
+Native player must have advanced from a different sequence to exactly `seq` in
+that frame. Safety-neutralized recording rewrites grant no acknowledgement.
+Owner, life, room, release, reset and failure transitions revoke stored proof.
+
+`neutral` requires both the original admitted client intent and the final packed
+input to have no gameplay action. Movement, stance/action flags, equipment use,
+weapon selection, purchase and practice commands count as actions. Persistent
+preview equipment and throw-mode settings do not. A final latched action can
+therefore make `neutral` false even when the base client packet was neutral.
+
+The browser keeps at most 256 actually sent inputs in the current context. It
+accepts a wire acknowledgement only for one of those exact sequences, with the
+same life, matching public Native `last_seq`, and an application tick after its
+last observed tick at send and no later than the received state. It uses only
+that validated acknowledgement for input latency; legacy input-confirmation latency
+remains unavailable. An AI-generated
+`last_seq`, even one exactly equal to a sent sequence, grants no proof by itself.
+
+Initial ownership and reconnect/claim recovery wait for an actually acknowledged
+neutral input. A stale-action resync additionally clears held inputs, closes play
+and requires an explicit Resume gesture after the neutral barrier. If the first
+neutral packet was coalesced, any later actually sent neutral in the same context
+can satisfy the barrier. Neither a sequence inequality nor a fabricated ACK may
+complete it. The pre-protocol server remains an explicit legacy mode without
+these guarantees; receipt-v1 and unknown advertised protocols require an update
+and cannot silently downgrade to that mode.
+
 ## Recording boundary
 
 Each new tape is opened exclusively with append semantics. The service writes
@@ -109,7 +144,10 @@ receipt deadline, and explicit ACK history. Fixed counters include
 The private observer emits `input_arrival` only after admission, with
 `accepted: true` and receipt timing/generation metadata. Rejections emit
 `input_rejected` with fixed `reason` and `stage` values (`arrival`, `native_step`,
-or `buy`); raw nonces are never emitted.
+or `buy`); raw nonces are never emitted. A paired `input_ack` records only
+`room`, `slot`, `version`, `seq`, `tick`, `life`, `neutral` and receipt generation;
+it is emitted before the corresponding private `native_frame`, without a nonce
+or control token.
 
 Successful HTTP purchase admission emits private `purchase_arrival` with a
 room-local increasing `requestId`, slot, item, life, issued/deadline monotonic

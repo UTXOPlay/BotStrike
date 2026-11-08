@@ -8,7 +8,7 @@ import {classifyWebGLRenderer} from '../tools/network-browser-actors.mjs';
 
 export const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 export const angle=value=>Math.atan2(Math.sin(value),Math.cos(value));
-export const neutral=input=>!!input&&input.x===0&&input.y===0&&['fire','reload','walk','crouch','jump','ability','interact','scope','drop'].every(key=>!input[key])&&!input.item&&!input.practice&&input.weapon==null;
+export const neutral=input=>!!input&&input.x===0&&input.y===0&&['fire','reload','walk','crouch','jump','ability','interact','scope','drop'].every(key=>!input[key])&&!input.item&&!input.practice&&input.weapon==null&&input.buy==null;
 export function privateArtifacts(directory){
  fs.mkdirSync(directory,{recursive:true,mode:0o700});const stat=fs.lstatSync(directory);
  assert.ok(stat.isDirectory()&&!stat.isSymbolicLink()&&(process.getuid?.()===undefined||stat.uid===process.getuid()),'QA artifacts require an owned directory');
@@ -19,18 +19,26 @@ export async function until(predicate,{timeout=15000,label='Store observation'}=
  const end=performance.now()+timeout;while(performance.now()<end){const value=await predicate();if(value)return value;await pause(20);}throw Error(label+' timed out');
 }
 export function observeStoreProtocol(page,origin,{limit=16384}={}){
- const observation={inputs:[],controls:[],resyncs:[],snapshots:[],buys:[],socketCloses:[],errors:[],dropped:0};let eventIndex=0;
+ let nextSocketGeneration=0,current=null;const observation={inputs:[],controls:[],resyncs:[],snapshots:[],buys:[],socketCloses:[],errors:[],dropped:0,get currentContext(){return current?{...current}:null;}};let eventIndex=0;
  const keep=(key,value)=>{if(observation[key].length>=limit){observation.dropped++;return;}observation[key].push({eventIndex:++eventIndex,nodeAtMs:performance.now(),nodeUnixMs:Date.now(),...value});};
  page.on('websocket',socket=>{
   const url=new URL(socket.url());if(url.origin!==origin.replace(/^http/,'ws')||url.pathname!=='/games/botstrike/api/socket')return;
-  socket.on('close',()=>keep('socketCloses',{closed:true}));
+  const socketGeneration=++nextSocketGeneration;let ownerToken=null;
+  const context={socketGeneration,ownerEpoch:0,proofGeneration:0,connected:true,controller:false,protocolVersion:null,maxAgeMs:null,room:null,life:null,nativeTick:null};current=context;
+  const isCurrent=()=>current===context;
+  socket.on('close',()=>{context.connected=false;context.controller=false;context.proofGeneration++;ownerToken=null;keep('socketCloses',{closed:true,currentSocket:isCurrent(),socketGeneration,ownerEpoch:context.ownerEpoch,proofGeneration:context.proofGeneration});});
   socket.on('framesent',({payload})=>{let value;try{value=JSON.parse(String(payload));}catch{return;}
-   if(value.type==='input')keep('inputs',{...value.input,room:value.room,deliveryAttached:!!value.delivery});
+   if(value.type==='input')keep('inputs',{...value.input,room:value.room,deliveryAttached:!!value.delivery,protocolVersion:value.delivery?.version??null,currentSocket:isCurrent(),socketGeneration,ownerEpoch:context.ownerEpoch,proofGeneration:context.proofGeneration,life:context.life,nativeTick:context.nativeTick});
   });
   socket.on('framereceived',({payload})=>{let value;try{value=JSON.parse(String(payload));}catch{return;}
-   if(value.type==='control')keep('controls',{active:value.active===true,inputProtocol:value.inputProtocol?{version:value.inputProtocol.version,maxAgeMs:value.inputProtocol.maxAgeMs}:null});
-   if(value.type==='input_resync')keep('resyncs',{code:value.code});
-   if(value.type==='state'&&value.room?.state){const room=value.room,me=room.state.players[room.slot];keep('snapshots',{room:room.id,tick:room.state.tick,phase:room.state.phase,slot:room.slot,life:me.life,lastSeq:me.last_seq,deliveryAttached:!!value.delivery,alive:me.alive});}
+   if(value.type==='control'){const owns=value.active===true&&typeof value.token==='string'&&value.token.length>0;if(context.controller!==owns||ownerToken!==value.token){context.ownerEpoch++;context.proofGeneration++;}context.controller=owns;ownerToken=value.token;context.protocolVersion=value.inputProtocol?.version??null;context.maxAgeMs=value.inputProtocol?.maxAgeMs??null;keep('controls',{active:owns,currentSocket:isCurrent(),socketGeneration,ownerEpoch:context.ownerEpoch,proofGeneration:context.proofGeneration,inputProtocol:value.inputProtocol?{version:value.inputProtocol.version,maxAgeMs:value.inputProtocol.maxAgeMs}:null});}
+   if(value.type==='input_resync'){context.proofGeneration++;keep('resyncs',{code:value.code,currentSocket:isCurrent(),socketGeneration,ownerEpoch:context.ownerEpoch,proofGeneration:context.proofGeneration});}
+   if(value.type==='state'){
+    const room=value.room,me=room?.state?.players[room.slot],roomId=room?.id??null,life=me?.life??null,tick=room?.state?.tick??null,stale=roomId===context.room&&Number.isSafeInteger(tick)&&Number.isSafeInteger(context.nativeTick)&&tick<context.nativeTick;
+    if(!stale){if(context.room!==roomId||context.life!==life)context.proofGeneration++;context.room=roomId;context.life=life;context.nativeTick=tick;}
+    const ack=value.inputAck,inputAck=ack&&Object.keys(ack).sort().join(',')==='life,neutral,seq,tick,version'&&ack.version===1&&['seq','tick','life'].every(key=>Number.isSafeInteger(ack[key])&&ack[key]>0)&&typeof ack.neutral==='boolean'?{version:ack.version,seq:ack.seq,tick:ack.tick,life:ack.life,neutral:ack.neutral}:null;
+    keep('snapshots',{room:roomId,tick,phase:room?.state?.phase??null,slot:room?.slot??null,life,lastSeq:me?.last_seq??null,deliveryAttached:!!value.delivery,alive:me?.alive??null,currentSocket:isCurrent(),currentContext:isCurrent()&&!stale,socketGeneration,ownerEpoch:context.ownerEpoch,proofGeneration:context.proofGeneration,inputAck});
+   }
   });
  });
  page.on('request',request=>{if(request.method()!=='POST'||request.url()!==origin+'/games/botstrike/api/action')return;let value;try{value=request.postDataJSON();}catch{return;}
@@ -38,8 +46,11 @@ export function observeStoreProtocol(page,origin,{limit=16384}={}){
  });
  page.on('pageerror',error=>keep('errors',{code:error.name||'PageError'}));return observation;
 }
+export function storeInputAck(snapshot,input,{requireNeutral=false,current}={}){
+ const ack=snapshot?.inputAck;return!!current&&current.connected===true&&current.controller===true&&current.protocolVersion===2&&current.maxAgeMs===400&&['socketGeneration','ownerEpoch','proofGeneration'].every(key=>Number.isSafeInteger(current[key])&&current[key]>0)&&!!ack&&ack.version===1&&Object.keys(ack).sort().join(',')==='life,neutral,seq,tick,version'&&['seq','tick','life'].every(key=>Number.isSafeInteger(ack[key])&&ack[key]>0)&&typeof ack.neutral==='boolean'&&!!input&&Number.isSafeInteger(input.nativeTick)&&input.nativeTick>=0&&snapshot.currentSocket!==false&&snapshot.currentContext!==false&&input.currentSocket!==false&&snapshot.deliveryAttached&&input.deliveryAttached&&input.protocolVersion===2&&snapshot.socketGeneration===input.socketGeneration&&snapshot.ownerEpoch===input.ownerEpoch&&snapshot.proofGeneration===input.proofGeneration&&snapshot.socketGeneration===current.socketGeneration&&snapshot.ownerEpoch===current.ownerEpoch&&snapshot.proofGeneration===current.proofGeneration&&snapshot.room===current.room&&snapshot.life===current.life&&snapshot.room===input.room&&snapshot.life===input.life&&ack.life===input.life&&ack.seq===input.seq&&ack.seq===snapshot.lastSeq&&ack.tick>input.nativeTick&&ack.tick<=snapshot.tick&&(!requireNeutral||ack.neutral&&neutral(input));
+}
 export async function assertReceiptProtocol(game,observation){
- await until(()=>observation.controls.some(control=>control.active&&control.inputProtocol?.version===1&&control.inputProtocol.maxAgeMs===400),{label:'Store receipt control handshake'});
+ await until(()=>observation.controls.some(control=>control.active&&control.inputProtocol?.version===2&&control.inputProtocol.maxAgeMs===400),{label:'Store receipt control handshake'});
  await until(async()=>await game.locator('html').getAttribute('data-input-protocol')==='receipt',{label:'Actual Store iframe receipt protocol UI'});
  assert.ok(observation.inputs.every(input=>input.deliveryAttached),'Every modern Store input carries the outer delivery envelope');
 }
@@ -83,23 +94,24 @@ export function kernelCDrops(stats){return [...stats.server.qdisc.filter(row=>ro
 // Exact raw frames stay private. AI cover is identified from the corresponding
 // packed takeover flag, never inferred from a human seat's aggregate shot count.
 export async function analyzeStoreRecovery(file,{slot=0,restoreAt,heldSequences=[],neutralSeq,newMovementSeq}={}){
- const reader=createInterface({input:createReadStream(file),crlfDelay:Infinity}),held=new Set(heldSequences),arrivals=new Map(),inputs=new Map(),appliedNeutralTicks=new Set(),appliedMovementTicks=new Set(),result={nativeFrames:0,rawNativeFrames:0,obsoleteHeldFrames:[],expiredControlFrames:[],missingAdmissionFrames:[],rejected:{},neutralAck:false,newMovementAck:false,aiCoverShotEvents:0,humanShotEvents:0,headerBotsCapable:null};
+ const reader=createInterface({input:createReadStream(file),crlfDelay:Infinity}),held=new Set(heldSequences),arrivals=new Map(),inputs=new Map(),acks=new Map(),appliedNeutralTicks=new Set(),appliedMovementTicks=new Set(),result={nativeFrames:0,rawNativeFrames:0,obsoleteHeldFrames:[],expiredControlFrames:[],missingAdmissionFrames:[],rejected:{},neutralAck:false,newMovementAck:false,aiCoverShotEvents:0,humanShotEvents:0,headerBotsCapable:null};
  try{for await(const line of reader){const event=JSON.parse(line);
   if(event.type==='room_started')result.headerBotsCapable=event.config.bots;
   if(event.type==='input_arrival'&&event.slot===slot)arrivals.set(event.seq,event);
   if(event.type==='input_rejected'&&event.slot===slot)result.rejected[event.reason]=(result.rejected[event.reason]||0)+1;
+  if(event.type==='input_ack'&&event.slot===slot){acks.set(event.tick,event);if(acks.size>128)acks.delete(acks.keys().next().value);}
   if(event.type==='native_input'){
    inputs.set(event.tick,event.inputs[slot]);if(inputs.size>128)inputs.delete(inputs.keys().next().value);const input=event.inputs[slot];if(!input||!(input[5]&256))continue;
    if(event.at>=restoreAt&&input[0]===neutralSeq&&input[1]===0&&input[2]===0&&(input[5]&767)===0&&input[6]==null&&input[7]==null&&!input[9]&&!input[11])appliedNeutralTicks.add(event.tick);
    if(event.at>=restoreAt&&input[0]===newMovementSeq&&(input[1]||input[2]))appliedMovementTicks.add(event.tick);
-   const active=!!(input[1]||input[2]||(input[5]&1));if(event.at>=restoreAt&&active&&held.has(input[0]))result.obsoleteHeldFrames.push({tick:event.tick,seq:input[0]});
+   const active=!!(input[1]||input[2]||(input[5]&767)||input[6]!=null||input[7]!=null||input[9]||input[11]);if(event.at>=restoreAt&&active&&held.has(input[0]))result.obsoleteHeldFrames.push({tick:event.tick,seq:input[0]});
    const admission=arrivals.get(input[0])?.admission;if(active&&!admission)result.missingAdmissionFrames.push({tick:event.tick,seq:input[0]});if(active&&admission&&event.monotonicMs>=admission.deadlineAt)result.expiredControlFrames.push({tick:event.tick,seq:input[0]});
    for(const ticket of [...(event.pulseTickets||[]),...(event.purchaseTickets||[])])if(ticket.slot===slot){if(event.monotonicMs>=ticket.deadlineAt)result.expiredControlFrames.push({tick:event.tick,sourceSeq:ticket.sourceSeq??null});if(event.at>=restoreAt&&held.has(ticket.sourceSeq))result.obsoleteHeldFrames.push({tick:event.tick,sourceSeq:ticket.sourceSeq,field:ticket.field});}
   }
   if(event.type==='native_frame'){
    result.nativeFrames++;assert.equal(typeof event.rawLine,'string','Private Native frames must retain their original raw JSON line');result.rawNativeFrames++;
    const frame=JSON.parse(event.rawLine).state,player=frame.players[slot],input=inputs.get(frame.tick);assert.ok(inputs.has(frame.tick),'Every raw Native frame needs its exact same-tick dispatched input, including null AI input');
-   if(event.at>=restoreAt){if(appliedNeutralTicks.has(frame.tick)&&player.last_seq>=neutralSeq&&arrivals.get(neutralSeq)?.at>=restoreAt)result.neutralAck=true;if(appliedMovementTicks.has(frame.tick)&&player.last_seq>=newMovementSeq&&arrivals.get(newMovementSeq)?.at>=restoreAt)result.newMovementAck=true;
+   if(event.at>=restoreAt){if(appliedNeutralTicks.has(frame.tick)&&acks.get(frame.tick)?.seq===neutralSeq&&acks.get(frame.tick)?.life===player.life&&acks.get(frame.tick)?.neutral===true&&player.last_seq===neutralSeq&&arrivals.get(neutralSeq)?.at>=restoreAt)result.neutralAck=true;if(appliedMovementTicks.has(frame.tick)&&acks.get(frame.tick)?.seq===newMovementSeq&&acks.get(frame.tick)?.life===player.life&&acks.get(frame.tick)?.neutral===false&&player.last_seq===newMovementSeq&&arrivals.get(newMovementSeq)?.at>=restoreAt)result.newMovementAck=true;
     for(const shot of frame.events||[])if(shot.kind==='shot'&&shot.actor===slot){if(input?.[5]&256)result.humanShotEvents++;else if(result.headerBotsCapable?.[slot])result.aiCoverShotEvents++;}
    }
   }

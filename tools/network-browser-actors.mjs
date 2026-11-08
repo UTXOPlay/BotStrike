@@ -19,6 +19,7 @@ const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const clone=value=>value===undefined?undefined:structuredClone(value);
 const safeText=value=>String(value).replace(/[a-zA-Z0-9_-]{24,}/g,'[redacted]').slice(0,500);
 const finite=value=>typeof value==='number'&&Number.isFinite(value);
+export function publicInputAck(value){return value?.version===1&&Object.keys(value).sort().join(',')==='life,neutral,seq,tick,version'&&Number.isSafeInteger(value.seq)&&value.seq>0&&Number.isSafeInteger(value.tick)&&value.tick>0&&Number.isSafeInteger(value.life)&&value.life>0&&typeof value.neutral==='boolean'?{version:1,seq:value.seq,tick:value.tick,life:value.life,neutral:value.neutral}:null;}
 export function classifyWebGLRenderer(graphics){const renderer=graphics?.unmaskedRenderer;if(typeof renderer!=='string'||!renderer.trim())return'unknown';if(/swiftshader|llvmpipe|softpipe|software/i.test(renderer))return'software';return /intel|iris|nvidia|amd|radeon|apple|adreno|mali|powervr|qualcomm/i.test(renderer)?'hardware':'unknown';}
 const vector=value=>Array.isArray(value)&&value.length===3&&value.every(finite)?[...value]:null;
 const inputKeys=['action_life','drop','preview_item','throw_mode','practice','seq','viewTick','x','y','yaw','pitch','fire','reload','walk','crouch','jump','ability','interact','scope','weapon','item'];
@@ -61,7 +62,7 @@ export class NetworkBrowserActor{
  constructor(id,browser,context,page,trace,{timeout=60000,drainMs=100,touch=false,launchProfile={},requireHardware=false}={}){
   this.id=id;this.browser=browser;this.context=context;this.page=page;this.trace=trace;this.timeout=timeout;this.drainMs=drainMs;this.touchEnabled=touch;this.index=0;this.socketGeneration=0;this.roomGeneration=0;this.nextRoomGeneration=0;this.roomGenerations=new Map();this.currentRoom=null;this.control={active:false,nextSeq:null};this.recent=new Map();this.errors=[];this.capture=null;this.drainTimer=null;this.drainInFlight=null;this.captureDropped=0;this.closed=false;this.closing=false;this.heldKeys=new Set();this.heldMouse=new Set();this.mouseAt={x:0,y:0};this.gamepadHandle=null;this.cpuRate=1;this.departed=new Set();
   page.setDefaultTimeout(timeout);page.on('pageerror',error=>{const message=safeText(error.message);this.errors.push(message);if(this.errors.length>32)this.errors.shift();this.record('page_error',{message});});
-  this.launchProfile=launchProfile;this.requireHardware=requireHardware;this.browserVersion=null;this.graphics=null;
+  this.launchProfile=launchProfile;this.requireHardware=requireHardware;this.browserVersion=null;this.graphics=null;this.ownerGeneration=0;this.proofGeneration=1;this.proofRoom=null;this.proofLife=null;
   page.on('websocket',socket=>this.watchSocket(socket));
  }
  record(kind,data){if(this.trace.closed)return null;const row={index:++this.index,kind,nodeAtMs:performance.now(),nodeUnixMs:Date.now(),data};let recent=this.recent.get(kind);if(!recent){recent=[];this.recent.set(kind,recent);}recent.push(row);if(recent.length>512)recent.shift();this.trace.append(row);return this.unwrap(row);}
@@ -78,17 +79,17 @@ export class NetworkBrowserActor{
  }
  watchSocket(socket){
   const url=new URL(socket.url());if(url.origin!==NETWORK_GAME_ORIGIN.replace(/^http/,'ws')||url.pathname!=='/games/botstrike/api/socket')return;
-  const generation=++this.socketGeneration;this.record('socket_opening',{generation});
+  const generation=++this.socketGeneration;let ownerToken=null;this.record('socket_opening',{generation});
   socket.on('framesent',({payload})=>{let value;try{value=JSON.parse(String(payload));}catch{return;}
-   if(value.type==='input')this.record('input',{socketGeneration:generation,roomGeneration:this.generationFor(value.room),deliveryAttached:!!value.delivery,input:fields(value.input,inputKeys)});
+   if(value.type==='input')this.record('input',{socketGeneration:generation,ownerGeneration:this.ownerGeneration,proofGeneration:this.proofGeneration,roomGeneration:this.generationFor(value.room),life:this.currentRoom?.state?.players[this.currentRoom.slot]?.life??null,minTick:this.currentRoom?.state?.tick??null,deliveryAttached:!!value.delivery,protocolVersion:value.delivery?.version??null,input:fields(value.input,inputKeys)});
    else if(value.type==='quality')this.record('shared_summary',{socketGeneration:generation,summary:{version:value.version,windowMs:value.windowMs,metrics:value.metrics,counts:value.counts}});
   });
   socket.on('framereceived',({payload})=>{let value;try{value=JSON.parse(String(payload));}catch{return;}
-   if(value.type==='state'){if(generation===this.socketGeneration)this.trackRoom(value.room);this.record('snapshot',{socketGeneration:generation,currentSocket:generation===this.socketGeneration,roomGeneration:this.generationFor(value.room),...publicSnapshot(value.room)});}
-   else if(value.type==='control'){const control={active:value.active===true,nextSeq:Number.isSafeInteger(value.nextSeq)?value.nextSeq:null};if(generation===this.socketGeneration)this.control=control;this.record('control',{socketGeneration:generation,currentSocket:generation===this.socketGeneration,...control});}
-   else if(['error','quality_error','input_resync'].includes(value.type))this.record('socket_error',{socketGeneration:generation,type:value.type,message:safeText(value.error||value.code||'Rejected')});
+   if(value.type==='state'){const current=generation===this.socketGeneration,stale=current&&value.room&&this.currentRoom?.id===value.room.id&&(value.room.state?.tick??0)<(this.currentRoom.state?.tick??0);if(current&&!stale){const room=value.room?.id??null,life=value.room?.state?.players[value.room.slot]?.life??null;if(room!==this.proofRoom||life!==this.proofLife){this.proofGeneration++;this.proofRoom=room;this.proofLife=life;}this.trackRoom(value.room);}this.record('snapshot',{socketGeneration:generation,currentSocket:current,currentContext:current&&!stale,ownerGeneration:this.ownerGeneration,proofGeneration:this.proofGeneration,controllerActive:this.control.active,roomGeneration:this.generationFor(value.room),...publicSnapshot(value.room),inputAck:publicInputAck(value.inputAck)});}
+   else if(value.type==='control'){const token=value.active?value.token:null;if(generation===this.socketGeneration&&token!==ownerToken){this.ownerGeneration++;this.proofGeneration++;}ownerToken=token;const control={active:value.active===true,nextSeq:Number.isSafeInteger(value.nextSeq)?value.nextSeq:null,protocolVersion:value.inputProtocol?.version??null,ownerGeneration:this.ownerGeneration};if(generation===this.socketGeneration)this.control=control;this.record('control',{socketGeneration:generation,currentSocket:generation===this.socketGeneration,proofGeneration:this.proofGeneration,...control});}
+   else if(['error','quality_error','input_resync'].includes(value.type)){if(value.type==='input_resync'&&generation===this.socketGeneration)this.proofGeneration++;this.record('socket_error',{socketGeneration:generation,proofGeneration:this.proofGeneration,type:value.type,message:safeText(value.error||value.code||'Rejected')});}
   });
-  socket.on('close',()=>this.record('socket_close',{generation}));
+  socket.on('close',()=>{if(generation===this.socketGeneration){this.control={...this.control,active:false};this.proofGeneration++;}this.record('socket_close',{generation,proofGeneration:this.proofGeneration});});
  }
  async boot(){
   const response=await this.page.goto(NETWORK_GAME_URL);if(response?.status()!==200)throw Error('Actor game entry is unavailable.');

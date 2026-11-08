@@ -6,6 +6,12 @@ two independent Chrome processes, and eight independent Node actors. It does not
 add an input bypass, assign a pose/HP/RNG, alter the Native profile, or count
 client muzzle flashes as hits. Import and `--list` start no container or match.
 
+Current reports use schema 3 and explicitly bind envelope protocol 2 / input ACK
+version 1. A v1 application image is ineligible. Source binding includes the
+shared InputDelivery module imported by Node actors, in addition to the other
+driver/helper files. Schema-2 C-image reports and later host-only navigation
+rechecks remain historical evidence; they are never rewritten or resumed as v3.
+
 ```sh
 node tools/run-network-matrix.mjs --list
 node tools/run-network-matrix.mjs --application-image sha256:EXACT_IMAGE_ID --case rtt-0-loss-0
@@ -101,11 +107,27 @@ labeled as driver keyup intent until the renderer actually thaws. The overall
 recovery observation budget is sixty seconds; this is a fixture timeout, not a
 competitive-play latency promise. The 400 ms authority boundary is unchanged.
 
+Recovery selects a real post-restoration sent neutral sequence whose public
+`state.inputAck` names that exact sequence, tick and life. The ACK must match the
+current socket, controller, room, life and proof epoch, including a fence after
+same-socket resync. `last_seq >= requested` and AI progression never establish
+application. The private `input_ack` observation is independently joined to the
+fresh base receipt, final packed input and exact Native frame. A preview/throw
+selection in packed field 12 is configuration; with no item/action it does not
+make a neutral input active. Real movement, modifiers, fire, item, weapon,
+purchase and practice controls retain their action classification.
+
 The Tactical case creates a normal private demolition lobby, selects unique
 heroes within each team, joins ten authenticated Node controllers and readies
 all ten. It hard-asserts the actual Native header has ten `bots=false` values.
-It checks an expired same-life HTTP purchase after TCP outage, a successful
-fresh purchase with Native event, duplicate socket/explicit claim revoking the
+It first freezes the private receipt used by an input already proven applied by
+an exact ACK. WS input continues with new receipts for an unshaped 600 ms wait;
+the recorded new-challenge count must stay below 24. The same-context HTTP buy
+must then produce an actual `expired` receipt rejection. This is separate from
+the outage's obsolete purchase, whose `unknown` or `expired` rejection is
+recorded without substituting for the strict known-receipt expiry test. Neither
+opaque freeze handles nor traces expose the raw nonce, owner token or cookie.
+It also checks a successful fresh purchase with Native event, duplicate socket/explicit claim revoking the
 old owner, positive control by the new owner, normal round/new-life transition,
 old-life purchase rejection, another actual fresh purchase, ten explicit leaves,
 a real incomplete-room cancellation and capacity release. Four additional normal
@@ -137,10 +159,11 @@ RTT, exact matched-sequence input ACK latency, snapshot delivery gap/age,
 interpolation age, prediction correction, actual draw callback interval and main
 thread long tasks. A sample is one original observation, never a report-window
 percentile inserted as raw latency. Action correlation records CDP sent input,
-same-socket/same-room snapshot ACK observation, the exact recorded authorized
+same-socket/owner/room/life exact explicit ACK observation, the exact recorded authorized
 aim presentation, and render observations drained after sending. Buffered drain
-order does not prove that a callback occurred after the send; skipped/coalesced
-sequence ACKs are labeled. CDP observation elapsed
+order does not prove that a callback occurred after the send. A gesture's fire
+source sequence and a later exact release/stop ACK sequence are distinguished;
+an unobserved requested sequence is never described as applied. CDP observation elapsed
 wall time is an estimate, not one-way transit or exact JS latency. A rendered
 client sequence is a request observation, not a Native ACK. Full browser clock
 evaluation brackets and raw source traces remain available privately.
@@ -297,6 +320,9 @@ averaged 19,180 bytes; all capture events averaged 23,400 bytes per tick and the
 95th-percentile tick interval contained 26,738 bytes. A 10,000-tick projection at
 that latter rate is 267,380,000 bytes, only about 1 MiB below 256 MiB before
 Tactical-specific inventory/configuration/probe overhead. The 512 MiB Tactical
-choice is a conservative size projection, not an executed Tactical capture result.
+choice remains the v3 bound. A historical C/v1 Tactical recovery capture reached
+7,495 Native frames with 116,221,839 runtime bytes and no capture drops; its
+strict expiry assertion failed and its replay was not run. It provides size
+evidence, not v2 protocol acceptance or a completed Tactical match.
 The 4 GiB run cap, 2 GiB reserve, 512 MiB file bound and overflow-fails-evidence
 policy remain in force.

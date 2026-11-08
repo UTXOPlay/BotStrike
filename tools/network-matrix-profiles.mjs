@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {normalizeDirection} from './network-lab.mjs';
-export const MATRIX_VERSION=2;
+export const MATRIX_VERSION=3;
 export const MATRIX_BUDGET_BYTES=4*1024**3;
 export const MATRIX_MIN_FREE_BYTES=2*1024**3;
 export const MATRIX_DEFAULT_ROOT='/home/arthur/.codex/artifacts/botstrike-network-20261108';

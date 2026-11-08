@@ -37,30 +37,53 @@ async function setKeys(actor,current,desired){const wanted=new Set(desired);for(
 async function release(actor,current){await setKeys(actor,current,[]);}
 
 export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tolerance=2,mark=()=>{}}={}){
- const held=new Set(),arrivals=[];
+ const originalModifiers=['ShiftLeft','KeyF'].filter(key=>actor.heldKeys?.has(key)),held=new Set(originalModifiers),arrivals=[];let failure;
+ const stamp=()=>({wallAt:Date.now(),monotonicMs:performance.now(),index:actor.index});
+ const stoppedInput=(row,walk,crouch)=>row.input.x===0&&row.input.y===0&&row.input.walk===walk&&row.input.crouch===crouch;
+ async function assertActive(){const observed=await actor.sample();if(!observed.window.playing||observed.window.visibility!=='visible'||!observed.window.hasFocus)throw Error(actor.id+' real browser controls are paused: '+JSON.stringify({window:observed.window,status:observed.status}));}
+ async function confirmStop(anchor,walk,crouch){const sent=await actor.waitInput(row=>stoppedInput(row,walk,crouch),{afterIndex:anchor,timeout:2000});const room=await actor.waitRoom(value=>own(value)?.last_seq>=sent.input.seq&&speed(own(value))<8&&own(value).crouch===crouch,{timeout:2000});return {sent,room};}
  try{
   for(const goal of waypoints){
    if(!Array.isArray(goal)||goal.length!==2||!goal.every(Number.isFinite))throw Error('Use static map [x,z] waypoints.');
-   const aligned=await aimOrientation(actor,{yaw:0,pitch:0});await mark('route-heading-aligned',{actor:actor.id,goal,...aligned});
-   const started=performance.now();let lastDistance=Infinity,progressAt=started,arrived=false;
+   await assertActive();const aligned=await aimOrientation(actor,{yaw:0,pitch:0});await mark('route-heading-aligned',{actor:actor.id,goal,...aligned});
+   const started=performance.now();let lastDistance=Infinity,progressAt=started,arrived=false,fineHoldMs=0,pulseNumber=0;
    await mark('route-waypoint-start',{actor:actor.id,goal});
    while(performance.now()-started<timeoutPerWaypoint){
-    const observed=await actor.sample();if(!observed.window.playing||observed.window.visibility!=='visible'||!observed.window.hasFocus)throw Error(actor.id+' real browser controls are paused: '+JSON.stringify({window:observed.window,status:observed.status}));
+    await assertActive();
     const room=await actor.room(),player=own(room);if(!player?.alive)throw Error(actor.id+' died or has no own public pose while navigating');
     const dx=goal[0]-player.position[0],dz=goal[1]-player.position[2],distance=Math.hypot(dx,dz);
     if(distance<=tolerance&&speed(player)<8){arrived=true;arrivals.push({goal,position:[...player.position],tick:room.state.tick,lastSeq:player.last_seq});break;}
     if(distance<lastDistance-.2){lastDistance=distance;progressAt=performance.now();}if(performance.now()-progressAt>5000)throw Error('Route made no progress: '+JSON.stringify({actor:actor.id,goal,position:player.position,distance}));
-    // Move one world axis at a time. Short real pulses near corners avoid
-    // cutting across the production obstacles or relying on exact JS timers.
-    const axis=Math.abs(dx)>Math.abs(dz)?[Math.sign(dx),0]:[0,Math.sign(dz)],walk=distance<150;
-    const pulse=distance>180?260:distance>60?90:distance>15?40:20;
-    await setKeys(actor,held,movementKeys(player.yaw,axis[0],axis[1],{walk}));await pause(pulse);const releasedAfter=actor.lastInput?.index??0;await release(actor,held);
-    const stopped=await actor.waitInput(row=>row.input.x===0&&row.input.y===0,{afterIndex:releasedAfter,timeout:2000});await actor.waitRoom(value=>own(value)?.last_seq>=stopped.input.seq&&speed(own(value))<8,{timeout:2000});await pause(35);
+    // A WebSocket framesent observation is not a TCP arrival or a Native step.
+    // Short intents may arrive together, or remain held longer on the server.
+    // Adapt from the public stopped pose, rather than assuming timer duration
+    // equals authoritative movement. No private capture drives these controls.
+    const axis=Math.abs(dx)>Math.abs(dz)?[Math.sign(dx),0]:[0,Math.sign(dz)],walk=distance<150,crouch=distance<30;
+    const modifiers=[...(walk?['ShiftLeft']:[]),...(crouch?['KeyF']:[])],desired=[...modifiers,...movementKeys(player.yaw,axis[0],axis[1])];
+    const expected={x:Number(desired.includes('KeyD'))-Number(desired.includes('KeyA')),y:Number(desired.includes('KeyW'))-Number(desired.includes('KeyS')),walk,crouch};
+    const pulse=distance>180?260:distance>60?90:distance>15?40:fineHoldMs;
+    await mark('route-pulse-start',{actor:actor.id,goal,pulseNumber:++pulseNumber,requestAnchor:stamp(),beforePublic:{tick:room.state.tick,position:[...player.position],distance},expected,extraHoldMs:pulse});
+    // Take the anchor after the marker: marker work must not allow an old
+    // neutral or an input from before this actual keydown to satisfy the wait.
+    const down=stamp();await setKeys(actor,held,desired);
+    const sent=await actor.waitInput(row=>row.input.x===expected.x&&row.input.y===expected.y&&row.input.walk===walk&&row.input.crouch===crouch,{afterIndex:down.index,timeout:2000});
+    await pause(Math.max(0,pulse-(performance.now()-sent.nodeAtMs)));const keyup=stamp();await setKeys(actor,held,modifiers);
+    // Write potentially asynchronous markers only after releasing movement.
+    await mark('route-pulse-sent',{actor:actor.id,goal,pulseNumber,downAnchor:down,observedSend:{index:sent.index,seq:sent.input.seq,wallAt:sent.nodeUnixMs,monotonicMs:sent.nodeAtMs},extraHoldMs:pulse,meaning:'Real WebSocket framesent observation; not wire arrival or Native application'});
+    await mark('route-pulse-keyup',{actor:actor.id,goal,pulseNumber,keyupAnchor:keyup});
+    const stopped=await confirmStop(keyup.index,walk,crouch),after=own(stopped.room),moved=[after.position[0]-player.position[0],after.position[2]-player.position[2]],displacement=Math.hypot(...moved),afterDistance=Math.hypot(goal[0]-after.position[0],goal[1]-after.position[2]);
+    const overshot=(goal[0]-after.position[0])*axis[0]+(goal[1]-after.position[2])*axis[1]<0;
+    if(distance<=15){if(displacement<.05)fineHoldMs=Math.min(60,fineHoldMs+4);else if(overshot||afterDistance>=distance)fineHoldMs=0;else fineHoldMs=Math.max(0,Math.min(fineHoldMs,Math.floor(pulse*Math.max(0,afterDistance-tolerance)/displacement)));}
+    await mark('route-pulse-stopped',{actor:actor.id,goal,pulseNumber,neutral:{index:stopped.sent.index,seq:stopped.sent.input.seq,wallAt:stopped.sent.nodeUnixMs},publicAck:{tick:stopped.room.state.tick,lastSeq:after.last_seq,position:[...after.position],speed:speed(after),distance:afterDistance},publicDisplacement:displacement,overshot,nextFineHoldMs:fineHoldMs});await pause(35);
    }
    if(!arrived)throw Error(actor.id+' waypoint timeout: '+JSON.stringify({goal,position:own(await actor.room())?.position}));await mark('route-waypoint-arrived',{actor:actor.id,...arrivals.at(-1)});
   }
   return arrivals;
- }finally{await release(actor,held);}
+ }catch(error){failure=error;throw error;}
+ finally{
+  try{const restore=stamp();await setKeys(actor,held,originalModifiers);const restored=await confirmStop(restore.index,originalModifiers.includes('ShiftLeft'),originalModifiers.includes('KeyF'));await mark('route-modifiers-restored',{actor:actor.id,restoreAnchor:restore,modifiers:originalModifiers,seq:restored.sent.input.seq,tick:restored.room.state.tick,lastSeq:own(restored.room).last_seq});}
+  catch(error){if(!failure)throw error;failure.navigationCleanupError=error.message;try{await mark('route-modifiers-unconfirmed',{actor:actor.id,error:error.message});}catch{}}
+ }
 }
 
 export async function aimOrientation(actor,{yaw=0,pitch=0}={}, {tolerance=.002,maxSteps=20}={}){

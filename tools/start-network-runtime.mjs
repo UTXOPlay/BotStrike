@@ -5,7 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createBotStrike} from '../botstrike-service/server.mjs';
 
-const allowed=new Set(['room_started','native_input','native_frame','input_arrival','input_rejected','purchase_arrival','snapshot_write','seal_started','seal_completed','room_failed','room_cancelled']);
+const allowed=new Set(['room_started','native_input','native_frame','input_arrival','input_ack','input_rejected','purchase_arrival','snapshot_write','seal_started','seal_completed','room_failed','room_cancelled']);
 const safeCode=error=>/^[A-Z][A-Z0-9_]{0,31}$/.test(error?.code||'')?error.code:'IO_ERROR';
 export async function createNetworkCapture({directory,data,maxBytes=256*1024**2,maxQueuedBytes=4*1024**2}={}){
  const base=path.resolve(data||''),out=path.resolve(directory||'');

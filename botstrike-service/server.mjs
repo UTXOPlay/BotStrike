@@ -19,7 +19,7 @@ import {QualityStore,QUALITY_METRICS,QUALITY_COHORTS} from './quality.mjs';
 import {RuntimeResourceSampler} from './quality-resources.mjs';
 import {ingestQualityReport,takeQualityReport,ingestGatewayReport,takeGatewayReport} from './quality-report.mjs';
 import {ViewHistory} from './view-history.mjs';
-import {DeliveryReceipts,DELIVERY_RECEIPT_VERSION,DELIVERY_RECEIPT_MAX_AGE_MS} from './delivery-receipts.mjs';
+import {DeliveryReceipts,DELIVERY_RECEIPT_VERSION,DELIVERY_RECEIPT_MAX_AGE_MS,appliedInputAcknowledgement} from './delivery-receipts.mjs';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const spec=JSON.parse(readFileSync(path.join(root,'botstrike/spec.json'),'utf8')),weaponCount=spec.weapons.length,itemCount=spec.items.length;
@@ -51,6 +51,7 @@ export function pack(input){
  if(release)packed.push(release);
  return packed;
 }
+export function packedInputIsNeutral(input){return!!input&&!input[1]&&!input[2]&&!(input[5]&(255|512))&&input[6]===null&&input[7]===null&&!input[9]&&!input[11];}
 export function practiceOptions(b){
  if(b.drill===undefined)return null;
  if(b.kind!=='practice'||!Number.isInteger(b.drill)||b.drill<0||b.drill>7)throw Error('Choose a valid solo drill');
@@ -93,7 +94,20 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  function send(ws,v,complete){if(ws.readyState!==WebSocket.OPEN)return false;if(ws.bufferedAmount>256000){ws.terminate();return false;}try{ws.send(JSON.stringify(v),complete||(()=>{}));return true;}catch(error){complete?.(error);ws.terminate();return false;}}
  function receiptContext(ws,r,account){
   const receipts=ws.deliveryReceipts??=new DeliveryReceipts(),slot=r?.members.indexOf(account)??-1,life=r?.state?.players[slot]?.life??null;
-  const generation=receipts.prepare({owner:controllers.get(account)===ws&&!ws.needsUpdate?ws.controlToken:null,room:r?.id??null,life});return{receipts,generation,slot,life};
+  const generation=receipts.prepare({owner:controllers.get(account)===ws&&!ws.needsUpdate?ws.controlToken:null,room:r?.id??null,life});
+  if(ws.appliedInputAck&&(ws.appliedInputAck.generation!==generation||ws.appliedInputAck.room!==r?.id||ws.appliedInputAck.life!==life||ws.appliedInputAck.ownerToken!==ws.controlToken||controllers.get(account)!==ws))delete ws.appliedInputAck;
+  return{receipts,generation,slot,life};
+ }
+ function clearAccountInputAcks(r,account){for(const ws of peers.get(account)||[])delete ws.appliedInputAck;if(r?.pendingInputAck)r.pendingInputAck.candidates=r.pendingInputAck.candidates.filter(value=>value.account!==account);}
+ function clearRoomInputAcks(r){delete r.pendingInputAck;for(const account of r.members)for(const ws of peers.get(account)||[])if(ws.appliedInputAck?.room===r.id)delete ws.appliedInputAck;}
+ function controllerInputAck(ws,r,account,context){const cached=ws.appliedInputAck;return r?.status==='running'&&current(account)===r&&controllers.get(account)===ws&&!ws.needsUpdate&&cached?.room===r.id&&cached.life===context.life&&cached.generation===context.generation&&cached.ownerToken===ws.controlToken?cached.value:null;}
+ function acknowledgeFrame(r,previous){
+  const pending=r.pendingInputAck;delete r.pendingInputAck;
+  for(let slot=0;slot<r.members.length;slot++)if(previous?.players[slot]?.life!==r.state.players[slot]?.life)clearAccountInputAcks(r,r.members[slot]);
+  if(!pending||pending.tick!==r.state.tick)return;
+  for(const candidate of pending.candidates){const context=checkTicketContext(candidate.ticket,r,candidate.slot);if(!context.ok)continue;const value=appliedInputAcknowledgement(candidate,previous?.players[candidate.slot],r.state.players[candidate.slot],r.state.tick);if(!value)continue;
+   const {ticket}=candidate;ticket.ws.appliedInputAck={value,room:r.id,life:ticket.life,generation:ticket.generation,ownerToken:ticket.ownerToken};emit('input_ack',{room:r.id,slot:candidate.slot,...value,generation:ticket.generation});
+  }
  }
  function deliverState(ws,r,account){
   if(ws.needsUpdate)return;
@@ -101,7 +115,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   const history=ws.viewHistory??=new ViewHistory(),generation=history.prepare(r?.id??null,life),queueBytes=ws.bufferedAmount;
   const context=receiptContext(ws,r,account),delivery=context.receipts.issue(tick,context.generation);
   if(r?.state)instrument('sample','snapshotQueueBytes',queueBytes,r);
-  const queued=send(ws,{type:'state',...view(r,account,ws.feedbackRoom===r?.id?ws.feedbackTick:tick-128),delivery},error=>{
+  const queued=send(ws,{type:'state',...view(r,account,ws.feedbackRoom===r?.id?ws.feedbackTick:tick-128),delivery,inputAck:controllerInputAck(ws,r,account,context)},error=>{
    if(error){if(r)instrument('record','snapshotWriteFailures',1,r);emit('snapshot_write',{room:r?.id,slot,tick,success:false});return;}
    if(delivery)context.receipts.written(delivery.nonce,context.generation);
    if(!r?.state||!history.written(tick,generation))return;
@@ -122,7 +136,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  function fail(r,message){
   if(['failed','cancelled','finished'].includes(r.status))return;
   clearTimeout(r.timer);clearTimeout(r.queueTimer);clearTimeout(r.watchdog);r.status='failed';r.finishedAt=Date.now();r.error=message;metrics.failedRooms++;instrument('record','matchFailed',1,r);emit('room_failed',{room:r.id,message});
-  r.child?.kill();closeTape(r);
+  clearRoomInputAcks(r);r.child?.kill();closeTape(r);
   drainState();
   try{persist(r);}catch(error){console.error('Room failure could not persist',r.id,error.code||error.message);}
   try{broadcast(r);}catch(error){console.error('Room failure notification',error.message);}
@@ -130,10 +144,10 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  function cancelEmpty(r){
   if(r.status!=='running'||r.members.some(id=>!id.startsWith('bot-')&&!r.departed?.has(id)))return;
   r.status='cancelled';r.finishedAt=Date.now();instrument('record','matchAbandoned',1,r);emit('room_cancelled',{room:r.id});clearTimeout(r.timer);clearTimeout(r.watchdog);
-  r.child?.kill();closeTape(r);
+  clearRoomInputAcks(r);r.child?.kill();closeTape(r);
  }
  function seal(r,result){
-  r.status='sealing';clearTimeout(r.watchdog);persist(r);broadcast(r);metrics.sealingJobs++;const queuedAt=performance.now();quality.gauge('sealBacklog',metrics.sealingJobs);
+  clearRoomInputAcks(r);r.status='sealing';clearTimeout(r.watchdog);persist(r);broadcast(r);metrics.sealingJobs++;const queuedAt=performance.now();quality.gauge('sealBacklog',metrics.sealingJobs);
   const job=async()=>{const started=performance.now();instrument('sample','sealQueueAgeMs',started-queuedAt,r);emit('seal_started',{room:r.id,queueAgeMs:started-queuedAt});const verifierPids=new Set();try{
    const proof=await new Promise((resolve,reject)=>{
     let delivered=false;const worker=new Worker(new URL('./seal-worker.mjs',import.meta.url),{workerData:{directory:roomDir(r.id),assets,room:r.id,players:r.members,result}});
@@ -145,9 +159,9 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   finally{for(const pid of verifierPids)resourceSampler?.untrack('verifier',pid);metrics.sealingJobs--;metrics.lastSealMs=Math.round(performance.now()-started);instrument('sample','sealDurationMs',metrics.lastSealMs,r);quality.gauge('sealBacklog',metrics.sealingJobs);}};
   sealing=sealing.then(job,job);
  }
- function start(r){requireTacticalStart(r,id=>!!peers.get(id)?.size);clearTimeout(r.queueTimer);r.queueDeadline=null;r.status='running';r.inputs=Array.from({length:10},(_,slot)=>({...neutral(),yaw:slot<5?0:Math.PI}));r.seen=Array(10).fill(-Infinity);r.inputDelivery=Array(10).fill(null);r.buyDelivery=Array(10).fill(null);r.pulses=Array.from({length:10},()=>({}));r.pulseDelivery=Array.from({length:10},()=>({}));r.weaponRequests=Array(10).fill(null);r.buy=Array(10).fill(null);r.state=null;instrument('record','matchStarted',1,r);emit('room_started',{room:r.id,kind:r.kind,config:r.config});r.fd=openSync(path.join(roomDir(r.id),'tape.jsonl'),'ax',0o600);const header=JSON.stringify({config:r.config})+'\n';writeSync(r.fd,header);r.bytes=Buffer.byteLength(header);persist(r);
+ function start(r){requireTacticalStart(r,id=>!!peers.get(id)?.size);clearRoomInputAcks(r);clearTimeout(r.queueTimer);r.queueDeadline=null;r.status='running';r.inputs=Array.from({length:10},(_,slot)=>({...neutral(),yaw:slot<5?0:Math.PI}));r.seen=Array(10).fill(-Infinity);r.inputDelivery=Array(10).fill(null);r.buyDelivery=Array(10).fill(null);r.pulses=Array.from({length:10},()=>({}));r.pulseDelivery=Array.from({length:10},()=>({}));r.weaponRequests=Array(10).fill(null);r.buy=Array(10).fill(null);r.state=null;instrument('record','matchStarted',1,r);emit('room_started',{room:r.id,kind:r.kind,config:r.config});r.fd=openSync(path.join(roomDir(r.id),'tape.jsonl'),'ax',0o600);const header=JSON.stringify({config:r.config})+'\n';writeSync(r.fd,header);r.bytes=Buffer.byteLength(header);persist(r);
  const child=spawn(path.join(assets,'botstrike-engine'),[],{stdio:['pipe','pipe','pipe']});r.child=child;resourceSampler?.track('native',child.pid);let resultSeen=false,pending=false,pendingAt=null,deadline=performance.now(),lastBroadcast=-1;child.stdin.on('error',()=>{});child.on('error',()=>fail(r,'The native engine could not start'));child.stderr.on('data',b=>console.error('BotStrike engine',String(b).slice(0,500)));
- const lines=createInterface({input:child.stdout});lines.on('line',line=>{if(r.status!=='running'||closed)return;try{const msg=JSON.parse(line);if(msg.type==='ready'){r.state=msg.state;recordPublicStart(r);broadcast(r);step();}else if(msg.type==='frame'){clearTimeout(r.watchdog);pending=false;if(pendingAt!==null)instrument('sample','nativeTickProcessingMs',performance.now()-pendingAt,r);pendingAt=null;const previous=r.state,oldPhase=previous?.phase;r.state=msg.state;trackHumanFrame(r,r.state);collectFeedback(r,previous,spec);const tick=r.state.tick;emit('native_frame',{room:r.id,state:r.state,rawLine:line});if(tick-lastBroadcast>=4||r.state.events.some(e=>e.kind!=='shot')||r.state.phase!==oldPhase){lastBroadcast=tick;broadcast(r)}
+ const lines=createInterface({input:child.stdout});lines.on('line',line=>{if(r.status!=='running'||closed)return;try{const msg=JSON.parse(line);if(msg.type==='ready'){r.state=msg.state;recordPublicStart(r);broadcast(r);step();}else if(msg.type==='frame'){clearTimeout(r.watchdog);pending=false;if(pendingAt!==null)instrument('sample','nativeTickProcessingMs',performance.now()-pendingAt,r);pendingAt=null;const previous=r.state,oldPhase=previous?.phase;r.state=msg.state;acknowledgeFrame(r,previous);trackHumanFrame(r,r.state);collectFeedback(r,previous,spec);const tick=r.state.tick;emit('native_frame',{room:r.id,state:r.state,rawLine:line});if(tick-lastBroadcast>=4||r.state.events.some(e=>e.kind!=='shot')||r.state.phase!==oldPhase){lastBroadcast=tick;broadcast(r)}
  if(tick%640===0||r.state.phase!==oldPhase)persist(r);
  if(r.state.phase==='finished'){closeSync(r.fd);delete r.fd;child.stdin.end();}else{deadline+=tickMs;if(deadline<performance.now()-250)deadline=performance.now();r.timer=setTimeout(()=>void step(),Math.max(0,deadline-performance.now()));}
  }else if(msg.type==='result'){resultSeen=true;if(!msg.result.completed)throw Error('Incomplete match');seal(r,msg.result)}}catch(e){console.error(e);fail(r,'The native engine returned an invalid match')}});
@@ -157,13 +171,13 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   if(r.backpressured){r.timer=setTimeout(()=>void step(),10);return;}
   pending=true;
   try {
-   const now=performance.now(),controlled=Array(10).fill(null),tickets=Array.from({length:10},()=>[]),capturedPulses=Array.from({length:10},()=>[]);instrument('sample','nativeTickOverrunMs',Math.max(0,now-deadline),r);
+   const now=performance.now(),controlled=Array(10).fill(null),tickets=Array.from({length:10},()=>[]),baseTickets=Array(10).fill(null),capturedPulses=Array.from({length:10},()=>[]);instrument('sample','nativeTickOverrunMs',Math.max(0,now-deadline),r);
    const inputs=r.members.map((id,slot)=>{
     const human=!id.startsWith('bot-'),owner=controllers.get(id),connected=human&&peers.get(id)?.size,age=now-r.seen[slot],ticket=r.inputDelivery[slot],lease=ticket?checkTicket(ticket,r,slot):{ok:false,reason:'unknown'},recent=age<400&&lease.ok,active=connected&&age<2000;
     if(ticket&&!lease.ok){rejectDelivery(ticket.ws,id,r,slot,r.inputs[slot].seq,lease.reason,'native_step',needsRecovery({...r.inputs[slot],...r.pulses[slot]}));if(r.inputDelivery[slot]===ticket){r.inputDelivery[slot]=null;clearPulses(r,slot);r.weaponRequests[slot]=null;}}
     // Keep an unconnected pilot's buy budget intact; combat still yields to AI.
     const input=active?(recent?{...r.inputs[slot],takeover:true}:{...neutral(),seq:r.inputs[slot].seq,yaw:r.inputs[slot].yaw,pitch:r.inputs[slot].pitch,takeover:true}):human&&r.state?.phase==='buy'?{...neutral(),seq:r.inputs[slot].seq,yaw:r.inputs[slot].yaw,pitch:r.inputs[slot].pitch,takeover:true}:{};
-    if(recent)tickets[slot].push(ticket);
+    if(recent){tickets[slot].push(ticket);baseTickets[slot]=ticket;}
     if(active)controlled[slot]=id;
     if(connected&&recent&&(!isTactical(r)||r.pulses[slot].action_life===input.action_life))for(const [field,value]of Object.entries(r.pulses[slot])){
      if(field==='action_life')continue;const source=r.pulseDelivery[slot][field],valid=checkTicket(source?.ticket,r,slot);
@@ -191,6 +205,11 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
    }
    const purchaseTickets=packed.flatMap((input,slot)=>{if(input?.[7]===null||input?.[7]===undefined)return[];const ticket=tickets[slot].find(value=>Number.isSafeInteger(value.requestId)&&value.purchaseItem===input[7]);return ticket?[{slot,requestId:ticket.requestId,item:ticket.purchaseItem,life:ticket.life,issuedAt:ticket.issuedAt,deadlineAt:ticket.deadlineAt,generation:ticket.generation}]:[];});
    const pulseTickets=capturedPulses.flatMap((values,slot)=>neutralized.has(slot)?[]:values.filter(value=>inputs[slot][value.field]===value.value).map(({field,sourceSeq,ticket})=>({slot,field,sourceSeq,issuedAt:ticket.issuedAt,deadlineAt:ticket.deadlineAt,generation:ticket.generation,life:ticket.life})));
+   const tick=(r.state?.tick||0)+1;
+   r.pendingInputAck={tick,candidates:packed.flatMap((input,slot)=>{
+    const ticket=baseTickets[slot];if(neutralized.has(slot)||!input||!(input[5]&256)||!ticket||ticket.seq!==input[0]||!checkTicket(ticket,r,slot).ok)return[];
+    return[{slot,tick,seq:input[0],life:ticket.life,neutral:ticket.neutral===true&&packedInputIsNeutral(input),freshAtWrite:true,ticket}];
+   })};
    r.bytes=baseBytes+Buffer.byteLength(line);emit('native_input',{room:r.id,tick:(r.state?.tick||0)+1,inputs:packed,purchaseTickets,pulseTickets});
    // false means accepted into the stream buffer, not a failed native input.
    pendingAt=performance.now();if(!child.stdin.write(line)){r.backpressured=true;child.stdin.once('drain',()=>{r.backpressured=false;});}
@@ -213,14 +232,18 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
  // Configuration-only expiry still revokes and neutralizes its transport ticket.
  // Interrupt play only when an actual control, pulse or purchase was discarded.
  function needsRecovery(input){return!!(input.x||input.y||input.item||input.practice||input.weapon!==undefined&&input.weapon!==null||input.buy!==undefined&&input.buy!==null||['fire','reload','walk','crouch','jump','ability','interact','scope','drop'].some(key=>input[key]));}
- function checkTicket(ticket,r,slot){
+ function checkTicketContext(ticket,r,slot){
   if(!ticket)return{ok:false,reason:'unknown'};
   const account=r.members[slot],owner=controllers.get(account);
-  if(owner!==ticket.ws||owner?.needsUpdate||owner?.controlToken!==ticket.ownerToken)return{ok:false,reason:'old_owner'};
-  if(ticket.room!==r.id)return{ok:false,reason:'old_room'};
+  if(account!==ticket.account||owner!==ticket.ws||owner?.needsUpdate||owner?.controlToken!==ticket.ownerToken)return{ok:false,reason:'old_owner'};
+  if(ticket.room!==r.id||current(account)!==r||r.status!=='running')return{ok:false,reason:'old_room'};
   if(ticket.life!==r.state?.players[slot]?.life)return{ok:false,reason:'old_life'};
   const context=receiptContext(owner,r,account);
   if(context.generation!==ticket.generation)return{ok:false,reason:'old_generation'};
+  return{ok:true,context};
+ }
+ function checkTicket(ticket,r,slot){
+  const checked=checkTicketContext(ticket,r,slot);if(!checked.ok)return checked;const {context}=checked;
   if(!context.receipts.isFresh(ticket.deadlineAt,ticket.generation,ticket.nonce))return{ok:false,reason:performance.now()>=ticket.deadlineAt?'expired':'unknown'};
   return{ok:true};
  }
@@ -232,6 +255,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   else if(reason.startsWith('old_'))instrument('record','inputDeliveryContextRejected',1,r);
   emit('input_rejected',{room:r?.id,slot,...(Number.isInteger(seq)?{seq}:{}),...(Number.isSafeInteger(requestId)&&requestId>0?{requestId}:{}),reason,stage});
   if(!ws)return;
+  if(['missing','unsupported_version','expired','unknown'].includes(reason))delete ws.appliedInputAck;
   if(['missing','unsupported_version'].includes(reason)){
    if(ws.needsUpdate)return;ws.needsUpdate=true;instrument('record','inputClientUpdateRequired',1,r);ws.deliveryReceipts?.reset();ws.viewHistory?.reset();
    if(controllers.get(account)===ws){controllers.delete(account);releaseInput(r,account);}control(ws,account,false);send(ws,{type:'error',error:CLIENT_UPDATE_ERROR});return;
@@ -258,7 +282,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   let next;try{next=safeInput(b.input);if(next.practice&&(r.config.mode!=='practice'||r.kind!=='practice'||slot!==0))throw Error('Practice commands require your solo range');}catch(error){rejectDelivery(ws,account,r,slot,b.input?.seq,'invalid_input');send(ws,{type:'error',error:error.message});return;}
   if(next.seq<=r.inputs[slot].seq){instrument('record','staleInputRejected',1,r);rejectDelivery(ws,account,r,slot,next.seq,'stale_sequence');return;}
   const accepted=admitDelivery(ws,account,r,slot,b.delivery,next.view_tick,next.seq,'arrival',needsRecovery(next));if(!accepted)return;
-  const {admission,ticket}=accepted,requested=next.view_tick;if(next.view_tick!==undefined)next.view_tick=admission.acceptedViewTick;
+  const {admission,ticket}=accepted,requested=next.view_tick;ticket.seq=next.seq;ticket.neutral=!needsRecovery(next);if(next.view_tick!==undefined)next.view_tick=admission.acceptedViewTick;
   emit('input_arrival',{room:r.id,slot,seq:next.seq,accepted:true,admission:{...admission,requested:requested??null},input:{...next}});
   if(requested!==undefined&&admission.acceptedViewTick!==requested)instrument('record','viewTickAdjusted',1,r);
   instrument('record','inputAccepted',1,r);
@@ -269,10 +293,10 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   r.inputs[slot]=next;r.inputDelivery[slot]=ticket;r.seen[slot]=performance.now();
  }
  function releaseInput(r,account){
-  r?.comms?.disconnect(account);controllers.get(account)?.deliveryReceipts?.reset();const slot=r?.members.indexOf(account)??-1;if(r?.status!=='running'||slot<0||!r.inputs)return;
+  clearAccountInputAcks(r,account);r?.comms?.disconnect(account);controllers.get(account)?.deliveryReceipts?.reset();const slot=r?.members.indexOf(account)??-1;if(r?.status!=='running'||slot<0||!r.inputs)return;
   const previous=r.inputs[slot],pilot=r.state?.players[slot];r.inputs[slot]={...neutral(),seq:previous.seq,yaw:pilot?.yaw??previous.yaw,pitch:pilot?.pitch??previous.pitch};clearPulses(r,slot);r.weaponRequests[slot]=null;r.seen[slot]=-Infinity;r.inputDelivery[slot]=null;r.buy[slot]=null;r.buyDelivery[slot]=null;
  }
- function control(ws,account,active){const r=current(account),slot=r?.members.indexOf(account)??-1;send(ws,{type:'control',active:active&&!ws.needsUpdate,inputProtocol:receiptProtocol(),room:r?.id||null,nextSeq:slot>=0?r.inputs?.[slot]?.seq??0:0,...(active&&!ws.needsUpdate?{token:ws.controlToken}:{})});}
+ function control(ws,account,active){if(!active)delete ws.appliedInputAck;const r=current(account),slot=r?.members.indexOf(account)??-1;send(ws,{type:'control',active:active&&!ws.needsUpdate,inputProtocol:receiptProtocol(),room:r?.id||null,nextSeq:slot>=0?r.inputs?.[slot]?.seq??0:0,...(active&&!ws.needsUpdate?{token:ws.controlToken}:{})});}
  function requireControl(account,b){if(!peers.get(account)?.size)return;const owner=controllers.get(account);if(!owner||owner.needsUpdate||typeof b.controlToken!=='string'||b.controlToken!==owner.controlToken)throw Error('Resume this tab to control the match');}
  const server=http.createServer(async(req,res)=>{const reply=(status,v)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(v));};const account=authenticate(req);if(!account)return reply(403,{error:'Forbidden'});try{
  if(req.method==='GET'&&req.url.startsWith('/api/quality')){const url=new URL(req.url,'http://runtime');if(url.pathname!=='/api/quality')return reply(404,{error:'Unknown endpoint'});await quality.ready;const windowMs=Number(url.searchParams.get('windowMs')||300000);return reply(200,{quality:quality.snapshot({windowMs,includeHistory:url.searchParams.get('history')==='1'}),resources:resourceSampler?.snapshot()??null,sampling:{inputAge:'one rotating controlled slot per native frame; age since last admitted input on runtime monotonic clock',inputFreshness:'absolute 400ms since issued state receipt; never renewed by input arrival; exact nonce/generation rechecked before Native',snapshotHistory:'explicit same-owner/room/life delivery ACK endpoints authorize rewind; inner writes alone do not',runtimeHeartbeat:'runtime peer only (commonly inner host proxy)',gatewayHeartbeat:'authenticated host to immediate peer (possibly Store proxy); not end-to-end browser RTT; separate from JS application ping',cohorts:'overlapping all/kind/ruleset sets; never sum them'}});}
@@ -326,7 +350,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
     ws.lastRtt=rtt;
    });
    ws.on('error',()=>ws.terminate());
-   ws.on('close',()=>{ws.deliveryReceipts?.reset();ws.viewHistory?.reset();instrument('record','socketClosed',1,current(account));set.delete(ws);if(controllers.get(account)===ws){controllers.delete(account);releaseInput(current(account),account)}if(!set.size){peers.delete(account);const room=current(account);if(isTactical(room)&&room.status==='waiting'){room.ready={};persist(room);broadcast(room);}if(room?.status==='running'&&room.connectedEver?.has(account))(room.disconnectedAt??=new Map()).set(account,Date.now())}});
+   ws.on('close',()=>{delete ws.appliedInputAck;ws.deliveryReceipts?.reset();ws.viewHistory?.reset();instrument('record','socketClosed',1,current(account));set.delete(ws);if(controllers.get(account)===ws){controllers.delete(account);releaseInput(current(account),account)}if(!set.size){peers.delete(account);const room=current(account);if(isTactical(room)&&room.status==='waiting'){room.ready={};persist(room);broadcast(room);}if(room?.status==='running'&&room.connectedEver?.has(account))(room.disconnectedAt??=new Map()).set(account,Date.now())}});
    ws.on('message',(raw,binary)=>{
     let parsed,parseError;
     if(!binary&&ws.gatewayTransport){
@@ -353,7 +377,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   for(const [id,quota]of creationQuotas)if(quota.until<Date.now())creationQuotas.delete(id);
  },heartbeatMs);heartbeat.unref();
  server.requestTimeout=5000;server.headersTimeout=5000;
- async function close(){closed=true;clearInterval(qualityTimer);clearInterval(heartbeat);clearInterval(retentionTimer);for(const r of rooms.values()){clearTimeout(r.timer);clearTimeout(r.queueTimer);clearTimeout(r.watchdog);r.child?.kill();closeTape(r);}for(const ws of sockets.clients)ws.terminate();await new Promise(resolve=>server.close(resolve));await resourceSampler?.close();await quality.close();}
+ async function close(){closed=true;clearInterval(qualityTimer);clearInterval(heartbeat);clearInterval(retentionTimer);for(const r of rooms.values()){clearRoomInputAcks(r);clearTimeout(r.timer);clearTimeout(r.queueTimer);clearTimeout(r.watchdog);r.child?.kill();closeTape(r);}for(const ws of sockets.clients)ws.terminate();await new Promise(resolve=>server.close(resolve));await resourceSampler?.close();await quality.close();}
  return{server,close,rooms,metrics,prune,quality,resourceSampler};
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)){const service=createBotStrike();service.server.listen(Number(process.env.PORT||8785),process.env.BIND||'127.0.0.1',()=>console.log('BotStrike 2050 room service ready'));for(const s of ['SIGINT','SIGTERM'])process.on(s,()=>service.close().then(()=>process.exit(0)));}

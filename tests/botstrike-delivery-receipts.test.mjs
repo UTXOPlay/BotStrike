@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {DeliveryReceipts,DELIVERY_RECEIPT_VERSION} from '../botstrike-service/delivery-receipts.mjs';
+import {DeliveryReceipts,DELIVERY_RECEIPT_VERSION,appliedInputAcknowledgement} from '../botstrike-service/delivery-receipts.mjs';
 function fixture(options={}){let now=1000;const receipts=new DeliveryReceipts({...options,now:()=>now});const context={owner:Symbol('owner'),room:'a'.repeat(24),life:1};const generation=receipts.prepare(context);return{receipts,context,generation,set:value=>now=value,advance:ms=>now+=ms,issue:(tick=80)=>receipts.issue(tick,generation)};}
 function written(f,tick){const delivery=f.issue(tick);assert.equal(f.receipts.written(delivery.nonce,f.generation),true);return delivery;}
 
@@ -39,8 +39,8 @@ test('explicit ownership reset clears authority even when the next room/life val
 });
 
 test('missing, malformed, unknown, expired and future receipts have fixed reasons without echoing raw nonce',()=>{
- const f=fixture();assert.deepEqual(f.receipts.admit(undefined,80,80),{ok:false,reason:'missing'});assert.deepEqual(f.receipts.admit({version:2,nonce:'private-value'},80,80),{ok:false,reason:'unsupported_version'});
- for(const delivery of [{version:1,nonce:'private-value'},{version:1,nonce:'f'.repeat(32)},{version:1,nonce:'f'.repeat(32),account:'private-value'}]){const rejected=f.receipts.admit(delivery,80,80);assert.deepEqual(rejected,{ok:false,reason:'unknown'});assert.equal(JSON.stringify(rejected).includes('private-value'),false);}
+ const f=fixture();assert.equal(DELIVERY_RECEIPT_VERSION,2);assert.deepEqual(f.receipts.admit(undefined,80,80),{ok:false,reason:'missing'});assert.deepEqual(f.receipts.admit({version:1,nonce:'private-value'},80,80),{ok:false,reason:'unsupported_version'});
+ for(const delivery of [{version:2,nonce:'private-value'},{version:2,nonce:'f'.repeat(32)},{version:2,nonce:'f'.repeat(32),account:'private-value'}]){const rejected=f.receipts.admit(delivery,80,80);assert.deepEqual(rejected,{ok:false,reason:'unknown'});assert.equal(JSON.stringify(rejected).includes('private-value'),false);}
  const d=written(f,88);assert.deepEqual(f.receipts.admit(d,88,87),{ok:false,reason:'future_receipt'});assert.deepEqual(f.receipts.admit(d,-1,88),{ok:false,reason:'invalid_tick'});f.advance(400);assert.equal(f.receipts.written(d.nonce,f.generation),false);assert.deepEqual(f.receipts.admit(d,88,88),{ok:false,reason:'expired'});
 });
 
@@ -62,4 +62,15 @@ test('wall-clock changes cannot affect monotonic lease, and injected clock regre
 test('service can require the exact acknowledged nonce when two receipts share a deadline',()=>{
  const f=fixture({capacity:2}),old=written(f,80),first=f.receipts.admit(old,80,80),other=written(f,84);f.receipts.admit(other,84,84);written(f,88);
  assert.equal(f.receipts.isFresh(first.deadlineAt,first.generation),true,'another acknowledged same-time entry can share the deadline');assert.equal(f.receipts.isFresh(first.deadlineAt,first.generation,old.nonce),false,'evicted original nonce must not inherit it');assert.equal(f.receipts.isFresh(first.deadlineAt,first.generation,other.nonce),true);
+});
+
+test('an applied input ACK requires a fresh final candidate and an exact changed-sequence same-life Native frame',()=>{
+ const candidate={seq:83,tick:84,life:1,neutral:true,freshAtWrite:true},before={last_seq:82,life:1},after={last_seq:83,life:1};
+ assert.deepEqual(appliedInputAcknowledgement(candidate,before,after,84),{version:1,seq:83,tick:84,life:1,neutral:true});
+ assert.equal(appliedInputAcknowledgement({...candidate,freshAtWrite:false},before,after,84),null);
+ assert.equal(appliedInputAcknowledgement(candidate,{...before,last_seq:83},after,84),null,'AI coincidence and early-return unchanged seq cannot be an ACK');
+ assert.equal(appliedInputAcknowledgement(candidate,before,{...after,last_seq:84},84),null,'a greater seq is not an exact ACK');
+ assert.equal(appliedInputAcknowledgement(candidate,before,after,85),null);
+ assert.equal(appliedInputAcknowledgement(candidate,before,{...after,life:2},84),null);
+ assert.equal(appliedInputAcknowledgement({...candidate,seq:0},before,{...after,last_seq:0},84),null);
 });

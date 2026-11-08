@@ -2,7 +2,7 @@ import {QUALITY_REPORT_MS,QUALITY_WINDOW_MS,qualityMetrics} from './connection-q
 
 const labels={
  appRttMs:['App ping round trip','Includes socket round trip and browser/server scheduling.'],
- inputAckMs:['Input → Native ACK observed','Send to the first received snapshot with that exact last_seq. Includes both directions, host ticks and scheduling.'],
+ inputAckMs:['Input → server confirmation','Send to receipt of the current controller’s exact Native execution confirmation. Includes both directions and server scheduling. Unavailable on legacy servers.'],
  snapshotGapMs:['New snapshot arrival gap','Time between received snapshots whose Native tick advances. This is not a packet-loss percentage.'],
  snapshotAgeMs:['Snapshot not updated for','Elapsed local time since the newest advancing snapshot arrived.'],
  interpolationAgeTicks:['Remote interpolation age','Latest received tick minus the tick actually selected for rendering. Native ticks, not milliseconds.'],

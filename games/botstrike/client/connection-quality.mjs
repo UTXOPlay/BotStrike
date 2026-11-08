@@ -69,7 +69,7 @@ export class ConnectionQuality{
   if(!sequence(lastSeq)||this.lastAck!==null&&lastSeq<=this.lastAck)return;
   const baseline=this.lastAck;this.lastAck=lastSeq;let matched=false,skipped=0;
   for(const [seq,sent]of this.pending){if(seq>lastSeq)continue;this.pending.delete(seq);if(seq===lastSeq){matched=true;this.sample('inputAckMs',Math.max(0,at-sent),at);}else skipped++;}
-  // Only the exact last_seq is known to have been executed. Earlier sent
+  // Only the exact confirmed sequence is known to have executed. Earlier sent
   // sequences may have been coalesced; never invent per-command ACK latencies.
   if(skipped)this.count('ackSkipped',skipped,at);
   if(!matched&&baseline!==null)this.count('ackUnmatched',1,at);

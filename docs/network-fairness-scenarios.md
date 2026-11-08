@@ -20,10 +20,20 @@ is excluded from that interval; this is not a whole-match no-AI claim.
 `moveBrowser(actor, [[x,z],...], options)` reads only that actor's own authorized
 Native public pose. Before each segment it uses real mouse feedback to align the actual camera to
 world yaw/pitch zero and requires corresponding Native acknowledgement. It then
-converts world directions into real WASD/Shift events,
-releases controls between bounded pulses, and waits for a sent neutral sequence's
-Native acknowledgement plus braking before the next decision. Short pulses at
-corners aim at the existing route without teleporting or skipping collision.
+converts world directions into real WASD/Shift events and uses normal F crouch
+near a waypoint. Each pulse is anchored to a new observed nonzero WebSocket
+send with the intended direction/modifiers. It releases movement, selects only
+a neutral send observed after the explicit keyup anchor, and waits for public
+sequence/stop feedback before the next decision. Near-target extra hold starts
+at zero and adapts from actual stopped public displacement: a zero-motion pulse
+grows gradually and an overshoot shortens the next one. Original targets,
+tolerance 2, 30-second segment timeout and five-second no-progress boundary are
+unchanged. Original modifiers are restored and confirmation or cleanup failure
+is recorded. This navigation feedback is not a private Native application proof;
+the v3 matrix separately requires explicit input ACKs and exact replay.
+Private pulse markers retain down/send/keyup/stop indexes, observed send time,
+sequence and public displacement. Marker I/O runs after movement release so it
+cannot extend a short hold. No private capture is read to steer.
 Blockage, death, lack of progress or timeout fails explicitly. Current routes:
 
 - A: `[-100,1050]` → `[-100,600]`.

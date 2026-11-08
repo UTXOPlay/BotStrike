@@ -39,7 +39,7 @@ test('quality stays runtime-private, persists across restart, and WS summary adm
    assert.equal((await fetch(f.base+endpoint)).status,403);assert.equal((await f.request(0,endpoint,undefined,{'X-Runtime-Token':'wrong'})).status,403);
   }
   const created=await f.action(0,training);assert.equal(created.status,200);const room=f.service.rooms.get(created.body.room.id);await until(()=>room.state?.tick>0);
-  const owner=await f.connect(0),observer=await f.connect(0),report=summary();assert.deepEqual(owner.control().inputProtocol,{version:1,maxAgeMs:400});report.metrics.appRttMs={n:17,p50:12,p95:30,max:40};
+  const owner=await f.connect(0),observer=await f.connect(0),report=summary();assert.deepEqual(owner.control().inputProtocol,{version:2,maxAgeMs:400});report.metrics.appRttMs={n:17,p50:12,p95:30,max:40};
   owner.send(report);owner.send(report);await until(()=>count(f.service.quality,'clientAppRttSamples','practice')===34);
   assert.equal(observed(f.service.quality,'clientAppRttWindowP95Ms','practice').observations,2);
   owner.send(report);observer.send(report);await until(()=>count(f.service.quality,'clientReportsRejected')===2);

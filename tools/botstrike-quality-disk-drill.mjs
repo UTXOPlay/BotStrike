@@ -16,14 +16,16 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const json=async file=>JSON.parse(await fs.readFile(file,'utf8'));
 const save=(file,value)=>fs.writeFile(file,JSON.stringify(value,null,2)+'\n',{mode:0o600});
 const inside=(base,target)=>{const absolute=path.resolve(target);assert.ok(absolute.startsWith(path.resolve(base)+path.sep),'Path escapes owned drill root');return absolute;};
-async function privateDirectory(directory){const real=await fs.realpath(directory),s=await fs.lstat(directory);assert.equal(real,path.resolve(directory),'Owned directories cannot redirect');assert.ok(s.isDirectory()&&!s.isSymbolicLink()&&s.uid===process.getuid()&&(s.mode&0o077)===0,'Owned mode-0700 directory required');return real;}
+async function privateDirectory(directory){const real=await fs.realpath(directory),s=await fs.lstat(directory);assert.equal(real,path.resolve(directory),'Owned directories cannot redirect');assert.ok(s.isDirectory()&&!s.isSymbolicLink()&&s.uid===process.getuid()&&(s.mode&0o777)===0o700,'Owned mode-0700 directory required');return real;}
 async function regular(file,maxBytes=64*1024**2){const s=await fs.lstat(file);assert.ok(s.isFile()&&!s.isSymbolicLink()&&s.size<=maxBytes,'Bounded regular file required: '+file);return fs.readFile(file);}
 async function inventory(directory){const rows=[];async function walk(base,relative=''){for(const entry of(await fs.readdir(base,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))){const file=path.join(base,entry.name),name=path.join(relative,entry.name);assert.ok(!entry.isSymbolicLink(),'Source contains a symlink');if(entry.isDirectory())await walk(file,name);else{const bytes=await regular(file);rows.push({file:name,bytes:bytes.length,sha256:hash(bytes)});assert.ok(rows.length<=2048&&rows.reduce((n,r)=>n+r.bytes,0)<=512*1024**2,'Source inventory exceeds drill bound');}}}await walk(directory);return rows;}
 async function sourceHashes(base){return Object.fromEntries(await Promise.all(modules.map(async file=>[file,hash(await regular(path.join(base,file)))])));}
 
-export async function inspectOpsSource(sourceRoot){
+export async function inspectOpsSource(sourceRoot,{sourceBase}={}){
  assert.ok(typeof sourceRoot==='string'&&path.isAbsolute(sourceRoot)&&!sourceRoot.includes('://'),'Only an owned local ops root is accepted');
- const root=await privateDirectory(sourceRoot);assert.match(root,/^\/tmp\/botstrike-quality-ops-[A-Za-z0-9]+$/,'Only this goal\'s disposable ops roots are accepted');
+ let base='/tmp';
+ if(sourceBase!==undefined){assert.ok(typeof sourceBase==='string'&&path.isAbsolute(sourceBase)&&!sourceBase.includes('://'),'An explicit owned local source base is required');base=await privateDirectory(sourceBase);}
+ const root=await privateDirectory(sourceRoot);assert.ok(path.dirname(root)===base&&/^botstrike-quality-ops-[A-Za-z0-9]+$/.test(path.basename(root)),'Only direct disposable ops roots below the authorized source base are accepted');
  // The original ops tool created its marker with default file permissions;
  // its enclosing owned 0700 directory supplies the privacy boundary.
  const marker=path.join(root,'.ops-drill-owner'),m=await fs.lstat(marker);assert.equal(m.uid,process.getuid(),'Ops owner marker must belong to this user');assert.equal((await regular(marker,128)).length,32,'Ops owner marker required');
@@ -37,7 +39,18 @@ export async function inspectOpsSource(sourceRoot){
  for(const name of ['botstrike-engine','myelin-botstrike'])assert.match(current.sha256[name],/^[a-f0-9]{64}$/);
  const expected={};for(const [id,p]of Object.entries(room.participants||{}))if(p.ticks>0){assert.match(id,/^[a-f0-9]{64}$/);const ledger=JSON.parse(await regular(path.join(data,'careers',id+'.json')));assert.equal(ledger.version,1);assert.equal(ledger.matches,1);assert.deepEqual(ledger.applied,{[room.id]:true});expected[id]=ledger;}
  assert.ok(Object.keys(expected).length>0&&Object.keys(expected).length<=10,'Attributed synthetic career source required');
- return{root,data,roomId:room.id,profile:DISK_PROFILE,expectedPair:current.sha256,expectedCareers:expected,sourceInventory:await inventory(data),exportSha256:hash(exported)};
+ return{root,data,sourceAuthorization:{kind:sourceBase===undefined?'legacy_tmp':'explicit_owned_base',base},roomId:room.id,profile:DISK_PROFILE,expectedPair:current.sha256,expectedCareers:expected,sourceInventory:await inventory(data),exportSha256:hash(exported)};
+}
+
+export function parseDiskDrillArguments(args){
+ assert.ok(Array.isArray(args),'Disk drill arguments must be an array');const result={},seen=new Set();
+ for(let i=0;i<args.length;i++){
+  const flag=args[i];assert.ok(['--preflight','--prototype','--source-base','--source-root'].includes(flag),'Unsupported disk drill argument');assert.ok(!seen.has(flag),'Duplicate disk drill argument');seen.add(flag);
+  if(flag==='--preflight')result.preflightOnly=true;
+  else if(flag==='--prototype')result.devSource=repo;
+  else{const value=args[++i];assert.ok(typeof value==='string'&&path.isAbsolute(value)&&!value.includes('://'),'Source paths must be absolute local paths');result[flag==='--source-base'?'sourceBase':'sourceRoot']=value;}
+ }
+ assert.equal(seen.has('--source-base'),seen.has('--source-root'),'--source-base and --source-root must be supplied together');return result;
 }
 
 export function diskContainerArguments({runId,dataDir,applicationImageId,devSource=null}){
@@ -74,12 +87,12 @@ async function containerWorker(){
 }
 
 export async function runDiskDrill(options={}){
- assert.ok(options&&typeof options==='object'&&!Array.isArray(options)&&Object.keys(options).every(key=>['sourceRoot','applicationImage','devSource','preflightOnly'].includes(key)),'Unsupported disk drill option');
- const {sourceRoot='/tmp/botstrike-quality-ops-xoAg8l',applicationImage=BASE_IMAGE,devSource=null,preflightOnly=false}=options;assert.equal(typeof preflightOnly,'boolean');assert.ok(typeof applicationImage==='string'&&/^[A-Za-z0-9][A-Za-z0-9._/:@-]{1,200}$/.test(applicationImage)&&!applicationImage.includes('://'),'Local application image reference required');
+ assert.ok(options&&typeof options==='object'&&!Array.isArray(options)&&Object.keys(options).every(key=>['sourceRoot','sourceBase','applicationImage','devSource','preflightOnly'].includes(key)),'Unsupported disk drill option');
+ const {sourceRoot='/tmp/botstrike-quality-ops-xoAg8l',sourceBase,applicationImage=BASE_IMAGE,devSource=null,preflightOnly=false}=options;assert.equal(typeof preflightOnly,'boolean');assert.ok(sourceBase===undefined||typeof options.sourceRoot==='string','An explicit source base requires its explicit source root');assert.ok(typeof applicationImage==='string'&&/^[A-Za-z0-9][A-Za-z0-9._/:@-]{1,200}$/.test(applicationImage)&&!applicationImage.includes('://'),'Local application image reference required');
  if(devSource!==null)assert.equal(await fs.realpath(devSource),repo,'Only this read-only development checkout is supported');
- const source=await inspectOpsSource(sourceRoot);await fs.mkdir(DISK_ARTIFACTS_ROOT,{recursive:true,mode:0o700});await privateDirectory(DISK_ARTIFACTS_ROOT);
+ const source=await inspectOpsSource(sourceRoot,{sourceBase});await fs.mkdir(DISK_ARTIFACTS_ROOT,{recursive:true,mode:0o700});await privateDirectory(DISK_ARTIFACTS_ROOT);
  const root=await fs.mkdtemp(path.join(DISK_ARTIFACTS_ROOT,'disk-drill-'));await fs.chmod(root,0o700);const runId=randomUUID(),data=path.join(root,'data'),reportFile=path.join(root,'report.json');await fs.writeFile(path.join(root,'.ops-drill-owner'),runId,{mode:0o600});
- const report={schemaVersion:1,status:'preparing',runId,root,startedAt:new Date().toISOString(),syntheticRepairClone:true,developmentBind:devSource!==null,immutableImageAcceptance:false,limitations:['Only the synthetic career aggregate tmpfs is exhausted; no whole-host disk-full, power-loss, production-save, or public network acceptance is claimed.','The source signed export is reverified on its recorded exact original pair; no rules or signed bytes are reinterpreted.','The tmpfs is ephemeral; its recovered ledger is copied to owned evidence before shutdown and cold-copied into the clone after unmount.'],source:{root:source.root,roomId:source.roomId,profile:source.profile,exportSha256:source.exportSha256},commands:[]};let id;
+ const report={schemaVersion:1,status:'preparing',runId,root,startedAt:new Date().toISOString(),syntheticRepairClone:true,developmentBind:devSource!==null,immutableImageAcceptance:false,limitations:['Only the synthetic career aggregate tmpfs is exhausted; no whole-host disk-full, power-loss, production-save, or public network acceptance is claimed.','The source signed export is reverified on its recorded exact original pair; no rules or signed bytes are reinterpreted.','The tmpfs is ephemeral; its recovered ledger is copied to owned evidence before shutdown and cold-copied into the clone after unmount.'],source:{root:source.root,authorization:source.sourceAuthorization,roomId:source.roomId,profile:source.profile,exportSha256:source.exportSha256},commands:[]};let id;
  async function docker(args,timeout=30000){report.commands.push(args);let result;try{result=await execute('docker',args,{encoding:'utf8',timeout,maxBuffer:8*1024**2});}catch(error){if(args[0]==='start'){await fs.writeFile(path.join(root,'container-stdout.log'),String(error.stdout||''),{mode:0o600});await fs.writeFile(path.join(root,'container-stderr.log'),String(error.stderr||''),{mode:0o600});}throw error;}if(args[0]==='start'){await fs.writeFile(path.join(root,'container-stdout.log'),result.stdout,{mode:0o600});await fs.writeFile(path.join(root,'container-stderr.log'),result.stderr,{mode:0o600});report.containerCapture={stdout:'container-stdout.log',stderr:'container-stderr.log',complete:true};}return result.stdout.trim();}
  try{
   const image=JSON.parse(await docker(['image','inspect',applicationImage]))[0];report.image={reference:applicationImage,id:image.Id,sourceRevision:image.Config.Labels?.['org.opencontainers.image.revision']??null};
@@ -104,6 +117,6 @@ export async function runDiskDrill(options={}){
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===here){
  if(process.argv[2]==='--container-worker')await containerWorker();
- else try{const args=process.argv.slice(2);assert.ok(args.every(arg=>['--preflight','--prototype'].includes(arg)),'Only --preflight and --prototype are accepted; source URLs/data paths are not CLI arguments');const result=await runDiskDrill({applicationImage:process.env.BOTSTRIKE_DISK_APPLICATION_IMAGE||BASE_IMAGE,devSource:args.includes('--prototype')?repo:null,preflightOnly:args.includes('--preflight')});console.log(JSON.stringify({status:result.report.status,immutableImageAcceptance:result.report.immutableImageAcceptance,report:result.reportFile}));if(result.report.status==='failed')process.exitCode=1;}
+ else try{const result=await runDiskDrill({applicationImage:process.env.BOTSTRIKE_DISK_APPLICATION_IMAGE||BASE_IMAGE,...parseDiskDrillArguments(process.argv.slice(2))});console.log(JSON.stringify({status:result.report.status,immutableImageAcceptance:result.report.immutableImageAcceptance,report:result.reportFile}));if(result.report.status==='failed')process.exitCode=1;}
  catch(error){console.error(JSON.stringify({status:'failed',message:error.message,report:error.diskReport||null}));process.exitCode=1;}
 }

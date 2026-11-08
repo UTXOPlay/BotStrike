@@ -127,12 +127,37 @@ async function runtimeChild(){
 }
 async function openPilot(runtime,id,roomId){
  const ws=new WebSocket(runtime.base.replace('http','ws')+'/api/socket',{headers:{'X-Runtime-Token':runtime.token,'X-UTXOPlay-Account':id}}),pilot={ws,id,roomId,token:null,state:null,sent:0,highestAck:0,snapshots:0,errors:[]};
- pilot.delivery=trackSocketDelivery(ws);
- ws.on('error',error=>pilot.errors.push(error.message));ws.on('message',raw=>{const message=JSON.parse(raw);if(message.type==='control'&&message.active)pilot.token=message.token;else if(message.type==='state'){pilot.state=message.room;pilot.snapshots++;pilot.highestAck=Math.max(pilot.highestAck,message.room?.state?.players[message.room.slot]?.last_seq||0);}else if(message.type==='error')pilot.errors.push(message.error);});
+ pilot.delivery=trackSocketDelivery(ws);pilot.inputProof=createPilotInputProof(roomId);
+ ws.on('error',error=>pilot.errors.push(error.message));ws.on('close',()=>{pilot.token=null;pilot.inputProof.close();pilot.highestAck=0;});ws.on('message',raw=>{const message=JSON.parse(raw);pilot.inputProof.receive(message);pilot.highestAck=pilot.inputProof.highestAck;if(message.type==='control')pilot.token=message.active?message.token:null;else if(message.type==='state'){pilot.state=message.room;pilot.snapshots++;}else if(message.type==='error')pilot.errors.push(message.error);});
  await waitFor('pilot controller',()=>pilot.token,{timeout:15000});return pilot;
 }
-function startInputs(pilot){pilot.timer=setInterval(()=>{if(pilot.ws.readyState!==WebSocket.OPEN||pilot.state?.status!=='running'||!pilot.delivery.get(pilot.roomId))return;const seq=++pilot.sent,input={...neutral(),seq,x:.4*Math.sin(seq/19),y:.3,yaw:pilot.state.slot<5?0:Math.PI,pitch:0,fire:seq%3!==0,reload:seq%90===0,jump:seq%120===0,viewTick:Math.max(0,pilot.state.state?.tick-4||0)};pilot.ws.send(JSON.stringify(pilot.delivery.envelope(pilot.roomId,input)));},25);}
+function startInputs(pilot){pilot.timer=setInterval(()=>{if(pilot.ws.readyState!==WebSocket.OPEN||pilot.state?.status!=='running'||!pilot.delivery.get(pilot.roomId))return;const seq=++pilot.sent,input={...neutral(),seq,x:.4*Math.sin(seq/19),y:.3,yaw:pilot.state.slot<5?0:Math.PI,pitch:0,fire:seq%3!==0,reload:seq%90===0,jump:seq%120===0,viewTick:Math.max(0,pilot.state.state?.tick-4||0)},envelope=pilot.delivery.envelope(pilot.roomId,input);if(pilot.inputProof.sent(envelope))pilot.ws.send(JSON.stringify(envelope));},25);}
 function closePilots(pilots){for(const pilot of pilots){clearInterval(pilot.timer);pilot.ws.terminate();}}
+// Local tool guard, not a second service ACK issuer. The bounded sent map binds
+// the canonical controller-only wire proof to this pilot's current WS context.
+export function createPilotInputProof(roomId){
+ assert.match(roomId,/^[a-f0-9]{24}$/);let owner=null,context=null,highestAck=0,lastNativeSeq=null,verifiedAckCount=0;const known=new Map();
+ const reset=()=>{known.clear();context=null;highestAck=0;lastNativeSeq=null;};
+ const isNeutral=input=>!['x','y','fire','reload','walk','crouch','jump','ability','interact','scope','drop','item','practice'].some(key=>!!input[key])&&input.weapon==null&&input.buy==null;
+ return{
+  get highestAck(){return highestAck;},get lastNativeSeq(){return lastNativeSeq;},get verifiedAckCount(){return verifiedAckCount;},get pending(){return known.size;},
+  close(){owner=null;reset();},
+  sent(envelope){
+   const input=envelope?.input,delivery=envelope?.delivery;if(!owner||!context||envelope.type!=='input'||envelope.room!==roomId||delivery?.version!==2||!/^[a-f0-9]{32}$/.test(delivery.nonce||'')||!Number.isSafeInteger(input?.seq)||input.seq<1||input.seq>0xffffffff||known.has(input.seq)||input.seq<=highestAck)return false;
+   known.set(input.seq,{...context,neutral:isNeutral(input)});while(known.size>256)known.delete(known.keys().next().value);return true;
+  },
+  receive(message){
+   if(message?.type==='control'){reset();owner=message.active===true&&typeof message.token==='string'&&message.token.length>0&&message.inputProtocol?.version===2&&message.inputProtocol.maxAgeMs===400?message.token:null;return null;}
+   if(message?.type==='input_resync'){reset();return null;}if(message?.type!=='state')return null;
+   const room=message.room,player=room?.state?.players?.[room.slot],tick=room?.state?.tick,life=player?.life;
+   if(!owner||room?.id!==roomId||!Number.isSafeInteger(life)||life<1||!Number.isSafeInteger(tick)||tick<0||message.delivery?.version!==2||!/^[a-f0-9]{32}$/.test(message.delivery.nonce||'')){reset();return null;}
+   if(context&&(context.life!==life||context.owner!==owner||context.room!==room.id))reset();context={owner,room:room.id,life,minNativeTick:tick};lastNativeSeq=Number.isSafeInteger(player.last_seq)?player.last_seq:null;
+   const ack=message.inputAck;if(!ack||Array.isArray(ack)||Object.keys(ack).sort().join(',')!=='life,neutral,seq,tick,version'||ack.version!==1||!Number.isSafeInteger(ack.seq)||ack.seq<1||ack.seq>0xffffffff||!Number.isSafeInteger(ack.tick)||ack.tick<1||ack.life!==life||typeof ack.neutral!=='boolean'||ack.seq!==player.last_seq||ack.tick>tick)return null;
+   const sent=known.get(ack.seq);if(!sent||sent.owner!==owner||sent.room!==room.id||sent.life!==life||ack.tick<=sent.minNativeTick||(ack.neutral&&!sent.neutral))return null;
+   highestAck=Math.max(highestAck,ack.seq);verifiedAckCount++;for(const seq of known.keys())if(seq<=ack.seq)known.delete(seq);return Object.freeze({...ack});
+  },
+ };
+}
 const liveStatuses=new Set(['running','waiting','sealing']);
 export function drainedForBackup(metrics){return!!(metrics?.draining===true&&metrics.drainReady===true&&metrics.pendingIO===0&&metrics.sealingJobs===0&&metrics.rooms&&typeof metrics.rooms==='object'&&!Array.isArray(metrics.rooms)&&Object.entries(metrics.rooms).every(([status,count])=>Number.isSafeInteger(count)&&count>=0&&(!liveStatuses.has(status)||count===0)));}
 
@@ -158,8 +183,9 @@ async function currentMatch(root,assets,provenance,progress){
   assert.ok(drainedForBackup(completed.metrics),'Drain did not reach zero active rooms and zero pending recording I/O');
   const file=path.join(root,'exports','current.json');await writeJSON(file,await runtime.request(a,'/api/export'));
   const quality=await runtime.request(a,'/api/quality?history=1');await writeJSON(path.join(root,'evidence','active-match-quality.json'),quality);await writeJSON(path.join(root,'evidence','active-match-resources.json'),samples);
+  const pilotEvidence=pilots.map(p=>({slot:p.state?.slot,sent:p.sent,highestAck:p.highestAck,verifiedAckCount:p.inputProof.verifiedAckCount,lastNativeSeqDiagnostic:p.inputProof.lastNativeSeq,ackProof:'controller_inputAck_exact_known_sent_v2',proofSnapshot:'before_pilot_close',snapshots:p.snapshots,errors:[...p.errors]}));
   await runtime.ipc('flush');closePilots(pilots);const stoppedRuntime=await runtime.stop();stopped=true;assert.equal(stoppedRuntime.trace.dropped,0);assert.equal(stoppedRuntime.trace.errorCode,null);
-  return{data,roomId:id,account:a,proof:completed.room.proof,career,ticks:completed.room.state.tick,source:'two_automated_active_clients_eight_native_bots',humanParticipants:0,drain:{requestedWhileRunning:true,newMatchRejected:true,activeAtCompletion:0,pendingIO:completed.metrics.pendingIO,drainReady:completed.metrics.drainReady},pilots:pilots.map(p=>({slot:p.state?.slot,sent:p.sent,highestAck:p.highestAck,snapshots:p.snapshots,errors:p.errors})),resources:{samples:samples.length,live:samples.filter(s=>s.phase==='running').length,sealing:samples.filter(s=>s.phase==='sealing').length,nativeObserved:samples.filter(s=>(s.sample?.native?.processes||0)>0).length,verifierObserved:samples.filter(s=>(s.sample?.verifier?.processes||0)>0).length,artifact:'evidence/active-match-resources.json',boundary:'separate_runtime_Node_process_including_seal_worker_threads; native_child_family_and_verifier_child_family_reported_separately; driver_and_clients_in_parent_excluded'},trace:stoppedRuntime.trace,qualityArtifact:'evidence/active-match-quality.json',exportSha256:digest(await fs.readFile(file))};
+  return{data,roomId:id,account:a,proof:completed.room.proof,career,ticks:completed.room.state.tick,source:'two_automated_active_clients_eight_native_bots',humanParticipants:0,drain:{requestedWhileRunning:true,newMatchRejected:true,activeAtCompletion:0,pendingIO:completed.metrics.pendingIO,drainReady:completed.metrics.drainReady},pilots:pilotEvidence,resources:{samples:samples.length,live:samples.filter(s=>s.phase==='running').length,sealing:samples.filter(s=>s.phase==='sealing').length,nativeObserved:samples.filter(s=>(s.sample?.native?.processes||0)>0).length,verifierObserved:samples.filter(s=>(s.sample?.verifier?.processes||0)>0).length,artifact:'evidence/active-match-resources.json',boundary:'separate_runtime_Node_process_including_seal_worker_threads; native_child_family_and_verifier_child_family_reported_separately; driver_and_clients_in_parent_excluded'},trace:stoppedRuntime.trace,qualityArtifact:'evidence/active-match-quality.json',exportSha256:digest(await fs.readFile(file))};
  }finally{closePilots(pilots);if(!stopped)await runtime.terminate();}
 }
 export async function baselineSource(root,ref,{bundleDirectory=path.join(repo,'build-validation/network-quality/rollback-source'),requireBundle=process.env.BOTSTRIKE_OPS_REQUIRE_BUNDLE==='1'}={}){

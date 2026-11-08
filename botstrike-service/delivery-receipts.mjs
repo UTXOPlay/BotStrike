@@ -4,12 +4,20 @@
 import {randomBytes} from 'node:crypto';
 import {performance} from 'node:perf_hooks';
 
-export const DELIVERY_RECEIPT_VERSION=1;
+export const DELIVERY_RECEIPT_VERSION=2;
 export const DELIVERY_RECEIPT_MAX_AGE_MS=400;
 const tick=value=>Number.isSafeInteger(value)&&value>=0&&value<=230400;
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const token=value=>typeof value==='string'&&/^[a-f0-9]{32}$/.test(value);
 const exactDelivery=value=>object(value)&&Object.keys(value).length===2&&Object.hasOwn(value,'version')&&Object.hasOwn(value,'nonce');
+
+// Called only with a final, fresh-at-write controller candidate and its paired
+// Native frame. A scalar last_seq, including an AI-generated one, is not proof.
+export function appliedInputAcknowledgement(candidate,previousPlayer,player,frameTick){
+ if(!candidate||candidate.freshAtWrite!==true||!tick(candidate.tick)||candidate.tick<1||candidate.tick!==frameTick||!Number.isSafeInteger(candidate.seq)||candidate.seq<1||candidate.seq>0xffffffff||!Number.isSafeInteger(candidate.life)||candidate.life<1||typeof candidate.neutral!=='boolean')return null;
+ if(previousPlayer?.life!==candidate.life||player?.life!==candidate.life||player.last_seq!==candidate.seq||previousPlayer.last_seq===candidate.seq)return null;
+ return Object.freeze({version:1,seq:candidate.seq,tick:candidate.tick,life:candidate.life,neutral:candidate.neutral});
+}
 
 export class DeliveryReceipts{
  constructor({capacity=24,maxAgeMs=DELIVERY_RECEIPT_MAX_AGE_MS,rewindTicks=12,now=()=>performance.now()}={}){

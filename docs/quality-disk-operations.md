@@ -8,11 +8,26 @@ simulate a power loss, test production saves, or certify a deployment.
 The default source is the existing successful synthetic operations rehearsal
 `/tmp/botstrike-quality-ops-xoAg8l`. That old rehearsal supplies signed fixture
 bytes and attribution; it is not current-source operations acceptance. The
-tool accepts only a private owned `/tmp/botstrike-quality-ops-*` root with its
+Without explicit source authorization the tool accepts only a private owned
+direct `/tmp/botstrike-quality-ops-*` root with its
 32-byte `.ops-drill-owner`, successful report, synthetic active-client origin,
 original current-profile export hash, exact pair hashes and career ledger. A
 URL, SSH destination, production data path, arbitrary artifact directory or
 foreign container ID is not an accepted option.
+
+For a new immutable rehearsal whose temporary data lives on a home-owned
+filesystem, supply both `--source-base BASE` and `--source-root ROOT`. This is
+an explicit local read authorization, not an environment-variable expansion of
+the default. `BASE` and `ROOT` must resolve to their own canonical paths, belong
+to the current UID and have mode 0700. `ROOT` must be a direct child of `BASE`
+named `botstrike-quality-ops-` followed only by alphanumeric characters. Nested,
+adjacent-prefix and symlinked paths fail. The original report must still name
+that exact root and its own `live-data`; moving evidence or editing the report
+to claim a different location is not accepted. All marker, successful synthetic
+origin, signed-export, exact-profile and original-ledger checks remain mandatory.
+The private disk report records `source.authorization` with the canonical base
+and whether the caller explicitly authorized it. No username or date is part of
+this source-base API.
 
 New runs allocate mode-0700 `disk-drill-*` directories below
 `/home/arthur/.codex/artifacts/botstrike-network-20261108`. The complete source
@@ -31,6 +46,9 @@ node tools/botstrike-quality-disk-drill.mjs --prototype
 
 # Final immutable image must already contain this tool and matching modules.
 BOTSTRIKE_DISK_APPLICATION_IMAGE=sha256:<local-image-id> node tools/botstrike-quality-disk-drill.mjs
+
+# Fresh home-filesystem ops source, using its original unmodified report paths.
+BOTSTRIKE_DISK_APPLICATION_IMAGE=sha256:<local-image-id> node tools/botstrike-quality-disk-drill.mjs --source-base /owned/private/tmp --source-root /owned/private/tmp/botstrike-quality-ops-Ab12Cd
 ```
 
 Prototype mode binds only this checkout's service and tools directories read
@@ -40,10 +58,15 @@ and revision label, and compares the worker's tool/career/retention file hashes
 with the initiating source. It does not pull an image or contact a registry.
 
 The exported API is
-`runDiskDrill({sourceRoot, applicationImage, devSource: null|checkout,
-preflightOnly: false})`, returning `{root, reportFile, report}`. The CLI exposes
-only `--preflight` and `--prototype`; the image can be selected through
-`BOTSTRIKE_DISK_APPLICATION_IMAGE`. `preflight_only` is not a disk-drill pass.
+`runDiskDrill({sourceRoot, sourceBase, applicationImage, devSource: null|checkout,
+preflightOnly: false})`, returning `{root, reportFile, report}`.
+`inspectOpsSource(sourceRoot, {sourceBase})` runs the same read-only source guards.
+Omitting `sourceBase` preserves the strict `/tmp` default; an explicit base
+requires an explicit root. The CLI accepts `--preflight`, `--prototype` and the
+paired source flags above; unknown, duplicate, missing or nonlocal path arguments
+fail before execution. The image can be selected through
+`BOTSTRIKE_DISK_APPLICATION_IMAGE`. Output clone placement remains the fixed
+private artifacts root above. `preflight_only` is not a disk-drill pass.
 
 The owned container uses the inspected immutable image ID, `--network none`,
 read-only root filesystem, dropped capabilities, no-new-privileges, user

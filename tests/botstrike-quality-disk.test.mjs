@@ -5,10 +5,10 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {createHash,randomUUID} from 'node:crypto';
-import {inspectOpsSource,diskContainerArguments,runDiskDrill,DISK_ARTIFACTS_ROOT,DISK_PROFILE} from '../tools/botstrike-quality-disk-drill.mjs';
+import {inspectOpsSource,parseDiskDrillArguments,diskContainerArguments,runDiskDrill,DISK_ARTIFACTS_ROOT,DISK_PROFILE} from '../tools/botstrike-quality-disk-drill.mjs';
 const write=(file,value)=>fs.writeFile(file,JSON.stringify(value),{mode:0o600});
-async function fixture(t){
- const root=await fs.mkdtemp(path.join(tmpdir(),'botstrike-quality-ops-'));t.after(()=>fs.rm(root,{recursive:true,force:true}));await fs.chmod(root,0o700);
+async function fixture(t,base='/tmp'){
+ const root=await fs.mkdtemp(path.join(base,'botstrike-quality-ops-'));t.after(()=>fs.rm(root,{recursive:true,force:true}));await fs.chmod(root,0o700);
  const roomId='a'.repeat(24),account='1'.padStart(64,'0'),data=path.join(root,'live-data');for(const directory of ['assets','exports','live-data/rooms/'+roomId,'live-data/careers','live-data/accounts'])await fs.mkdir(path.join(root,directory),{recursive:true,mode:0o700});
  const exported={application:'myelin-botstrike',fixture:'guard-only-not-a-signed-export'},bytes=JSON.stringify(exported),sha256={'botstrike-engine':'b'.repeat(64),'myelin-botstrike':'c'.repeat(64)},proof={verified:true,profile:DISK_PROFILE};
  await fs.writeFile(path.join(root,'.ops-drill-owner'),Buffer.alloc(32,1),{mode:0o600});await fs.writeFile(path.join(root,'exports/current.json'),bytes,{mode:0o600});await fs.writeFile(path.join(data,'rooms',roomId,'export.json'),bytes,{mode:0o600});await fs.writeFile(path.join(data,'rooms',roomId,'tape.jsonl'),'guard fixture',{mode:0o600});
@@ -17,6 +17,21 @@ async function fixture(t){
 }
 test('owned passed synthetic ops input binds its original export, attribution and exact profile without invoking verification',async t=>{
  const f=await fixture(t),source=await inspectOpsSource(f.root);assert.equal(source.root,f.root);assert.equal(source.profile,DISK_PROFILE);assert.equal(source.roomId,f.roomId);assert.equal(source.expectedPair['botstrike-engine'],'b'.repeat(64));assert.equal(Object.keys(source.expectedCareers).length,1);assert.ok(source.sourceInventory.every(row=>/^[a-f0-9]{64}$/.test(row.sha256)));
+ assert.deepEqual(source.sourceAuthorization,{kind:'legacy_tmp',base:'/tmp'});
+});
+test('an explicit owned private base permits only its direct ops child and retains original report/export guards',async t=>{
+ const base=await fs.mkdtemp(path.join(tmpdir(),'disk-source-base-'));t.after(()=>fs.rm(base,{recursive:true,force:true}));await fs.chmod(base,0o700);const f=await fixture(t,base);
+ await assert.rejects(inspectOpsSource(f.root),/authorized source base/);const source=await inspectOpsSource(f.root,{sourceBase:base});assert.deepEqual(source.sourceAuthorization,{kind:'explicit_owned_base',base});assert.equal(source.exportSha256,f.report.stages.activeMatch.exportSha256);
+ await fs.chmod(base,0o755);await assert.rejects(inspectOpsSource(f.root,{sourceBase:base}),/mode-0700/);await fs.chmod(base,0o500);await assert.rejects(inspectOpsSource(f.root,{sourceBase:base}),/mode-0700/);await fs.chmod(base,0o700);
+ const nested=path.join(base,'nested');await fs.mkdir(nested,{mode:0o700});const deeper=await fixture(t,nested);await assert.rejects(inspectOpsSource(deeper.root,{sourceBase:base}),/direct disposable ops/);
+ const unrelated=await fixture(t);await assert.rejects(inspectOpsSource(unrelated.root,{sourceBase:base}),/authorized source base/);
+ const alias=path.join(base,'base-alias');await fs.symlink(base,alias);await assert.rejects(inspectOpsSource(f.root,{sourceBase:alias}),/cannot redirect/);const rootAlias=path.join(base,'botstrike-quality-ops-alias');await fs.symlink(f.root,rootAlias);await assert.rejects(inspectOpsSource(rootAlias,{sourceBase:base}),/cannot redirect/);
+ f.report.root=path.join('/tmp',path.basename(f.root));await write(path.join(f.root,'report.json'),f.report);await assert.rejects(inspectOpsSource(f.root,{sourceBase:base}));f.report.root=f.root;f.report.stages.activeMatch.data=path.join('/tmp',path.basename(f.root),'live-data');await write(path.join(f.root,'report.json'),f.report);await assert.rejects(inspectOpsSource(f.root,{sourceBase:base}),/bind its own live-data/);
+ await assert.rejects(inspectOpsSource(f.root,{sourceBase:'ssh://host/tmp'}),/explicit owned local/);
+});
+test('CLI source authorization requires both absolute local paths, rejects duplicates and never widens by default',()=>{
+ assert.deepEqual(parseDiskDrillArguments([]),{});assert.deepEqual(parseDiskDrillArguments(['--preflight','--source-base','/owned/base','--source-root','/owned/base/botstrike-quality-ops-abc']),{preflightOnly:true,sourceBase:'/owned/base',sourceRoot:'/owned/base/botstrike-quality-ops-abc'});
+ for(const args of [['--source-root','/tmp/botstrike-quality-ops-a'],['--source-base','/owned/base'],['--source-base'],['--source-root','relative'],['--source-base','ssh://host/tmp'],['--preflight','--preflight'],['--source-base','/owned','--source-root','/owned/botstrike-quality-ops-a','--source-root','/owned/botstrike-quality-ops-b'],['--output','/other']])assert.throws(()=>parseDiskDrillArguments(args));
 });
 test('source guards reject missing/private-owner violations, failed reports, signed-byte changes, foreign profiles and redirecting files',async t=>{
  const f=await fixture(t),marker=path.join(f.root,'.ops-drill-owner');await fs.unlink(marker);await assert.rejects(inspectOpsSource(f.root));await fs.writeFile(marker,Buffer.alloc(31),{mode:0o644});await assert.rejects(inspectOpsSource(f.root),/Ops owner marker required/);await fs.writeFile(marker,Buffer.alloc(32));await fs.chmod(f.root,0o755);await assert.rejects(inspectOpsSource(f.root),/mode-0700/);await fs.chmod(f.root,0o700);
@@ -32,5 +47,5 @@ test('container arguments enforce exact owned clone, nonroot bounded tmpfs and n
  assert.throws(()=>diskContainerArguments({runId,dataDir,applicationImageId,devSource:'/tmp/foreign'}),/this checkout/);assert.throws(()=>diskContainerArguments({runId,dataDir,applicationImageId:'registry.example/remote:latest'}));
 });
 test('the API rejects arbitrary output roots, URLs, SSH and external-data option surfaces before execution',async()=>{
- for(const option of [{url:'https://example.com'},{ssh:'host'},{data:'/srv/production'},{artifactsRoot:'/tmp/elsewhere'},{sourceRoot:'ssh://host/data'},{applicationImage:'https://registry.example/image'}])await assert.rejects(runDiskDrill(option));
+ for(const option of [{url:'https://example.com'},{ssh:'host'},{data:'/srv/production'},{artifactsRoot:'/tmp/elsewhere'},{sourceRoot:'ssh://host/data'},{sourceBase:'/owned/base'},{applicationImage:'https://registry.example/image'}])await assert.rejects(runDiskDrill(option));
 });

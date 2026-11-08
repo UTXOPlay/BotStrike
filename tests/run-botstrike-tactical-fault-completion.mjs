@@ -1,0 +1,83 @@
+// Owned immutable application + separate NET_ADMIN tool in its network namespace.
+// No Docker socket, writable source, host qdisc, synthetic WS loss or Native
+// state mutation is exposed to the application. The tool runs only --netem-tool.
+import assert from 'node:assert/strict';
+import * as fs from 'node:fs/promises';
+import {createWriteStream,readFileSync,readlinkSync} from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {tmpdir} from 'node:os';
+import {randomBytes,createHash} from 'node:crypto';
+import {spawn,execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+
+const exec=promisify(execFile),self=fileURLToPath(import.meta.url),repo=fileURLToPath(new URL('../',import.meta.url)),pause=ms=>new Promise(r=>setTimeout(r,ms));
+const TOOL='sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209',PROFILE='c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d';
+const hash=async file=>createHash('sha256').update(await fs.readFile(file)).digest('hex');
+async function atomic(file,value,rootOwned=false){await fs.writeFile(file+'.tmp',JSON.stringify(value,null,2)+'\n',{mode:0o600});if(rootOwned)await fs.chown(file+'.tmp',1000,1000);await fs.rename(file+'.tmp',file);}
+async function json(file){try{return JSON.parse(await fs.readFile(file,'utf8'));}catch(error){if(error.code==='ENOENT')return null;throw error;}}
+async function until(fn,timeout,label){const end=performance.now()+timeout;while(performance.now()<end){const value=await fn();if(value)return value;await pause(10);}throw Error(label+' timed out');}
+async function bounded(promise,timeout,label){let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(label+' timed out')),timeout);})]);}finally{clearTimeout(timer);}}
+async function inspect(id){return JSON.parse((await exec('docker',['inspect',id,'--format','{{json .}}'],{maxBuffer:1024**2})).stdout);}
+function tcp(){const rows=readFileSync('/proc/net/snmp','utf8').split('\n').filter(row=>row.startsWith('Tcp:')),keys=rows[0].trim().split(/\s+/),values=rows[1].trim().split(/\s+/);return Object.fromEntries(keys.slice(1).map((key,i)=>[key,Number(values[i+1])]));}
+
+// This branch executes inside the independent pinned tool, without importing
+// any game modules. Its only filesystem write mount is this cohort's control dir.
+export async function runNetemTool(controlDir){
+ const ready=await json(path.join(controlDir,'fault-ready.json'));assert.ok(ready);assert.ok(Number.isInteger(ready.port)&&ready.port>0&&ready.port<65536);
+ const tc=async args=>(await exec('tc',args,{maxBuffer:1024**2})).stdout,qdisc=async()=>JSON.parse(await tc(['-s','-j','qdisc','show','dev','lo']));
+ const result={toolNetns:readlinkSync('/proc/self/ns/net'),timeNamespace:readlinkSync('/proc/self/ns/time'),scope:'lo IPv4 TCP sport/dport '+ready.port,clock:'Linux process.hrtime CLOCK_MONOTONIC shared kernel; command start/end brackets, not one-way delay',port:ready.port,status:'running'};let installed=false;
+ try{
+  assert.equal(result.timeNamespace,ready.timeNamespace,'hrtime mapping requires the actual same Linux time namespace');assert.equal(result.toolNetns,ready.netns,'Tool must join this exact owned application network namespace');result.beforeQdisc=await qdisc();assert.ok(result.beforeQdisc.every(item=>item.kind==='noqueue'),'Only a fresh unshaped owned namespace is permitted');result.tcpBefore=tcp();
+  await tc(['qdisc','replace','dev','lo','root','handle','1:','prio','bands','3','priomap',...Array(16).fill('0')]);installed=true;
+  await tc(['qdisc','replace','dev','lo','parent','1:3','handle','30:','netem','loss','0%']);
+  for(const [key,pref]of [['dport','1'],['sport','2']])await tc(['filter','add','dev','lo','parent','1:','protocol','ip','pref',pref,'u32','match','ip','protocol','6','0xff','match','ip',key,String(ready.port),'0xffff','flowid','1:3']);
+  result.applyStartNs=process.hrtime.bigint().toString();await tc(['qdisc','replace','dev','lo','parent','1:3','handle','30:','netem','loss','100%']);result.appliedNs=process.hrtime.bigint().toString();await atomic(path.join(controlDir,'kernel-cut.json'),{applyStartNs:result.applyStartNs,appliedNs:result.appliedNs,port:ready.port,netns:result.toolNetns},true);
+  await pause(Math.max(0,1000-Number(process.hrtime.bigint()-BigInt(result.appliedNs))/1e6));result.duringQdisc=await qdisc();result.tcpDuring=tcp();result.restoreStartNs=process.hrtime.bigint().toString();
+  await tc(['qdisc','replace','dev','lo','parent','1:3','handle','30:','netem','loss','0%']);result.restoredNs=process.hrtime.bigint().toString();await atomic(path.join(controlDir,'kernel-restored.json'),{restoreStartNs:result.restoreStartNs,restoredNs:result.restoredNs,port:ready.port,netns:result.toolNetns},true);
+  result.afterQdisc=await qdisc();await pause(300);result.tcpAfter=tcp();result.dropCount=result.duringQdisc.filter(item=>item.kind==='netem'&&item.handle==='30:').reduce((sum,item)=>sum+item.drops,0);result.retransmissions=result.tcpAfter.RetransSegs-result.tcpBefore.RetransSegs;result.lossWindowMs=Number(BigInt(result.restoreStartNs)-BigInt(result.appliedNs))/1e6;
+  assert.ok(result.dropCount>0,'Actual kernel drops are required');assert.ok(result.retransmissions>0,'Actual TCP retransmission evidence is required');assert.ok(result.lossWindowMs>=1000&&result.lossWindowMs<1500,'One-second loss is measured, with explicit command/scheduler overhead');result.status='passed';
+ }catch(error){result.status='failed';result.error=error.message;throw error;}
+ finally{try{if(installed)await tc(['qdisc','del','dev','lo','root']);result.cleanupQdisc=await qdisc();assert.ok(result.cleanupQdisc.every(item=>item.kind==='noqueue'));}catch(error){result.cleanupError=error.message;result.status='failed';}await atomic(path.join(controlDir,'kernel-receipt.json'),result,true);}
+ assert.equal(result.status,'passed',result.cleanupError||result.error||'Kernel tool failed');return result;
+}
+
+function loggedProcess(args,file,{env=process.env,cwd=repo,group=false}={}){
+ const stream=createWriteStream(file,{flags:'wx',mode:0o600}),child=spawn(args[0],args.slice(1),{cwd,env,detached:group,stdio:['ignore','pipe','pipe']});let bytes=0;
+ for(const source of [child.stdout,child.stderr])source.on('data',chunk=>{bytes+=chunk.length;if(bytes>4*1024**2)child.kill('SIGTERM');else stream.write(chunk);});
+ const done=new Promise((resolve,reject)=>{child.once('error',reject);child.once('close',(code,signal)=>stream.end(()=>resolve({code,signal,pid:child.pid,bytes})));});return {child,done};
+}
+
+export async function runFaultCompletion({image=process.env.BOTSTRIKE_FAULT_IMAGE,out}={}){
+ assert.ok(/^sha256:[a-f0-9]{64}$/.test(image||''),'Specify immutable BOTSTRIKE_FAULT_IMAGE=sha256:... for the v2 product, not a mutable tag');
+ const base=process.env.BOTSTRIKE_NETWORK_LAB_ROOT||tmpdir();await fs.mkdir(base,{recursive:true});out=out?path.resolve(out):await fs.mkdtemp(path.join(base,'immutable-tactical-fault-'));await fs.mkdir(out,{recursive:true});await fs.chmod(out,0o700);
+ const owner='botstrike-fault-'+randomBytes(6).toString('hex'),control=path.join(out,'control'),evidence=path.join(out,'evidence'),temp=path.join(out,'tmp'),faultDriver=path.join(repo,'tests/botstrike-tactical-fault-completion.mjs'),activeDriver=path.join(repo,'tests/botstrike-tactical-active-flow.mjs');
+ for(const dir of [control,evidence,temp])await fs.mkdir(dir,{mode:0o700});
+ const receipt={schemaVersion:1,status:'running',out,owner,applicationImage:image,toolImage:TOOL,humanParticipants:0,networkAcceptance:false,scope:'all-ten simultaneous same-namespace loopback TCP fault followed by complete signed Tactical replay',hostNetns:readlinkSync('/proc/self/ns/net'),hostTimeNamespace:readlinkSync('/proc/self/ns/time'),drivers:{runnerSha256:await hash(self),externalFaultSha256:await hash(faultDriver),activeSha256:await hash(activeDriver)},resources:'Node service + ten WS actors + observer are combined; auxiliary Rust hasher is separate; not an independent capacity or human acceptance baseline',containers:[],cleanup:[]};
+ let application,tool,appProcess,toolProcess,auditProcess;
+ const own=async id=>{const item=await inspect(id);assert.equal(item.Config.Labels['io.utxoplay.fault-owner'],owner,'Exact owned-container label required');return item;};
+ try{
+  assert.equal((await inspect(image)).Id,image);assert.equal((await inspect(TOOL)).Id,TOOL);
+  application=(await exec('docker',['create','--name',owner+'-app','--label','io.utxoplay.fault-owner='+owner,'--network','none','--read-only','--user','1000:1000','--cap-drop','ALL','--security-opt','no-new-privileges','--pids-limit','128','--mount','type=bind,src='+evidence+',dst=/fault-data/evidence','--mount','type=bind,src='+control+',dst=/fault-data/control','--mount','type=bind,src='+temp+',dst=/fault-data/tmp','--mount','type=bind,src='+faultDriver+',dst=/app/tests/botstrike-tactical-fault-completion.mjs,readonly','--env','BOTSTRIKE_APPLICATION_IMAGE_ID='+image,'--env','BOTSTRIKE_IMAGE_ID='+image,'--env','BOTSTRIKE_NATIVE_PROFILE='+PROFILE,'--env','BOTSTRIKE_NETWORK_LAB_ROOT=/fault-data/evidence','--env','TMPDIR=/fault-data/tmp','--env','TACTICAL_FAULT_CONTROL_DIR=/fault-data/control','--env','TACTICAL_ACTIVE_EXTERNAL_DRIVER=1','--env','TACTICAL_ACTIVE_HASHER=/app/tools/network-audit-inspector','--workdir','/app','--entrypoint','node',image,'/app/tests/botstrike-tactical-fault-completion.mjs','--exercise-only'])).stdout.trim();
+  const baked=path.join(out,'baked-active-driver.mjs');await exec('docker',['cp',application+':/app/tests/botstrike-tactical-active-flow.mjs',baked]);assert.equal(await hash(baked),receipt.drivers.activeSha256,'Host audit must use the actual image-baked active implementation');
+  appProcess=loggedProcess(['docker','start','-a',application],path.join(out,'application.log'));receipt.applicationHandle={container:application,hostAttachPid:appProcess.child.pid};await atomic(path.join(out,'host-receipt.json'),receipt);
+  await until(async()=>{const state=await own(application);assert.notEqual(state.State.Status,'exited','Application exited during startup');return state.State.Running;},10000,'Owned application startup');
+  const ready=await until(async()=>{const state=await own(application);assert.equal(state.State.Running,true,'Application stopped before fault readiness');return json(path.join(control,'fault-ready.json'));},120000,'Ten actual active ACKs and fault readiness');assert.notEqual(ready.netns,receipt.hostNetns);assert.equal(ready.timeNamespace,receipt.hostTimeNamespace);
+  tool=(await exec('docker',['create','--name',owner+'-tool','--label','io.utxoplay.fault-owner='+owner,'--network','container:'+application,'--read-only','--cap-drop','ALL','--cap-add','NET_ADMIN','--cap-add','DAC_OVERRIDE','--cap-add','CHOWN','--security-opt','no-new-privileges','--pids-limit','32','--mount','type=bind,src='+control+',dst=/fault-control','--mount','type=bind,src='+self+',dst=/fault-tool.mjs,readonly','--entrypoint','node',TOOL,'/fault-tool.mjs','--netem-tool','/fault-control'])).stdout.trim();
+  toolProcess=loggedProcess(['docker','start','-a',tool],path.join(out,'kernel-tool.log'));receipt.toolHandle={container:tool,hostAttachPid:toolProcess.child.pid};await atomic(path.join(out,'host-receipt.json'),receipt);
+  const cut=await until(()=>json(path.join(control,'kernel-cut.json')),10000,'Actual kernel cut');await pause(Math.max(0,650-Number(process.hrtime.bigint()-BigInt(cut.appliedNs))/1e6));receipt.releaseSignal={sendStartNs:process.hrtime.bigint().toString()};await exec('docker',['kill','--signal=USR2',application]);receipt.releaseSignal.sentNs=process.hrtime.bigint().toString();
+  receipt.toolExit=await bounded(toolProcess.done,10000,'Kernel tool completion');assert.equal(receipt.toolExit.code,0,'Kernel fault tool must exit cleanly');receipt.kernel=await json(path.join(control,'kernel-receipt.json'));assert.equal(receipt.kernel.status,'passed');assert.equal(receipt.kernel.toolNetns,ready.netns);
+  await until(()=>json(path.join(control,'neutral-ready.json')),20000,'All ten exact current-context neutral ACKs');receipt.newIntentSignal={sendStartNs:process.hrtime.bigint().toString()};await exec('docker',['kill','--signal=USR2',application]);receipt.newIntentSignal.sentNs=process.hrtime.bigint().toString();await atomic(path.join(out,'host-receipt.json'),receipt);
+  receipt.applicationExit=await bounded(appProcess.done,900000,'Full Tactical exercise and seal');assert.equal(receipt.applicationExit.code,0,'Full Tactical exercise must exit cleanly');const dirs=await fs.readdir(evidence);assert.equal(dirs.length,1);const match=path.join(evidence,dirs[0]),before=await json(path.join(match,'active-tactical-receipt.json'));assert.equal(before.status,'sealed-awaiting-source-audit');assert.equal(before.application.imageId,image);assert.equal(before.fault.complete,true);assert.equal(before.driver.external,true);assert.equal(before.driver.executionFromImageOnly,false);assert.equal(before.driver.bakedIntoApplicationImage,null);assert.equal(before.driver.readOnlyFileMountObserved,true);assert.equal(before.driver.sha256,receipt.drivers.externalFaultSha256);
+  const releaseNs=BigInt(before.fault.release.atNs);assert.ok(releaseNs-BigInt(cut.appliedNs)>=650000000n&&releaseNs-BigInt(cut.appliedNs)<900000000n,'Actual software release handler must run 650–900ms after measured kernel cut');
+  auditProcess=loggedProcess(['node',faultDriver,'--audit-only',match],path.join(out,'source-audit.log'),{env:{...process.env,TACTICAL_ACTIVE_EXTERNAL_DRIVER:'1',TMPDIR:temp,BOTSTRIKE_NETWORK_LAB_ROOT:out},group:true});receipt.auditExit=await bounded(auditProcess.done,900000,'Independent source replay audit');assert.equal(receipt.auditExit.code,0,'Source/retained/actual every-state audit must exit cleanly');const final=await json(path.join(match,'active-tactical-receipt.json'));assert.equal(final.status,'passed');assert.equal(final.replay.actualSourceAndRetainedEveryStateMatched,true);receipt.match={directory:match,ticks:final.final.tick,score:final.final.score,round:final.final.round,receiptSha256:await hash(path.join(match,'active-tactical-receipt.json')),tapeSha256:final.tape.sha256};receipt.status='passed';
+ }catch(error){receipt.status='failed';receipt.error={name:error.name,message:error.message};}
+ finally{
+  if(auditProcess&&!receipt.auditExit){try{process.kill(-auditProcess.child.pid,'SIGTERM');await bounded(auditProcess.done,5000,'Audit process group stop');}catch(error){try{process.kill(-auditProcess.child.pid,'SIGKILL');}catch{}receipt.auditCleanupError=error.message;}}
+  for(const id of [tool,application].filter(Boolean)){try{const item=await own(id);receipt.containers.push({id:item.Id,image:item.Image,networkMode:item.HostConfig.NetworkMode,readOnlyRootfs:item.HostConfig.ReadonlyRootfs,capAdd:item.HostConfig.CapAdd,state:item.State,mounts:item.Mounts.map(m=>({destination:m.Destination,rw:m.RW,type:m.Type}))});await exec('docker',['rm','-f',id]);try{await inspect(id);throw Error('Owned container still exists after removal');}catch(error){assert.match(String(error),/No such/);}receipt.cleanup.push({id,removed:true});}catch(error){receipt.status='failed';receipt.cleanup.push({id,error:error.message});}}
+  await Promise.allSettled([appProcess?.done,toolProcess?.done].filter(Boolean));receipt.finishedAt=Date.now();await atomic(path.join(out,'host-receipt.json'),receipt);
+ }
+ return receipt;
+}
+
+if(process.argv[1]===self){try{if(process.argv[2]==='--netem-tool'){assert.equal(process.argv.length,4);console.log(JSON.stringify(await runNetemTool(process.argv[3])));}else{assert.equal(process.argv.length,2);const result=await runFaultCompletion();console.log(JSON.stringify({status:result.status,out:result.out,applicationHandle:result.applicationHandle,toolHandle:result.toolHandle,error:result.error??null}));if(result.status!=='passed')process.exitCode=1;}}catch(error){console.error(JSON.stringify({status:'failed',message:error.message}));process.exitCode=1;}}
