@@ -5,24 +5,26 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {WebSocket} from 'ws';
+import {trackSocketDelivery} from './ws-delivery-client.mjs';
 import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
 import {matchResults} from '../games/botstrike/client/post-match.mjs';
 const secret='botstrike-integration-private-token-2050',data=mkdtempSync(path.join(tmpdir(),'botstrike-flow-'));
 const service=createBotStrike({secret,data,tickMs:0});await new Promise(r=>service.server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+service.server.address().port;
 const accounts=['a'.repeat(64),'b'.repeat(64)];const headers=id=>({'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':id});
 async function request(id,body){const response=await fetch(base+'/api/'+(body?'action':'state'),{method:body?'POST':'GET',headers:headers(id),body:body?JSON.stringify(body):undefined});const value=await response.json();assert.equal(response.status,200,JSON.stringify(value));return value;}
-const ws=[],controlTokens=new Map();
+const ws=[],deliveries=[],controlTokens=new Map();
 try{
  const unauthorized=await fetch(base+'/api/state');assert.equal(unauthorized.status,403);
  let a=await request(accounts[0],{type:'create',kind:'private',mode:'deathmatch',map:1,hero:2,difficulty:1});assert.equal(a.room.status,'waiting');const id=a.room.id;
  const b=await request(accounts[1],{type:'join',room:id,hero:4});assert.equal(b.room.slot,5,'balance human teams');assert.equal(b.room.config.heroes[5],4);
  const denied=await fetch(base+'/api/action',{method:'POST',headers:headers(accounts[1]),body:JSON.stringify({type:'start'})});assert.equal(denied.status,400);
- for(const account of accounts){const socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(account)});const control=new Promise(resolve=>socket.on('message',raw=>{const message=JSON.parse(raw);if(message.type==='control'&&message.active)resolve(message.token)}));await new Promise((resolve,reject)=>{socket.on('open',resolve);socket.on('error',reject)});controlTokens.set(account,await control);ws.push(socket)}
+ for(const account of accounts){const socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(account)});deliveries.push(trackSocketDelivery(socket));const control=new Promise(resolve=>socket.on('message',raw=>{const message=JSON.parse(raw);if(message.type==='control'&&message.active)resolve(message.token)}));await new Promise((resolve,reject)=>{socket.on('open',resolve);socket.on('error',reject)});controlTokens.set(account,await control);ws.push(socket)}
  await request(accounts[0],{type:'start',controlToken:controlTokens.get(accounts[0])});
  let state=null;for(let attempt=0;attempt<100&&!state;attempt++){state=(await request(accounts[0])).room.state;if(!state)await new Promise(r=>setTimeout(r,20))}assert.ok(state,'native room becomes ready');assert.equal(state.players.length,10);assert.deepEqual(state.events,[],'raw native events never appear in the public snapshot');
- ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:100,x:1,fire:true,viewTick:Math.max(0,state.tick-6)}}));await new Promise(r=>setTimeout(r,50));state=(await request(accounts[0])).room.state;assert.equal(state.players[0].last_seq,100,'native accepts authenticated human input');
- ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:101,ability:true}}));
- ws[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:102}}));await new Promise(r=>setTimeout(r,80));state=(await request(accounts[0])).room.state;assert.ok(state.players[0].skill_wait>0,'a short press between ticks is retained');
+ await deliveries[0].ready(id);
+ ws[0].send(JSON.stringify(deliveries[0].envelope(id,{...neutral(),seq:100,x:1,fire:true,viewTick:Math.max(0,state.tick-6)})));await new Promise(r=>setTimeout(r,50));state=(await request(accounts[0])).room.state;assert.equal(state.players[0].last_seq,100,'native accepts authenticated human input');
+ ws[0].send(JSON.stringify(deliveries[0].envelope(id,{...neutral(),seq:101,ability:true})));
+ ws[0].send(JSON.stringify(deliveries[0].envelope(id,{...neutral(),seq:102})));await new Promise(r=>setTimeout(r,80));state=(await request(accounts[0])).room.state;assert.ok(state.players[0].skill_wait>0,'a short press between ticks is retained');
  await new Promise(r=>setTimeout(r,450));state=(await request(accounts[0])).room.state;assert.equal(state.players[0].last_seq,102,'network input silence must not hand a connected player to AI');
  ws.forEach(s=>s.close());
  const deadline=Date.now()+180000;let end;

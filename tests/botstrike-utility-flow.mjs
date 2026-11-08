@@ -1,18 +1,20 @@
 // Actual native releases at three requested cadences, under the browser's 60 Hz
 // transport cap. This does not claim physical 120 FPS rendering acceptance.
 import assert from 'node:assert/strict';import {mkdtempSync,writeFileSync,readFileSync} from 'node:fs';import {tmpdir} from 'node:os';import path from 'node:path';import {execFileSync} from 'node:child_process';
+import {trackSocketDelivery} from './ws-delivery-client.mjs';
 import {WebSocket} from 'ws';import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
 const token='botstrike-utility-flow-fixture-token-2050',account='a'.repeat(64),data=mkdtempSync(path.join(tmpdir(),'botstrike-utility-flow-')),service=createBotStrike({secret:token,data});
 await new Promise(r=>service.server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+service.server.address().port,headers={'Content-Type':'application/json','X-Runtime-Token':token,'X-UTXOPlay-Account':account};
-let socket,controlToken,seq=0,timer,roomId;const results=[];
+let socket,deliveryClient,controlToken,seq=0,timer,roomId;const results=[];
 async function request(body){const r=await fetch(base+'/api/'+(body?'action':'state'),{method:body?'POST':'GET',headers,body:body?JSON.stringify(body):undefined});const value=await r.json();assert.equal(r.status,200,JSON.stringify(value));return value.room;}
 async function until(predicate,timeout=10000){const end=Date.now()+timeout;while(Date.now()<end){const r=await request();if(r?.status==='failed')throw Error(r.error);if(predicate(r))return r;await new Promise(r=>setTimeout(r,12));}throw Error('Utility flow timeout');}
-async function connect(){socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers});const control=new Promise(resolve=>socket.on('message',raw=>{const m=JSON.parse(raw);if(m.type==='control'&&m.active){controlToken=m.token;seq=Math.max(seq,m.nextSeq||0);resolve();}}));await new Promise((resolve,reject)=>{socket.once('open',resolve);socket.once('error',reject)});await control;}
-const send=input=>socket.send(JSON.stringify({type:'input',room:roomId,input:{...neutral(),seq:++seq,...input}}));
+async function connect(){socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers});deliveryClient=trackSocketDelivery(socket);const control=new Promise(resolve=>socket.on('message',raw=>{const m=JSON.parse(raw);if(m.type==='control'&&m.active){controlToken=m.token;seq=Math.max(seq,m.nextSeq||0);resolve();}}));await new Promise((resolve,reject)=>{socket.once('open',resolve);socket.once('error',reject)});await control;await deliveryClient.ready(roomId);}
+const send=input=>socket.send(JSON.stringify(deliveryClient.envelope(roomId,{...neutral(),seq:++seq,...input})));
 try{
  let room=await request({type:'create',kind:'practice',mode:'deathmatch',map:0,hero:0,difficulty:0,drill:5});roomId=room.id;await connect();await until(r=>r.state?.practice);
  for(const fps of [30,60,120])for(const mode of [0,1,2]){
   const prior=(await request()).state.practice.attempt;send({practice:1,throw_mode:mode,preview_item:2});send({throw_mode:mode,preview_item:2});room=await until(r=>r.state?.practice?.attempt===prior+1);
+  await deliveryClient.ready(roomId,{life:room.state.players[0].life});
   const player=room.state.players[0],yaw=Math.round(player.yaw*1e6)/1e6,control={yaw,pitch:0,throw_mode:mode,preview_item:2};send(control);
   room=await until(r=>r.state?.players[0].throw_mode===mode&&r.state.practice.preview_kind===2&&r.state.practice.preview_mode===mode&&r.state.practice.preview_release);
   const pose=room.state.players[0],fixture={map:0,mode,kind:2,position:pose.position,velocity:pose.velocity,yaw,pitch:0,stance:pose.stance};

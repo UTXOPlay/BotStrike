@@ -2,6 +2,7 @@
   "name": "myelin-botstrike",
   "port": 8890,
   "runtimePort": 8790,
+  "transportQuality": true,
   "games": [
     {
       "id": "botstrike",
