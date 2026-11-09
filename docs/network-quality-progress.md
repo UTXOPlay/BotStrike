@@ -369,3 +369,35 @@ digests. D2's failed matrix and D3's failed UI run remain historical results.
 Human A/B, public-WAN, physical-device, capacity and competitive gates remain
 false; issues #30, #12 and #26 remain open. This is a local engineering checkpoint,
 not merge, deployment or full network acceptance.
+
+## D4 host follow-up: current-local-epoch matrix recovery
+
+The matrix recovery selector now uses the same original-send local fence as the
+targeted browser observer. It requires a paused neutral send strictly after a
+fresh page-clock restoration barrier, a newer local epoch, exact original-byte
+CDP matching and the independent public ACK in the current wire context. It
+re-reads immediately before one explicit software Resume action and confirms the
+same epoch after resuming. Ordinary unpaused shot-release checks are unchanged.
+The host binding now includes the recovery helper and its transitive observers.
+These host-only changes passed 44 related pure checks, including seven focused
+recovery checks; they are not part of D4's image-baked 545/24 counts.
+
+One new immutable-D4 `outage-heartbeat-long` case passed. Its requested 12-second
+bidirectional kernel outage reached the actual fault phase, observed 11 upstream
+and six downstream drops at the fault-active sample, and recovered through a new
+socket, fresh current-epoch neutral proof, explicit software Resume and a new
+positive input ACK. All 5,242 captured runtime frames matched source and retained
+replay. The tape has one additional unconfirmed shutdown-tail tick, excluded from
+gameplay evidence. Capture drops and expired control frames were zero. The case
+cancelled without sealing or producing a new signed match export; fault gaps do
+not establish globally AI-free play.
+
+The selected case passed while the new catalog remains `incomplete` with 30 cases
+pending. Direct Node exited 1 under that existing incomplete-catalog policy; the
+supervisor exited 0. All 12 raw archives verified, all 20 bound host sources
+stayed unchanged, and the six created containers, owned network and 20 tracked
+Chrome processes were gone. The [redacted follow-up checkpoint](acceptance/network-quality-D4-heartbeat.json)
+keeps the exact identities and scope separate from D4's earlier targeted runs.
+The original D2 heartbeat failure occurred before the requested outage; it and
+the historical 12-pass/19-fail matrix remain unchanged. Other failed conditions,
+human A/B, WAN, physical-device, capacity and prerequisite gates remain open.

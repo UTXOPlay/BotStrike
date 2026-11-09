@@ -117,6 +117,19 @@ selection in packed field 12 is configuration; with no item/action it does not
 make a neutral input active. Real movement, modifiers, fire, item, weapon,
 purchase and practice controls retain their action classification.
 
+New browser matrix runs also enable the local recovery observer. Fault recovery
+requires an original paused-neutral send after a fresh page-clock restoration
+barrier, a local epoch newer than the unpaused fault baseline, and an exact-byte
+CDP join to the same public ACK. A new page read immediately before manual Resume
+must still show that current paused epoch. A delayed CDP callback cannot move an
+old send past restoration; a same-socket local watchdog trip invalidates earlier
+proof even without a service resync. Normal unpaused shot-release ACKs use their
+existing action checks and cannot substitute for this paused recovery barrier.
+Missing diagnostics, stale proof or observer overflow fails the new recovery
+check. Source binding includes the observer and recovery helper; old C/D2 reports
+remain historical and cannot be resumed under this changed binding. This is a
+host-observer correction, with no application, wire or Native-rule change.
+
 The Tactical case creates a normal private demolition lobby, selects unique
 heroes within each team, joins ten authenticated Node controllers and readies
 all ten. It hard-asserts the actual Native header has ten `bots=false` values.
