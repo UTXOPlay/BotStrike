@@ -127,7 +127,9 @@
     "originalOfflineShotReporterError": "CASE_IDENTITY_MISMATCH",
     "matrixAutomaticallyRetried": false,
     "autoResumePerformed": false,
-    "originalCaseArchivesAndManifestsUnchanged": true
+    "originalCaseArchivesAndManifestsUnchanged": true,
+    "requestedImpairedProfileApplied": false,
+    "measuredCondition": "Unshaped startup; the selected A0/B180 impairment profile is applied only after successful setup and navigation."
   },
   "sealedEvidence": {
     "archivesVerified": 12,

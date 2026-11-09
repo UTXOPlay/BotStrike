@@ -634,7 +634,10 @@ The catalog appends one peek case without changing the earlier 32 cases.
 
 Its single actual attempt failed in setup while waiting 60,000 ms for B's resume
 action. The last completed checkpoint was ten controlled seats ready. No scenario
-action, completed logical presentation or Native shot was reached. The precise
+action, completed logical presentation or Native shot was reached.
+The selected asymmetric impairment profile had not been applied: only unshaped
+startup and its initial kernel counters were reached. These traces do not
+measure the requested 180 ms condition. The precise
 resume latch state was not captured, so the cause remains unknown; the evidence
 does not establish a gameplay or shader defect. All owned runtime resources were
 removed. The original failed case, archives and manifests remain unchanged,

@@ -4,7 +4,7 @@ import {mkdtempSync,readFileSync,statSync,rmSync,mkdirSync,chmodSync} from 'node
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
-import {ActorTrace,publicSnapshot,publicInputAck,NetworkBrowserActor,NETWORK_GAME_ORIGIN,classifyWebGLRenderer,browserRuntimePaths} from '../tools/network-browser-actors.mjs';
+import {ActorTrace,publicSnapshot,publicInputAck,NetworkBrowserActor,NETWORK_GAME_ORIGIN,classifyWebGLRenderer,browserRuntimePaths,createControlStatusPageObserver} from '../tools/network-browser-actors.mjs';
 
 test('latest completed-presentation query refreshes after an older drain without cloning full histories',async()=>{
  const actor=new NetworkBrowserActor('A',null,null,{setDefaultTimeout(){},on(){}},{closed:false,append(){return true;}},{localRecoveryFence:true});let finishOld,reads=0;
@@ -121,4 +121,49 @@ test('sent-input watcher capacity and rejected trace writes remain bounded failu
  const {actor,wire}=sentActor(),watches=Array.from({length:64},()=>actor.watchInputSent(()=>true,{timeout:1000}));await assert.rejects(actor.watchInputSent(()=>true,{timeout:1000}).promise,/capacity/);assert.equal(actor.inputSentWatchers.size,64);for(const watch of watches)watch.cancel();await Promise.all(watches.map(watch=>assert.rejects(watch.promise,/cancelled/)));assert.equal(actor.inputSentWatchers.size,0);
  const watch=actor.watchInputSent(()=>true,{timeout:1000});actor.trace.append=()=>false;wire.send(sentInput(2));await assert.rejects(watch.promise,/did not retain/);assert.equal(actor.inputSentWatchers.size,0);
  assert.throws(()=>actor.watchInputSent(()=>true,{timeout:300001}),/bounded/);assert.throws(()=>actor.watchInputSent(null),/predicate/);assert.throws(()=>actor.watchInputSent(()=>true,{afterIndex:actor.index+1}),/existing index/);
+});
+
+
+function controlDom(){
+ let time=100,mutations,writes=0;const listeners=new Map(),attrs=new Map([['data-playing','false'],['data-control-recovery-epoch','0'],['data-control-paused','0'],['data-input-protocol','receipt']]);
+ const element=()=>({hidden:false,disabled:false,getAttribute(name){return this.attrs?.get(name)??null;},setAttribute(){writes++;throw Error('Observer must never write public DOM');}}),root={...element(),attrs},status={...element(),textContent:'Choose your chassis. SECRET_PLAYER'},resume=element(),panel=element(),canvas=element();
+ const listen=(target,name,fn)=>{const key=target+':'+name;const old=listeners.get(key)||[];old.push(fn);listeners.set(key,old);},remove=(target,name,fn)=>listeners.set(target+':'+name,(listeners.get(target+':'+name)||[]).filter(value=>value!==fn));
+ const doc={documentElement:root,pointerLockElement:null,visibilityState:'visible',hasFocus:()=>true,querySelector:selector=>({'#status':status,'#resume':resume,'#panel':panel,'#arena':canvas}[selector]),addEventListener:(name,fn)=>listen('document',name,fn),removeEventListener:(name,fn)=>remove('document',name,fn)};
+ let disconnected=false;const env={document:doc,performance:{now:()=>time},MutationObserver:class{constructor(fn){mutations=fn;}observe(){}disconnect(){disconnected=true;}},addEventListener:(name,fn)=>listen('window',name,fn),removeEventListener:(name,fn)=>remove('window',name,fn)};
+ return{env,root,status,resume,panel,canvas,attrs,setTime:value=>time=value,notify:rows=>mutations(rows),dispatch:(name,event)=>{for(const fn of listeners.get('document:'+name)||[])fn(event);},writes:()=>writes,disconnected:()=>disconnected,listeners};
+}
+test('optional public DOM observer records only enums and preserves removed reason plus transient active state',()=>{
+ const f=controlDom(),observer=createControlStatusPageObserver({},f.env);observer.drain();f.attrs.set('data-control-paused','1');f.attrs.set('data-control-recovery-epoch','2');f.status.textContent='Fresh neutral controls confirmed. SECRET_TOKEN';f.setTime(200);
+ f.notify([{type:'attributes',target:f.root,attributeName:'data-playing',oldValue:'true'},{type:'childList',target:f.status,removedNodes:[{textContent:'Browser stalled; controls cleared. SECRET_ACCOUNT'}],addedNodes:[{textContent:f.status.textContent}]}]);
+ const batch=observer.drain();assert.ok(batch.events.some(row=>row.kind==='removed_status'&&row.phase==='scheduler_gap'));assert.ok(batch.events.some(row=>row.kind==='attribute_previous'&&row.previousValue==='true'));const current=batch.events.find(row=>row.kind==='current_state');assert.equal(current.ui.statusPhase,'fresh_neutral_ready');assert.equal(current.ui.playing,false);assert.equal(current.ui.localPaused,true);assert.equal(current.ui.localRecoveryEpoch,2);assert.equal(current.atMs,200,'Callback observation time, not original mutation time');
+ for(const value of ['SECRET_ACCOUNT','SECRET_TOKEN','SECRET_PLAYER'])assert.equal(JSON.stringify(batch).includes(value),false);assert.equal(f.writes(),0);observer.stop();assert.equal(f.disconnected(),true);assert.ok([...f.listeners.values()].every(list=>list.length===0));
+});
+test('control observer ignores no-op attributes, caps lifetime rows and exposes loss without rotating first evidence',()=>{
+ const f=controlDom(),observer=createControlStatusPageObserver({limit:3},f.env),first=observer.drain().events[0];for(let i=0;i<10;i++)f.notify([{type:'attributes',target:f.root,attributeName:'data-playing',oldValue:'false'}]);assert.equal(observer.drain().events.length,0);
+ f.dispatch('click',{target:f.resume,isTrusted:true});f.dispatch('click',{target:f.resume,isTrusted:true});f.dispatch('click',{target:f.resume,isTrusted:true});const full=observer.drain();assert.equal(full.events.length,2);assert.equal(full.totalDropped,1);assert.equal(full.events[0].serial,first.serial+1);f.dispatch('click',{target:f.resume,isTrusted:true});assert.equal(observer.drain().events.length,0,'Draining cannot reset the lifetime evidence limit');assert.equal(observer.status().totalDropped,2);observer.stop();
+});
+function controlActionFixture({local=true,mutateSample}={}){
+ const f=sentActor(),actor=f.actor;actor.controlStatusObservationEnabled=true;actor.localFenceEnabled=local;f.wire.send({seq:2,x:0,y:0,fire:false});const ack={version:1,seq:2,tick:11,life:1,neutral:true};f.wire.receive({type:'state',room:{...f.room,state:{...f.room.state,tick:11,players:[{...f.room.state.players[0],last_seq:2}]}},inputAck:ack,delivery:{version:2,nonce:'SECRET_NONCE'}});
+ actor.currentLocalNeutral=async()=>({ack,input:{pageSentAt:90,cdpSocketGeneration:actor.socketGeneration},snapshot:{pageObservedAt:100},current:{room:actor.currentRoom.id,slot:0,life:1,localRecoveryEpoch:2,localPaused:true,socketGeneration:1,ownerEpoch:1,proofGeneration:4}});
+ actor.controlStatusCapture={async evaluate(){mutateSample?.(actor);return{atMs:110,playing:false,localRecoveryEpoch:2,localPaused:true,pointerLocked:false,visible:true,hasFocus:true,resumeEnabled:true,resumeHidden:false,panelHidden:false,inputProtocol:'receipt',statusPhase:'fresh_neutral_ready'};}};return f;
+}
+test('fresh action-phase ACK summary joins current local epoch and both CDP contexts without players or credentials',async()=>{
+ const f=controlActionFixture();const result=await f.actor.observeControlAction('resume','before-wait','playing');assert.equal(result.publicAck.available,true);assert.equal(result.publicAck.seq,2);assert.equal(result.publicAck.ageAtUISampleMs,20);assert.equal(result.publicAck.localRecoveryEpoch,2);assert.ok(result.publicAck.cdpSentIndex<result.publicAck.cdpSnapshotIndex);const row=f.rows.at(-1);assert.equal(row.kind,'control_action_phase');for(const secret of ['SECRET_NONCE','owner','sent-room','position','players'])assert.equal(JSON.stringify(row).includes('"'+secret+'"'),false);
+});
+test('same-socket owner, proof, room, socket or controller changes during the UI sample cannot relabel old ACKs',async()=>{
+ for(const change of [actor=>actor.ownerGeneration++,actor=>actor.proofGeneration++,actor=>actor.roomGeneration++,actor=>actor.socketGeneration++,actor=>{actor.control.active=false;},actor=>{actor.closing=true;}]){const f=controlActionFixture({mutateSample:change}),result=await f.actor.observeControlAction('resume','before-wait','playing');assert.equal(result.publicAck.available,false);assert.equal(result.publicAck.reason,'ui_or_actor_context_changed_after_ack_refresh');}
+});
+test('default actor actions perform no optional DOM or ACK query',async()=>{
+ const f=sentActor();f.page.evaluate=async()=>true;f.actor.room=async()=>null;f.actor.currentLocalNeutral=()=>{throw Error('Optional observer must stay disabled');};await f.actor.action('resume');assert.equal(f.rows.filter(row=>row.kind==='control_action_phase').length,0);assert.equal(f.actor.controlStatusReceipt(),null);
+});
+test('Resume failure retains request, actual gesture and playing wait phases with one ordinary click',async()=>{
+ const f=controlActionFixture({local:false}),failure=Object.assign(Error('Timeout SECRET_TOKEN'),{name:'TimeoutError'});let clicks=0,waits=0;
+ f.page.evaluate=async()=>false;f.page.locator=()=>({async scrollIntoViewIfNeeded(){},async boundingBox(){return{x:0,y:0,width:20,height:20};}});f.page.mouse={async click(){clicks++;}};f.page.waitForFunction=async()=>{waits++;throw failure;};
+ await assert.rejects(f.actor.action('resume'),error=>error===failure);assert.equal(clicks,1);assert.equal(waits,1);const phases=f.rows.filter(row=>row.kind==='control_action_phase').map(row=>row.data);assert.deepEqual(phases.map(row=>row.phase),['request-issued','before-gesture','before-wait','failure']);assert.equal(phases.at(-1).wait,'playing');assert.equal(phases.at(-1).error,'timeout');assert.equal(JSON.stringify(phases).includes('SECRET_TOKEN'),false);
+});
+test('capturePointer failure inside preceding Resume is never mislabeled as its later pointer-lock wait',async()=>{
+ const f=controlActionFixture({local:false}),failure=Error('Resume did not enter');f.actor.sample=async()=>({window:{playing:false}});f.actor.action=async name=>{assert.equal(name,'resume');throw failure;};await assert.rejects(f.actor.capturePointer(),error=>error===failure);const phases=f.rows.filter(row=>row.kind==='control_action_phase').map(row=>row.data);assert.equal(phases.at(-1).phase,'failure');assert.equal(phases.at(-1).wait,'resume');assert.ok(!phases.some(row=>row.phase==='before-wait'&&row.wait==='pointer-lock'));
+});
+test('unavailable observation is explicit and never replaces the original action error',async()=>{
+ const f=controlActionFixture({local:false}),failure=Error('Original resume failure');f.actor.controlStatusCapture.evaluate=async()=>{throw Error('DOM unavailable SECRET');};f.page.evaluate=async()=>false;f.page.locator=()=>({async scrollIntoViewIfNeeded(){},async boundingBox(){return{x:0,y:0,width:20,height:20};}});f.page.mouse={async click(){}};f.page.waitForFunction=async()=>{throw failure;};await assert.rejects(f.actor.action('resume'),error=>error===failure);assert.equal(f.actor.controlStatusReceipt().unavailableReason,'action_phase_observation_unavailable');assert.ok(f.rows.filter(row=>row.kind==='control_action_phase').every(row=>row.data.available===false&&row.data.reason==='observation_unavailable'));assert.equal(JSON.stringify(f.rows.filter(row=>row.kind==='control_action_phase')).includes('SECRET'),false);
 });
