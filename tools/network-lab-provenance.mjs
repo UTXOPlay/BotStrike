@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+const MODEL='4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49';
+const PROFILE='c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d';
+export function labQualityProvenance({applicationIdentity,imageConfig,recordedBinding,imageArtifacts,guard,guardSha256,devSource=false,runtimeEnv={}}){
+ assert.match(applicationIdentity,/^sha256:[a-f0-9]{64}$/);assert.equal(recordedBinding.modelSha256,MODEL);assert.equal(recordedBinding.profileSha256,PROFILE);
+ for(const file of ['release/botstrike-engine','release/myelin-botstrike','botstrike/spec.json'])assert.equal(imageArtifacts[file],recordedBinding.base.files[file],'Application Native pair differs from recorded exact profile: '+file);
+ if(runtimeEnv.BOTSTRIKE_NATIVE_PROFILE!==undefined)assert.equal(runtimeEnv.BOTSTRIKE_NATIVE_PROFILE,PROFILE,'Runtime profile cannot override the recorded exact application profile');
+ const env=Object.fromEntries((imageConfig?.Env||[]).map(value=>{const at=value.indexOf('=');return[value.slice(0,at),value.slice(at+1)];})),labels=imageConfig?.Labels||{},revision=env.BOTSTRIKE_SOURCE_REVISION;
+ const guardVerified=!!guard&&/^[a-f0-9]{64}$/.test(guardSha256||'')&&/^[a-f0-9]{40}$/.test(revision||'')&&labels['org.opencontainers.image.revision']===revision&&labels['io.utxoplay.source-kind']==='git_tree'&&guard.sourceKind==='git_tree'&&guard.baseProtectedFiles===113&&guard.protectedFileCount===105&&guard.intentionalFileCount===8&&guard.retainedPairCount===10&&guard.sourceRevision===revision&&guard.nativeRulesChanged===false&&guard.nativeModelSha256===MODEL&&guard.portableProfileSha256===PROFILE&&['release/botstrike-engine','release/myelin-botstrike','botstrike/spec.json'].every(file=>guard.protectedFiles?.[file]===imageArtifacts[file]);
+ const provenance={sourceRevision:!devSource&&guardVerified?revision:'unknown',imageId:devSource?'unknown':applicationIdentity,nativeProfile:PROFILE};
+ return{...provenance,provenanceBound:!devSource&&guardVerified,sourceKind:!devSource&&guardVerified?'git_tree':'unknown',guardVerified:!devSource&&guardVerified,guardSha256:!devSource&&guardVerified?guardSha256:null,meaning:devSource?'Development bind: base image identity/revision do not describe mounted code; quality provenance intentionally unbound':'Actual inspected image identity; source bound only after image label/environment/build guard agree'};
+}

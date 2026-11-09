@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "candidate": "D4",
+  "kind": "partial-engineering-checkpoint",
+  "acceptanceComplete": false,
+  "networkAcceptance": false,
+  "humanParticipants": 0,
+  "issueAcceptance": {
+    "30": false,
+    "12": false,
+    "26": false
+  },
+  "gates": {
+    "humanAB": false,
+    "publicWan": false,
+    "physicalDevice": false,
+    "capacity": false,
+    "competitive": false
+  },
+  "provenance": {
+    "applicationImageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "sourceKind": "git_tree",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "nativeRulesChanged": false,
+    "wireProtocolChangedByD4UiFollowup": false,
+    "checkpointCreatedAfterImageBuild": true
+  },
+  "buildChecks": {
+    "scope": "Image-baked checks only",
+    "buildExitCode": 0,
+    "unitPassed": 545,
+    "hostPassed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "staticAudit": {
+    "status": "passed",
+    "originalRunnerExitCode": 0,
+    "actualImageChecks": "passed",
+    "actualWebAssetsMatched": true
+  },
+  "integrity": {
+    "protectedFiles": 105,
+    "releaseFiles": 21,
+    "releaseBytes": 184371322,
+    "releaseBytesAndModesUnchanged": true,
+    "retainedEngineVerifierPairs": 10,
+    "nativeModelAndProfileUnchanged": true
+  },
+  "uiSixSizes": {
+    "status": "passed",
+    "driverExitCode": 0,
+    "entry": "standalone_host",
+    "automated": true,
+    "viewports": [
+      {
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "width": 2560,
+        "height": 1080
+      },
+      {
+        "width": 2560,
+        "height": 1440
+      },
+      {
+        "width": 3840,
+        "height": 2160
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 844,
+        "height": 390
+      }
+    ],
+    "assertionGroups": 15,
+    "pngCount": 20,
+    "rendererClassification": "hardware",
+    "rendererVendor": "Intel",
+    "browserVersion": "157.0.8103.38",
+    "desktopDpr": 0.5,
+    "mobileDpr": 1,
+    "physicalPerformanceAccepted": false,
+    "storeLaunchAccepted": false,
+    "independentVisualReviewImages": 20,
+    "independentVisualLayoutBlockers": 0,
+    "ownedContainersGone": 6,
+    "ownedNetworkGone": true,
+    "ownedChromeRemaining": 0
+  },
+  "targetedWatchdog": {
+    "status": "passed",
+    "supervisorExitCode": 0,
+    "directNodeReturnCode": 0,
+    "execution": "external_host_fixture",
+    "syntheticClientStimuli": true,
+    "actualNetworkImpairment": false,
+    "mainThreadTask": {
+      "status": "passed",
+      "durationMs": 800,
+      "originalNeutralBaselineKnownApplied": true,
+      "freshCurrentContextNeutralBeforeManualResume": true,
+      "trustedSoftwareManualResumeGestures": 1,
+      "newActiveInputAckObserved": true,
+      "noticeVisible": true,
+      "noticeUncovered": true,
+      "panelScrollTop": 0,
+      "actualSourceExactReplayFrames": 178,
+      "unconfirmedTailFrames": 0,
+      "captureDrops": 0
+    },
+    "ackOmission": {
+      "status": "passed",
+      "fixedOmissionWindowMs": 1600,
+      "observedOriginalSendAgeMs": 1008.0999999940395,
+      "continuousPreGateStates": 35,
+      "freshCurrentContextNeutralBeforeManualResume": true,
+      "trustedSoftwareManualResumeGestures": 1,
+      "newActiveInputAckObserved": true,
+      "noticeVisible": true,
+      "noticeUncovered": true,
+      "panelScrollTop": 0,
+      "actualSourceExactReplayFrames": 227,
+      "unconfirmedTailFrames": 0,
+      "captureDrops": 0
+    },
+    "totalActualSourceExactReplayFrames": 405,
+    "unconfirmedTailFrames": 0,
+    "captureDrops": 0,
+    "ownedContainersGone": 12,
+    "ownedNetworksGone": 2,
+    "ownedChromeRemaining": 0
+  },
+  "targetedHistory": {
+    "documentStartFixtureFailure": {
+      "status": "failed",
+      "driverExitCode": 1,
+      "caseCount": 2,
+      "exactReplayFramesPerCase": 21,
+      "intendedFaultExecuted": false,
+      "reason": "Document-start observer attempted documentElement before it existed",
+      "originalFailurePreserved": true
+    },
+    "hostDocumentStartFix": {
+      "scope": "external_host_fixture_only",
+      "filesChanged": 2,
+      "pureChecksPassed": 15,
+      "pureChecksFailed": 0,
+      "coveredByImageBuildChecks": false,
+      "applicationImageChanged": false,
+      "sourceBindingSha256": "7ee33245932a0eed19076b340715848f3f71cb6068649cfd979f2e33eb1892df"
+    },
+    "functionalPassWithUnknownProcessExit": {
+      "status": "functional_pass_process_exit_unverified",
+      "observedCommandExitCode": 143,
+      "directNodeExitCode": null,
+      "exitReason": "unknown",
+      "functionalCasesPassed": 2,
+      "actualSourceExactReplayFrames": 410,
+      "creditedAsCleanExit": false,
+      "originalRecordPreserved": true
+    }
+  },
+  "receiptSha256": {
+    "build": "15b4ca902a092f5e67c0e3de15cc6d2ada4cd31f60c72ba1ab5acdb5ef5a45f1",
+    "actualImageAudit": "5e73232cb726b2bfeb563ec1b3aa25cbd52a9aba026b87a854a2a8ce8de28b9d",
+    "binding": "38f6637b0c1943326ab02f1795eeb9b41c156f069b9a89b868701dd50567cad9",
+    "actualWebAssets": "47cdadf3832ed7a3e2783326ef5f6377f0c1a7ef421084fa09fbfc5859216202",
+    "uiCompletion": "5453a98ff5386142312d7541c9829def23e0c4e930184cbdbb9cc4c5e284afde",
+    "independentVisualReview": "d4b1078e8ffe140728ceaf45a7111241dd6578137b130df1951fc7252074b629",
+    "documentStartFailure": "437d4368fc9751ff0b33dec125a405db0796d2f89844899c9e49e05cdcaa29de",
+    "hostDocumentStartPureTap": "c0690c2fe387b8c3abc7223a304d61bd1ab4c67ab3ff6f1ba7e08bee81d81714",
+    "functionalPassWithUnknownExit143": "8d991dd6db9c4fd054c30078469567fcc4f3f8f18ed9497382b6dab50feb9db0",
+    "supervisedWatchdogCompletion": "8f62baf05174a00d21ff5ca9c6606e894be5f83e8ae3c11afd1e70e2c8af2a64",
+    "watchdogSourceBinding": "7ee33245932a0eed19076b340715848f3f71cb6068649cfd979f2e33eb1892df"
+  },
+  "limitations": [
+    "Automated local hardware-renderer evidence does not establish human, WAN, physical-device, capacity or competitive acceptance.",
+    "Desktop viewport checks used DPR 0.5; 3840x2160 CSS is not a native 4K screenshot-pixel or physical-legibility claim.",
+    "The six-size suite used a standalone host entry and does not establish D4 Store launch or opaque browser-game sandbox acceptance.",
+    "Targeted watchdog stimuli were an explicit browser script task and synthetic application-message ACK omission, not TCP/WAN faults.",
+    "Post-build host fixture checks are separate from the image-baked 545 unit and 24 host checks.",
+    "D2 matrix failures, D3 UI failures and both earlier targeted-run classifications remain unchanged.",
+    "Selected D4 UI/watchdog results do not complete the full network acceptance matrix or close issues 30, 12 or 26.",
+    "Myelin verifies exact off-chain host replay, not CKB settlement."
+  ]
+}

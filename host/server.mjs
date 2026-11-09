@@ -5,7 +5,7 @@ import {createHmac,randomBytes,timingSafeEqual} from 'node:crypto';
 import {optimizedStatic} from './static.mjs';
 import {gameSockets} from './socket-proxy.mjs';
 
-export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSecret=runtimeToken,fetchImpl=fetch,requestLimit=3000,install=()=>({close(){}})}) {
+export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSecret=runtimeToken,fetchImpl=fetch,requestLimit=3000,transportQuality=config.transportQuality===true,install=()=>({close(){}})}) {
  if(!runtimeToken||runtimeToken.length<32||!sessionSecret||sessionSecret.length<32)throw Error('Set stable server-only secrets of at least 32 characters');
  if(!['http:','https:'].includes(new URL(runtimeUrl).protocol))throw Error('Invalid runtime URL');
  const app=express();app.disable('x-powered-by');
@@ -74,7 +74,7 @@ export function createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSec
  }
  app.use((_req,res)=>res.status(404).json({error:'Not found'}));
  app.use((err,_req,res,_next)=>res.status(err.status||500).json({error:err.status===413?'Request too large':'Unable to complete request'}));
- const routes=new Map(config.games.filter(g=>g.socket).map(g=>['/games/'+g.id+'/api/socket',{url:runtimeUrl+g.runtimePath+'/api/socket',token:runtimeToken}]));
+ const routes=new Map(config.games.filter(g=>g.socket).map(g=>['/games/'+g.id+'/api/socket',{url:runtimeUrl+g.runtimePath+'/api/socket',token:runtimeToken,...(transportQuality===true&&g.id==='botstrike'?{transportQuality:true}:{})}]));
  const sockets=gameSockets({account,origin,limited,routes});
  return {app,account,db:plugin.db,attachSockets:sockets.attach,close(){plugin.close();sockets.close();clearInterval(cleanup);}};
 }

@@ -1,0 +1,704 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-08",
+  "candidate": "D2",
+  "kind": "redacted_evidence_checkpoint",
+  "acceptanceComplete": false,
+  "networkAcceptance": false,
+  "humanParticipants": 0,
+  "provenance": {
+    "imageId": "sha256:09eadfd30a716fefd53a35b35362bad0831d0fc8cd1c46cc1e81a020553dd3d9",
+    "sourceTree": "839bdb9c5b9783cba6885f441b0729baa982b5c8",
+    "sourceKind": "git_tree",
+    "buildGuardSha256": "1cc8602c5405daada04df65fe6ae00fecb67bb05fd52effa58201fa2d430bef9",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "nativeProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "nativeRulesChanged": false,
+    "protectedFileCount": 105,
+    "retainedPairCount": 10,
+    "signedCheckpoint": {
+      "commit": "d7760503c1693b33bb45eac064ad2dd0c2600d87",
+      "sourceTree": "0c84e3631f322798dee2309f7b1b270d926fc1ca",
+      "candidate": "C",
+      "signsD2": false
+    },
+    "identityMeaning": "The D2 image binds a separate source tree; the signed C checkpoint does not sign D2 or authorize deployment."
+  },
+  "buildChecks": {
+    "unit": {
+      "passed": 423,
+      "failed": 0,
+      "skipped": 0
+    },
+    "host": {
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0
+    },
+    "actualImageFileAudit": "passed",
+    "scope": "Build unit tests and host tests are separate checks; neither establishes network acceptance."
+  },
+  "execution": {
+    "matrixSchema": 3,
+    "catalogVersion": 2,
+    "seed": 20261108,
+    "inputEnvelopeVersion": 2,
+    "inputAckVersion": 1,
+    "maxInputAgeMs": 400,
+    "caseCount": 31,
+    "passed": 12,
+    "failed": 19,
+    "unsupported": 0,
+    "pending": 0,
+    "filtered": false,
+    "resumed": false,
+    "developmentBind": false,
+    "matrixSha256": "eba9deb0774d9ea18eb3a5e8b1a27ed644a622083442f0302eee136d85099ec7",
+    "settledProfileEvidenceMeaning": "Presence records a successful settled-profile sample. Absence does not prove shaping was never applied; navigation and observation failures require their separate evidence.",
+    "cases": [
+      {
+        "id": "rtt-0-loss-0",
+        "status": "passed",
+        "nativeCapturedTicks": 3986,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 3986,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-0-loss-1",
+        "status": "passed",
+        "nativeCapturedTicks": 3950,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 3950,
+          "unsentTailTicks": 1
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-0-loss-3",
+        "status": "passed",
+        "nativeCapturedTicks": 4102,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 4102,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-50-loss-0",
+        "status": "failed",
+        "nativeCapturedTicks": 2726,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 2726,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": false
+      },
+      {
+        "id": "rtt-50-loss-1",
+        "status": "passed",
+        "nativeCapturedTicks": 6783,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6783,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-50-loss-3",
+        "status": "failed",
+        "nativeCapturedTicks": 5492,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 5492,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-100-loss-0",
+        "status": "passed",
+        "nativeCapturedTicks": 6903,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6903,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-100-loss-1",
+        "status": "failed",
+        "nativeCapturedTicks": 4396,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 4396,
+          "unsentTailTicks": 1
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-100-loss-3",
+        "status": "failed",
+        "nativeCapturedTicks": 4442,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 4442,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-180-loss-0",
+        "status": "failed",
+        "nativeCapturedTicks": 5686,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 5686,
+          "unsentTailTicks": 1
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-180-loss-1",
+        "status": "failed",
+        "nativeCapturedTicks": 3983,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 3983,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "rtt-180-loss-3",
+        "status": "failed",
+        "nativeCapturedTicks": 3886,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 3886,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "asymmetric-a-both-180",
+        "status": "failed",
+        "nativeCapturedTicks": 1653,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 1653,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": false
+      },
+      {
+        "id": "asymmetric-a-upstream-180",
+        "status": "failed",
+        "nativeCapturedTicks": 4457,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 4457,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "asymmetric-a-downstream-180",
+        "status": "failed",
+        "nativeCapturedTicks": 5252,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 5252,
+          "unsentTailTicks": 1
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "asymmetric-b-both-180",
+        "status": "failed",
+        "nativeCapturedTicks": 6408,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6408,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "asymmetric-b-upstream-180",
+        "status": "passed",
+        "nativeCapturedTicks": 6804,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6804,
+          "unsentTailTicks": 1
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "asymmetric-b-downstream-180",
+        "status": "passed",
+        "nativeCapturedTicks": 6573,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6573,
+          "unsentTailTicks": 1
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "jitter-normal-100",
+        "status": "passed",
+        "nativeCapturedTicks": 6579,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6579,
+          "unsentTailTicks": 1
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "jitter-policy-edge-180",
+        "status": "failed",
+        "nativeCapturedTicks": 3983,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 3983,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "gem-burst-a",
+        "status": "failed",
+        "nativeCapturedTicks": 3134,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 3134,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "bandwidth-uplink-128",
+        "status": "failed",
+        "nativeCapturedTicks": 6836,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6836,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "bandwidth-downlink-256",
+        "status": "failed",
+        "nativeCapturedTicks": 1775,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 1775,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": false
+      },
+      {
+        "id": "outage-upstream-short",
+        "status": "failed",
+        "nativeCapturedTicks": 1740,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 1740,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": false
+      },
+      {
+        "id": "outage-both-short",
+        "status": "passed",
+        "nativeCapturedTicks": 7603,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 7603,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "outage-heartbeat-long",
+        "status": "failed",
+        "nativeCapturedTicks": 4650,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 4650,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": false
+      },
+      {
+        "id": "network-interface-change",
+        "status": "passed",
+        "nativeCapturedTicks": 8579,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 8579,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "suspended-tab",
+        "status": "failed",
+        "nativeCapturedTicks": 6738,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 6738,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "render-30-cpu-4x",
+        "status": "failed",
+        "nativeCapturedTicks": 5142,
+        "originalReplay": {
+          "sourceNativeReplayMatched": null,
+          "fullTapeTraceMatched": null,
+          "capturedRuntimePrefixMatched": null,
+          "comparedRuntimeTicks": null,
+          "unsentTailTicks": null
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "arsenal-life-multiple",
+        "status": "passed",
+        "nativeCapturedTicks": 8024,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 8024,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": true
+      },
+      {
+        "id": "tactical-recovery-no-ai",
+        "status": "passed",
+        "nativeCapturedTicks": 7502,
+        "originalReplay": {
+          "sourceNativeReplayMatched": true,
+          "fullTapeTraceMatched": true,
+          "capturedRuntimePrefixMatched": true,
+          "comparedRuntimeTicks": 7502,
+          "unsentTailTicks": 0
+        },
+        "settledProfileEvidencePresent": false
+      }
+    ]
+  },
+  "replayEvidence": {
+    "originalReportCasesConfirmed": 30,
+    "originalReportCasesMissing": 1,
+    "originalReportConfirmedTicks": 154625,
+    "independentRenderAudit": {
+      "caseId": "render-30-cpu-4x",
+      "completionSha256": "bf00145853f6109ef838836be5b3aebd0172e6578e3a32b9735d1bc1b190ee60",
+      "sourceNativeReplayMatched": true,
+      "fullTapeTraceMatched": true,
+      "capturedRuntimePrefixMatched": true,
+      "confirmedTicks": 5142,
+      "unsentTailTicks": 0,
+      "originalCaseStatus": "failed",
+      "originalEvidenceChanged": false
+    },
+    "combinedConfirmedCapturedTicks": 159767,
+    "totalUnconfirmedShutdownTailTicks": 7,
+    "scope": "Every captured tick has an exact actual/source/retained replay confirmation across the original reports and the separate render audit. The seven unconfirmed shutdown tail ticks are excluded; replay agreement does not turn failed cases into passes."
+  },
+  "limitedRayWitnessEvidence": {
+    "caseId": "arsenal-life-multiple",
+    "available": 6,
+    "rngMatched": 6,
+    "damageAgrees": 6,
+    "scope": "Only supported isolated ARC, ION and RAIL shot frames in this case; no all-weapon or all-situation coverage claim."
+  },
+  "postBuildHostAnalysis": {
+    "separateFromImmutableApplication": true,
+    "appliedToImmutableApplication": false,
+    "runtimeSourceFileCount": 16,
+    "runtimeSourceManifestSha256": "9cbc980737eba71850f668d615f389d7e1b0300f774df6a76676f388d5623654",
+    "unchangedDuringMatrix": true,
+    "unchangedOtherRuntimeFilesMatchingImage": 15,
+    "correctedHostAnalyzerSha256": "0a6a671b60f62967ffa2452d0249edd61620498e6b45083d9d42c25a5ffa6036",
+    "bakedAnalyzerSha256": "cce3db00252276015e3b760d65a7bf2702beccb3c28132756509b02bdf8448e7",
+    "correctionScope": "Exact issued-plus-400 construction, original-request AND final-packed neutral semantics, and same-life preceding-player ACK proof. No input deadline tolerance, game rule or Native profile change.",
+    "futureWatchdogAppliedToD2": false
+  },
+  "storageAndCleanup": {
+    "measurementBytes": 235950870,
+    "measurementBudgetBytes": 4294967296,
+    "filesystemReserveBytes": 2147483648,
+    "captureDefaultBytes": 268435456,
+    "captureTacticalBytes": 536870912,
+    "captureQueueBytes": 4194304,
+    "allCaseCapturesComplete": true,
+    "captureDrops": 0,
+    "allCaseLosslessArchivesComplete": true,
+    "scratchBudgetSeparate": true,
+    "scratchHardLimitBytes": 2147483648,
+    "scratchStartAllocatedBytes": 4096,
+    "scratchPeakAllocatedBytes": 81510400,
+    "scratchFinalAllocatedBytes": 68739072,
+    "ownedContainersRemaining": 0,
+    "ownedNetworksRemaining": 0,
+    "ownedBrowserProfilesRemaining": 0,
+    "ownedProcessesRemaining": 0,
+    "scope": "Cleanup was checked after this run and after the independent audit. Completed evidence was preserved; this is not a claim about unrelated processes or later runs."
+  },
+  "openGates": [
+    {
+      "id": "network-slo",
+      "status": "open"
+    },
+    {
+      "id": "capacity-and-load-envelope",
+      "status": "open"
+    },
+    {
+      "id": "real-wan",
+      "status": "open"
+    },
+    {
+      "id": "physical-device-input-and-display",
+      "status": "open"
+    },
+    {
+      "id": "human-participant-fairness",
+      "status": "open"
+    },
+    {
+      "id": "failed-matrix-condition-diagnosis",
+      "status": "open"
+    }
+  ],
+  "clientControlStatusGap": {
+    "status": "open",
+    "observedLiveAlive": true,
+    "freshStatesObserved": true,
+    "approximateMatchedAckGapMs": 3000,
+    "meaning": "A live/alive browser continued receiving fresh states without a new matched controller ACK for about three seconds, exposing a control-status gap. This is not a measured network SLO or proof that all server applications were absent.",
+    "resolution": "Requires a separate future candidate and its own validation; no new watchdog is claimed to be applied to D2."
+  },
+  "normalHostExercise": {
+    "status": "passed",
+    "passed": true,
+    "scope": "Disposable local standalone normal host/start Docker drain, recreate and fixed-base completed-data backout",
+    "application": {
+      "imageId": "sha256:09eadfd30a716fefd53a35b35362bad0831d0fc8cd1c46cc1e81a020553dd3d9",
+      "sourceTree": "839bdb9c5b9783cba6885f441b0729baa982b5c8",
+      "defaultCommandPreserved": true,
+      "applicationSourceBind": false,
+      "nativeProfile": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+      "nativeRulesChanged": false,
+      "retainedPairCount": 10
+    },
+    "fixedBase": {
+      "imageId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+      "sourceCommit": "01dee05170c84c3e5d4fde9887c2d10282229f21",
+      "actualRuntimeSourceClosureVerified": true,
+      "readCompletedDataOnly": true,
+      "modernDrainReadinessUnsupported": true
+    },
+    "hostDriver": {
+      "file": "tools/botstrike-host-deployment-rehearsal.mjs",
+      "sha256": "a9c1faf434aab08d0dead2ee0ee86103da160fdb89241467a9e3f7f5dc092eb7",
+      "testSha256": "1ad7c6cdba7e89790d9ef57d26f3fe799af8c1f62ed882ddb5b8f59e913256e8",
+      "execution": "post-build external host QA",
+      "coveredByD2BakedCI": false,
+      "focusedPureChecksPassed": 23
+    },
+    "normalClock": {
+      "tickMs": 15.625,
+      "nativeHz": 64,
+      "acceleratedWallClock": false
+    },
+    "resources": {
+      "cpuLimit": 2,
+      "memoryBytes": 4294967296,
+      "pidsLimit": 256,
+      "boundary": "Standalone host, runtime Node, Native and verifier are inside the application limit; clients and host QA driver are outside",
+      "capacityAcceptance": false
+    },
+    "completedMatch": {
+      "nativeTicks": 23040,
+      "automatedPilots": 2,
+      "nativeAiSeats": 8,
+      "configBotsCapable": true,
+      "humanParticipants": 0,
+      "sealed": true,
+      "signatureVerified": true,
+      "wireAcksJoinedToExactTickPayloadAndView": 12119,
+      "activeWireAcksJoined": 12117,
+      "resyncs": 0,
+      "neutralFallbackFrames": 0
+    },
+    "deploymentChain": {
+      "sameGuestAuthentication": true,
+      "careerAndCompletedExportUnchanged": true,
+      "noDuplicateCareerAward": true,
+      "liveDrainRejectedCreateAndJoin": true,
+      "modernZeroPendingIoDrainBeforeColdBackup": true,
+      "coldBackupsOnlyAfterStoppedRuntime": true,
+      "newCandidateContainerStarted": true,
+      "latestCoherentBackupUsedForBaseRead": true,
+      "normalStopMs": {
+        "A": 192.19704800000181,
+        "B": 182.49239999998827,
+        "C": 177.7176389999804
+      },
+      "maximumPermittedStopMsExclusive": 2900,
+      "exportsVerifiedPerRestoredGeneration": {
+        "B": 11,
+        "C": 11
+      },
+      "distinctRetainedPairs": 10,
+      "newBMatchStartup": {
+        "knownAppliedAcks": 4,
+        "activeAcks": 3,
+        "cancelledByExplicitLeave": true,
+        "secondFullMatchCompleted": false
+      }
+    },
+    "sentinel": {
+      "identityAndLifecycleUnchanged": true,
+      "observations": 386,
+      "restarts": 0
+    },
+    "quality": {
+      "normalClockPhases": [
+        "running",
+        "steady-running",
+        "sealing",
+        "after-seal"
+      ],
+      "provenanceBound": true,
+      "validatedActualGuardSha256": "1cc8602c5405daada04df65fe6ae00fecb67bb05fd52effa58201fa2d430bef9",
+      "previousUnknownSamplesPreserved": true,
+      "performanceOrCapacitySloClaimed": false
+    },
+    "cleanup": {
+      "ownedContainersRemoved": 6,
+      "ownedNetworkRemoved": true,
+      "externalGoneInspectionVerified": true,
+      "temporarySecretFileRemoved": true,
+      "driverGone": true
+    },
+    "receiptSha256": {
+      "run": "514939650a88e75cd6d6524bb06a565b380342d1f9dd3ac9d96160b3435fbbed",
+      "externalTerminal": "0e432ad219a844dd67d31423578b5fed9f0c0b5d8cb7adc111b90c0f40d9bba6",
+      "strictTapeAudit": "a53da28e83f39003cee45c7021c87351e587ec1f72528c3ba00f935f6a70a966"
+    },
+    "preservedFailedAttempts": [
+      {
+        "status": "failed",
+        "stage": "before Native",
+        "cause": "Internal-only network did not satisfy actual host-port publication prerequisite",
+        "originalReceiptSha256": "ec96fb10e1c3110d773afa23183e26034e1f743fa5ace0608f4ebb221febb85b",
+        "separateProbeReceiptSha256": "e875de8a4e0b7901bffba5d6d209309746ae24b275f37466f4c6d423c333132e"
+      },
+      {
+        "status": "failed",
+        "stage": "after completed and sealed A",
+        "cause": "Fixture audit required literal held payload across legitimate life-fence neutralisation",
+        "originalReceiptSha256": "8c29ec131ebbbb9beed24ad3e78fc829c6209117fba98773bf0689b5dc8fc6d5"
+      },
+      {
+        "status": "failed",
+        "stage": "after completed and sealed A",
+        "cause": "Fixture audit incorrectly rejected a genuine earlier ACK before later new-life neutral fallback",
+        "originalReceiptSha256": "bf957a0f2aafaf392f2110186ecbd81901bbd82fc6531883e87043927dd6572f",
+        "independentFinalGuardReanalysisSha256": "7621185156c8be3a7fe63df9b82c490e9268b1566e18aef579ed775916cee898",
+        "originalRunStatusChanged": false
+      }
+    ],
+    "limitations": [
+      "Local standalone-host rehearsal; not production or Parent Store deployment or no-downtime migration.",
+      "Two software-controlled pilots and eight AI seats; no human, WAN, physical-device or capacity acceptance.",
+      "B startup probe was cancelled, not a second full sealed match.",
+      "Old base reads durable completed data; missing modern IO-readiness fields never authorise backup.",
+      "Post-build host QA and corrected analysis do not reclassify original failed runs or the network matrix."
+    ]
+  },
+  "limitations": [
+    "This redacted checkpoint publishes aggregates, identifiers and file digests only.",
+    "Requested fault coverage is not equivalent to successful fault execution: some cases failed prerequisites or observation steps.",
+    "The Tactical recovery matrix case did not run a complete match; separate full-match evidence cannot be inferred from that case.",
+    "The original 12-pass/19-fail matrix is unchanged; independent replay analysis is additional evidence only.",
+    "This is neither complete issue acceptance nor merge, deployment, public performance or competitive fairness approval."
+  ]
+}

@@ -4,12 +4,14 @@ import {waitNativeState} from './browser-native-state.mjs';
 import {leaveBrowserRoom} from './botstrike-browser-room.mjs';
 import {resizeMobile,screenshotMobile} from './mobile-viewport.mjs';
 import {drills} from '../games/botstrike/client/practice.mjs';
+import {graphicsObservation} from './botstrike-store-observations.mjs';
 
 const {chromium}=await import(process.env.PLAYWRIGHT_ENTRY||'playwright');
 const base=process.env.STORE_URL||'http://127.0.0.1:19921';
 const out=process.env.CONTROL_ARTIFACTS||'/tmp/botstrike-tactical-ui-browser';mkdirSync(out,{recursive:true});
 const cohort=process.env.UI_COHORT||'all';assert.ok(['all','desktop','mobile'].includes(cohort));
-const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader','--mute-audio']});
+const requireHardware=process.env.UI_REQUIRE_HARDWARE==='1';
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-unsafe-swiftshader','--mute-audio',...(requireHardware?['--enable-gpu']:[])]});
 const pages=[],contexts=[],errors=[],results=[];
 const sizes=[[1920,1080],[2560,1080],[2560,1440],[3840,2160]];
 const intersect=(a,b)=>!!a&&!!b&&a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
@@ -18,14 +20,14 @@ const state=page=>page.evaluate(()=>fetch('/games/botstrike/api/state').then(r=>
 async function stable(page){await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));}
 async function active(page){if(await page.evaluate(()=>document.documentElement.dataset.playing!=='true'))await page.locator('#resume').click();await page.waitForFunction(()=>document.documentElement.dataset.playing==='true');}
 async function boot(options){
- const context=await browser.newContext({reducedMotion:'reduce',...options});contexts.push(context);
+ const context=await browser.newContext({reducedMotion:'reduce',...options,...(process.env.NETWORK_BROWSER_PROXY?{proxy:{server:process.env.NETWORK_BROWSER_PROXY,bypass:'<-loopback>'}}:{})});contexts.push(context);
  await context.addInitScript(()=>localStorage.setItem('botstrike:settings',JSON.stringify({motion:false,sound:false,renderFps:30})));
  const page=await context.newPage();pages.push(page);page.inputs=[];page.mobile=!!options.isMobile;page.setDefaultTimeout(60000);
  page.on('pageerror',e=>errors.push(e.message));
  page.on('websocket',ws=>ws.on('framesent',({payload})=>{const m=JSON.parse(payload);if(m.type==='input')page.inputs.push({at:Date.now(),seq:m.input.seq,x:m.input.x,y:m.input.y,fire:m.input.fire});}));
  const response=await page.goto(base+'/games/botstrike/');assert.equal(response.status(),200,'candidate static game entry is available');
  await page.waitForFunction(()=>document.querySelector('#status')?.textContent.includes('Choose your chassis')||document.querySelector('#fatal')?.hidden===false);
- assert.equal(await page.locator('#fatal').isHidden(),true,await page.locator('#fatal').textContent());return page;
+ assert.equal(await page.locator('#fatal').isHidden(),true,await page.locator('#fatal').textContent());page.graphics=await graphicsObservation(page,browser,{hardware:requireHardware});return page;
 }
 async function reachable(page,selector,{minimum=44,scroll=true}={}){
  const el=page.locator(selector);if(scroll)await el.scrollIntoViewIfNeeded();const r=await el.boundingBox();
@@ -133,7 +135,7 @@ try{
  await resizeMobile(phone,844,390);await stable(phone);if(await phone.locator('#immersive-gate').isVisible())await phone.locator('#immersive-enter').click();await phone.locator('#immersive-gate').waitFor({state:'hidden'});await active(phone);await retakeUse(phone,cssInsets);await leaveBrowserRoom(phone);await phone.context().close();
  results.push({view:'mobile-lifecycle',fullscreenHeldInputCleared:true,sameNativeRoomPreserved:true,rotationGate:true});
  }
- assert.deepEqual(errors,[]);writeFileSync(out+'/measurements.json',JSON.stringify({automated:true,humanParticipants:0,softwareRendering:true,physicalPerformanceAccepted:false,cohort,desktopDpr:.5,mobileDpr:1,results,errors},null,2));console.log(JSON.stringify({viewports:cohort==='all'?6:cohort==='desktop'?4:2,results:results.length,errors,output:out}));
+ assert.deepEqual(errors,[]);writeFileSync(out+'/measurements.json',JSON.stringify({automated:true,humanParticipants:0,softwareRendering:pages.every(page=>page.graphics?.classification==='software'),hardwareRendering:pages.every(page=>page.graphics?.classification==='hardware'),requiredHardware:requireHardware,graphics:pages.map(page=>page.graphics),physicalPerformanceAccepted:false,cohort,desktopDpr:.5,mobileDpr:1,results,errors},null,2));console.log(JSON.stringify({viewports:cohort==='all'?6:cohort==='desktop'?4:2,results:results.length,errors,output:out}));
 }catch(error){
  const diagnostics=[];for(const [index,page]of pages.entries())if(!page.isClosed())try{diagnostics.push(await page.evaluate(()=>({url:location.href,playing:document.documentElement.dataset.playing,active:document.activeElement?.id,rects:Object.fromEntries(['#practice-hud','#radar','#vitals-state','#touch-jump','#touch-crouch','#practice-panel','#resume','.armory-header','#buy-items'].map(s=>{const n=document.querySelector(s),r=n?.getBoundingClientRect();return[s,r?{x:r.x,y:r.y,width:r.width,height:r.height}:null];}))})));if(page.mobile)await screenshotMobile(page,out+'/failure-'+index+'.png');else await page.screenshot({path:out+'/failure-'+index+'.png'});}catch{}
  writeFileSync(out+'/failure.json',JSON.stringify({error:String(error),results,errors,diagnostics},null,2));throw error;

@@ -5,6 +5,21 @@
  --type-body:clamp(14px,.85vw,24px);--type-small:clamp(12px,.72vw,21px);--type-label:clamp(11px,.64vw,18px);
  --interface-gap:clamp(12px,1vw,28px);--field-radar-size:clamp(176px,12.5vw,360px);--field-radar-top:clamp(100px,12vh,200px);
 }
+/* Bounded local connection diagnostics live in the existing in-scene menu. */
+.quality-panel{margin:18px 0;padding:12px 16px;border:1px solid var(--stroke);border-radius:4px;color:var(--text-secondary);font-size:var(--type-small);line-height:1.5;max-width:1240px}
+.quality-panel>summary{color:var(--text-primary);font-size:var(--type-small);min-height:44px;align-content:center;font-weight:650}
+.quality-panel p{max-width:100ch;font:inherit;letter-spacing:0;overflow-wrap:anywhere}
+.quality-columns,.quality-metric{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(170px,1fr) minmax(64px,.3fr);gap:12px;align-items:center}
+.quality-columns{color:var(--text-secondary);font-size:var(--type-label);margin-top:18px;padding:6px 0}
+#quality-metrics{margin:0}.quality-metric{padding:10px 0;border-top:1px solid var(--stroke)}
+.quality-metric dt{color:var(--text-primary);font-size:inherit;font-weight:600;min-width:0}
+.quality-metric small{display:block;font:400 var(--type-label)/1.5 system-ui;color:var(--text-secondary);margin-top:4px;letter-spacing:0}
+.quality-metric dd{margin:0;min-width:0;font:var(--type-small)/1.5 monospace;overflow-wrap:anywhere}
+.quality-samples{text-align:right}.quality-columns>span:last-child{text-align:right}
+.quality-share{display:flex;align-items:center;gap:12px;min-height:44px;font-size:inherit;letter-spacing:0;margin-top:16px;cursor:pointer}
+.quality-share input{width:22px;height:22px;flex:none;min-height:22px;margin:0}
+.quality-actions{display:flex;gap:10px;flex-wrap:wrap}.quality-actions button{min-height:44px;min-width:160px;padding:10px 14px;font-size:var(--type-small)}
+@media(max-width:600px){.quality-panel{padding:10px;max-width:100%}.quality-columns{display:none}.quality-metric{grid-template-columns:minmax(0,1fr) 50px;gap:4px 8px}.quality-metric dt{grid-column:1/-1}.quality-metric dd{font-size:12px}.quality-metric small{font-size:12px}.quality-metric .quality-samples::after{content:' obs.'}.quality-actions button{flex:1;min-width:130px}.quality-share{font-size:13px}}
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
 button,input,select,summary{touch-action:manipulation}
 button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}

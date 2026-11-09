@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "kind": "network-navigation-send-observer-followup",
+  "candidate": "D4",
+  "status": "single_case_passed",
+  "scope": {
+    "automated": true,
+    "humanParticipants": 0,
+    "hostOnly": true,
+    "applicationRebuilt": false,
+    "nativeRulesChanged": false,
+    "issueAcceptance": false,
+    "networkAcceptance": false,
+    "merged": false,
+    "deployed": false
+  },
+  "application": {
+    "imageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "toolImageId": "sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d"
+  },
+  "hostChange": {
+    "description": "Arm a bounded framesent watcher before keydown; release movement before observer drains/markers; retain attempted keydown for failure cleanup.",
+    "maximumWatchers": 64,
+    "existingWaitInputUnchanged": true,
+    "sendIsNativeApplicationProof": false,
+    "driverSources": [
+      {
+        "file": "tools/run-network-matrix.mjs",
+        "sha256": "fc53da0eb31afd9975d3c298be3925f81ba7d1e032631af12fd416c73171857b"
+      },
+      {
+        "file": "tools/network-matrix-profiles.mjs",
+        "sha256": "80bac43ef440cf2b1320674ae115c1c5ec943289cb05d1dc4d5a182ff84ad63a"
+      },
+      {
+        "file": "tools/network-matrix-analysis.mjs",
+        "sha256": "0a6a671b60f62967ffa2452d0249edd61620498e6b45083d9d42c25a5ffa6036"
+      },
+      {
+        "file": "tools/network-matrix-recovery.mjs",
+        "sha256": "2259b5b6227cf069a39b7759572aeec5d3b8dae5b126441725b23d8faffc372b"
+      },
+      {
+        "file": "tools/network-matrix-replay.mjs",
+        "sha256": "e21d4bfb9079e9e88b11f9c9d27264e9ab2c0ef2b2457f9721fbc93f43683b9e"
+      },
+      {
+        "file": "tools/network-matrix-artifacts.mjs",
+        "sha256": "2d2b21ce8afbe955a4ac6824be1f81ae427a39a169ec34b412e4f72f1d80ca2a"
+      },
+      {
+        "file": "tools/network-trace-archive.mjs",
+        "sha256": "722cb2a9f7eb27ddd6dc7b866aa2f7190664984ea90db8450f87dbb137cbe489"
+      },
+      {
+        "file": "tools/start-network-runtime.mjs",
+        "sha256": "844d03d70ed9f025f0cfb3a84d9b31fb3bff389afa136fc1d125845bdd8aea16"
+      },
+      {
+        "file": "tools/network-proxy.mjs",
+        "sha256": "73e12aa1cc45d2bf3c68f333275a048c6088413a10361c91bec2a203eb74d153"
+      },
+      {
+        "file": "tools/network-lab.mjs",
+        "sha256": "c3420a55613a2f98796c24aa8f29fd58f0f08ef8f41ca3e79ae5e9b39a910968"
+      },
+      {
+        "file": "tools/network-lab-provenance.mjs",
+        "sha256": "ad95303734e12d8fe2eb3f973b7d67b60c0eb4b9d005e6e58714139616b3f231"
+      },
+      {
+        "file": "tools/network-node-actors.mjs",
+        "sha256": "440555d95746ca497d5102a2b42f9fae7797bcab72cd1f3fbe06e1eea955657a"
+      },
+      {
+        "file": "games/botstrike/client/input-delivery.mjs",
+        "sha256": "e307dbd6646c4ac32227ea19809491344b819766bb785fe8168587e5184c0bca"
+      },
+      {
+        "file": "tools/network-browser-actors.mjs",
+        "sha256": "0f18bda7258e9ca6fdef0ab7702579756354d977518a78e5bf582065287ce977"
+      },
+      {
+        "file": "tools/local-recovery-fence.mjs",
+        "sha256": "e24bea3dcc6a010d703dfc75f2a1553a117382db6c546664419a5676b21557d0"
+      },
+      {
+        "file": "tools/network-local-fence.mjs",
+        "sha256": "a17509ab094bade5539eda9c83bd4857b2670418229d371f5529dd315d5a5a9c"
+      },
+      {
+        "file": "tools/network-fairness-scenarios.mjs",
+        "sha256": "684a4dec3b239af84e24a1c7c1d09874eecc6a6c49af54aeeaa4fed72f43576b"
+      },
+      {
+        "file": "tools/run-network-audit.mjs",
+        "sha256": "c85fab206cad9d46df333611526d80378f77499bb1b8da52ff6c4ec14895b86d"
+      },
+      {
+        "file": "tools/damage-contract-source.mjs",
+        "sha256": "3b0b2d861d44ffd1b33bd526d5c50806edc40db4a35f5b8b04849ea9db70c203"
+      },
+      {
+        "file": "botstrike/examples/network_audit.rs",
+        "sha256": "5c16511bb903e0c81bc276e1d17c6111da8ede93f15a32adfa4993e2f90959d8"
+      }
+    ],
+    "fixedLimits": {
+      "navigationToleranceUnits": 2,
+      "waypointTimeoutMs": 30000,
+      "noProgressTimeoutMs": 5000,
+      "inputObservationTimeoutMs": 2000,
+      "inputLeaseMs": 400,
+      "maxOriginalSendAgeMs": 1000
+    }
+  },
+  "pureChecks": {
+    "relatedPassed": 60,
+    "actorChecksIncluded": 14,
+    "navigationChecksIncluded": 9,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "imageBaked": false,
+    "receiptSha256": "6cd2d0fa8b981c7820ad1558d553a2ba43d0d5d98e92c915e24cd11520611aa3",
+    "testSources": {
+      "tests/network-browser-actors.test.mjs": "33539ed509f17a16761992b9f22337ffb4ec155402a14b2ac4ea7319410901f9",
+      "tests/network-fairness-scenarios.test.mjs": "8fb6614f3a40a0fe2a16c3966a9d698aa07e1acaa3a89298bc0b0ef6d390ef65"
+    }
+  },
+  "originalFailureReview": {
+    "preShapingRoute": "Real repeated stopped displacements overshot the waypoint; all41 reviewed stops were actual same-context controlled stops. Observer drain preceded keyup.",
+    "shaped180msRoute": "Occurred after shaping during cover/peek return; actual valid held and neutral inputs sometimes arrived together before one Native tick, producing zero movement.",
+    "rtt50Loss3": "Fire and release requests were really rejected as expired. Later neutral ACK cannot establish a shot. Exclusive transport cause remains unproven.",
+    "originalRouteAuditSha256": "b33e273960e5968b79b146c4b91eecfc033ac5fe3434601e0fe60cd7d53789b5",
+    "expiredShotAuditSha256": "cf7de36a98295989fcc0b085c5063419c04891a8fdc4e58cbfdc2a388dec744f",
+    "originalVerdictsChanged": false
+  },
+  "singleCase": {
+    "id": "outage-upstream-short",
+    "passed": true,
+    "firstWaypointDistanceUnits": 1.996560853831106,
+    "requestedUpstreamOutageMs": 1000,
+    "faultActiveUpstreamKernelDrops": 13,
+    "requestedRecoveryBandwidthKbit": 128,
+    "currentLocalEpoch": 7,
+    "postBarrierOriginalNeutral": true,
+    "sameEpochAfterOneExplicitSoftwareResume": true,
+    "freshPositiveInputAck": true,
+    "neutralAckAfterRestorationMs": 6389,
+    "expiredControlFrames": 0,
+    "obsoleteHeldFrames": 0,
+    "fullCatalogStatus": "incomplete",
+    "fullCatalogPendingCases": 30,
+    "directNodeExitCode": 1,
+    "supervisorExitCode": 0,
+    "exitMeaning": "Selected case passed; incomplete full catalog intentionally exits1."
+  },
+  "replay": {
+    "sourceNativeReplayMatched": true,
+    "fullTapeTraceMatched": true,
+    "capturedRuntimePrefixMatched": true,
+    "comparedRuntimeTicks": 4373,
+    "tapeTicks": 4373,
+    "unconfirmedTapeTailTicks": 0,
+    "selectedToTick": 4266
+  },
+  "capture": {
+    "status": "complete",
+    "dropped": 0,
+    "archives": 12,
+    "archiveOriginalBytes": 147102768,
+    "archiveCompressedBytes": 5115324,
+    "aiEligibleFrames": 400,
+    "globalNoAiEstablished": false,
+    "newSignedMatchExportProduced": false
+  },
+  "cleanup": {
+    "newContainersRemaining": 0,
+    "newNetworksRemaining": 0,
+    "trackedChromeProcesses": 20,
+    "ownedChromeProcessesRemaining": 0,
+    "sourceUnchanged": true
+  },
+  "evidenceSha256": {
+    "case": "5d88e0ff4605cd87a7114ac669fa0fa1bf9050519a982b9009fa86e2f2aaf463",
+    "matrix": "8eeb0d86bf64f269c938d3185835a7b4d4f3735ebd493a0c440ac21cae8143ed",
+    "archives": "d446349a3a4d7a1a3fa12f89fac56c304adfb7a427fcf7ad5fbf9cd53b435c8d",
+    "evidenceManifest": "6002efec5c2df520590bdc3e118db2a0566d4045db49ce0853fdc86f7580a64e",
+    "supervisedCompletion": "7f6598e7750831ad05431a6ef19d78a2dd69ca6c0959dd053c2702509054a280",
+    "after": "78e4f309540ce131abdf09cbcfd4689021da00d0d2d571361d8876f77d165957",
+    "dockerEvents": "02ea216ba50f76ed933d2017bcff4529c72f2218eb8733d83b13411c3f04d84c"
+  },
+  "limitations": [
+    "One automated desktop shared-kernel cohort, not human/WAN/physical-device or competitive acceptance.",
+    "This host revision differs from the earlier heartbeat follow-up; do not combine partial catalogs or claim either revalidates the other.",
+    "The historical D2 matrix remains12 passed/19 failed; its original cases and archives are unchanged.",
+    "A successful fresh neutral took6389ms after restoration in this case; the60s fixture bound is not a competitive latency promise.",
+    "No sealed match or new game signature; fault gaps may use AI cover.",
+    "The180ms coalescing and expired-shot conditions remain unresolved; this correction removes an observer dependency, not every network failure.",
+    "Original send to exact completed presentation correlation and real browser stance/peek boundary shots remain engineering work for#12.",
+    "Human A/B, #4/#12 dependencies, capacity and physical-device gates remain open.",
+    "Myelin verifies exact off-chain host replay, not CKB settlement."
+  ]
+}

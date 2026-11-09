@@ -8,15 +8,16 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 const run=promisify(execFile);
 import {WebSocket} from 'ws';
+import {trackSocketDelivery} from './ws-delivery-client.mjs';
 import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
 const secret='botstrike-tactical-protocol-test-private-token',data=mkdtempSync(path.join(tmpdir(),'botstrike-tactical-flow-'));
 const service=createBotStrike({secret,data,tickMs:0,maxRooms:2});await new Promise(r=>service.server.listen(0,'127.0.0.1',r));
 const base='http://127.0.0.1:'+service.server.address().port,accounts=Array.from({length:11},(_,i)=>(i+1).toString(16).padStart(64,'0'));
 const headers=i=>({'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':accounts[i]});
-const sockets=[],tokens=[],errors=[];let room;
-async function request(i,body,expected=200){const res=await fetch(base+'/api/'+(body?'action':'state'),{method:body?'POST':'GET',headers:headers(i),body:body?JSON.stringify({...body,...(tokens[i]?{controlToken:tokens[i]}:{})}):undefined});const out=await res.json();assert.equal(res.status,expected,JSON.stringify(out));return out.room;}
+const sockets=[],tokens=[],deliveries=[],errors=[];let room;
+async function request(i,body,expected=200){const res=await fetch(base+'/api/'+(body?'action':'state'),{method:body?'POST':'GET',headers:headers(i),body:body?JSON.stringify({...body,...(tokens[i]?{controlToken:tokens[i]}:{}),...(body.type==='buy'?{delivery:await deliveries[i].ready(room.id)}:{})}):undefined});const out=await res.json();assert.equal(res.status,expected,JSON.stringify(out));return out.room;}
 async function until(predicate,limit=20000){const deadline=Date.now()+limit;while(Date.now()<deadline){const r=await request(0);if(r?.status==='failed')throw Error(r.error);if(predicate(r))return r;await new Promise(r=>setTimeout(r,15));}throw Error('Tactical protocol condition timeout');}
-async function connect(i){const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(i)});sockets[i]=ws;const controlled=new Promise(resolve=>ws.on('message',raw=>{const m=JSON.parse(raw);if(m.type==='control'&&m.active){tokens[i]=m.token;resolve();}if(m.type==='error')errors.push(m.error);}));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});await controlled;}
+async function connect(i){const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(i)});sockets[i]=ws;deliveries[i]=trackSocketDelivery(ws);const controlled=new Promise(resolve=>ws.on('message',raw=>{const m=JSON.parse(raw);if(m.type==='control'&&m.active){tokens[i]=m.token;resolve();}if(m.type==='error')errors.push(m.error);}));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});await controlled;}
 try{
  await request(0,{type:'create',kind:'public',mode:'demolition',ruleset:'tactical',map:0,hero:0,difficulty:0},400);
  room=await request(0,{type:'create',kind:'private',mode:'demolition',ruleset:'tactical',map:0,hero:0,difficulty:0});await connect(0);
@@ -27,19 +28,19 @@ try{
  await request(4,{type:'hero',hero:5});assert.ok((await request(0)).roster.every(p=>!p.ready),'selection invalidates squad readiness');
  for(let i=0;i<10;i++)await request(i,{type:'ready',ready:true});
  room=await request(0,{type:'start'});room=await until(r=>r.state?.phase==='buy');
- const id=room.id,life=room.state.players[0].life,firstLife=life;assert.equal(room.config.ruleset,'tactical');
+ const id=room.id,life=room.state.players[0].life,firstLife=life;await deliveries[0].ready(id,{life});assert.equal(room.config.ruleset,'tactical');
  assert.ok(room.roster.every(p=>!p.bot));assert.ok(service.rooms.get(id).config.bots.every(b=>!b));
  assert.equal(room.state.players[0].armor,0);assert.equal(room.state.players[1].credits,800);assert.equal(room.state.players[5].credits,undefined,'enemy funds remain private');assert.equal(room.state.players[5].owned,undefined);
  await request(0,{type:'hero',hero:1},400);await request(10,{type:'join',room:id,hero:5},400);await request(0,{type:'buy',item:2,life:0},400);
- sockets[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:1,action_life:life,drop:true}}));
- sockets[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:2,action_life:life}}));
+ sockets[0].send(JSON.stringify(deliveries[0].envelope(id,{...neutral(),seq:1,action_life:life,drop:true})));
+ sockets[0].send(JSON.stringify(deliveries[0].envelope(id,{...neutral(),seq:2,action_life:life})));
  room=await until(r=>r.state?.players[0].owned[0]===false);assert.equal(room.state.players[0].unarmed,true);assert.ok(room.state.drops.some(d=>d.weapon===0));
  await request(0,{type:'buy',item:0,life});await new Promise(r=>setTimeout(r,20));assert.equal((await request(0)).state.players[0].owned[0],false,'free purchase cannot restore a gifted ARC');
  room=await until(r=>r.state?.round===2&&r.state.phase==='buy',30000);assert.equal(room.state.players[0].owned[0],false,'surviving without ARC remains consequential');
- const currentLife=room.state.players[0].life;
+ const currentLife=room.state.players[0].life;await deliveries[0].ready(id,{life:currentLife});
  // An old-life pulse followed by new-life neutral must be discarded before buy.
- sockets[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:3,action_life:firstLife,drop:true,item:3}}));
- sockets[0].send(JSON.stringify({type:'input',room:id,input:{...neutral(),seq:4,action_life:currentLife}}));
+ sockets[0].send(JSON.stringify(deliveries[0].envelope(id,{...neutral(),seq:3,action_life:firstLife,drop:true,item:3})));
+ sockets[0].send(JSON.stringify(deliveries[0].envelope(id,{...neutral(),seq:4,action_life:currentLife})));
  await request(0,{type:'buy',item:2,life:currentLife});
  room=await until(r=>r.state?.players[0].owned[2]);assert.equal(room.state.players[0].owned[2],true);assert.equal(room.state.players[0].items[3],0);
  const position=room.state.players[0].position;sockets[0].terminate();

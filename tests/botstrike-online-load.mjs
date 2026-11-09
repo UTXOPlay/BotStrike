@@ -4,6 +4,7 @@ import {tmpdir,cpus,totalmem} from 'node:os';
 import path from 'node:path';
 import {performance} from 'node:perf_hooks';
 import {WebSocket} from 'ws';
+import {trackSocketDelivery} from './ws-delivery-client.mjs';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
@@ -36,7 +37,7 @@ async function nativeRssMb(){
 function sampleNative(){nativeSamplePromise=nativeSamplePromise.then(async()=>{try{peakNativeRssMb=Math.max(peakNativeRssMb,await nativeRssMb());nativeSamples++;}catch(error){nativeSampleError??=error;}});}
 async function connect(client){
  const socket=new WebSocket(base.replace('http','ws')+'/api/socket',{headers:headers(client.id)});
- sockets.push(socket);client.socket=socket;
+ sockets.push(socket);client.socket=socket;client.delivery=trackSocketDelivery(socket);
  socket.on('message',raw=>{const message=JSON.parse(raw);if(message.type==='error')client.errors.push(message.error);if(message.type==='control'&&message.active)client.controlToken=message.token;if(message.type!=='state'||!message.room?.state)return;const now=performance.now();if(client.lastAt!==undefined)gaps.push(now-client.lastAt);client.lastAt=now;client.snapshots++;client.lastTick=message.room.state.tick;});
  await new Promise((resolve,reject)=>{socket.once('open',resolve);socket.once('error',reject)});
  return socket;
@@ -70,7 +71,7 @@ try{
  const started=performance.now(),cpu=process.cpuUsage();let previous=started;
  sampleNative();await nativeSamplePromise;nativeTimer=setInterval(sampleNative,500);
  loopTimer=setInterval(()=>{const now=performance.now();loopDelays.push(Math.max(0,now-previous-100));previous=now;peakRss=Math.max(peakRss,process.memoryUsage().rss)},100);
- inputTimer=setInterval(()=>{for(const client of clients){if(client.socket?.readyState!==WebSocket.OPEN)continue;client.socket.send(JSON.stringify({type:'input',room:client.room,input:{...neutral(),seq:++client.seq}}))}},62);
+ inputTimer=setInterval(()=>{for(const client of clients){if(client.socket?.readyState!==WebSocket.OPEN||!client.delivery.get(client.room))continue;client.socket.send(JSON.stringify(client.delivery.envelope(client.room,{...neutral(),seq:++client.seq})))}},62);
  await wait(2000);
  const disconnected=clients[1],oldSocket=disconnected.socket;
  await close(oldSocket);await wait(100);await connect(disconnected);

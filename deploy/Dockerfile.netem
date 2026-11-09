@@ -1,0 +1,7 @@
+ARG APPLICATION_IMAGE=botstrike:interface-v5-20261107-v3
+FROM ${APPLICATION_IMAGE}
+USER root
+COPY netem-tools /opt/netem-tools
+COPY network-proxy.mjs /opt/network-proxy.mjs
+ENV PATH="/opt/netem-tools/bin:${PATH}"
+ENTRYPOINT ["node","/opt/network-proxy.mjs"]

@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/target
+**/target-*
+**/data
+.env*
+*.log
+artifacts
+release
+release/checkpoints
+release/local-baseline-salvage

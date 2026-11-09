@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "kind": "issue30-six-criterion-implementation-audit",
+  "issue": 30,
+  "issueUrl": "https://github.com/UTXOPlay/BotStrike/issues/30",
+  "status": "implementation_evidence_established_pending_delivery",
+  "scope": {
+    "automated": true,
+    "humanParticipants": 0,
+    "sixImplementationCriteriaEstablished": true,
+    "issueClosed": false,
+    "landed": false,
+    "merged": false,
+    "productionDeployed": false,
+    "currentD4WholeOperationsRunClaimed": false,
+    "newRuntimeStartedForThisAudit": false
+  },
+  "sourceLineage": {
+    "serviceFilesIdenticalD2D4Current": 15,
+    "operationsClosureFilesIdenticalD2D4Current": 19,
+    "normalHostClosureFilesIdenticalD2Current": 34,
+    "originalReceiptIdentitiesPreserved": true,
+    "laterTestBytesRelabelledAsD2Baked": false
+  },
+  "criteria": [
+    {
+      "number": 1,
+      "requirement": "Dashboards/reports retain meaningful history across restart and state sample counts, windows and component boundaries.",
+      "status": "implementation_evidence_established",
+      "receiptKeys": [
+        "D2UnitTap",
+        "D4UnitTap",
+        "normalRunningQuality",
+        "normalSteadyQuality",
+        "normalSealingQuality",
+        "normalAfterSealQuality",
+        "normalObjectivesReport",
+        "postBuildObjectiveReporter17Checks"
+      ],
+      "sourceFiles": [
+        "botstrike-service/quality.mjs",
+        "botstrike-service/quality-report.mjs",
+        "botstrike-service/quality-resources.mjs",
+        "games/botstrike/client/connection-quality.mjs"
+      ],
+      "limits": [
+        "No Internet latency or production capacity SLO is established or required to turn these persistence/report implementation checks into their actual scoped evidence.",
+        "Post-build reporter17 is separate from D2 baked423/24 and D4 baked545/24."
+      ]
+    },
+    {
+      "number": 2,
+      "requirement": "A documented failure drill produces the expected alert and operator response, with no false verified result or silently lost completed career commit.",
+      "status": "implementation_evidence_established",
+      "receiptKeys": [
+        "opsReport",
+        "opsExternalAcceptance",
+        "realEnospcReport",
+        "postDiskOriginalSnapshotVerification",
+        "D2UnitTap"
+      ],
+      "sourceFiles": [
+        "botstrike-service/server.mjs",
+        "botstrike-service/career.mjs",
+        "botstrike-service/seal-worker.mjs",
+        "tools/botstrike-quality-ops-drill.mjs",
+        "tools/botstrike-quality-disk-drill.mjs"
+      ],
+      "limits": [
+        "Orderly startup restart is not a hard crash. Career tmpfs ENOSPC is not whole-host disk/inode exhaustion or power-loss durability; those extra experiments are not specified blockers for this disposable issue scope."
+      ]
+    },
+    {
+      "number": 3,
+      "requirement": "A restore drill verifies current and historical exports using the recorded exact artifacts and recovers accepted match metadata.",
+      "status": "implementation_evidence_established",
+      "receiptKeys": [
+        "opsReport",
+        "opsExternalAcceptance",
+        "normalHostReceipt",
+        "normalHostExternalTerminal",
+        "normalHostStrictTapeAudit"
+      ],
+      "sourceFiles": [
+        "botstrike-service/career.mjs",
+        "tools/verify-export.mjs",
+        "tools/botstrike-host-deployment-rehearsal.mjs"
+      ],
+      "limits": [
+        "Historical fixtures are fresh original-engine synthetic exports, not historical customer saves; the issue requests disposable restore validation, not a production-save migration."
+      ]
+    },
+    {
+      "number": 4,
+      "requirement": "Retention never deletes protected live/waiting/sealing records; storage/backlog limits fail explicitly and release capacity appropriately.",
+      "status": "implementation_evidence_established",
+      "receiptKeys": [
+        "D2UnitTap",
+        "D4UnitTap",
+        "opsReport",
+        "realEnospcReport",
+        "normalHostReceipt"
+      ],
+      "sourceFiles": [
+        "botstrike-service/retention.mjs",
+        "botstrike-service/career.mjs",
+        "botstrike-service/server.mjs",
+        "tests/botstrike-pending-recording.test.mjs",
+        "tests/botstrike-quality-recovery.test.mjs"
+      ],
+      "limits": [
+        "A certified multi-room capacity SLO is not one of the six issue criteria. Sustained match plus sealing-resource evidence exists separately."
+      ]
+    },
+    {
+      "number": 5,
+      "requirement": "Release procedures demonstrate game-only drain/deploy/backout and confirm that unrelated services/data remain unaffected.",
+      "status": "implementation_evidence_established",
+      "receiptKeys": [
+        "normalHostReceipt",
+        "normalHostExternalTerminal",
+        "postBuildNormalHostDriver23Checks",
+        "normalHostStrictTapeAudit"
+      ],
+      "sourceFiles": [
+        "tools/botstrike-host-deployment-rehearsal.mjs",
+        "host/start.mjs",
+        "host/server.mjs"
+      ],
+      "limits": [
+        "This establishes game-only disposable deployment/backout procedure, not production deployment, Parent Store deployment, no-downtime migration or physical input acceptance.",
+        "Final host driver23 checks and actual run are post-build external QA; not added to image baked totals."
+      ]
+    },
+    {
+      "number": 6,
+      "requirement": "CI/release evidence records the source revision, deployment-compatible build environment, exact engine-before-verifier pairing, artifact hashes and required test outcomes.",
+      "status": "implementation_evidence_established",
+      "receiptKeys": [
+        "D2FinalStaticBuild",
+        "D2FinalActualImageAudit",
+        "D2Guard",
+        "D2UnitTap",
+        "D2HostTap",
+        "D4Build",
+        "D4ActualImageAudit",
+        "D4Guard",
+        "normalHostExternalTerminal"
+      ],
+      "sourceFiles": [
+        "deploy/Dockerfile.network-quality",
+        "tools/quality-release-binding.mjs",
+        "tools/quality-rollback-bundle.mjs"
+      ],
+      "limits": [
+        "Later host-only code/QA remains separately bound; future at-write service instrumentation will change server.mjs and needs new source/image binding and scoped regression assessment."
+      ]
+    }
+  ],
+  "evidenceSha256": {
+    "D2FinalActualImageAudit": "01728c1087ac21402050a54bb5d99b749b9f830752a0585f2653bd439ee0f0b6",
+    "D2FinalStaticBuild": "463881fa7c0e9a8ae18c68da267cf3793dca6d2ed99fc8238ef55aa8f583b459",
+    "D2Guard": "1cc8602c5405daada04df65fe6ae00fecb67bb05fd52effa58201fa2d430bef9",
+    "D2HostTap": "ba8294bca528e2c7bb036f93e86aedde957b1a86f735511896440e758a333091",
+    "D2PreservedInitialStaticFailure": "b1cbd7f6d5ac57ea66d481f1472899b18aaaf3cb36842b02177de25fb7eed09e",
+    "D2UnitTap": "436934962d84e3adcf67a37001ca3865d65c66b954d2ddf89c5fc00a0e6c9fd1",
+    "D4ActualImageAudit": "5e73232cb726b2bfeb563ec1b3aa25cbd52a9aba026b87a854a2a8ce8de28b9d",
+    "D4Build": "15b4ca902a092f5e67c0e3de15cc6d2ada4cd31f60c72ba1ab5acdb5ef5a45f1",
+    "D4Guard": "38f6637b0c1943326ab02f1795eeb9b41c156f069b9a89b868701dd50567cad9",
+    "D4HostTap": "d56e8f55f23d9e9e8df0170bdb840671f3dba063f936af4734b265c7e767a021",
+    "D4UnitTap": "5707f7b8ff5e35fde7a7e8e5781477bdac38faf2ddefc46e469e7718b8ca4d72",
+    "authoritativeIssue30": "0f12b066736b93d399d1dc0135eef19e8d54d33bbf858c58d8bb5c9b6ec63a7f",
+    "deploy/Dockerfile.network-quality": "68d682d91a4273708c28e614eb70bd69eb0e4046add2b653691b569876c5a7f1",
+    "docs/acceptance/network-quality-D2.json": "da107cc8c1b55b571299c1a769e0b38d02a2717513c277714cd4bf6b5fe25322",
+    "docs/quality-recovery.md": "9f734cad4ca7eb519f54734222bac1a87e43c45c327f319440b3b50780c549b4",
+    "docs/quality-resources.md": "f7984982b5c2f331b54225f68d1ce34054bc8d16de76fff1808bc5a87dad5732",
+    "docs/quality-service-objectives.md": "f2f38176c0e5d380c8d1b6793d9a1cdb76cbff5ea5c8c6af6f0c783510394ef9",
+    "docs/quality-store-contract.md": "a59d53d35d6228ce5030ff76e11cdd9a02bed342ef6411f089b7b018ab7f56fd",
+    "normalAfterSealQuality": "7a79a72e1cf002dc1dcd4252948fd3349b5a3e16e3f88dd23a8442347a6b6575",
+    "normalHostExternalTerminal": "0e432ad219a844dd67d31423578b5fed9f0c0b5d8cb7adc111b90c0f40d9bba6",
+    "normalHostReceipt": "514939650a88e75cd6d6524bb06a565b380342d1f9dd3ac9d96160b3435fbbed",
+    "normalHostStrictTapeAudit": "a53da28e83f39003cee45c7021c87351e587ec1f72528c3ba00f935f6a70a966",
+    "normalObjectivesReport": "1a421050555d8632ecd9e6ec70a528ee537a946c28c72c79366af6c02cdf39c7",
+    "normalObjectivesSummary": "e5697c1821777e565f391f67887c5a296d7dd88b02e206ba620e5b9c6b1ce618",
+    "normalRunningQuality": "4a8c1e431326b0e881030e7d518e00b87756c91080ccdf7dd44beaf01eee6835",
+    "normalSealingQuality": "308b13147d468bc6b06d0652bd773f5693d76e8609a19d21deaf72e29c8ac8cc",
+    "normalSteadyQuality": "8a01fa2ed180d633d6c831cbf1c70dd36b263bd1183281719828b298fa111a40",
+    "opsActiveQuality": "4a885a1a1f26f7c30532ff18e6c61d62271fbad0927a44fdbbf743142710442b",
+    "opsActiveResources": "62eef3d7b4e6c6b55feef502d19d13124b81b1ede8f9325afde78ea80828b928",
+    "opsEvidenceManifest": "20ec68d4a85eb5b2d5a10658c5fa62a5c1c91862ab135df3d0ea6834c61e222d",
+    "opsExternalAcceptance": "3713a75737c6118b9b0259aa1e830a134a9309962ab51b881a8e53ac1bec6bd2",
+    "opsReport": "4b1e1e1e86d23be48b7bb3e24246a8bb13070bee56ad8bc2b406717deebfff5e",
+    "postBuildNormalHostDriver23Checks": "29780bcff537dbbb622ece21c7cb8425ec9091a24b8f404a9c5ace8e26f13f3e",
+    "postBuildObjectiveReporter17Checks": "55c07734a0a6a2c0f80c98574dac376a1fe164a4af4f0c75fd726ee1ed2500cf",
+    "postDiskOriginalSnapshotVerification": "7b6aeab2ae7f3abdf49957fb8606a872af6ed42f50cb81bad6478eca7ed07242",
+    "realEnospcReport": "d7806418e4b615947f3dc2b78d9c02a6782679c1f1e5773b8064bd1d2828a1aa"
+  },
+  "independentAuditSha256": "3b2ea7502730e5d6ce12e8c7e943510e3f9b41c720ab0ca6d4f9f319f2f4af62",
+  "deliveryGate": [
+    "Review and land the applicable operations implementation, documentation and evidence; then record issue30 completion.",
+    "The shared draft PR stack is a delivery packaging dependency, not an inherent issue12 or human-acceptance prerequisite.",
+    "Later service or metadata changes require a new source comparison and appropriate regression evidence."
+  ],
+  "scopeLimits": [
+    "Disposable operations and sustained active-input/sealing-resource evidence do not establish Internet or production-capacity SLOs.",
+    "Orderly interrupted-startup recovery is not hard power-loss durability; bounded career tmpfs ENOSPC is not whole-host disk exhaustion.",
+    "Historical exports are fresh synthetic original-engine fixtures, not migrated customer saves.",
+    "The original D2 static failure, final attempt2 pass, D4 checks and later17/23 host checks retain their separate identities.",
+    "Myelin verifies exact off-chain host replay, not CKB settlement."
+  ],
+  "historicalDocumentInputsSha256": {
+    "docs/quality-operations.md": "3e5a9882d4e4bd57603e5640488ca9865b5aab2f7e1287e8b287a661fffa0df8"
+  },
+  "currentPublicationDocumentsSha256": {
+    "docs/quality-operations.md": "f8062c596dbc50314e5a73d3d8841483e3d62252ff30e17035b66c6a58f9d4f1"
+  },
+  "documentProvenanceNote": "The original independent audit read the pre-append operations document. Its historical digest is preserved separately from this publication document; original runtime receipts are unchanged."
+}

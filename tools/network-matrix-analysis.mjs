@@ -1,0 +1,191 @@
+import {createReadStream} from 'node:fs';
+import {createInterface} from 'node:readline';
+import {validateAtomicShotPresentation} from './network-shot-boundary-proof.mjs';
+export async function visitJsonLines(file,visit,{maxLines=1000000,maxLineBytes=1048576}={}){
+ const stream=createReadStream(file),reader=createInterface({input:stream,crlfDelay:Infinity});let count=0;
+ try{for await(const line of reader){if(!line)continue;if(++count>maxLines||Buffer.byteLength(line)>maxLineBytes)throw Error('Matrix JSONL evidence bound exceeded');await visit(JSON.parse(line));}}finally{reader.close();stream.destroy();}return count;
+}
+export function runtimeNativeState(event){
+ if(event.type!=='native_frame')throw Error('A Native frame event is required');
+ if(typeof event.rawLine==='string'){const message=JSON.parse(event.rawLine);if(message.type!=='frame'||!message.state||!Number.isSafeInteger(message.state.tick))throw Error('Invalid original Native frame line');return message.state;}
+ // Legacy projections may support numerical diagnostics, but the replay gate
+ // refuses them as exact state evidence. Never synthesize rawLine from state.
+ if(event.state&&Number.isSafeInteger(event.state.tick))return event.state;
+ throw Error('Native frame source missing');
+}
+const pulseBits={fire:1,reload:2,jump:16,ability:32,interact:64,drop:512};
+const packedPulse=(input,field)=>Object.hasOwn(pulseBits,field)?!!(input?.[5]&pulseBits[field]):field==='weapon'?input?.[6]:field==='item'?(input?.[9]||0):field==='practice'?(input?.[11]||0):undefined;
+// Packed field 12 configures throw/preview selection. It cannot perform a
+// utility action without item (field 9); life bits and repeated hero are metadata.
+export const packedControlNeutral=input=>Array.isArray(input)&&!input[1]&&!input[2]&&!input[9]&&input[6]==null&&input[7]==null&&!(input[5]&767)&&!(input[11]||0);
+// Purchases have their independent HTTP ticket; do not borrow a WS admission
+// to validate them. They still make a final packed input non-neutral for ACKs.
+const active=input=>!!(input&&(input[1]||input[2]||input[9]||input[6]!=null||(input[5]&767)||(input[11]||0)));
+const neutralObject=input=>!!input&&!input.x&&!input.y&&!input.item&&!input.practice&&input.weapon==null&&input.buy==null&&!['fire','reload','walk','crouch','jump','ability','interact','scope','drop'].some(key=>input[key]);
+export function explicitBrowserInputAck(snapshot,sent){
+ const ack=snapshot?.inputAck,self=snapshot?.players?.find(player=>player.slot===snapshot.slot);
+ if(!ack||Object.keys(ack).sort().join(',')!=='life,neutral,seq,tick,version'||ack.version!==1||typeof ack.neutral!=='boolean'||(!Number.isSafeInteger(ack.seq)||ack.seq<=0)||(!Number.isSafeInteger(ack.tick)||ack.tick<=0)||(!Number.isSafeInteger(ack.life)||ack.life<=0)||snapshot.currentSocket!==true||snapshot.currentContext===false||snapshot.controllerActive!==true||sent?.protocolVersion!==2||!sent.deliveryAttached)return null;
+ for(const key of ['socketGeneration','ownerGeneration','proofGeneration','roomGeneration'])if(!Number.isSafeInteger(sent[key])||sent[key]<1||snapshot[key]!==sent[key])return null;
+ if(ack.seq!==sent.input?.seq||ack.life!==sent.life||ack.life!==self?.life||ack.seq!==self?.last_seq||(!Number.isSafeInteger(sent.minTick)||sent.minTick<0)||!Number.isSafeInteger(snapshot.tick)||ack.tick<=sent.minTick||ack.tick>snapshot.tick||ack.neutral&&!neutralObject(sent.input))return null;
+ return {...ack};
+}
+function inspectTargetTransitionBeforeShot(action,shots,frames,nativeInputs,accepted,acks){
+ const wanted=action.boundaryRequirement,baseline=wanted?.targetBaselineApplication,crouch=wanted?.targetCrouchApplication;
+ const contextKeys=['socketGeneration','ownerGeneration','proofGeneration','roomGeneration'];
+ const validRef=ref=>ref&&Number.isSafeInteger(ref.seq)&&ref.seq>0&&Number.isSafeInteger(ref.tick)&&ref.tick>0&&ref.slot===wanted.targetSlot&&ref.life===wanted.targetLife&&contextKeys.every(key=>Number.isSafeInteger(ref[key])&&ref[key]>0);
+ const proof=(ref,pressed)=>{
+  if(!validRef(ref))return null;
+  const matches=acks.filter(ack=>ack.slot===ref.slot&&ack.seq===ref.seq&&ack.tick===ref.tick&&ack.life===ref.life),ack=matches.length===1?matches[0]:null;
+  const packed=nativeInputs.get(ref.tick)?.inputs?.[ref.slot],player=frames.get(ref.tick)?.state?.players?.[ref.slot],source=accepted.get(ref.slot+':'+ref.seq);
+  if(!ack||!packed||packed[0]!==ref.seq||!(packed[5]&256)||!!(packed[5]&8)!==pressed||source?.input?.crouch!==pressed||player?.last_seq!==ref.seq||player.life!==ref.life||player.alive!==true||player.crouch!==pressed||!Number.isFinite(player.stance))return null;
+  if(pressed?!(player.stance>0&&player.stance<1):player.stance!==0||ack.neutral!==true)return null;
+  return ack;
+ };
+ const baselineAck=proof(baseline,false),crouchAck=proof(crouch,true),firstShotTick=shots.length===1?shots[0].tick:null;
+ const contract=wanted?.kind==='target-stance-transition'&&wanted.version===2&&wanted.nativeTargetTransitionRequired===true&&baselineAck&&crouchAck&&baseline.seq<crouch.seq&&baseline.tick<crouch.tick&&Number.isSafeInteger(baselineAck.generation)&&baselineAck.generation>0&&baselineAck.generation===crouchAck.generation&&contextKeys.every(key=>baseline[key]===crouch[key])&&wanted.minimumNativeTick===crouch.tick;
+ let observedFrames=0,partialFrames=0,lifeChanged=false,unavailable=false;const crouchStates=new Set();
+ const ordered=!!contract&&Number.isSafeInteger(firstShotTick)&&firstShotTick>=wanted.minimumNativeTick&&firstShotTick-baseline.tick<frames.size;
+ if(ordered){
+  for(let tick=baseline.tick;tick<=firstShotTick;tick++){
+   const player=frames.get(tick)?.state?.players?.[wanted.targetSlot];
+   if(!player||!Number.isFinite(player.stance)||typeof player.crouch!=='boolean'){unavailable=true;continue;}
+   if(player.life!==wanted.targetLife){lifeChanged=true;continue;}
+   if(!player.alive){unavailable=true;continue;}
+   observedFrames++;crouchStates.add(player.crouch);if(tick>=wanted.minimumNativeTick&&player.stance>0&&player.stance<1)partialFrames++;
+  }
+ }
+ const verified=ordered&&shots[0].packedViewTick>=wanted.minimumNativeTick&&!unavailable&&!lifeChanged&&partialFrames>0&&crouchStates.size===2;
+ return{verified,baselineVerified:!!baselineAck,newCrouchVerified:!!crouchAck,minimumNativeTick:wanted?.minimumNativeTick??null,firstShotTick,observedFrames,partialFrames,crouchStatesBeforeShot:crouchStates.size,lifeChanged,source:'exact_private_target_ACK_and_captured_native_frames_before_actual_shot'};
+}
+function inspectTargetPeekBeforeShot(action,shots,frames,nativeInputs,accepted,acks,actions,allShots){
+ const r=action.boundaryRequirement,baseline=r?.targetBaselineApplication,move=r?.targetMoveApplication,keys=['socketGeneration','ownerGeneration','proofGeneration','roomGeneration'];
+ if(!Array.isArray(r?.geometry?.coveredGoal)||r.geometry.coveredGoal.length!==2||!r.geometry.coveredGoal.every(Number.isFinite)||!Array.isArray(r.geometry.peekGoal)||r.geometry.peekGoal.length!==2||!r.geometry.peekGoal.every(Number.isFinite))return{verified:false,reason:'peek_geometry_unavailable'};
+ const vec=v=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite),ref=v=>v&&v.slot===r.targetSlot&&v.life===r.targetLife&&['seq','tick','life',...keys].every(key=>Number.isSafeInteger(v[key])&&v[key]>0);
+ const standing=p=>p?.alive===true&&p.life===r.targetLife&&p.crouch===false&&p.stance===0&&vec(p.position)&&vec(p.velocity)&&p.position[1]===0;
+ const proof=(v,moving)=>{
+  if(!ref(v))return null;const matches=acks.filter(a=>a.slot===v.slot&&a.seq===v.seq&&a.tick===v.tick&&a.life===v.life),ack=matches.length===1?matches[0]:null,input=nativeInputs.get(v.tick)?.inputs?.[v.slot],source=accepted.get(v.slot+':'+v.seq),p=frames.get(v.tick)?.state.players?.[v.slot];
+  if(!ack||!input||input[0]!==v.seq||!(input[5]&256)||source?.input?.crouch!==false||!!(input[5]&8)||p?.last_seq!==v.seq||!standing(p)||!Array.isArray(r.geometry?.coveredGoal))return null;
+  if(moving){if(!(input[1]||input[2])||!Number.isFinite(input[3])||!(-Math.sin(input[3])*input[2]+Math.cos(input[3])*input[1]<0)||!(p.velocity[0]<0)||ack.neutral!==false)return null;}
+  else if(ack.neutral!==true||!packedControlNeutral(input)||Math.hypot(p.velocity[0],p.velocity[2])>=8||Math.hypot(p.position[0]-r.geometry.coveredGoal[0],p.position[2]-r.geometry.coveredGoal[1])>2)return null;
+  return ack;
+ };
+ const baselineAck=proof(baseline,false),moveAck=proof(move,true),shot=shots.length===1?shots[0]:null;
+ const coveredAction=actions.find(value=>value.label===r.coverShotLabel&&value.kind==='shot'&&value.slot===action.slot&&value.actor===action.actor),coveredShots=coveredAction?allShots.filter(value=>value.actor===coveredAction.slot&&value.weapon===coveredAction.weapon&&value.tick>=coveredAction.fromTick&&value.tick<=coveredAction.toTick):[],covered=coveredShots.length===1?coveredShots[0]:null,coveredPlayer=covered&&frames.get(covered.tick)?.state.players?.[r.targetSlot];
+ const contract=r.kind==='target-peek-transition'&&r.version===1&&baselineAck&&moveAck&&baseline.seq<move.seq&&baseline.tick<move.tick&&r.minimumNativeTick===move.tick&&keys.every(key=>baseline[key]===move[key])&&Number.isSafeInteger(baselineAck.generation)&&baselineAck.generation>0&&baselineAck.generation===moveAck.generation;
+ const chronology=!!contract&&covered&&covered.tick>=baseline.tick&&covered.tick<move.tick&&shot&&shot.tick>=move.tick&&shot.packedViewTick>=move.tick;
+ let lifeChanged=false,unavailable=false,observedFrames=0;
+ if(chronology)for(let tick=baseline.tick;tick<=shot.tick;tick++){const p=frames.get(tick)?.state.players?.[r.targetSlot];if(!p?.alive)unavailable=true;else if(p.life!==r.targetLife)lifeChanged=true;else observedFrames++;}
+ const historical=shot&&frames.get(shot.packedViewTick)?.state.players?.[r.targetSlot],current=shot&&frames.get(shot.tick)?.state.players?.[r.targetSlot];
+ const coveredPosition=standing(coveredPlayer)&&Math.hypot(coveredPlayer.position[0]-r.geometry.coveredGoal[0],coveredPlayer.position[2]-r.geometry.coveredGoal[1])<=2;
+ const historicalMoving=standing(historical)&&historical.velocity[0]<0&&Math.abs(historical.position[2]-r.geometry.peekGoal[1])<=2;
+ return{verified:!!(chronology&&coveredPosition&&historicalMoving&&!lifeChanged&&!unavailable),baselineVerified:!!baselineAck,newMoveVerified:!!moveAck,coveredShotNativeEventBeforeMoveVerified:!!(chronology&&coveredPosition),minimumNativeTick:r.minimumNativeTick??null,firstShotTick:shot?.tick??null,rewindTick:shot?.packedViewTick??null,historicalMoving:!!historicalMoving,currentMoving:standing(current)&&current.velocity[0]<0,currentMotionRequired:false,observedFrames,lifeChanged,source:'exact_private_target_ACK_and_original_native_frames; cover ray and original optical/motion references require the independent offline report'};
+}
+export function analyzeRuntimeRows(rows,{roomId,actions=[],controlIntervals=[],faultWindow=null,requirePulseTickets=false,requiredInputAcks=[]}={}){
+ const failures=[],accepted=new Map(),nativeInputs=new Map(),frames=new Map(),rejections={},missingTakeover=[],shots=[],controlFrames=[],positiveAcks=[],buyRejections=[],purchaseAdmissions=new Map(),purchases=[],pulses=[],pulseFields={},ackEvents=[],authoritativeAcks=[];let pulseCount=0,maxPulseAgeMs=null;let cancelled=false,sealingStarted=false,sealingCompleted=false,bots=null,expiredControlFrames=0,aiEligibleFrames=0;
+ for(const event of rows){if(event.room!==roomId)continue;
+  if(event.type==='room_started')bots=event.config.bots;
+  if(event.type==='purchase_arrival'&&event.accepted===true)purchaseAdmissions.set(event.requestId,event);
+  if(event.type==='input_arrival'&&event.accepted!==false)accepted.set(event.slot+':'+event.seq,event);
+  if(event.type==='input_ack')ackEvents.push(event);
+  if(event.type==='input_rejected'){rejections[event.reason]=(rejections[event.reason]||0)+1;if(event.stage==='buy')buyRejections.push({reason:event.reason,at:event.at,slot:event.slot});}if(event.type==='room_cancelled')cancelled=true;if(event.type==='seal_started')sealingStarted=true;if(event.type==='seal_completed')sealingCompleted=true;
+  if(event.type==='native_input'){
+   nativeInputs.set(event.tick,event);let missing=false;if(requirePulseTickets&&!Array.isArray(event.pulseTickets)&&failures.length<32)failures.push({code:'missing_pulse_origin_observation',tick:event.tick});
+   const pulseKeys=new Set();for(const ticket of event.pulseTickets||[]){const key=ticket.slot+':'+ticket.field,source=accepted.get(ticket.slot+':'+ticket.sourceSeq),input=event.inputs?.[ticket.slot],value=packedPulse(input,ticket.field);if(pulseKeys.has(key)||!source||value===undefined||source.input?.[ticket.field]!==value||source.admission?.issuedAt!==ticket.issuedAt||source.admission?.deadlineAt!==ticket.deadlineAt||source.admission?.generation!==ticket.generation||ticket.deadlineAt!==ticket.issuedAt+400){if(failures.length<32)failures.push({code:'pulse_receipt_correlation_missing',tick:event.tick,slot:ticket.slot,field:ticket.field,sourceSeq:ticket.sourceSeq});continue;}pulseKeys.add(key);if(event.monotonicMs>=ticket.deadlineAt&&failures.length<32)failures.push({code:'pulse_past_original_absolute_deadline',tick:event.tick,slot:ticket.slot,field:ticket.field,sourceSeq:ticket.sourceSeq});pulseCount++;pulseFields[ticket.field]=(pulseFields[ticket.field]||0)+1;const age=event.monotonicMs-ticket.issuedAt;maxPulseAgeMs=Math.max(maxPulseAgeMs??0,age);if(pulses.length<64)pulses.push({tick:event.tick,...ticket,packedSeq:input[0],appliedAgeMs:age});}
+   for(let slot=0;slot<10;slot++){
+    const input=event.inputs?.[slot];if(bots?.[slot]&&!(input?.[5]&256)){missing=true;if(controlIntervals.some(v=>event.tick>=v.fromTick&&event.tick<=v.toTick)&&missingTakeover.length<32)missingTakeover.push({tick:event.tick,slot});}
+    if(input?.[5]&256&&active(input)){const admission=accepted.get(slot+':'+input[0]);if(!admission||!Number.isFinite(admission.admission?.deadlineAt)){if(failures.length<32)failures.push({code:'active_input_without_receipt_admission',tick:event.tick,slot,seq:input[0]});}else if(event.monotonicMs>=admission.admission.deadlineAt){expiredControlFrames++;if(failures.length<32)failures.push({code:'control_past_absolute_400ms_deadline',tick:event.tick,slot,seq:input[0],deadlineAt:admission.admission.deadlineAt,appliedAt:event.monotonicMs});}}
+   }
+   for(let slot=0;slot<10;slot++){const input=event.inputs?.[slot];if(!input||input[7]===null||input[7]===undefined)continue;const tickets=(event.purchaseTickets||[]).filter(ticket=>ticket.slot===slot),ticket=tickets[0],admitted=ticket&&purchaseAdmissions.get(ticket.requestId);if(tickets.length!==1||!admitted||admitted.slot!==slot||admitted.item!==input[7]||ticket.item!==input[7]||admitted.life!==ticket.life||admitted.generation!==ticket.generation||admitted.issuedAt!==ticket.issuedAt||admitted.deadlineAt!==ticket.deadlineAt||ticket.deadlineAt!==ticket.issuedAt+400){failures.push({code:'purchase_receipt_correlation_missing',tick:event.tick,slot});continue;}if(event.monotonicMs>=ticket.deadlineAt)failures.push({code:'purchase_past_absolute_400ms_deadline',tick:event.tick,slot,requestId:ticket.requestId});purchases.push({tick:event.tick,slot,requestId:ticket.requestId,item:ticket.item,life:ticket.life,issuedAt:ticket.issuedAt,deadlineAt:ticket.deadlineAt});}
+   if(missing)aiEligibleFrames++;controlFrames.push(event.tick);
+  }
+  if(event.type==='native_frame'){frames.set(event.state.tick,event);for(const shot of event.state.events.filter(v=>v.kind==='shot'))shots.push({tick:event.state.tick,actor:shot.actor,weapon:shot.value,at:event.at});}
+ }
+ if(!Array.isArray(bots)||bots.length!==10)failures.push({code:'missing_native_configuration'});
+ for(const ack of ackEvents){
+  const event=nativeInputs.get(ack.tick),packed=event?.inputs?.[ack.slot],source=accepted.get(ack.slot+':'+ack.seq),frame=frames.get(ack.tick),player=frame?.state.players[ack.slot],previous=frames.get(ack.tick-1)?.state.players[ack.slot];
+  if(!Number.isSafeInteger(ack.seq)||ack.seq<=0||!Number.isSafeInteger(ack.tick)||ack.tick<=0||!Number.isSafeInteger(ack.life)||ack.life<=0||!packed||!(packed[5]&256)||packed[0]!==ack.seq||player?.last_seq!==ack.seq||player?.life!==ack.life||previous?.life!==ack.life||previous.last_seq===ack.seq||typeof ack.neutral!=='boolean'||ack.neutral!==(neutralObject(source?.input)&&packedControlNeutral(packed))||!source||source.admission?.generation!==ack.generation||!Number.isFinite(source.admission?.issuedAt)||source.admission.deadlineAt!==source.admission.issuedAt+400||!Number.isFinite(event.monotonicMs)||event.monotonicMs<source.admission.issuedAt||event.monotonicMs>=source.admission.deadlineAt){if(failures.length<64)failures.push({code:'invalid_authoritative_input_ack',tick:ack.tick,slot:ack.slot,seq:ack.seq});continue;}
+  authoritativeAcks.push(ack);
+ }
+ const requiredInputAckProofs=requiredInputAcks.map(required=>({...required,verified:authoritativeAcks.some(ack=>['slot','seq','tick','life'].every(key=>ack[key]===required[key]))}));
+ for(const proof of requiredInputAckProofs)if(!proof.verified)failures.push({code:'missing_required_authoritative_input_ack',...proof});
+ if(missingTakeover.length)failures.push({code:'bots_capable_seat_not_taken_over_in_combat_interval',examples:missingTakeover});
+ for(const interval of controlIntervals){let count=0;for(let tick=interval.fromTick;tick<=interval.toTick;tick++)if(nativeInputs.has(tick))count++;if(count!==interval.toTick-interval.fromTick+1)failures.push({code:'incomplete_control_interval',...interval,observed:count});}
+ const actionResults=[];
+ for(const action of actions){
+  const matching=shots.filter(shot=>shot.actor===action.slot&&shot.weapon===action.weapon&&shot.tick>=action.fromTick&&shot.tick<=action.toTick).map(shot=>{const input=nativeInputs.get(shot.tick)?.inputs?.[action.slot],receipt=input&&accepted.get(action.slot+':'+input[0]);const pulse=(nativeInputs.get(shot.tick)?.pulseTickets||[]).find(ticket=>ticket.slot===action.slot&&ticket.field==='fire'),fireSource=pulse&&accepted.get(action.slot+':'+pulse.sourceSeq);return{...shot,seq:input?.[0]??null,controlSourceSeq:pulse?.sourceSeq??input?.[0]??null,packedViewTick:input?.[10]??null,fireReceipt:fireSource?{issuedAt:fireSource.admission?.issuedAt,deadlineAt:fireSource.admission?.deadlineAt,generation:fireSource.admission?.generation,requestedViewTick:fireSource.admission?.requested,acceptedViewTick:fireSource.admission?.acceptedViewTick}:null,receipt:receipt?{issuedAt:receipt.admission?.issuedAt,deadlineAt:receipt.admission?.deadlineAt,generation:receipt.admission?.generation,requestedViewTick:receipt.admission?.requested,acceptedViewTick:receipt.admission?.acceptedViewTick}:null};});
+  let ack=null;for(const proof of authoritativeAcks)if(proof.slot===action.slot&&proof.seq===(action.ackSeq??action.seq)&&proof.tick>=action.fromTick&&proof.tick<=action.toTick&&(action.life===undefined||action.life===proof.life)){const frame=frames.get(proof.tick),packed=nativeInputs.get(proof.tick).inputs[action.slot],admitted=accepted.get(action.slot+':'+packed[0]);ack={tick:proof.tick,life:proof.life,lastSeq:proof.seq,requestedSeqAppliedExactly:packed[0]===action.seq,appliedSeq:packed[0],packedViewTick:packed[10]??null,nativeAt:frame.at,proof:'private_authoritative_input_ack_exact_final_packed_and_frame',admission:{issuedAt:admitted.admission.issuedAt,deadlineAt:admitted.admission.deadlineAt,generation:admitted.admission.generation,requestedViewTick:admitted.admission.requested,acceptedViewTick:admitted.admission.acceptedViewTick}};break;}
+  const result={...action,nativeShots:matching,ack,cosmeticMeaning:'client trigger/flash is request evidence only; Native events decide outcome'};
+  if(action.boundaryRequirement){result.boundaryTargetTransition=action.boundaryRequirement.kind==='target-peek-transition'?inspectTargetPeekBeforeShot(action,matching,frames,nativeInputs,accepted,authoritativeAcks,actions,shots):inspectTargetTransitionBeforeShot(action,matching,frames,nativeInputs,accepted,authoritativeAcks);if(!result.boundaryTargetTransition.verified)failures.push({code:'boundary_native_target_transition_missing',label:action.label});}
+  actionResults.push(result);
+  if(!ack)failures.push({code:'missing_positive_native_ack',label:action.label,slot:action.slot,seq:action.seq});else positiveAcks.push({label:action.label,...ack});
+  if(action.kind==='shot'&&matching.length!==action.expectedShots)failures.push({code:'single_gesture_native_shot_count',label:action.label,expected:action.expectedShots,actual:matching.length});
+ }
+ let recovery=null;
+ if(faultWindow){
+  const neutral=[],obsolete=[];for(const [tick,event]of nativeInputs){if(event.at<faultWindow.restoredAt)continue;const input=event.inputs?.[faultWindow.slot];if(!input||!(input[5]&256))continue;const admission=accepted.get(faultWindow.slot+':'+input[0]),proof=authoritativeAcks.find(ack=>ack.slot===faultWindow.slot&&ack.tick===tick&&ack.seq===input[0]&&ack.neutral);if(!active(input)&&admission?.at>=faultWindow.restoredAt&&proof&&faultWindow.recoveryAck&&['seq','tick','life'].every(key=>proof[key]===faultWindow.recoveryAck[key])){const frame=frames.get(tick);neutral.push({tick,seq:input[0],life:proof.life,elapsedMs:frame.at-faultWindow.restoredAt,proof:'public_exact_ACK_independently_matched_to_private_final_packed_and_frame'});}
+   if(event.at>faultWindow.releasedAt+400&&event.at<faultWindow.freshActionAt&&(input[1]||input[2]||input[5]&1))obsolete.push({tick,seq:input[0]});
+  }
+  recovery={neutralAck:neutral[0]??null,obsoleteHeldFrames:obsolete.slice(0,32),budgetMs:faultWindow.recoveryBudgetMs};
+  if(!recovery.neutralAck||recovery.neutralAck.elapsedMs>faultWindow.recoveryBudgetMs)failures.push({code:'missing_or_late_recovery_neutral_ack'});if(obsolete.length)failures.push({code:'obsolete_held_replayed_after_restore',examples:obsolete.slice(0,32)});
+ }
+ for(const purchase of purchases)purchase.nativeConfirmed=frames.get(purchase.tick)?.state.events.some(event=>event.kind==='buy'&&event.actor===purchase.slot&&event.value===purchase.item)===true;
+ return{failures,deadlineScope:'WS and HTTP purchase receipts have independent admitted tickets',inputAckScope:'explicit current-controller ACK; AI/coalesced last_seq>= is never application proof',inputAckCount:authoritativeAcks.length,requiredInputAckProofs,purchases,pulses,pulseSummary:{observed:pulseCount,fields:pulseFields,maxAppliedAgeMs:maxPulseAgeMs,exampleLimit:64,examplesMeaning:'bounded examples; every original pulse ticket remains in private raw Native input observations'},pulseOriginScope:requirePulseTickets?'required_original_sourceSeq_and_deadline':'legacy_sequence_only_not_full_pulse_proof',buyRejections,cancelled,sealingStarted,sealingCompleted,headerBotsCapable:bots,aiEligibleFrames,controlIntervals,missingTakeover,expiredControlFrames,rejections,actionResults,positiveAcks,recovery,shotTicks:shots.map(v=>v.tick),nativeFrames:frames.size,nativeInputFrames:nativeInputs.size};
+}
+export async function analyzeRuntimeFile(file,options){const rows=[];await visitJsonLines(file,row=>{if(rows.length>=150000)throw Error('Case runtime row bound exceeded');if(row.type==='native_frame'){const state=runtimeNativeState(row);rows.push({type:row.type,room:row.room,at:row.at,monotonicMs:row.monotonicMs,state:{tick:state.tick,events:state.events,players:state.players.map(p=>({last_seq:p.last_seq,life:p.life,alive:p.alive,crouch:p.crouch,stance:p.stance,position:p.position,velocity:p.velocity}))},fidelity:typeof row.rawLine==='string'?'original_native_line':'legacy_js_projection'});}else rows.push(row);});return analyzeRuntimeRows(rows,options);}
+export function validateKernelEvidence(caseDefinition,samples){
+ const failures=[];if(samples.length<2)return[{code:'missing_kernel_samples'}];
+ for(const sample of samples)for(const actor of ['A','B','C'])if(!sample.value?.actors?.[actor]?.ss||!sample.value.actors[actor].nstat||!Array.isArray(sample.value.actors[actor].qdisc))failures.push({code:'incomplete_kernel_observations',label:sample.label,actor});
+ const needsLoss=['outage','tactical'].includes(caseDefinition.kind)||Object.values(caseDefinition.profiles).some(p=>p.upstream.lossPct||p.downstream.lossPct||p.upstream.burstLoss||p.downstream.burstLoss);
+ if(needsLoss&&!samples.some(sample=>[...sample.value.server.qdisc,...Object.values(sample.value.actors).flatMap(a=>a.qdisc)].some(q=>q.kind==='netem'&&q.drops>0)))failures.push({code:'configured_packet_loss_not_observed'});
+ return failures;
+}
+
+const scalarMetrics=['appRttMs','inputAckMs','snapshotGapMs','snapshotAgeMs','interpolationAgeTicks','predictionCorrectionUnits','renderFrameMs','mainThreadLongTaskMs'];
+const counterMetrics=['ackSkipped','ackUnmatched','pendingExpired','disconnects','predictionSnaps'];
+export function rawDistribution(values){
+ if(!values.length)return null;const sorted=[...values].sort((a,b)=>a-b),pick=p=>sorted[Math.max(0,Math.ceil(sorted.length*p)-1)];
+ return{n:sorted.length,p50:pick(.5),p95:pick(.95),p99:pick(.99),max:sorted.at(-1)};
+}
+// These are observations from a trusted local lab subscriber, not authoritative
+// hit rules. A CDP framesent event does not expose JS input-send performance.now.
+// Only the browser's own scalar inputAck samples are exact matched-seq latency;
+// cross-process wall/CDP differences below remain observation estimates.
+export async function analyzeBrowserTrace(file,{actorId,slot,actions=[],window,requireAtomicPresentation=false,localFenceStatus=null}={}){
+ const metrics=Object.fromEntries(scalarMetrics.map(name=>[name,[]])),counts=Object.fromEntries(counterMetrics.map(name=>[name,0]));
+ const correlations=actions.filter(action=>action.actor===actorId).map(action=>({label:action.label,kind:action.kind,seq:action.seq,ackSeq:action.ackSeq??action.seq,input:null,ackInput:null,firstAckSnapshot:null,firstFollowingPresentation:null,aimPresentation:action.presentation??null,recordedAimPresentation:null,nativeShotInputs:(action.nativeShots||[]).map(shot=>({tick:shot.tick,seq:shot.controlSourceSeq??shot.seq,packedSeq:shot.seq,packedViewTick:shot.packedViewTick,receipt:shot.fireReceipt??shot.receipt,input:null}))}));
+ let frameCount=0,firstFrameAt=null,lastFrameAt=null,socketOpens=0,resyncs=0,atomicCaptureUnavailable=false;const failures=[],atomicPresentations=[],atomicInputs=new Map(),atomicShotPresentations=[],requiredAtomicShots=requireAtomicPresentation?actions.filter(action=>action.actor===actorId&&action.kind==='shot').flatMap(action=>(action.nativeShots||[]).map(shot=>({action,shot,seq:shot.controlSourceSeq??shot.seq}))):[];if(requiredAtomicShots.length>64)throw Error('Atomic shot bound exceeded');
+ await visitJsonLines(file,row=>{
+  const value=row.data||{};
+  if(requireAtomicPresentation){if(row.kind==='local_presentation'){if(atomicPresentations.length>=16384)atomicCaptureUnavailable=true;else atomicPresentations.push(value);}if(row.kind==='local_input'&&requiredAtomicShots.some(required=>required.seq===value.seq)){const rows=atomicInputs.get(value.seq)||[];if(rows.length>=64)atomicCaptureUnavailable=true;else rows.push(value);atomicInputs.set(value.seq,rows);}if(['capture_drop','capture_error'].includes(row.kind)||row.kind==='local_capture_status'&&value.evidenceAvailable!==true)atomicCaptureUnavailable=true;}
+  if(row.kind==='socket_opening')socketOpens++;
+  if(row.kind==='socket_error'&&value.type==='input_resync')resyncs++;
+  const measured=Number.isFinite(value.atMs)&&window&&value.atMs>=window.fromBrowserMs&&value.atMs<=window.toBrowserMs;
+  if(row.kind==='scalar'&&measured&&Number.isFinite(value.value)&&value.value>=0){
+   if(Object.hasOwn(metrics,value.metric)){const samples=metrics[value.metric];if(samples.length>=50000)throw Error('Browser raw metric sample bound exceeded');samples.push(value.value);}
+   if(Object.hasOwn(counts,value.metric))counts[value.metric]+=value.value;
+  }
+  if(row.kind==='presentation'&&measured){frameCount++;firstFrameAt??=value.atMs;lastFrameAt=value.atMs;}
+  for(const correlation of correlations){
+   if(row.kind==='presentation'&&row.index===correlation.aimPresentation?.frameIndex)correlation.recordedAimPresentation={index:row.index,atMs:value.atMs,animationAtMs:value.animationAtMs,viewTick:value.viewTick,renderTick:value.renderTick,visibleSlots:(value.players||[]).filter(player=>player.alive).map(player=>player.slot)};
+   if(row.kind==='input')for(const shot of correlation.nativeShotInputs)if(value.input?.seq===shot.seq&&!shot.input)shot.input={index:row.index,socketGeneration:value.socketGeneration,roomGeneration:value.roomGeneration,deliveryAttached:value.deliveryAttached,requestedViewTick:value.input.viewTick,fireRequested:value.input.fire===true};
+   if(row.kind==='input'){
+    const input={index:row.index,nodeUnixMs:row.nodeUnixMs,socketGeneration:value.socketGeneration,ownerGeneration:value.ownerGeneration,proofGeneration:value.proofGeneration,roomGeneration:value.roomGeneration,life:value.life,minTick:value.minTick,protocolVersion:value.protocolVersion,deliveryAttached:value.deliveryAttached,input:value.input,seq:value.input?.seq,requestedViewTick:value.input?.viewTick};
+    if(value.input?.seq===correlation.seq&&!correlation.input)correlation.input=input;
+    if(value.input?.seq===correlation.ackSeq&&!correlation.ackInput)correlation.ackInput=input;
+   }
+   const sent=correlation.input;if(!sent||row.index<=sent.index)continue;
+   if(row.kind==='snapshot'&&correlation.ackInput&&row.index>correlation.ackInput.index&&!correlation.firstAckSnapshot){const ack=explicitBrowserInputAck(value,correlation.ackInput);if(ack)correlation.firstAckSnapshot={index:row.index,nodeUnixMs:row.nodeUnixMs,tick:value.tick,life:ack.life,lastSeq:ack.seq,ack:{...ack},exactRequestedSeq:ack.seq===correlation.seq,proof:'explicit_current_controller_ACK_for_exact_known_sent_sequence',cdpObservationElapsedMs:row.nodeUnixMs-correlation.ackInput.nodeUnixMs};}
+   if(row.kind==='presentation'&&!correlation.firstFollowingPresentation)correlation.firstFollowingPresentation={index:row.index,atMs:value.atMs,animationAtMs:value.animationAtMs,tick:value.tick,viewTick:value.viewTick,renderTick:value.renderTick,sequence:value.sequence,visibleSlots:(value.players||[]).map(player=>player.slot),meaning:'first render observation drained after CDP input event; callback may precede that send because capture is buffered; client sequence is not a Native ACK'};
+  }
+ });
+ for(const correlation of correlations){
+  if(correlation.kind==='shot'){
+   const recorded=correlation.recordedAimPresentation,expected=correlation.aimPresentation;
+   if(!recorded||recorded.viewTick!==expected?.viewTick||recorded.renderTick!==expected?.renderTick||Number.isInteger(expected?.targetSlot)&&!recorded.visibleSlots.includes(expected.targetSlot))failures.push({code:'shot_aim_not_correlated_to_authorized_render',actor:actorId,label:correlation.label});
+   for(const shot of correlation.nativeShotInputs)if(!shot.input?.deliveryAttached||!shot.input.fireRequested||!shot.receipt)failures.push({code:'native_shot_missing_browser_receipt_input',actor:actorId,label:correlation.label,tick:shot.tick});
+  }
+  if(!correlation.input?.deliveryAttached)failures.push({code:'browser_action_missing_receipted_input',actor:actorId,label:correlation.label});if(!correlation.firstAckSnapshot)failures.push({code:'browser_action_missing_snapshot_ack_observation',actor:actorId,label:correlation.label});if(!correlation.firstFollowingPresentation)failures.push({code:'browser_action_missing_following_render',actor:actorId,label:correlation.label});}
+ for(const required of requiredAtomicShots){const inputs=atomicInputs.get(required.seq)||[],input=inputs.length===1?inputs[0]:null;const proof=validateAtomicShotPresentation({input,presentations:atomicPresentations,requirement:required.action.boundaryRequirement??null,sourceStatus:atomicCaptureUnavailable?null:localFenceStatus});if(!proof.available||input?.slot!==slot||input?.life!==required.action.life){failures.push({code:'shot_atomic_presentation_unavailable',actor:actorId,label:required.action.label,tick:required.shot.tick,reason:proof.reason??'shot_actor_or_life_mismatch'});continue;}const target=required.action.boundaryRequirement?proof.presentation.frame.players.find(player=>player.slot===required.action.boundaryRequirement.targetSlot):null;atomicShotPresentations.push({label:required.action.label,fireSourceSeq:required.seq,nativeTick:required.shot.tick,presentationEventIndex:proof.ref.eventIndex,viewTick:proof.presentation.frame.viewTick,renderTick:proof.presentation.frame.renderTick,completedCallbackToOriginalSendMs:input.pageSentAt-proof.presentation.callbackObservedAtMs,targetRenderedStance:target?.stance??null,proof:'original_send_atomic_completed_presentation_reference'});}
+ if(!window||frameCount<20)failures.push({code:'browser_measured_render_window_missing',actor:actorId});
+ return{actor:actorId,slot,window,trust:'local automated browser observations; never authoritative gameplay',sampleUnit:'one raw ephemeral subscriber sample; percentiles are not percentiles-of-window-percentiles',clockMeaning:'metric/render atMs use the same browser monotonic clock; CDP observationElapsedMs is a driver wall-clock estimate, not one-way transit or exact application ACK latency',metrics:Object.fromEntries(Object.entries(metrics).map(([name,values])=>[name,rawDistribution(values)])),counts,render:{sampledCallbacks:frameCount,firstAtMs:firstFrameAt,lastAtMs:lastFrameAt,observedMeanHz:frameCount>1?(frameCount-1)*1000/(lastFrameAt-firstFrameAt):null},socketOpens,resyncs,correlations,atomicShotPresentations,failures};
+}

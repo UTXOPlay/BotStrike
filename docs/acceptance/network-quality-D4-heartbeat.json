@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "kind": "network-matrix-local-fence-followup",
+  "candidate": "D4",
+  "status": "single_case_passed",
+  "scope": {
+    "automated": true,
+    "humanParticipants": 0,
+    "nativeRulesChanged": false,
+    "applicationRebuilt": false,
+    "hostOnlyFollowup": true,
+    "issues": [
+      30,
+      12,
+      26
+    ],
+    "issueAcceptance": false,
+    "networkAcceptance": false,
+    "merged": false,
+    "deployed": false
+  },
+  "application": {
+    "imageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "toolImageId": "sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "engineSha256": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+    "verifierSha256": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74"
+  },
+  "hostObserver": {
+    "driverSources": [
+      {
+        "file": "tools/run-network-matrix.mjs",
+        "sha256": "fc53da0eb31afd9975d3c298be3925f81ba7d1e032631af12fd416c73171857b"
+      },
+      {
+        "file": "tools/network-matrix-profiles.mjs",
+        "sha256": "80bac43ef440cf2b1320674ae115c1c5ec943289cb05d1dc4d5a182ff84ad63a"
+      },
+      {
+        "file": "tools/network-matrix-analysis.mjs",
+        "sha256": "0a6a671b60f62967ffa2452d0249edd61620498e6b45083d9d42c25a5ffa6036"
+      },
+      {
+        "file": "tools/network-matrix-recovery.mjs",
+        "sha256": "2259b5b6227cf069a39b7759572aeec5d3b8dae5b126441725b23d8faffc372b"
+      },
+      {
+        "file": "tools/network-matrix-replay.mjs",
+        "sha256": "e21d4bfb9079e9e88b11f9c9d27264e9ab2c0ef2b2457f9721fbc93f43683b9e"
+      },
+      {
+        "file": "tools/network-matrix-artifacts.mjs",
+        "sha256": "2d2b21ce8afbe955a4ac6824be1f81ae427a39a169ec34b412e4f72f1d80ca2a"
+      },
+      {
+        "file": "tools/network-trace-archive.mjs",
+        "sha256": "722cb2a9f7eb27ddd6dc7b866aa2f7190664984ea90db8450f87dbb137cbe489"
+      },
+      {
+        "file": "tools/start-network-runtime.mjs",
+        "sha256": "844d03d70ed9f025f0cfb3a84d9b31fb3bff389afa136fc1d125845bdd8aea16"
+      },
+      {
+        "file": "tools/network-proxy.mjs",
+        "sha256": "73e12aa1cc45d2bf3c68f333275a048c6088413a10361c91bec2a203eb74d153"
+      },
+      {
+        "file": "tools/network-lab.mjs",
+        "sha256": "c3420a55613a2f98796c24aa8f29fd58f0f08ef8f41ca3e79ae5e9b39a910968"
+      },
+      {
+        "file": "tools/network-lab-provenance.mjs",
+        "sha256": "ad95303734e12d8fe2eb3f973b7d67b60c0eb4b9d005e6e58714139616b3f231"
+      },
+      {
+        "file": "tools/network-node-actors.mjs",
+        "sha256": "440555d95746ca497d5102a2b42f9fae7797bcab72cd1f3fbe06e1eea955657a"
+      },
+      {
+        "file": "games/botstrike/client/input-delivery.mjs",
+        "sha256": "e307dbd6646c4ac32227ea19809491344b819766bb785fe8168587e5184c0bca"
+      },
+      {
+        "file": "tools/network-browser-actors.mjs",
+        "sha256": "ac0d69a370dd0aa90b8129c3165566405bb91903ce4f114e6e5ab5a7a82f7e3c"
+      },
+      {
+        "file": "tools/local-recovery-fence.mjs",
+        "sha256": "e24bea3dcc6a010d703dfc75f2a1553a117382db6c546664419a5676b21557d0"
+      },
+      {
+        "file": "tools/network-local-fence.mjs",
+        "sha256": "a17509ab094bade5539eda9c83bd4857b2670418229d371f5529dd315d5a5a9c"
+      },
+      {
+        "file": "tools/network-fairness-scenarios.mjs",
+        "sha256": "1552c9202bf78b2d0167e25d11897529cccbb178c666088bab6519d2217fff75"
+      },
+      {
+        "file": "tools/run-network-audit.mjs",
+        "sha256": "c85fab206cad9d46df333611526d80378f77499bb1b8da52ff6c4ec14895b86d"
+      },
+      {
+        "file": "tools/damage-contract-source.mjs",
+        "sha256": "3b0b2d861d44ffd1b33bd526d5c50806edc40db4a35f5b8b04849ea9db70c203"
+      },
+      {
+        "file": "botstrike/examples/network_audit.rs",
+        "sha256": "5c16511bb903e0c81bc276e1d17c6111da8ede93f15a32adfa4993e2f90959d8"
+      }
+    ],
+    "restorationBarrier": "strict original pageSentAt greater than a fresh post-restoration page clock",
+    "recoveryProof": "current paused local epoch; exact original bytes/CDP join; independent current public ACK; fresh re-read immediately before one Resume; same epoch observed resumed",
+    "missingOrOverflowEvidence": "fail closed; retain original history",
+    "ordinaryShotReleaseChecksUnchanged": true,
+    "inputLeaseMs": 400,
+    "maxOriginalSendAgeMs": 1000
+  },
+  "pureChecks": {
+    "relatedPassed": 44,
+    "focusedRecoveryIncluded": 7,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "imageBaked": false,
+    "receiptSha256": "2eb91f9f7d1b85241da3722c78a791d2a1d3bc76182afa42bf468673fa0f3894",
+    "focusedTestSha256": "43eaac8596e3c2b0ac1a86ea0d75781973a9438264592748df0856ffad8c7477"
+  },
+  "singleCase": {
+    "id": "outage-heartbeat-long",
+    "passed": true,
+    "requestedBidirectionalOutageMs": 12000,
+    "faultActiveKernelDrops": {
+      "upstream": 11,
+      "downstream": 6
+    },
+    "observedNewSocket": true,
+    "currentLocalEpoch": 2,
+    "postBarrierOriginalNeutral": true,
+    "sameEpochAfterManualResume": true,
+    "freshPositiveInputAck": true,
+    "expiredControlFrames": 0,
+    "unexpectedAssertionFailures": 0,
+    "fullCatalogStatus": "incomplete",
+    "fullCatalogPendingCases": 30,
+    "directNodeExitCode": 1,
+    "supervisorExitCode": 0,
+    "exitMeaning": "A single selected case passes; the whole catalog remains incomplete and the CLI intentionally exits1."
+  },
+  "replay": {
+    "sourceNativeReplayMatched": true,
+    "fullTapeTraceMatched": true,
+    "capturedRuntimePrefixMatched": true,
+    "comparedRuntimeTicks": 5242,
+    "tapeTicks": 5243,
+    "unconfirmedTapeTailTicks": 1,
+    "selectedToTick": 5124
+  },
+  "capture": {
+    "dropped": 0,
+    "status": "complete",
+    "archives": 12,
+    "archiveOriginalBytes": 173573357,
+    "archiveCompressedBytes": 6019364,
+    "aiEligibleFramesOutsideMeasuredCore": 822,
+    "noGlobalNoAiClaim": true,
+    "newMatchSignatureProduced": false
+  },
+  "cleanup": {
+    "newContainersRemaining": 0,
+    "newNetworksRemaining": 0,
+    "trackedChromeProcesses": 20,
+    "ownedChromeProcessesRemaining": 0,
+    "sourceUnchanged": true
+  },
+  "evidenceSha256": {
+    "case": "c66fefec7fc5396d2f094a0536d60af80578129a9b3c6421970d83338a90bddb",
+    "matrix": "4d34dbfd24476f76678d330ab261120fba4154b2ed5314c26549b29472868e46",
+    "archives": "57e30ee1b0097345299d73b645282899483bb5158cf151c39e432e77a46cae51",
+    "evidenceManifest": "db2b55ff3c7d84a5cdce88edacd0c90644e71df1b68f05c641e5c6ba98a75b26",
+    "supervisedCompletion": "427cc4a3ee55b4927953f715782e0700346e4ea0003d6e0ed32a48c85983473f",
+    "after": "c8082b32a6609697631bf497aab6a087993e79305372de88ebb6c8f0049caf39",
+    "dockerEvents": "ccba35684a338e0bdd8e0f1055b231e0661cb4eb5170a8f780f584276724f9ba"
+  },
+  "limitations": [
+    "One shared-kernel automated desktop cohort; no WAN, physical input/display or human fairness acceptance.",
+    "One shutdown tape tail tick is unconfirmed and is excluded from gameplay evidence.",
+    "The complete historical D2 matrix remains12 passed/19 failed; no original verdict or archive is changed.",
+    "D3 UI and prior D4 targeted failures remain historical records.",
+    "The current full31-case D4 catalog has30 pending cases.",
+    "No complete sealed match or signed game export was produced by this cancelled case.",
+    "Other failed network conditions, #4 and #12 prerequisites, capacity and human/device gates remain open.",
+    "Myelin verifies exact off-chain host replay, not CKB settlement."
+  ]
+}

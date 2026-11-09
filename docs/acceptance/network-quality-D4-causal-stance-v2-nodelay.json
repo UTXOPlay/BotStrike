@@ -1,0 +1,226 @@
+{
+  "application": {
+    "imageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "toolImageId": "sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209"
+  },
+  "candidate": "D4",
+  "capture": {
+    "archiveCompressedBytes": 6897835,
+    "archiveOriginalBytes": 199655699,
+    "archives": 12,
+    "atomicObserverEvidenceAvailable": {
+      "A": true,
+      "B": true
+    },
+    "browserDropped": {
+      "A": 0,
+      "B": 0
+    },
+    "browserMeasuredRenderCallbacks": {
+      "A": 859,
+      "B": 859
+    },
+    "dropped": 0,
+    "measuredBrowserRenderWindowsAvailable": true
+  },
+  "causalContract": {
+    "baselineWindowMs": 2000,
+    "liveBoundaryShotsReached": 2,
+    "liveV2ToolCasePassed": true,
+    "maximumPresentationAgeMs": 100,
+    "originalTargetSendAndPageBarrierRequired": true,
+    "presentationPackedAndRewindAtOrAfterNewCrouchRequired": true,
+    "requiresNewStandingBaselineAndCrouchAck": true,
+    "singleTrainObservationWindowMs": 1000,
+    "toggleCount": 8,
+    "toggleIntervalMs": 80,
+    "version": 2,
+    "liveV2EngineeringVerified": true
+  },
+  "cleanup": {
+    "newContainersRemaining": 0,
+    "newNetworksRemaining": 0,
+    "ownedChromeProcessesRemaining": 0,
+    "runtimeCleanupFailures": 0,
+    "sourceUnchanged": true
+  },
+  "currentHostChecks": {
+    "boundCaseTimeFiles": 35,
+    "caseTimeRelatedPureFailed": 0,
+    "caseTimeRelatedPurePassed": 118,
+    "exitCode": 0,
+    "imageBaked": false,
+    "postCaseLegacyAndNewProxyTestCohortIncluded": false,
+    "pureReceiptSha256": "0d76300154dd32c2ad35af3029ea2ed810c21ad17cc0bb26e19e13412ddc45c5",
+    "pureTapSha256": "4708499bdc608861f6f7d0cd6ed8dba017604c8edd02a0cae38b64966db7f09b",
+    "runtimeSourceFiles": 25,
+    "sourceUnchangedDuringRun": true
+  },
+  "evidenceSha256": {
+    "after": "90e907cee464ff88407e3fc4c403bcba2fe6ce9c6e9e16cb5a69c77bf280bc2d",
+    "archives": "d8b798b567014cb09c9c8cea56fb83993ec889efda9ef2714447a8ef1392adb0",
+    "before": "f77f5d577be9c649840d43d25281fb56c14a11676bcbd0d45fa4da3c69feac2d",
+    "case": "1bcaa27bc3b7974c8953203de3b519548fe739f14d79e0eb09cde5a6dc65de94",
+    "chromeCleanup": "711c37cfa1b429bc04aa48f37e7593748726182bbc40eb87fdce8814ee247c3b",
+    "dockerEvents": "afaf080cb61ae63d39e27992af83d4de4bee5c6a5ce1321188d507dc041a616f",
+    "evidenceManifest": "cf39d2246fe8c28bdf314f0afb37d6ca1a90ac91ceb5e198de805cdf247b765c",
+    "frozenHostSources": "ae86eac3cd679f5b484f3490ad3e59162bbb654b136177c2b7955929d3773e6b",
+    "matrix": "7a6151cff7f73aae08e8bc90d6a83cbc9e7bcec62d38a354ff76920bdd3568b7",
+    "pureReceipt": "0d76300154dd32c2ad35af3029ea2ed810c21ad17cc0bb26e19e13412ddc45c5",
+    "pureTap": "4708499bdc608861f6f7d0cd6ed8dba017604c8edd02a0cae38b64966db7f09b",
+    "replayReport": "86f63a347c4e31cdc9e1d863e3f98e288058bda3772eb81e1e7d388cca10d60d",
+    "runtimeAgreement": "96a9bf30660d5c1f1402a2018bf32e68917d2f261ea8b2f687e18817ea7d694c",
+    "runtimeCleanup": "d8708fcc3118d62817a60ec0d75f9ee44555d89c00b7df3552f9a1118384e1dc",
+    "shotBoundaryReport": "87eba6c7063712965e8eb050fa02fa6e41582eb0d0816cebabd2a69905d88a96",
+    "supervisorCompletion": "2e15736587c67c239acdf81162dfbcd6022c9d835f1b10b09c3d4d0012e03f43",
+    "independentRawCausalRayAudit": "f875433e2826fcdd9ec507ac00356f92a308520a84fb51f0f77e400173fd72be"
+  },
+  "hostSourceSha256": {
+    "botstrike/examples/network_audit.rs": "6dd07b6ba1023c06d174c68111be789447247588ede5f5a1cae1290e5275ffc9",
+    "botstrike/spec.json": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+    "games/botstrike/client/input-delivery.mjs": "e307dbd6646c4ac32227ea19809491344b819766bb785fe8168587e5184c0bca",
+    "tools/damage-contract-source.mjs": "3b0b2d861d44ffd1b33bd526d5c50806edc40db4a35f5b8b04849ea9db70c203",
+    "tools/local-recovery-fence.mjs": "e8bb293ed42346cae9040a0fb8eea1da68619fa803ead0b04ba55f16bbc23048",
+    "tools/network-browser-actors.mjs": "bda8f1c1974ccac259eb8cd9921c216473ae7233fcc28a49c273f04d9a97a03d",
+    "tools/network-fairness-scenarios.mjs": "6f5d411d6d7f405423e44ed7f5539eb8a5bc20ffbbda5a9a6010ec7af55fa23a",
+    "tools/network-lab-provenance.mjs": "ad95303734e12d8fe2eb3f973b7d67b60c0eb4b9d005e6e58714139616b3f231",
+    "tools/network-lab.mjs": "c3420a55613a2f98796c24aa8f29fd58f0f08ef8f41ca3e79ae5e9b39a910968",
+    "tools/network-local-fence.mjs": "5c26936e6f875748447cdb7994952035fc3d0e845f037ff3fe2b4b68a4ebdbd9",
+    "tools/network-matrix-analysis.mjs": "25fc974e553981cc5ef8b371ad13db8a77dbc925dbe6b4aa4142a98bd5de0ee6",
+    "tools/network-matrix-artifacts.mjs": "2d2b21ce8afbe955a4ac6824be1f81ae427a39a169ec34b412e4f72f1d80ca2a",
+    "tools/network-matrix-profiles.mjs": "16defea0aca2c1a29c111708be5155f39290906c171feac1565a93482596a0e6",
+    "tools/network-matrix-recovery.mjs": "2259b5b6227cf069a39b7759572aeec5d3b8dae5b126441725b23d8faffc372b",
+    "tools/network-matrix-replay.mjs": "e21d4bfb9079e9e88b11f9c9d27264e9ab2c0ef2b2457f9721fbc93f43683b9e",
+    "tools/network-navigation-steering.mjs": "fbc9f5dd6b7290dc245711d6918fe09aa01879af562e54128d5c3b2d4c6d89f1",
+    "tools/network-node-actors.mjs": "440555d95746ca497d5102a2b42f9fae7797bcab72cd1f3fbe06e1eea955657a",
+    "tools/network-proxy.mjs": "89aea3c834241fc47be4c4fc4c310b5af1ff217fe218fb6aaa571f21e704878c",
+    "tools/network-shot-boundary-proof.mjs": "12f15795f341534a4f55b9d1809d6af95ea93c0f6e01e6f8d4ea0edd19e47b5e",
+    "tools/network-shot-boundary-report.mjs": "1e6aab7db140644056963ac6ee07fae7c0c6504c0dad82e01b2089e3d4b6c88f",
+    "tools/network-stance-boundary.mjs": "d9e081a77a57fbb773bab920f6dafc2c1f19029f07cbce7d3e01b1a526327d00",
+    "tools/network-trace-archive.mjs": "722cb2a9f7eb27ddd6dc7b866aa2f7190664984ea90db8450f87dbb137cbe489",
+    "tools/run-network-audit.mjs": "c85fab206cad9d46df333611526d80378f77499bb1b8da52ff6c4ec14895b86d",
+    "tools/run-network-matrix.mjs": "4d2e3351b3e750b8594a5089ecb2422f1cfbb43f5c758e750604f56bac68d3f5",
+    "tools/start-network-runtime.mjs": "844d03d70ed9f025f0cfb3a84d9b31fb3bff389afa136fc1d125845bdd8aea16"
+  },
+  "kind": "network-causal-stance-v2-nodelay-selected-case-checkpoint",
+  "limitations": [
+    "One selected software case passed while31 catalog cases remain pending; no full matrix, issue, human, WAN or physical acceptance.",
+    "The first partial v1 cohort and three earlier failed v2 cohorts remain independent.",
+    "Case-time118 QA is preserved; restoring legacy proxy tests and moving new tests to a distinct filename is separate post-case QA, not a runtime source change.",
+    "The five-shot report is hash/source/tool/replay bound here; independent raw target-causality/ray audit is a separate receipt.",
+    "The exact at-write admission interval/reason is still not recorded; original requested/rendered, arrival-admitted and final Native/rewind values must remain distinct.",
+    "Explicit NODELAY changes the extra lab proxy socket policy. This one selected outcome is not a production transport benchmark or exclusive causal proof.",
+    "No navigation tolerance, deadline, delivery lifetime or train window changed.",
+    "Logical callback completion and exact off-chain host replay are not physical display/input, human fairness or CKB settlement.",
+    "The successful new-policy run planned no two-leg maneuver. Its success does not establish a successful high-delay two-leg controller cohort.",
+    "Rendered interpolated target stance and selected Native historical stance can differ; exact atomic reference and new-train causality are not pose equality or full fairness acceptance."
+  ],
+  "matrixCase": {
+    "catalogCount": 32,
+    "configurationIsMeasuredAppRtt": false,
+    "configuredAddedRoundTripDelayMs": {
+      "A": 0,
+      "B": 180
+    },
+    "directNodeExit": 1,
+    "failureCount": 0,
+    "id": "stance-boundary-low-high",
+    "pendingCases": 31,
+    "toolVerdict": "passed",
+    "wholeCatalogStatus": "incomplete"
+  },
+  "navigationContract": {
+    "distanceTolerance": 2,
+    "limitsRelaxed": false,
+    "maximumFineHoldMs": 60,
+    "noProgressLimitMs": 5000,
+    "normalKeyboardAndMouse": true,
+    "waypointLimitMs": 30000
+  },
+  "proxyChange": {
+    "actualSteeringPlans": 0,
+    "applicationRebuilt": false,
+    "caseTimeSha256": "89aea3c834241fc47be4c4fc4c310b5af1ff217fe218fb6aaa571f21e704878c",
+    "explicitNoDelayOnExtraProxySockets": true,
+    "nativeRulesChanged": false,
+    "onlyChangedRuntimeFile": "tools/network-proxy.mjs",
+    "previousSha256": "73e12aa1cc45d2bf3c68f333275a048c6088413a10361c91bec2a203eb74d153",
+    "productionNetworkBenefitClaimed": false,
+    "runtimeFilesChangedFromPriorSteeringCase": 1,
+    "separatePingExperimentIncluded": false
+  },
+  "replay": {
+    "capturedRuntimePrefixMatched": true,
+    "comparedRuntimeTicks": 5437,
+    "fullTapeTraceMatched": true,
+    "selectedToTick": 5251,
+    "sourceNativeReplayMatched": true,
+    "tapeTicks": 5437,
+    "unconfirmedTapeTailTicks": 0
+  },
+  "schemaVersion": 1,
+  "scope": {
+    "applicationRebuilt": false,
+    "automated": true,
+    "deployed": false,
+    "hostOnly": true,
+    "humanParticipants": 0,
+    "independentRawCausalRayReviewIncluded": true,
+    "issueAcceptance": false,
+    "merged": false,
+    "nativeRulesChanged": false,
+    "networkAcceptance": false,
+    "twoTargetCausalToolEvidenceAvailable": true,
+    "targetedNewTrainCausalEngineeringVerified": true,
+    "humanOrCompetitiveStanceAcceptance": false
+  },
+  "separatePriorEvidenceSha256": {
+    "firstAtomicPartialPublicCheckpoint": "72f6ac3432f7edfe8ef18d12cbce66bf6c2e80ae570427326996bb63e5e51693",
+    "firstFailedCausalV2Case": "b42e5a6a1cc8d08b8e352a1c015a7656542398013dfb8267952aeb60f1f21545",
+    "firstPartialV1Case": "2fba86130ffce458743ad7eebccc8e527211466e84935c4e11a004b01588fa8f",
+    "independentFastsearchNavigationAudit": "c128fefb14500d75d80958e7290edcfed3819760b86c879f284eaaf90ffac81f",
+    "priorCausalV2Audit": "f7ecd0fadb0a0fc00361f383ed60b8800ba9c4f1c2207be9872d1f094e8452af",
+    "priorCausalV2PublicCheckpoint": "696b28822074dcfc05645de00e09e2a5307495e5c0fa026f94082370d93985e8",
+    "priorCausalV2TakeoverSupplement": "299b10b807c51a4201ce0cd4d12ce987152fbd83a8c2a44fbb9c29173160eb8e",
+    "secondFailedFastsearchV2Case": "88535eddf76501bc514641b80b0baef9d0b30abc67d2ed3723d741c783613f3d",
+    "thirdFailedSteeringV2Case": "c4e291816f39459ea1f92000b4668969021095550646fd76572ce5a59e1cc4f2"
+  },
+  "shotBoundaryReport": {
+    "atWriteAdmissionRecorded": false,
+    "bytes": 229112,
+    "independentRawCausalRayAuditIncluded": true,
+    "selectedShots": 5,
+    "sha256": "87eba6c7063712965e8eb050fa02fa6e41582eb0d0816cebabd2a69905d88a96",
+    "sourceAndReplayAndToolBindingsMatched": true,
+    "status": "exact",
+    "targetApplicationEvidenceAvailable": 2,
+    "unavailableShots": 0,
+    "independentRawCausalRayAuditSha256": "f875433e2826fcdd9ec507ac00356f92a308520a84fb51f0f77e400173fd72be"
+  },
+  "status": "selected_case_passed_catalog_incomplete",
+  "postCaseHostChecks": {
+    "relatedPurePassed": 120,
+    "exitCode": 0,
+    "runtimeDriverSources": 25,
+    "runtimeDriverBytesChangedAfterCase": false,
+    "originalProxyCompatibilityTestsPreserved": 2,
+    "pureReceiptSha256": "7ecd8f363368455f37058d42139469cba4d27aae29490953cd2f9d89fa243b3e",
+    "pureTapSha256": "b27dd3b9477aa971e64b4945681cdd6932189c70424a984f13023a9cd857389f",
+    "scope": "Post-case host QA after restoring legacy proxy tests and moving the new contracts to a separate file; distinct from case-time118 checks and image-baked checks.",
+    "newSeparateProxyNoDelayContracts": 2
+  },
+  "independentEngineeringValidation": {
+    "exactOriginalFireReferences": 5,
+    "newTargetCrouchRoles": 2,
+    "sameFramePublicLocalPrivateAcksVerified": true,
+    "nativeCurrentHistoricalSlotOrderVerified": true,
+    "rngRayDamageIndependentlyRecomputed": true,
+    "renderedPoseEqualityEstablished": false,
+    "atWriteAdmissionIntervalRecorded": false,
+    "issueAcceptance": false,
+    "scope": "Only these source-bound automated stance and common-core shots; other pose boundaries, transport envelope and human/physical acceptance remain open."
+  }
+}

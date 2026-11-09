@@ -4,6 +4,7 @@ import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {WebSocket} from 'ws';
+import {trackSocketDelivery} from './ws-delivery-client.mjs';
 import {createBotStrike,neutral} from '../botstrike-service/server.mjs';
 
 for(const closeController of [false,true])for(const nextAction of ['start','leave']){
@@ -15,7 +16,7 @@ for(const closeController of [false,true])for(const nextAction of ['start','leav
   const headers={'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':account};
   const action=async body=>{const response=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify(body)});return{status:response.status,body:await response.json()};};
   const until=async predicate=>{const deadline=Date.now()+5000;while(!predicate()){if(Date.now()>deadline)throw Error('Lobby control did not arrive');await new Promise(resolve=>setTimeout(resolve,10));}};
-  const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers}),messages=[];sockets.push(ws);ws.on('message',raw=>messages.push(JSON.parse(raw)));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});return{ws,messages};};
+  const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers}),messages=[],delivery=trackSocketDelivery(ws);sockets.push(ws);ws.on('message',raw=>messages.push(JSON.parse(raw)));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});return{ws,messages,delivery};};
   const control=(peer,active)=>peer.messages.findLast(message=>message.type==='control'&&message.active===active);
   try{
    const created=await action({type:'create',kind:'private',mode:'deathmatch',map:0,hero:0,difficulty:0});
@@ -52,9 +53,9 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
  const headers={'Content-Type':'application/json','X-Runtime-Token':secret,'X-UTXOPlay-Account':account};
  const action=async body=>{const response=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify(body)});return{status:response.status,body:await response.json()};};
  const until=async predicate=>{const deadline=Date.now()+5000;while(!predicate()){if(Date.now()>deadline)throw Error('Controller state did not arrive');await new Promise(resolve=>setTimeout(resolve,10));}};
- const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers}),messages=[];ws.on('message',raw=>messages.push(JSON.parse(raw)));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});sockets.push(ws);return{ws,messages};};
+ const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/api/socket',{headers}),messages=[],delivery=trackSocketDelivery(ws);ws.on('message',raw=>messages.push(JSON.parse(raw)));await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject)});sockets.push(ws);return{ws,messages,delivery};};
  const control=(peer,active)=>peer.messages.findLast(message=>message.type==='control'&&message.active===active);
- const packet=(seq,extra={})=>JSON.stringify({type:'input',room:room.id,input:{...neutral(),seq,...extra}});
+ const packet=(peer,seq,extra={})=>JSON.stringify({...peer.delivery.envelope(room.id,{...neutral(),seq,...extra})});
  let room;
  try{
   const created=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify({type:'create',kind:'practice',mode:'deathmatch',map:0,hero:0,difficulty:0})});
@@ -69,15 +70,16 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
   assert.match(firstToken,/^[a-f0-9]{32}$/);
   assert.equal((await action({type:'hero',hero:2,controlToken:firstToken})).status,200);
   assert.equal(live.selected[0],2);
-  first.ws.send(packet(1,{fire:true}));await until(()=>live.inputs[0].seq===1);
-  second.ws.send(packet(100,{x:-1}));await new Promise(resolve=>setTimeout(resolve,60));
+  await first.delivery.ready(room.id);
+  first.ws.send(packet(first,1,{fire:true}));await until(()=>live.inputs[0].seq===1);
+  second.ws.send(JSON.stringify({type:'input',room:room.id,input:{...neutral(),seq:100,x:-1},delivery:first.delivery.get(room.id)}));await new Promise(resolve=>setTimeout(resolve,60));
   assert.equal(live.inputs[0].seq,1,'passive tab cannot submit input with a higher sequence');
   second.ws.send(JSON.stringify({type:'claim',room:'0'.repeat(24)}));
   await until(()=>second.messages.some(message=>message.type==='error'&&message.error==='No active seat to control'));
   assert.equal(live.inputs[0].fire,true,'an invalid claim cannot release the active tab');
   const http=await fetch(base+'/api/action',{method:'POST',headers,body:JSON.stringify({type:'input',room:room.id,input:{...neutral(),seq:101}})});
   assert.equal(http.status,400,'HTTP actions cannot bypass socket control');
-  second.ws.send(JSON.stringify({type:'claim',room:room.id}));
+  const firstReceipt=first.delivery.get(room.id);second.ws.send(JSON.stringify({type:'claim',room:room.id}));
   await until(()=>control(first,false)&&control(second,true));
   assert.equal(control(second,true).nextSeq,1);
   const secondToken=control(second,true).token;
@@ -87,19 +89,20 @@ test('only the claimed tab controls a seat and takeover releases held input',asy
   assert.equal(live.selected[0],4);
   assert.equal(live.inputs[0].fire,false,'takeover releases a held trigger');
   assert.deepEqual(live.pulses[0],{},'takeover clears pending trigger pulses');
-  first.ws.send(packet(1000,{fire:true}));second.ws.send(packet(2,{x:-1,fire:true}));
+  await second.delivery.ready(room.id);
+  first.ws.send(JSON.stringify({type:'input',room:room.id,input:{...neutral(),seq:1000,fire:true},delivery:firstReceipt}));second.ws.send(packet(second,2,{x:-1,fire:true}));
   await until(()=>live.inputs[0].seq===2);assert.equal(live.inputs[0].x,-1);
   second.ws.close();await new Promise(resolve=>second.ws.once('close',resolve));
   await until(()=>live.inputs[0].fire===false);
   assert.equal(live.inputs[0].fire,false,'closing the controller releases a held trigger');
-  first.ws.send(packet(1001,{x:1}));await new Promise(resolve=>setTimeout(resolve,60));
+  first.ws.send(JSON.stringify({type:'input',room:room.id,input:{...neutral(),seq:1001,x:1},delivery:firstReceipt}));await new Promise(resolve=>setTimeout(resolve,60));
   assert.equal(live.inputs[0].seq,2,'a remaining passive tab does not take control silently');
   first.ws.send(JSON.stringify({type:'claim',room:room.id}));await until(()=>first.messages.filter(message=>message.type==='control'&&message.active).length===2);
   assert.equal(control(first,true).nextSeq,2);
   assert.notEqual(control(first,true).token,firstToken);
-  first.ws.send(packet(3,{x:1,weapon:1}));await until(()=>live.state?.players[0].last_seq===3);
+  await first.delivery.ready(room.id);first.ws.send(packet(first,3,{x:1,weapon:1}));await until(()=>live.state?.players[0].last_seq===3);
   assert.equal(live.inputs[0].weapon,undefined,'weapon selection is not retained as a held control');
-  first.ws.send(packet(4,{x:1,weapon:1}));await until(()=>live.inputs[0].seq===4);
+  first.ws.send(packet(first,4,{x:1,weapon:1}));await until(()=>live.inputs[0].seq===4);
   assert.equal(live.pulses[0].weapon,undefined,'repeated snapshots do not queue another switch');
   const observer=await connect();await until(()=>control(observer,false));
   assert.equal((await action({type:'leave'})).status,400,'a passive tab cannot leave the live room');
