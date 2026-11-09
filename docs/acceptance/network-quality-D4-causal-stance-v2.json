@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "kind": "network-causal-stance-v2-failed-checkpoint",
+  "candidate": "D4",
+  "status": "failed_before_stance_boundary",
+  "scope": {
+    "hostOnly": true,
+    "applicationRebuilt": false,
+    "nativeRulesChanged": false,
+    "automated": true,
+    "humanParticipants": 0,
+    "issueAcceptance": false,
+    "networkAcceptance": false,
+    "newTrainCausalAcceptance": false,
+    "merged": false,
+    "deployed": false
+  },
+  "application": {
+    "imageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "toolImageId": "sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d"
+  },
+  "currentHostChecks": {
+    "relatedPurePassed": 101,
+    "nativeInspectorPassed": 6,
+    "imageBaked": false,
+    "sourceUnchanged": true,
+    "pureReceiptSha256": "549dd4530a9ed722d6d55fdb5ed4dca6a78ff00bccf65a1ddb39f4ca7ed70639"
+  },
+  "causalContract": {
+    "version": 2,
+    "requiresNewStandingBaselineAndCrouchAck": true,
+    "originalTargetSendAndPageBarrierRequired": true,
+    "presentationPackedAndRewindAtOrAfterNewCrouchRequired": true,
+    "baselineWindowMs": 2000,
+    "singleTrainObservationWindowMs": 1000,
+    "toggleCount": 8,
+    "toggleIntervalMs": 80,
+    "maximumPresentationAgeMs": 100,
+    "liveBoundaryShotsReached": 0,
+    "liveV2Acceptance": false
+  },
+  "matrixCase": {
+    "id": "stance-boundary-low-high",
+    "toolVerdict": "failed",
+    "wholeCatalogStatus": "failed",
+    "pendingCases": 31,
+    "catalogCount": 32,
+    "configuredAddedRoundTripDelayMs": {
+      "A": 0,
+      "B": 180
+    },
+    "configurationIsMeasuredAppRtt": false,
+    "failurePhase": "B cover/peek return in common combat core, before stance helper",
+    "primaryFailure": "Route made no progress",
+    "secondaryFailures": [
+      "browser_measured_render_window_missing A",
+      "browser_measured_render_window_missing B"
+    ],
+    "directNodeExit": 1,
+    "supervisorObservedExit": 0
+  },
+  "replay": {
+    "sourceNativeReplayMatched": true,
+    "fullTapeTraceMatched": true,
+    "capturedRuntimePrefixMatched": true,
+    "comparedRuntimeTicks": 5076,
+    "tapeTicks": 5076,
+    "unconfirmedTapeTailTicks": 0,
+    "selectedToTick": 3996
+  },
+  "capture": {
+    "dropped": 0,
+    "archives": 12,
+    "archiveOriginalBytes": 185910011,
+    "archiveCompressedBytes": 6415577,
+    "browserDropped": {
+      "A": 0,
+      "B": 0
+    },
+    "atomicObserverEvidenceAvailable": {
+      "A": true,
+      "B": true
+    }
+  },
+  "cleanup": {
+    "sourceUnchanged": true,
+    "newContainersRemaining": 0,
+    "newNetworksRemaining": 0,
+    "ownedChromeProcessesRemaining": 0,
+    "runtimeCleanupFailures": 0
+  },
+  "evidenceSha256": {
+    "case": "b42e5a6a1cc8d08b8e352a1c015a7656542398013dfb8267952aeb60f1f21545",
+    "matrix": "7f79b07f4377750419719d67f89210c55233edf46b5957bf271b98094299fc68",
+    "frozenHostSources": "8d2913e9890e75e0d926ab1c934ad597ef57b7828cb5daad5230d88f018ab6ff",
+    "supervisorCompletion": "de2ddd052d731bbe017784bd0c7bb67f91484f4cef52f8cba92784a635586093",
+    "archives": "65a2375e158165a5085f20e73196ff14d7a62cc490c5b4f787614f06098a0acd",
+    "evidenceManifest": "3b6cc6e7ed884b0a56118b20a7ebe954e074de10d4aabba152285598006b18e7",
+    "replayReport": "f2a978d7dc0044514c8a668ac79e249db0162807c9c9c831c446620ba8994d66",
+    "runtimeAgreement": "b00228a63890b8f367430446936b6c59a33f31a8b21bab850b96d10de04c1b3d",
+    "runtimeCleanup": "d368c8bf5a5dc32ae2340e25433de4d3857666192e7493137d075f72acad0c50"
+  },
+  "hostSourceSha256": {
+    "tools/local-recovery-fence.mjs": "e8bb293ed42346cae9040a0fb8eea1da68619fa803ead0b04ba55f16bbc23048",
+    "tools/network-local-fence.mjs": "5c26936e6f875748447cdb7994952035fc3d0e845f037ff3fe2b4b68a4ebdbd9",
+    "tools/network-browser-actors.mjs": "bda8f1c1974ccac259eb8cd9921c216473ae7233fcc28a49c273f04d9a97a03d",
+    "tools/network-fairness-scenarios.mjs": "684a4dec3b239af84e24a1c7c1d09874eecc6a6c49af54aeeaa4fed72f43576b",
+    "tools/network-matrix-recovery.mjs": "2259b5b6227cf069a39b7759572aeec5d3b8dae5b126441725b23d8faffc372b",
+    "tools/network-matrix-analysis.mjs": "25fc974e553981cc5ef8b371ad13db8a77dbc925dbe6b4aa4142a98bd5de0ee6",
+    "tools/network-matrix-profiles.mjs": "16defea0aca2c1a29c111708be5155f39290906c171feac1565a93482596a0e6",
+    "tools/run-network-matrix.mjs": "e80ba69c89cd3374e408f86a094f11c4ed8c41a72fedddf48ea7ab3f15c62707",
+    "tools/network-stance-boundary.mjs": "d9e081a77a57fbb773bab920f6dafc2c1f19029f07cbce7d3e01b1a526327d00",
+    "tools/network-shot-boundary-proof.mjs": "12f15795f341534a4f55b9d1809d6af95ea93c0f6e01e6f8d4ea0edd19e47b5e",
+    "tools/network-shot-boundary-report.mjs": "1e6aab7db140644056963ac6ee07fae7c0c6504c0dad82e01b2089e3d4b6c88f"
+  },
+  "limitations": [
+    "The stance helper was not reached. Pure checks and exact replay do not make this failed case pass.",
+    "The earlier v1 case and schema-corrected atomic report are preserved separately; they do not prove two newly induced stance shots.",
+    "No navigation tolerance, deadline, delivery lifetime or common-core prerequisite was relaxed.",
+    "Logical callback completion does not establish compositor or physical display completion.",
+    "The historical D2 matrix remains 12 passed / 19 failed. Partial source-bound catalogs are not combined.",
+    "Other pose boundaries, failed network conditions, #4/#12 prerequisites and human/WAN/physical-device/capacity acceptance remain open.",
+    "Myelin verifies exact off-chain host replay, not CKB settlement."
+  ]
+}

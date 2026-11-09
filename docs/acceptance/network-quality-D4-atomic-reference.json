@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "kind": "network-atomic-presentation-reference-checkpoint",
+  "candidate": "D4",
+  "status": "partial_engineering_evidence",
+  "scope": {
+    "hostOnly": true,
+    "applicationRebuilt": false,
+    "nativeRulesChanged": false,
+    "automated": true,
+    "humanParticipants": 0,
+    "issueAcceptance": false,
+    "networkAcceptance": false,
+    "newTrainCausalAcceptance": false,
+    "merged": false,
+    "deployed": false
+  },
+  "application": {
+    "imageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "toolImageId": "sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d"
+  },
+  "frozenHostSources": [
+    {
+      "file": "tools/run-network-matrix.mjs",
+      "sha256": "6e2a56de0ea0b2eea23cf91db338de7ab619a6a537e1293e699c3161249acdc3"
+    },
+    {
+      "file": "tools/network-matrix-profiles.mjs",
+      "sha256": "16defea0aca2c1a29c111708be5155f39290906c171feac1565a93482596a0e6"
+    },
+    {
+      "file": "tools/network-matrix-analysis.mjs",
+      "sha256": "6bfecd0bde2b52601258c0d39e77399b9769f4676dbcae23230e55c779b224de"
+    },
+    {
+      "file": "tools/network-matrix-recovery.mjs",
+      "sha256": "2259b5b6227cf069a39b7759572aeec5d3b8dae5b126441725b23d8faffc372b"
+    },
+    {
+      "file": "tools/network-stance-boundary.mjs",
+      "sha256": "18862cbd97938824ebb2c0d08cb65d4c0806164d7bf222fa9125e4d39e6962f4"
+    },
+    {
+      "file": "tools/network-shot-boundary-proof.mjs",
+      "sha256": "a9ad74269e553166b6a96d38d8788866ddea9765d900871273af6349f608d0ef"
+    },
+    {
+      "file": "tools/network-shot-boundary-report.mjs",
+      "sha256": "8c2a1ae163b0e688f51785bbd07cfbca29da46f0f8929faf81fbcf76542bf1b7"
+    },
+    {
+      "file": "tools/network-matrix-replay.mjs",
+      "sha256": "e21d4bfb9079e9e88b11f9c9d27264e9ab2c0ef2b2457f9721fbc93f43683b9e"
+    },
+    {
+      "file": "tools/network-matrix-artifacts.mjs",
+      "sha256": "2d2b21ce8afbe955a4ac6824be1f81ae427a39a169ec34b412e4f72f1d80ca2a"
+    },
+    {
+      "file": "tools/network-trace-archive.mjs",
+      "sha256": "722cb2a9f7eb27ddd6dc7b866aa2f7190664984ea90db8450f87dbb137cbe489"
+    },
+    {
+      "file": "tools/start-network-runtime.mjs",
+      "sha256": "844d03d70ed9f025f0cfb3a84d9b31fb3bff389afa136fc1d125845bdd8aea16"
+    },
+    {
+      "file": "tools/network-proxy.mjs",
+      "sha256": "73e12aa1cc45d2bf3c68f333275a048c6088413a10361c91bec2a203eb74d153"
+    },
+    {
+      "file": "tools/network-lab.mjs",
+      "sha256": "c3420a55613a2f98796c24aa8f29fd58f0f08ef8f41ca3e79ae5e9b39a910968"
+    },
+    {
+      "file": "tools/network-lab-provenance.mjs",
+      "sha256": "ad95303734e12d8fe2eb3f973b7d67b60c0eb4b9d005e6e58714139616b3f231"
+    },
+    {
+      "file": "tools/network-node-actors.mjs",
+      "sha256": "440555d95746ca497d5102a2b42f9fae7797bcab72cd1f3fbe06e1eea955657a"
+    },
+    {
+      "file": "games/botstrike/client/input-delivery.mjs",
+      "sha256": "e307dbd6646c4ac32227ea19809491344b819766bb785fe8168587e5184c0bca"
+    },
+    {
+      "file": "tools/network-browser-actors.mjs",
+      "sha256": "bda8f1c1974ccac259eb8cd9921c216473ae7233fcc28a49c273f04d9a97a03d"
+    },
+    {
+      "file": "tools/local-recovery-fence.mjs",
+      "sha256": "e8bb293ed42346cae9040a0fb8eea1da68619fa803ead0b04ba55f16bbc23048"
+    },
+    {
+      "file": "tools/network-local-fence.mjs",
+      "sha256": "5c26936e6f875748447cdb7994952035fc3d0e845f037ff3fe2b4b68a4ebdbd9"
+    },
+    {
+      "file": "tools/network-fairness-scenarios.mjs",
+      "sha256": "684a4dec3b239af84e24a1c7c1d09874eecc6a6c49af54aeeaa4fed72f43576b"
+    },
+    {
+      "file": "tools/run-network-audit.mjs",
+      "sha256": "c85fab206cad9d46df333611526d80378f77499bb1b8da52ff6c4ec14895b86d"
+    },
+    {
+      "file": "tools/damage-contract-source.mjs",
+      "sha256": "3b0b2d861d44ffd1b33bd526d5c50806edc40db4a35f5b8b04849ea9db70c203"
+    },
+    {
+      "file": "botstrike/examples/network_audit.rs",
+      "sha256": "6dd07b6ba1023c06d174c68111be789447247588ede5f5a1cae1290e5275ffc9"
+    }
+  ],
+  "qaAtRecordedRevision": {
+    "relatedPurePassed": 95,
+    "nativeInspectorPassed": 6,
+    "imageBaked": false,
+    "pureReceiptSha256": "aa2f2c30adba8beb9ff226f38ab111b268d8aa0da9989089de6ccebf3cdece23",
+    "nativeReceiptSha256": "a9a1a33f001e6cf3a3535e02fc7c88dcd093f9a28330bd56e47b01182ed0f01a"
+  },
+  "matrixCase": {
+    "id": "stance-boundary-low-high",
+    "toolVerdict": "passed",
+    "wholeCatalogStatus": "incomplete",
+    "pendingCases": 31,
+    "catalogCount": 32,
+    "historicalFirst31DefinitionsChanged": false,
+    "configuredAddedRoundTripDelayMs": {
+      "A": 0,
+      "B": 180
+    },
+    "configurationIsMeasuredAppRtt": false,
+    "directNodeExit": 1,
+    "supervisorObservedExit": 0
+  },
+  "replay": {
+    "sourceNativeReplayMatched": true,
+    "fullTapeTraceMatched": true,
+    "capturedRuntimePrefixMatched": true,
+    "comparedRuntimeTicks": 4798,
+    "tapeTicks": 4799,
+    "unconfirmedTapeTailTicks": 1,
+    "selectedToTick": 4664
+  },
+  "atomicAssociation": {
+    "originalSendReferencesCompletedLogicalFrame": true,
+    "referencesValidated": 5,
+    "physicalDisplayEstablished": false,
+    "initialReport": {
+      "status": "unavailable",
+      "unavailableShots": 5,
+      "directNodeExit": 2,
+      "sha256": "26df28f141a1b549908d2f43b53eaab8b8c25e623a421366b7e1537fc7196efc",
+      "cause": "Reporter incorrectly required target health/armor/protection fields on the eight-field shooter preShot pose."
+    },
+    "schemaCorrectedReport": {
+      "status": "exact_atomic_reference",
+      "availableShots": 5,
+      "unavailableShots": 0,
+      "directNodeExit": 0,
+      "sha256": "69830021cc57424608235c039e5039c7f4b69728fc0e530d370ca9c8cc824db3",
+      "externalReportToolSha256": "4dba3992bdced1ed6f03c4dadd5756399a655058b049e743897aec0d4775ab2e",
+      "sourceSnapshotReceiptSha256": "9da31c6267caa7dd07eb16e4635ec5b997b7db687cc053f197ada9d852c949af"
+    },
+    "atWriteAdmissionIntervalRecorded": false
+  },
+  "plannedTrainCoverage": {
+    "plannedRoles": 2,
+    "actualPartialPoseShots": 2,
+    "shotsAfterNewTargetCrouchApplication": 1,
+    "acceptance": false,
+    "scopeFinding": "The low-delay shot and its rewind preceded the new target crouch. Its real partial pose was residual stand-up motion from navigation. The other role was after the new crouch.",
+    "followup": "A stricter v2 contract requires a newly applied same-frame target standing baseline and new crouch proof, original target page barriers, and presentation/packed/rewind ticks at or after that application. New evidence is required; the original verdict is preserved."
+  },
+  "capture": {
+    "dropped": 0,
+    "archives": 12,
+    "archiveOriginalBytes": 175642849,
+    "archiveCompressedBytes": 6138905,
+    "expiredControlFrames": 0,
+    "globalNoAiEstablished": false,
+    "newSignedMatchExportProduced": false
+  },
+  "cleanup": {
+    "createdContainers": 6,
+    "ownedNetworkRemaining": 0,
+    "newContainersRemaining": 0,
+    "trackedChromeProcesses": 20,
+    "ownedChromeProcessesRemaining": 0,
+    "runtimeSourceGuardMatched": true
+  },
+  "evidenceSha256": {
+    "case": "2fba86130ffce458743ad7eebccc8e527211466e84935c4e11a004b01588fa8f",
+    "matrix": "9632a9dc21a3d3ca89c35352aa2ed38288515bade43b6aeb2fff6ff362461629",
+    "archives": "4cc1b493c7b026bb92fe5a2c787e01a667840170a3db49a16636ab91a5ac795d",
+    "evidenceManifest": "e500e389c78abdf5579a3ffbe47a1b90be770d1f8d3c2ec995530b89fff79def",
+    "atomicAudit": "a2eda02d4614f8dae26f175ddb094792c4297e8ee48b6ba63941fbb75f395dcd",
+    "causalitySupplement": "2c4c14c138de128356b987855ee64b793941977b32887f4d175ef32ed8a34117",
+    "independentAudit": "d8f17b113d5bb55851e86308b8d0dee71a2bf329d71f5c23722a91c869d020bb"
+  },
+  "limitations": [
+    "Five exact logical-frame references do not establish two newly induced stance-boundary shots.",
+    "Callback completion is logical world.frame completion, not compositor completion or photons.",
+    "Arrival requested/accepted and final packed/rewind ticks remain distinct; no at-write admission interval is invented.",
+    "The tool verdict, initial unavailable report, corrected report and all raw archives remain unchanged.",
+    "The historical D2 matrix remains12 passed/19 failed. Partial source-bound catalogs are not combined.",
+    "Other pose-boundary, failed network conditions, #4/#12 prerequisites and human/WAN/physical-device/capacity gates remain open.",
+    "Myelin verifies exact off-chain host replay, not CKB settlement."
+  ]
+}

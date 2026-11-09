@@ -440,8 +440,50 @@ processes were gone, and the 20 bound driver sources stayed unchanged. The
 this host revision separately from the earlier heartbeat revision; partial
 catalogs are not combined. The historical 12-pass/19-fail matrix remains unchanged.
 
-Remaining engineering work includes exact original-send to completed-presentation
-correlation and real browser shots during stance, peek and other pose boundaries.
-Existing callback-entry timestamps and earlier aim markers are insufficient for
-that exact correlation. Human A/B, WAN, physical-device, capacity and prerequisite
-gates also remain open. This follow-up does not authorize merge or deployment.
+At this revision, exact original-send to completed-presentation correlation and
+real browser shots during pose boundaries remained open. The following host-only
+checkpoint adds that correlation while preserving the earlier results.
+
+## D4 host follow-up: atomic presentation references and causal stance gates
+
+The observer now copies a completed logical `world.frame` reference immediately
+before the original WebSocket send. A shared page event serial establishes
+ordering; callback-entry timestamps or earlier aim markers cannot substitute.
+The reference binds socket, controller, room, slot, life and local recovery epoch.
+An offline reporter verifies exact wire joins, archive hashes, applied input,
+requested/admitted/packed/rewind ticks and the actual Native ray witness. The
+inspector records current-at-shot and historical target poses separately.
+This observes logical callback completion, not compositor or physical display
+completion. Application bytes, Native rules and retained profiles are unchanged.
+
+The first new low/high-delay case passed its original tool checks and replayed
+4,798 confirmed frames, with one excluded shutdown-tail tick. Its original report
+classified all five shots unavailable because the reporter incorrectly required
+target-only health/armor fields on the shooter's eight-field pre-shot pose. A
+separate schema-corrected report established five exact atomic references.
+Independent review then found that the low-delay boundary shot preceded the new
+crouch train: its real partial pose was residual stand-up motion. Only the other
+role followed the new crouch. These records remain separate, and do not establish
+two newly induced stance shots. See the [atomic-reference checkpoint](acceptance/network-quality-D4-atomic-reference.json).
+
+The stricter v2 gate requires a newly applied standing baseline and crouch, exact
+original target sends and same-frame ACKs, and presentation/packed/rewind ticks
+at or after that crouch application. Its fixed windows are 2,000 ms for baseline
+and 1,000 ms for one eight-toggle, 80 ms train; the maximum presentation age is
+100 ms. The current host revision passed 101 related pure checks and six Native
+inspector checks, separate from D4's baked counts.
+
+The new v2 real case **failed before the stance helper**, during B's cover/peek
+return in the common combat core under 180 ms configured added round-trip delay.
+It stopped with route-no-progress; neither role reached a v2 boundary shot.
+All 5,076 captured frames matched source and retained replay, with no tail or
+capture drops, and owned resources were cleaned. This is a preserved failure,
+not stance acceptance. The catalog remains failed with 31 pending cases; direct
+Node exited 1 and the supervisor exited 0. See the [v2 failed checkpoint](acceptance/network-quality-D4-causal-stance-v2.json).
+
+The new case is appended to the catalog; the original 31 definitions and the
+historical 12-pass/19-fail matrix are unchanged. Navigation tolerances, deadlines,
+delivery lifetimes and common-core prerequisites have not been relaxed. Other
+pose boundaries and failed network conditions remain open alongside Human A/B,
+WAN, physical-device, capacity and prerequisite gates. No merge, deployment or
+issue acceptance follows from these host-only results.

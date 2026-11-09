@@ -139,6 +139,25 @@ input proof, prevent TCP coalescing or relax the 2-unit waypoint tolerance,
 30-second waypoint timeout or 5-second progress limit. See the separately bound
 [D4 navigation follow-up](acceptance/network-quality-D4-navigation.json).
 
+New runs also attach an atomic reference to the most recently completed logical
+presentation before each original input send, using a shared page event serial
+and exact socket/controller/room/slot/life/local-epoch context. The bounded
+offline `tools/network-shot-boundary-report.mjs --matrix ... --case ... --out ...`
+reporter verifies archive and source bindings before joining that reference to
+applied input, final packed ticks, rewind and Native ray/damage witnesses.
+Missing original references remain unavailable; old captures are not upgraded.
+Logical callback completion does not prove physical display completion.
+
+The appended `stance-boundary-low-high` case retains the common combat core and
+adds role-swapped normal-input stance shots. Its v2 contract requires a fresh
+standing baseline, newly applied crouch and original target page/send proof;
+the original fire presentation, packed view and rewind must reach that new
+application tick. Baseline and single-train windows remain 2,000/1,000 ms, with
+eight 80 ms toggles and a maximum 100 ms presentation age. The first v1 run had
+five exact atomic references but only one shot after the new crouch. The next
+v2 run failed in common-core navigation before stance. Neither establishes v2
+acceptance; both original results are preserved in the [progress record](network-quality-progress.md).
+
 The Tactical case creates a normal private demolition lobby, selects unique
 heroes within each team, joins ten authenticated Node controllers and readies
 all ten. It hard-asserts the actual Native header has ten `bots=false` values.

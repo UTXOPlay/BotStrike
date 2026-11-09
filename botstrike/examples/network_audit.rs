@@ -189,7 +189,7 @@ fn ray(
         let h = r
             .hit_regions
             .intersect(origin, dir, pose.position, pose.stance, pose.look);
-        candidates.push(json!({"slot":p.slot,"currentLife":p.life,"historicalLife":old.map(|v|v.life),"currentAlive":p.alive,"historicalAlive":old.map(|v|v.alive),"eligible":eligible,"pose":pose,"intersection":h}));
+        candidates.push(json!({"slot":p.slot,"currentLife":p.life,"historicalLife":old.map(|v|v.life),"currentAlive":p.alive,"historicalAlive":old.map(|v|v.alive),"eligible":eligible,"currentPose":p,"historicalPose":old,"pose":pose,"intersection":h}));
         if eligible {
             if let Some(h) = h {
                 if h.distance < nearest {

@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import * as fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
-import {analyzeBrowserTrace,rawDistribution,runtimeNativeState,explicitBrowserInputAck,packedControlNeutral,analyzeRuntimeRows} from '../tools/network-matrix-analysis.mjs';
+import {analyzeBrowserTrace,rawDistribution,runtimeNativeState,explicitBrowserInputAck,packedControlNeutral,analyzeRuntimeRows,analyzeRuntimeFile} from '../tools/network-matrix-analysis.mjs';
 import {matrixEvidenceManifest,matrixCaseSummary,fileSha256,developmentArtifactBinding} from '../tools/network-matrix-artifacts.mjs';
 import {waitBrowserAppliedInput} from '../tools/run-network-matrix.mjs';
 test('browser analysis keeps raw sample counts and requires exact explicit ACK independently of render and JS latency',async()=>{
@@ -9,6 +9,8 @@ test('browser analysis keeps raw sample counts and requires exact explicit ACK i
  const file=path.join(root,'A.jsonl');await fs.writeFile(file,rows.map(row=>JSON.stringify(row)+'\n').join(''));
  const result=await analyzeBrowserTrace(file,{actorId:'A',slot:0,actions:[{actor:'A',label:'arc-a',kind:'shot',seq:9,presentation:{frameIndex:3,viewTick:41,renderTick:41,targetSlot:5},nativeShots:[{tick:45,seq:9,packedViewTick:40,receipt:{issuedAt:1,deadlineAt:401}}]}],window:{fromBrowserMs:100,toBrowserMs:1000}});
  assert.deepEqual(result.failures,[]);assert.equal(result.metrics.inputAckMs.n,24);assert.equal(result.metrics.inputAckMs.p95,23);assert.equal(result.metrics.renderFrameMs.p50,34);assert.equal(result.correlations[0].firstAckSnapshot.exactRequestedSeq,true);assert.equal(result.correlations[0].firstAckSnapshot.cdpObservationElapsedMs,50);assert.match(result.correlations[0].firstFollowingPresentation.meaning,/not a Native ACK/);
+ const atomic=await analyzeBrowserTrace(file,{actorId:'A',slot:0,actions:[{actor:'A',label:'arc-a',kind:'shot',life:1,seq:9,presentation:{frameIndex:3,viewTick:41,renderTick:41,targetSlot:5},nativeShots:[{tick:45,seq:9,packedViewTick:40,receipt:{issuedAt:1,deadlineAt:401}}]}],window:{fromBrowserMs:100,toBrowserMs:1000},requireAtomicPresentation:true,localFenceStatus:{presentationReferenceVersion:1,evidenceAvailable:true,unavailableReason:null,dropped:0,wireJoin:{available:true}}});
+ assert.ok(atomic.failures.some(failure=>failure.code==='shot_atomic_presentation_unavailable'&&failure.reason==='atomic_presentation_reference_missing'),'An earlier aim frame plus exact wire ACK cannot substitute for an original-send completed-frame reference');assert.deepEqual(atomic.atomicShotPresentations,[]);
  assert.deepEqual(rawDistribution([]),null);
  }finally{await fs.rm(root,{recursive:true,force:true});}
 });
@@ -69,6 +71,31 @@ function boundaryAckRows(deadline=boundaryIssued+400,applied=boundaryIssued+20){
  const room='boundary',frame=(tick,seq)=>({type:'native_frame',room,at:20000+tick,state:{tick,players:[{last_seq:seq,life:1}],events:[]}});
  return [{type:'room_started',room,config:{bots:Array(10).fill(false)}},frame(1,0),{type:'input_arrival',room,slot:0,seq:7,at:10010,input:{seq:7,x:0,y:0,preview_item:2},admission:{generation:3,issuedAt:boundaryIssued,deadlineAt:deadline}},{type:'native_input',room,tick:2,at:10020,monotonicMs:applied,inputs:[[7,0,0,0,0,256,null,null,0,0,1,0,6]]},{type:'input_ack',room,slot:0,seq:7,tick:2,life:1,neutral:true,generation:3},frame(2,7)];
 }
+function causalBoundaryFixture({shotTick=4,includeCrouchAck=true}={}){
+ const room='causal-boundary',ref=(seq,tick)=>({slot:1,seq,tick,life:7,socketGeneration:1,ownerGeneration:1,proofGeneration:1,roomGeneration:1}),requirement={kind:'target-stance-transition',version:2,targetSlot:1,targetLife:7,nativeTargetTransitionRequired:true,targetBaselineApplication:ref(10,2),targetCrouchApplication:ref(11,3),minimumNativeTick:3};
+ const action={kind:'shot',actor:'A',slot:0,label:'stance',weapon:0,expectedShots:1,seq:7,ackSeq:7,life:1,fromTick:2,toTick:4,boundaryRequirement:requirement},rows=[{type:'room_started',room,config:{bots:Array(10).fill(false)}}];
+ const packed=(seq,flags,view=1)=>[seq,0,0,0,0,flags,null,null,0,0,view,0,6],admission={generation:4,issuedAt:100,deadlineAt:500};
+ for(let tick=1;tick<=4;tick++){
+  if(tick===2){rows.push({type:'input_arrival',room,slot:1,seq:10,at:1001,monotonicMs:101,input:{seq:10,x:0,y:0,crouch:false},admission},{type:'input_arrival',room,slot:0,seq:7,at:1001,monotonicMs:101,input:{seq:7,x:0,y:0,fire:true},admission});}
+  if(tick===3)rows.push({type:'input_arrival',room,slot:1,seq:11,at:1002,monotonicMs:102,input:{seq:11,x:0,y:0,crouch:true},admission});
+  const shooterSeq=tick>=shotTick?7:0,targetSeq=tick>=3?11:tick>=2?10:0,inputs=[packed(shooterSeq,tick===shotTick?257:256,tick===shotTick?Math.max(0,shotTick-1):1),packed(targetSeq,tick>=3?264:256)];
+  rows.push({type:'native_input',room,tick,at:1000+tick,monotonicMs:110+tick,inputs,pulseTickets:tick===shotTick?[{slot:0,field:'fire',sourceSeq:7,issuedAt:100,deadlineAt:500,generation:4,life:1}]:[]});
+  if(tick===2)rows.push({type:'input_ack',room,slot:1,seq:10,tick,life:7,neutral:true,generation:4});
+  if(tick===3&&includeCrouchAck)rows.push({type:'input_ack',room,slot:1,seq:11,tick,life:7,neutral:false,generation:4});
+  if(tick===shotTick)rows.push({type:'input_ack',room,slot:0,seq:7,tick,life:1,neutral:false,generation:4});
+  rows.push({type:'native_frame',room,at:1000+tick,state:{tick,players:[{slot:0,last_seq:shooterSeq,life:1,alive:true,stance:0,crouch:false},{slot:1,last_seq:targetSeq,life:7,alive:true,stance:tick>=3?.25:0,crouch:tick>=3}],events:tick===shotTick?[{kind:'shot',actor:0,value:0}]:[]}});
+ }
+ return{rows,action,room};
+}
+test('a new target crouch must be exactly applied before the actual shot; later transitions cannot rescue old residue',async()=>{
+ const {rows,action,room}=causalBoundaryFixture(),options={roomId:room,actions:[action]},valid=analyzeRuntimeRows(rows,options);assert.equal(valid.actionResults[0].boundaryTargetTransition.verified,true);assert.equal(valid.actionResults[0].boundaryTargetTransition.baselineVerified,true);assert.equal(valid.actionResults[0].boundaryTargetTransition.newCrouchVerified,true);
+ assert.equal(analyzeRuntimeRows(rows,{roomId:room,actions:[{...action,fromTick:3}]}).actionResults[0].boundaryTargetTransition.verified,true,'The settled baseline can precede the shot action while remaining bound to its exact Native frame');
+ const legacy=structuredClone(action);legacy.boundaryRequirement.version=1;assert.equal(analyzeRuntimeRows(rows,{roomId:room,actions:[legacy]}).actionResults[0].boundaryTargetTransition.verified,false,'The new causal gate must not reinterpret an older partial-only boundary contract');
+ const early=causalBoundaryFixture({shotTick:2});assert.equal(analyzeRuntimeRows(early.rows,{roomId:early.room,actions:[early.action]}).actionResults[0].boundaryTargetTransition.verified,false,'A later real crouch cannot support an earlier shot/rewind');
+ const noAck=causalBoundaryFixture({includeCrouchAck:false});assert.ok(analyzeRuntimeRows(noAck.rows,{roomId:noAck.room,actions:[noAck.action]}).failures.some(failure=>failure.code==='boundary_native_target_transition_missing'));
+ const otherLife=structuredClone(rows);otherLife.find(row=>row.type==='native_frame'&&row.state.tick===3).state.players[1].life=8;assert.equal(analyzeRuntimeRows(otherLife,options).actionResults[0].boundaryTargetTransition.verified,false);
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'native-stance-projection-'));try{const file=path.join(root,'runtime.jsonl'),rawRows=rows.map(row=>row.type==='native_frame'?{...row,rawLine:JSON.stringify({type:'frame',state:row.state}),state:{...row.state,players:row.state.players.map(player=>({...player,stance:0,crouch:false}))}}:row);await fs.writeFile(file,rawRows.map(row=>JSON.stringify(row)+'\n').join(''));const fromFile=await analyzeRuntimeFile(file,options);assert.equal(fromFile.actionResults[0].boundaryTargetTransition.verified,true,'The actual file wrapper must retain stance from original Native lines, not a conflicting JS projection');}finally{await fs.rm(root,{recursive:true,force:true});}
+});
 test('ACK TTL uses the exact issued-plus-400 construction across8192 and rejects a one-ULP extension',()=>{
  const deadline=boundaryIssued+400;assert.notEqual(deadline-boundaryIssued,400,'Subtraction must expose the actual cancellation boundary');
  const options={roomId:'boundary',requiredInputAcks:[{slot:0,seq:7,tick:2,life:1}]},valid=analyzeRuntimeRows(boundaryAckRows(),options);assert.deepEqual(valid.failures,[]);assert.equal(valid.requiredInputAckProofs[0].verified,true);

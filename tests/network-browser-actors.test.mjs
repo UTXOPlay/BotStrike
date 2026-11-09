@@ -6,6 +6,22 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {ActorTrace,publicSnapshot,publicInputAck,NetworkBrowserActor,NETWORK_GAME_ORIGIN,classifyWebGLRenderer,browserRuntimePaths} from '../tools/network-browser-actors.mjs';
 
+test('latest completed-presentation query refreshes after an older drain without cloning full histories',async()=>{
+ const actor=new NetworkBrowserActor('A',null,null,{setDefaultTimeout(){},on(){}},{closed:false,append(){return true;}},{localRecoveryFence:true});let finishOld,reads=0;
+ actor.drainInFlight=new Promise(resolve=>{finishOld=resolve;});actor.drain=async()=>{reads++;};
+ actor.localFence.read=()=>{throw Error('Full history must not be queried');};actor.localFence.readPresentation=()=>({currentContext:{pageNowMs:30},presentations:[{eventIndex:7}]});
+ const pending=actor.readCurrentPresentation();assert.equal(reads,0);finishOld();const current=await pending;
+ assert.equal(reads,1);assert.deepEqual(current.presentations,[{eventIndex:7}]);
+});
+
+test('closed browser trace receipt retains durable local capture health after departure',async t=>{
+ const directory=mkdtempSync(path.join(tmpdir(),'network-presentation-footer-'));t.after(()=>rmSync(directory,{recursive:true,force:true}));
+ const trace=new ActorTrace(directory,'A'),actor=new NetworkBrowserActor('A',{async close(){}},null,{setDefaultTimeout(){},on(){}},trace,{localRecoveryFence:true});
+ actor.localFence.ingest({schema:'botstrike-local-send-fence-1',presentationReferenceVersion:1,pageEventIndex:0,events:[],dropped:0,unavailableReason:null,currentContext:null});
+ await actor.close({leave:false});const footer=JSON.parse(readFileSync(trace.receiptFile,'utf8'));
+ assert.equal(footer.localFence.presentationReferenceVersion,1);assert.equal(footer.localFence.evidenceAvailable,true);assert.equal(footer.localFence.dropped,0);assert.equal(footer.localFence.wireJoin.available,true);
+});
+
 test('private actor trace is bounded, refuses overwrite and records truncation without dropping old evidence',t=>{
  const directory=mkdtempSync(path.join(tmpdir(),'network-browser-actors-test-'));t.after(()=>rmSync(directory,{recursive:true,force:true}));const trace=new ActorTrace(directory,'A',{maxBytes:4096});const first={kind:'input',data:{input:{seq:1,viewTick:5,yaw:.1}}};assert.equal(trace.append(first),true);for(let i=0;i<100;i++)trace.append({kind:'presentation',data:{index:i,padding:'x'.repeat(100)}});const before=readFileSync(trace.file),receipt=trace.close({humanParticipants:0});assert.ok(receipt.bytes<=4096);assert.ok(receipt.dropped>0);assert.equal(receipt.persistenceError,null);assert.equal(receipt.sha256,createHash('sha256').update(before).digest('hex'));assert.deepEqual(JSON.parse(before.toString().split('\n')[0]),first);assert.equal(statSync(directory).mode&0o777,0o700);assert.equal(statSync(trace.file).mode&0o777,0o600);assert.equal(statSync(trace.receiptFile).mode&0o777,0o600);assert.throws(()=>new ActorTrace(directory,'A'),/EEXIST/);assert.throws(()=>new ActorTrace(directory,'../escape'),/actor ID/);
  const publicDirectory=path.join(directory,'public');mkdirSync(publicDirectory);chmodSync(publicDirectory,0o755);assert.throws(()=>new ActorTrace(publicDirectory,'B'),/private directory/);
