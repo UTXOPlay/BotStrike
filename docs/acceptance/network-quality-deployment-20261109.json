@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-09",
+  "kind": "authorized-current-progress-deployment",
+  "status": "deployed-functional-verified-cache-attribution-limited",
+  "deploymentComplete": true,
+  "acceptanceComplete": false,
+  "publicUrl": "https://store.utxoplay.io/games/botstrike/",
+  "source": {
+    "signedCommit": "d4302155e7c5b8258542601f095f1be38a178d2f",
+    "gitTree": "75a01f250ca35ed1ca0688c7160d299e8e5eeed7",
+    "sourceKind": "git_tree",
+    "signatureVerified": true
+  },
+  "pullRequest": {
+    "number": 47,
+    "url": "https://github.com/UTXOPlay/BotStrike/pull/47",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "headCommit": "d4302155e7c5b8258542601f095f1be38a178d2f",
+    "baseBranch": "codex/botstrike-tactical-core",
+    "verifiedAtUtc": "2026-11-09T05:21:41Z",
+    "verification": "Read-only GitHub PR metadata; deployment did not merge the PR."
+  },
+  "applicationIdentity": {
+    "localConfigId": "sha256:e093e4abbcb5bddee70a14189995ac1c9e8e2b81e03755fcd06b7e42ccd72a5e",
+    "remoteOciManifestId": "sha256:7d32e76055a9aecc2de0a22e14bb41ce71de80577be7d1ed6f54640ddb4c733a",
+    "sameOriginalConfigAnd42OrderedLayersVerified": true,
+    "nativeProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "bindingSha256": "a6fbbbe6835cc63fd0f516ebbedb5cfb161fe2cb80693f42f6f9156591196d8b"
+  },
+  "buildChecks": {
+    "unitPassed": 621,
+    "hostPassed": 24,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0
+  },
+  "actualRemoteImageAudit": {
+    "copiedSourceFilesMatched": 983,
+    "protectedFiles": 105,
+    "retainedEngineVerifierPairs": 10,
+    "nativeRulesChangedRelativeToVerifiedV5Base": false,
+    "nativeRuleComparisonBase": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+    "defaultUser": "node",
+    "passed": true
+  },
+  "productionRulesUpgrade": {
+    "from": "salvage-v1",
+    "to": "tactical-v5",
+    "beforeDefaultPair": {
+      "botstrike-engine": "0279a08f7b9e710d4fc9bc06d20a9d63e7320c66704a5303517e4859dfcc227a",
+      "myelin-botstrike": "6b7d5d8e82f3ddf9eeb95b2a8dd39b74554673d597389772a6861b61f1fd9575"
+    },
+    "afterDefaultPair": {
+      "botstrike-engine": "3921c3f929f7e33a20fca8d72b028dcfae53bf52a57f2c3c860f62c72f491a4b",
+      "myelin-botstrike": "3507a0d633346254d742eb00eab89cee278913938e34d181c117a4c6a943bd74"
+    },
+    "newDefaultProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "nativeUnchangedComparisonScope": "Only relative to verified V5 base sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631; production default rules/profile were upgraded.",
+    "oldSavesReinterpreted": false,
+    "retainedEngineVerifierPairs": 10,
+    "originalExportsMatchedOriginalPair": 69
+  },
+  "existingProductionExports": {
+    "verified": 69,
+    "origin": "Existing production exports, not new synthetic historical fixtures.",
+    "profiles": {
+      "readability-v5": 21,
+      "arsenal-v2": 22,
+      "network-v3": 13,
+      "tactics-v4": 6,
+      "salvage-v1": 7
+    },
+    "originalsUnchanged": true,
+    "dispatch": "Matching exact retained engine/verifier pair; no new-rules reinterpretation."
+  },
+  "rollout": {
+    "targets": [
+      "preview",
+      "production"
+    ],
+    "writerStops": {
+      "preview": {
+        "stopMs": 139.28227871656418,
+        "exitCode": 0,
+        "oomKilled": false
+      },
+      "production": {
+        "stopMs": 136.75493001937866,
+        "exitCode": 0,
+        "oomKilled": false
+      }
+    },
+    "coldBackups": [
+      {
+        "role": "preview",
+        "sha256": "4c86aa12051b01503350ced9f40c1c9a2fede991b2ac22ffeeceab96bcbc0614",
+        "bytes": 15476,
+        "files": 6,
+        "allTarMembersVerified": true,
+        "stoppedSourceUnchanged": true,
+        "matchingPrivateLocalCopyRetained": true
+      },
+      {
+        "role": "production",
+        "sha256": "7b97e76f29be9b3441876eea8dbe233207d8d0e51a91120f35e58996208a90d4",
+        "bytes": 8526837,
+        "files": 993,
+        "allTarMembersVerified": true,
+        "stoppedSourceUnchanged": true,
+        "matchingPrivateLocalCopyRetained": true
+      }
+    ],
+    "oldFilesUnchanged": 999,
+    "oldFilesByTarget": {
+      "production": 993,
+      "preview": 6
+    },
+    "missingOldFiles": 0,
+    "changedOldFiles": 0,
+    "containersBefore": 143,
+    "containersAfter": 143,
+    "expectedTargetsRecreated": 2,
+    "unrelatedContainersUnchanged": 141,
+    "unrelatedChanges": [],
+    "secretsResourcesSecurityDataNetworkPreserved": true,
+    "finalHealth": {
+      "preview": "passed",
+      "production": "passed",
+      "pendingIO": 0,
+      "qualityProvenanceBound": true
+    }
+  },
+  "localWatchdog": {
+    "casesPassed": 2,
+    "exactReplayFrames": 425,
+    "unconfirmedTailFrames": 0,
+    "captureDropped": 0,
+    "humanParticipants": 0,
+    "currentRunAutomaticReruns": 0,
+    "scope": "Local automated main-thread task and synthetic client-visible ACK omission; separate from public Store and WAN."
+  },
+  "publicStore": {
+    "status": "functional-passed-current-static-bytes-matched-historical-304-body-unavailable",
+    "originalFunctionalToolStatus": "passed",
+    "originalFunctionalToolDirectExit": 0,
+    "originalWrapperStatus": "failed",
+    "originalWrapperSupervisorExit": 1,
+    "originalWrapperFailurePreserved": true,
+    "rootReviewAccepted": true,
+    "cleanupComplete": true,
+    "currentHttp200ImmutableBodyMatches": 17,
+    "historicalHttp304BodiesUnavailable": 4,
+    "independentFreshCanonicalGetsMatched": 4,
+    "historical304CachedBodyAttributionAccepted": false,
+    "assetSha256": "d4d48dfead4af71fe3b8ba9faf8a57a908e1f39fd51b0aef8d4179c807034d00",
+    "uniqueCssViewports": [
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ]
+    ],
+    "retainedViewportAndPlayingScreenshots": 11,
+    "totalObservedInputs": 256,
+    "opaqueSandboxAcceptance": false,
+    "scope": "Both control handshakes advertise delivery version2/maxAge400, all256 sent inputs carry delivery; native gameplay effects/last_seq checked through public authoritative state. This tool does not retain public-selected exact original-send/local-epoch ACK proofs or raw remote Native/replay frames. Separate local functional smoke supplies that narrower exact-proof evidence."
+  },
+  "publicWrapperFailure": {
+    "status": "failed",
+    "exitCode": 1,
+    "functionalChildExitCode": 0,
+    "preserved": true,
+    "reason": "The additive observer required a body on HTTP 304 cache revalidations. Original wrapper status was not rewritten.",
+    "historicalExactUrlAndCachedBodyAttribution": "unavailable",
+    "separateCurrentCanonicalAssetChecks": "passed"
+  },
+  "visualReview": {
+    "status": "passed",
+    "automatedEvidence": true,
+    "reviewedScreenshotCount": 5,
+    "desktopDpr": 0.5,
+    "mobileDpr": 1,
+    "physicalDeviceAcceptance": false,
+    "nativeBackedFrameSandboxAttribute": null,
+    "opaqueBrowserGameSandboxAcceptance": false
+  },
+  "rollback": {
+    "compatibleV5LocalConfigId": "sha256:de2b4bfc2ffdcb9607d7594fc825deb5a956478d735fb1fd208c5b45ab0f5631",
+    "compatibleV5RemoteManifestId": "sha256:28cab89c94c34bd69d4bbc86b77f3b31bc3bf9ed20a7e4a64db57ac240ce260d",
+    "compatibleProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "compatibleImageArchiveSha256": "a98272002bcbb3747ecb8bf895ee732eb3febd7bc8f46712a0835ea65f97b371",
+    "compatibleImageArchiveBytes": 204260966,
+    "compatibleImageSourceMeaning": "Operator-recorded historical V5 base; original OCI image has no source revision label.",
+    "incorrectCandidateSourceLabelsRemoved": true,
+    "productionBackoutPerformed": false,
+    "currentDataStrategy": "Compatible V5 base.",
+    "originalProductionStrategy": "Original salvage image/Compose together with the complete pre-upgrade data snapshot; no salvage default against new tactical-v5 data."
+  },
+  "receiptSha256": {
+    "privateDeploymentAggregate": "73064aa2c30d6e5687d909f2e7e2633f8d44bf21a3eb3e1188ec2b4c607cef31",
+    "finalImmutableBuild": "e1889df7819b1fe0124d20b9beb0d16fb04106ea605063320ecd6f2734184681",
+    "imageBinding": "a6fbbbe6835cc63fd0f516ebbedb5cfb161fe2cb80693f42f6f9156591196d8b",
+    "actualRemoteImageAudit": "199970da7af9b97451b7c8b428187c15b106887689d9cdda6105770b0e4f06b1",
+    "localToRemoteIdentityComparison": "7e9f62ed6d59dd479341c3f4a175304fbf9348780e97e73125f9ea5036252b63",
+    "existingProductionExportVerification": "ebefbb06a6bba2b8fe6e447dd103fd6d6b770224bfe30ddc15de61d2cf3e9130",
+    "localWatchdogSummary": "e48b2dcaae373de48acf122430510d7020af62035cdd399bef5e6add53f95329",
+    "publicFunctionalTool": "68f8fffc90bb9a4d0797f350c3f5138625cebff64701407e810033a1accc79fa",
+    "preservedPublicWrapperFailure": "b00b5296d25b0ccadd856afa5dca7d9833d9a19b381dbc64bcae2d8ad8da7f19",
+    "publicAssetAdjudication": "ff11f4ad0189712f5dff5cbd98f732258e89121c9017245de1a9aeba9e07308c",
+    "publicRootReview": "fdf6c50fcd18ee98f666c7d06610519d07aa9e54693969b7739467d5d4dd3bbe",
+    "finalHealth": "593ec5b1e3f755be59615efdaddb871cdcfd9eefcfbe63674158943c3e91cb47",
+    "inventoryComparison": "2ce1b2d7e926424c2d9904a6b71dbdebd481e2127a318cf122ab03c95c38d8e2",
+    "oldDataPreservation": "60ca1521f93abe16eba5a92bdf741df4154100e62b0be172f5057abb03fb0c7c",
+    "coldBackupCopyVerification": "25ede15adc7fdcccc2e391a12241b7a16a0d626e77dbab0080098bb9237a40f1",
+    "rollbackLabelCorrection": "e56b59038de3c3b11c54190f90f88bea688d50fb4fd2f90b2e097a026ccbfa9a"
+  },
+  "issueAcceptanceClaimed": false,
+  "fullNetworkMatrixAcceptanceClaimed": false,
+  "humanWanPhysicalCapacityAcceptanceClaimed": false,
+  "humanParticipants": 0,
+  "limitations": [
+    "Deployment is separate from PR merge, issue completion and the still-incomplete network matrix.",
+    "Production default rules/profile upgraded from salvage-v1 to tactical-v5. Native-byte equality is only relative to the verified V5 build base.",
+    "The original passing public functional tool and the failed additive asset wrapper retain separate statuses. Historical exact-URL HTTP304 cache execution bodies remain unavailable.",
+    "Public input checks do not retain raw remote Native/replay frames or exact selected original-send/local-epoch ACK joins. Separate local watchdog evidence supplies only its stated exact-proof scope.",
+    "Desktop DPR0.5 and mobile emulation do not establish physical-device legibility, performance or latency.",
+    "The Native-backed same-origin frame has no sandbox attribute; opaque browser-game sandbox acceptance is not established.",
+    "The compatible V5 rollback image and both cold backups are retained; a production backout was not executed.",
+    "Myelin provides exact off-chain host replay, not CKB settlement."
+  ]
+}

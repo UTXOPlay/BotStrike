@@ -227,3 +227,66 @@ still runs `myelin-botstrike:hybrid-646ec4c` against its original data and secre
 See `acceptance/remote-tactical-preview/` for image/file binding, isolation,
 validation, browser and transport receipts. No issue closure or production
 acceptance is implied.
+
+## Network-quality progress deployment — 2026-11-09
+
+The maintainer explicitly authorized deployment of all current progress.
+Production and the private Tactical preview now run the complete signed source
+commit `d4302155e7c5b8258542601f095f1be38a178d2f`, built from Git tree
+`75a01f250ca35ed1ca0688c7160d299e8e5eeed7`. Both services passed their final
+health and source-bound quality checks. A read-only GitHub check at
+2026-11-09 05:21:41 UTC confirmed [PR #47](https://github.com/UTXOPlay/BotStrike/pull/47)
+was still open, draft and unmerged; deployment did not merge it.
+
+The local image configuration digest is
+`sha256:e093e4abbcb5bddee70a14189995ac1c9e8e2b81e03755fcd06b7e42ccd72a5e`.
+The remote daemon exposes the original OCI manifest digest
+`sha256:7d32e76055a9aecc2de0a22e14bb41ce71de80577be7d1ed6f54640ddb4c733a`.
+That manifest already exists in the transported archive and references the same
+configuration; all 42 ordered filesystem layer digests match. The final build
+passed 621 unit and 24 host checks with no failures, skips or cancellations.
+Actual remote inspection matched 983 copied source files, 105 protected files
+and all ten exact engine/verifier pairs under the image's ordinary `node` user.
+
+This rollout upgrades the production default from salvage-v1 to tactical-v5,
+profile `c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d`.
+Native bytes are unchanged relative to the verified V5 build base; production's
+previous salvage default is a different pair. All 69 existing production exports
+were verified with their matching retained pairs and stayed byte-identical.
+No old save was reinterpreted with the new default rules.
+
+Both writers were stopped before coherent cold backups. Preview and production
+stopped in 139.3 ms and 136.8 ms respectively, with exit code 0 and no OOM.
+Both backups were checked and retained remotely and as matching private local
+copies. All 999 pre-existing data files remained unchanged: 993 production and
+six preview files. Exactly those two services were recreated; the other 141
+containers stayed unchanged, with 143 containers before and after. Secrets,
+resource/security settings, data mounts and network membership were preserved.
+
+The original public Store functional tool passed with direct Node exit 0,
+covering desktop/mobile launch, all six required CSS viewports, controls,
+rotation, fullscreen re-entry and owned-session cleanup. The separate local
+watchdog checks passed two cases with 425 exact replay frames, no tail and no
+capture drops. These local exact-proof cases do not turn the public control
+checks into a captured remote Native replay. Desktop viewport checks used
+DPR 0.5; mobile used DPR 1. Browser emulation is not physical-device acceptance.
+The observed Native-backed Store frame was same-origin with no sandbox
+attribute; opaque browser-game sandbox acceptance is not claimed.
+
+An additive asset-observation wrapper exited 1 because it incorrectly required
+a response body on HTTP 304 cache revalidations. That original failure remains
+preserved alongside the passing functional tool. Independent review matched
+17 observed HTTP 200 bodies and four separately fetched current canonical
+assets against the immutable image. The four historical 304 executions retain
+an unavailable exact-URL/cached-body attribution. The release status is
+**deployed, functionally verified, with limited historical cache attribution**.
+
+For a code backout against current V5 data, retain the compatible V5 base image,
+remote manifest `sha256:28cab89c94c34bd69d4bbc86b77f3b31bc3bf9ed20a7e4a64db57ac240ce260d`.
+Returning to the original salvage production image requires its complete
+pre-upgrade data snapshot and Compose configuration. A production backout was
+not performed. Deployment does not close the remaining network matrix, issue,
+human A/B, WAN, physical-device, capacity or competitive acceptance gates.
+See the [redacted deployment record](acceptance/network-quality-deployment-20261109.json)
+and [network-quality progress](network-quality-progress.md). Myelin provides
+off-chain host replay, not CKB settlement.

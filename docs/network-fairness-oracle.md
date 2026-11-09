@@ -89,3 +89,52 @@ states failed at tick 3: Native negative zero was captured as positive zero.
 exact tape replay do not turn this missing lossless live-state evidence into
 acceptance. No float tolerance, zero normalization or field omission is allowed;
 new live capture must preserve the original Native bytes to satisfy that gate.
+
+
+## Private selection admission and final lease observations
+
+New opt-in `native_input.viewAdmissionChecks` version 1 records two separate
+service boundaries. `selection` brackets the existing `DeliveryReceipts.admit`
+call **before the asynchronous tape append**. Its `requestedViewTick` is the
+already normalized arrival view, while `admission` retains that actual call's
+receipt tick, original issue/deadline, admitted interval, accepted tick and
+reason. The original browser request, arrival admission, selection admission,
+final packed tuple and Native witness rewind remain separate fields. A changed
+packed view alone does not reconstruct an unrecorded admission or its interval.
+
+`checks` brackets the existing ticket checks after recording (`post_record`,
+rewrite pass 0–10) and during final base ACK-candidate selection
+(`ack_candidate`). Each entry retains only scalar ticket identity, base/pulse
+roles, original generation/life/issue/deadline, result and monotonic brackets.
+The source fire ticket can differ from the final packed base sequence. A base
+and several pulse fields may share one ticket, so repeated checks of that ticket
+are valid observations rather than an ambiguous new admission. Failed checks
+and `neutralizedSlots` remain visible. Neutral controls may have no post-record
+check; the report labels that boundary `not_checked`, and still requires the
+base ACK-candidate check when proving an exact target application.
+
+The bounded observation carries `checksComplete: true`, `checksDropped: 0`, at
+most 10 selection rows and at most 1,220 check rows (11 recording passes × 10
+slots × 11 possible ticket entries, plus 10 ACK candidates). This does not
+expand the recording passes, original 400 ms lease, receipt capacity or Native
+rewind/history bounds. No nonce, account, owner token or extra wire field is
+recorded. It is private runtime evidence and must not be published as client
+diagnostics.
+
+`tools/network-shot-boundary-report.mjs` validates any present observation
+strictly, joins the selected base and original-fire leases, checks interval
+normalization and the final packed view, and preserves the source archive line.
+A partial, malformed, dropped, conflicting or wrong-context observation makes
+that selected proof unavailable. For legacy captures with the field absent,
+the existing atomic-frame/ray result can remain available, while
+`selectionAdmission` and `finalFreshness` explicitly remain unavailable. Old
+captures are never relabelled as having the new evidence.
+
+The report calls the captured decision `selection_before_recording`.
+`atWriteAdmissionRecorded` and `atWriteReadmissionRecordAvailable` stay false:
+there is **no second admission at `stdin.write`**. Final freshness refers to the
+observed existing lease checks and conservative full check brackets before the
+private observer emit. That emit itself precedes `stdin.write`; its callback
+cost and the later physical write instant are not covered by this evidence.
+This observation does not establish physical display timing, network fairness
+acceptance, a new Native rule/profile, or complete issue acceptance.

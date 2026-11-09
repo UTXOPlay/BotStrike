@@ -172,6 +172,15 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
   pending=true;
   try {
    const now=performance.now(),controlled=Array(10).fill(null),tickets=Array.from({length:10},()=>[]),baseTickets=Array(10).fill(null),capturedPulses=Array.from({length:10},()=>[]);instrument('sample','nativeTickOverrunMs',Math.max(0,now-deadline),r);
+   // Private opt-in evidence only. Selection precedes the async tape append;
+   // later checks below validate leases, not a second historical interval.
+   const viewAdmissionChecks=typeof observe==='function'?{version:1,selection:[],checks:[],checksComplete:true,checksDropped:0,neutralizedSlots:[]}:null;
+   function observedLease(slot,ticket,valid,stage,pass,checkedFromMs){
+    if(!viewAdmissionChecks)return;
+    // Eleven passes, ten slots, at most eleven tickets plus ten ACK checks.
+    if(viewAdmissionChecks.checks.length>=1220){viewAdmissionChecks.checksComplete=false;viewAdmissionChecks.checksDropped++;return;}
+    viewAdmissionChecks.checks.push({slot,sourceSeq:ticket.seq??null,requestId:ticket.requestId??null,base:ticket===baseTickets[slot],pulseFields:capturedPulses[slot].filter(value=>value.ticket===ticket).map(value=>value.field),life:ticket.life,generation:ticket.generation,issuedAt:ticket.issuedAt,deadlineAt:ticket.deadlineAt,stage,pass,checkedFromMs,checkedThroughMs:performance.now(),ok:valid.ok,reason:valid.reason??null});
+   }
    const inputs=r.members.map((id,slot)=>{
     const human=!id.startsWith('bot-'),owner=controllers.get(id),connected=human&&peers.get(id)?.size,age=now-r.seen[slot],ticket=r.inputDelivery[slot],lease=ticket?checkTicket(ticket,r,slot):{ok:false,reason:'unknown'},recent=age<400&&lease.ok,active=connected&&age<2000;
     if(ticket&&!lease.ok){rejectDelivery(ticket.ws,id,r,slot,r.inputs[slot].seq,lease.reason,'native_step',needsRecovery({...r.inputs[slot],...r.pulses[slot]}));if(r.inputDelivery[slot]===ticket){r.inputDelivery[slot]=null;clearPulses(r,slot);r.weaponRequests[slot]=null;}}
@@ -184,7 +193,9 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
      if(!valid.ok){rejectDelivery(source?.ticket.ws||owner,id,r,slot,source?.sourceSeq??r.inputs[slot].seq,valid.reason,'native_step',needsRecovery({[field]:value}));if(field==='weapon'&&r.weaponRequests[slot]===value)r.weaponRequests[slot]=null;continue;}
      input[field]=value;tickets[slot].push(source.ticket);capturedPulses[slot].push({field,value,...source});
     }clearPulses(r,slot);
-    if(input.view_tick!==undefined){const admitted=owner.deliveryReceipts.admit({version:DELIVERY_RECEIPT_VERSION,nonce:ticket.nonce},input.view_tick,r.state?.tick||0,ticket.generation);input.view_tick=admitted.acceptedViewTick??(r.state?.tick||0);}
+    if(input.view_tick!==undefined){const currentTick=r.state?.tick||0,requestedViewTick=input.view_tick,checkedFromMs=viewAdmissionChecks?performance.now():null,admitted=owner.deliveryReceipts.admit({version:DELIVERY_RECEIPT_VERSION,nonce:ticket.nonce},requestedViewTick,currentTick,ticket.generation);input.view_tick=admitted.acceptedViewTick??currentTick;
+     if(viewAdmissionChecks)viewAdmissionChecks.selection.push({slot,seq:input.seq,life:ticket.life,generation:ticket.generation,currentTick,requestedViewTick,checkedFromMs,checkedThroughMs:performance.now(),admission:Object.fromEntries(['ok','reason','generation','receiptTick','issuedAt','deadlineAt','oldest','low','high','acceptedViewTick'].filter(key=>Object.hasOwn(admitted,key)).map(key=>[key,admitted[key]]))});
+    }
     if(r.selected[slot]!==undefined)input.hero=r.selected[slot];
     if(r.buy[slot]!==null){const purchaseTicket=r.buyDelivery[slot],valid=checkTicket(purchaseTicket,r,slot);if(valid.ok){bindPurchase(input,r.buy[slot],r.state?.players[slot]?.life,isTactical(r));tickets[slot].push(purchaseTicket);}else if(purchaseTicket)rejectDelivery(purchaseTicket.ws,id,r,slot,undefined,valid.reason,'buy',true,purchaseTicket.requestId);r.buy[slot]=null;r.buyDelivery[slot]=null;}
     return input;
@@ -197,7 +208,7 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
     packed=inputs.map(pack);line=JSON.stringify({inputs:packed})+'\n';if(baseBytes+Buffer.byteLength(line)>194_000_000)throw Error('Match recording exceeded its safety limit');
     await appendRecorded(r,line);if(closed||r.status!=='running')return;
     const stale=[];
-    for(let slot=0;slot<10;slot++)if(!neutralized.has(slot)&&hasTransportControl(inputs[slot]))for(const ticket of tickets[slot]){const valid=checkTicket(ticket,r,slot);if(!valid.ok){stale.push({slot,ticket,reason:valid.reason});break;}}
+    for(let slot=0;slot<10;slot++)if(!neutralized.has(slot)&&hasTransportControl(inputs[slot]))for(const ticket of tickets[slot]){const checkedFromMs=viewAdmissionChecks?performance.now():null,valid=checkTicket(ticket,r,slot);observedLease(slot,ticket,valid,'post_record',pass,checkedFromMs);if(!valid.ok){stale.push({slot,ticket,reason:valid.reason});break;}}
     if(!stale.length)break;
     ftruncateSync(r.fd,baseBytes);instrument('record','inputRecordingRewrites',1,r);
     for(const {slot,ticket,reason}of stale){const old=inputs[slot],purchase=tickets[slot].find(value=>Number.isSafeInteger(value.requestId)),pulse=capturedPulses[slot].find(value=>value.ticket===ticket);inputs[slot]={...neutral(),seq:old.seq||0,yaw:old.yaw||0,pitch:old.pitch||0,...(old.takeover?{takeover:true}:{}),...(old.hero!==undefined?{hero:old.hero}:{})};neutralized.add(slot);rejectDelivery(ticket.ws,ticket.account,r,slot,pulse?.sourceSeq??old.seq,reason,'native_step',needsRecovery(old),purchase?.requestId);discardPulseTicket(r,slot,ticket);if(r.inputDelivery[slot]===ticket){r.inputDelivery[slot]=null;clearPulses(r,slot);r.weaponRequests[slot]=null;}}
@@ -207,10 +218,12 @@ export function createBotStrike({secret=process.env.RUNTIME_TOKEN,data=process.e
    const pulseTickets=capturedPulses.flatMap((values,slot)=>neutralized.has(slot)?[]:values.filter(value=>inputs[slot][value.field]===value.value).map(({field,sourceSeq,ticket})=>({slot,field,sourceSeq,issuedAt:ticket.issuedAt,deadlineAt:ticket.deadlineAt,generation:ticket.generation,life:ticket.life})));
    const tick=(r.state?.tick||0)+1;
    r.pendingInputAck={tick,candidates:packed.flatMap((input,slot)=>{
-    const ticket=baseTickets[slot];if(neutralized.has(slot)||!input||!(input[5]&256)||!ticket||ticket.seq!==input[0]||!checkTicket(ticket,r,slot).ok)return[];
+    const ticket=baseTickets[slot];if(neutralized.has(slot)||!input||!(input[5]&256)||!ticket||ticket.seq!==input[0])return[];
+    const checkedFromMs=viewAdmissionChecks?performance.now():null,valid=checkTicket(ticket,r,slot);observedLease(slot,ticket,valid,'ack_candidate',null,checkedFromMs);if(!valid.ok)return[];
     return[{slot,tick,seq:input[0],life:ticket.life,neutral:ticket.neutral===true&&packedInputIsNeutral(input),freshAtWrite:true,ticket}];
    })};
-   r.bytes=baseBytes+Buffer.byteLength(line);emit('native_input',{room:r.id,tick:(r.state?.tick||0)+1,inputs:packed,purchaseTickets,pulseTickets});
+   if(viewAdmissionChecks)viewAdmissionChecks.neutralizedSlots=[...neutralized];
+   r.bytes=baseBytes+Buffer.byteLength(line);emit('native_input',{room:r.id,tick:(r.state?.tick||0)+1,inputs:packed,purchaseTickets,pulseTickets,...(viewAdmissionChecks?{viewAdmissionChecks}:{})});
    // false means accepted into the stream buffer, not a failed native input.
    pendingAt=performance.now();if(!child.stdin.write(line)){r.backpressured=true;child.stdin.once('drain',()=>{r.backpressured=false;});}
    r.watchdog=setTimeout(()=>{quality.alert('native_stalled');fail(r,'The native engine stopped responding');},10000);

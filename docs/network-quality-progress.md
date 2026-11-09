@@ -582,3 +582,32 @@ supported-condition and Human A/B/WAN/device gates remain open for #12/#26.
 The separate [#30 operations audit](acceptance/operations-reliability-issue30.json)
 establishes its six implementation criteria with delivery still pending; those
 operations criteria do not depend on #12 or human fairness acceptance.
+
+## Deployed checkpoint and private admission observations — 2026-11-09
+
+The maintainer authorized deployment of the cumulative signed `d430215` source.
+Both production and the isolated preview now run its exact Git tree
+`75a01f250ca35ed1ca0688c7160d299e8e5eeed7`. The
+[deployment record](acceptance/network-quality-deployment-20261109.json) keeps
+the passing public functional tool separate from the asset wrapper's preserved
+HTTP 304 body error and the independently matched current static bytes. The
+production default upgraded from salvage-v1 to tactical-v5; all 69 original
+exports were verified with their matching retained pairs and stayed unchanged.
+This deployment does not merge the draft stack or close #12/#26/#30.
+
+The next source candidate adds `native_input.viewAdmissionChecks` only to the
+private opt-in observer. It records the existing selection-time `admit()` result
+and the existing post-record and base ACK-candidate lease checks. It performs no
+extra admission, renews no lease and changes no Native input/tape field. The
+selection request is already normalized by arrival admission; it is not the
+original browser request. Selection precedes the asynchronous recording append.
+Final checks are freshness/context checks, not another view-interval decision,
+and the observer still runs before `stdin.write`; physical write-time freshness
+is not established by the metadata.
+
+Selection rows are bounded by ten slots; check rows have an explicit 1,220-row
+cap and overflow flag. No nonce, account, control token or object reference is
+copied. Old captures retain their original availability and cannot gain these
+observations retrospectively. The original #30 source-lineage audit describes
+the earlier checkpoint; this candidate changes `server.mjs` and needs its own
+regression and source/image binding. It has not yet been packaged or deployed.

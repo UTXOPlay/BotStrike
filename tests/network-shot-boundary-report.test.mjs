@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {createHash} from 'node:crypto';
 import {validateAtomicShotPresentation} from '../tools/network-shot-boundary-proof.mjs';
-import {createShotBoundaryReport,joinShotBoundaryEvidence,joinTargetStanceApplications,SHOT_REPORT_NATIVE_BINDING} from '../tools/network-shot-boundary-report.mjs';
+import {createShotBoundaryReport,joinShotBoundaryEvidence,joinTargetStanceApplications,joinNativeViewAdmissionChecks,SHOT_REPORT_NATIVE_BINDING} from '../tools/network-shot-boundary-report.mjs';
 import {archiveClosedCase} from '../tools/network-trace-archive.mjs';
 import {matrixEvidenceManifest,matrixCaseSummary} from '../tools/network-matrix-artifacts.mjs';
 const sha=value=>createHash('sha256').update(value).digest('hex');
@@ -54,6 +54,19 @@ function fixture(){
  const oracle={tick:21,controls:[{slot:0,seq:8,tapeViewTick:17,fire:true,takeover:true}],events:[shot,damage],authoritativePoses:[shooter,{...target,stance:.9}],witness};
  return{action,nativeShots:[{inputEvent:nativeInput,frameEvent:nativeFrame,state}],admissions:[wrap(sourceAdmission),wrap(packedAdmission)],cdpInputs:[wrap(cdp)],localInputs:[wrap(input)],presentations:[wrap(presentation)],sourceStatus:status,oracleRows:[wrap(oracle)],confirmedRuntimeTicks:21,roomId:'room',requirement,targetEvidence:targetCausal.evidence};
 }
+function attachViewChecks(native,{slot=0,admission,life=1,sourceAdmission,sourceSeq,neutral=false}={}){
+ admission.receiptTick??=admission.acceptedViewTick;
+ const end=native.monotonicMs,currentTick=native.tick-1,requestedViewTick=admission.acceptedViewTick;
+ const lease=(source,seq,base,pulseFields,stage,from)=>({slot,sourceSeq:seq,requestId:null,base,pulseFields,life,generation:source.generation,issuedAt:source.issuedAt,deadlineAt:source.deadlineAt,stage,pass:stage==='post_record'?0:null,checkedFromMs:end+from,checkedThroughMs:end+from+.05,ok:true,reason:null});
+ const selection={slot,seq:native.inputs[slot][0],life,generation:admission.generation,currentTick,requestedViewTick,checkedFromMs:end-.8,checkedThroughMs:end-.75,admission:{ok:true,reason:'received_interval',generation:admission.generation,receiptTick:admission.receiptTick,issuedAt:admission.issuedAt,deadlineAt:admission.deadlineAt,oldest:Math.max(0,currentTick-12),low:requestedViewTick,high:requestedViewTick,acceptedViewTick:requestedViewTick}};
+ const checks=neutral?[]:[lease(admission,native.inputs[slot][0],true,[],'post_record',-.6)];
+ if(sourceSeq!==undefined)checks.push(lease(sourceAdmission,sourceSeq,false,['fire'],'post_record',-.4));
+ checks.push(lease(admission,native.inputs[slot][0],true,[],'ack_candidate',-.2));
+ native.viewAdmissionChecks={version:1,selection:[selection],checks,neutralizedSlots:[],checksComplete:true,checksDropped:0};return native.viewAdmissionChecks;
+}
+function withViewChecks(f=fixture()){
+ attachViewChecks(f.nativeShots[0].inputEvent,{admission:f.admissions[1].data.admission,sourceAdmission:f.admissions[0].data.admission,sourceSeq:7});return f;
+}
 const atomic=f=>validateAtomicShotPresentation({input:f.localInputs[0].data,presentations:f.presentations.map(value=>value.data),requirement:f.action.boundaryRequirement??null,sourceStatus:f.sourceStatus});
 
 test('exact original source, final packed sequence and requested/admitted views remain separate',()=>{
@@ -65,11 +78,37 @@ test('production eight-field shooter pose is valid while full target pose fields
  const f=fixture();assert.deepEqual(Object.keys(f.oracleRows[0].data.witness.preShot.pose).sort(),['alive','life','look','position','slot','stance','team','velocity']);assert.equal(joinShotBoundaryEvidence(f).available,true);
  delete f.oracleRows[0].data.witness.ray.candidates[0].currentPose.health;assert.equal(joinShotBoundaryEvidence(f).reason,'oracle_current_or_historical_pose_unavailable');
 });
-test('arrival normalization and later Native-write re-admission preserve distinct view decisions',()=>{
+test('legacy arrival normalization and final packed views remain separate without a captured selection decision',()=>{
  const f=fixture();f.admissions[0].data.admission.acceptedViewTick=17;f.admissions[0].data.input.view_tick=17;f.admissions[1].data.admission.acceptedViewTick=18;f.admissions[1].data.input.view_tick=18;f.nativeShots[0].inputEvent.inputs[0][10]=19;f.oracleRows[0].data.controls[0].tapeViewTick=19;f.oracleRows[0].data.witness.tapeViewTick=19;f.oracleRows[0].data.witness.rewindTick=19;
  const result=joinShotBoundaryEvidence(f);assert.equal(result.available,true);assert.equal(result.originalFire.admission.requested,16);assert.equal(result.originalFire.admission.acceptedViewTick,17);assert.equal(result.native.packedAdmission.acceptedViewTick,18);assert.equal(result.native.packedViewTick,19);assert.equal(result.oracle.witness.rewindTick,19);assert.equal(result.native.arrivalToWriteViewChanged,true);assert.equal(result.native.atWriteReadmissionRecordAvailable,false);
  f.admissions[0].data.input.view_tick=16;assert.equal(joinShotBoundaryEvidence(f).reason,'original_fire_admission_payload_mismatch');
 });
+test('legacy exact shots explicitly lack optional selection and final-freshness records',()=>{
+ const result=joinShotBoundaryEvidence(fixture());assert.equal(result.available,true);assert.equal(result.native.selectionAdmissionRecorded,false);assert.deepEqual(result.native.selectionAdmission,{available:false,reason:'not_captured'});assert.deepEqual(result.native.finalFreshness,{available:false,reason:'not_captured'});assert.equal(result.native.atWriteReadmissionRecordAvailable,false);
+});
+test('recorded selection is before recording and final ticket checks are not a second view admission',()=>{
+ const f=withViewChecks(),result=joinShotBoundaryEvidence(f);assert.equal(result.available,true);assert.equal(result.native.selectionAdmissionRecorded,true);assert.equal(result.native.selectionAdmission.stage,'selection_before_recording');assert.equal(result.native.selectionAdmission.record.requestedViewTick,17);assert.equal(result.originalFire.admission.requested,16);assert.equal(result.native.finalFreshness.baseAckCandidate.sourceSeq,8);assert.equal(result.native.finalFreshness.originalFirePostRecord[0].sourceSeq,7);assert.equal(result.native.finalFreshness.physicalStdinWriteFreshnessEstablished,false);assert.equal(result.native.atWriteAdmissionRecorded,false);assert.equal(result.native.atWriteReadmissionRecordAvailable,false);
+ const changed=withViewChecks(),native=changed.nativeShots[0].inputEvent,a=native.viewAdmissionChecks.selection[0].admission;changed.admissions[1].data.admission.receiptTick=19;a.receiptTick=19;a.low=19;a.high=20;a.reason='before_received_history';a.acceptedViewTick=19;native.inputs[0][10]=19;changed.oracleRows[0].data.controls[0].tapeViewTick=19;changed.oracleRows[0].data.witness.tapeViewTick=19;changed.oracleRows[0].data.witness.rewindTick=19;const adjusted=joinShotBoundaryEvidence(changed);assert.equal(adjusted.available,true);assert.equal(adjusted.native.packedAdmission.acceptedViewTick,17);assert.equal(adjusted.native.selectionAdmission.record.admission.acceptedViewTick,19);assert.equal(adjusted.native.packedViewTick,19);
+});
+test('present incomplete, unsupported, overbound or unknown-field records fail closed instead of legacy fallback',()=>{
+ for(const change of [r=>{r.version=2;},r=>{r.checksComplete=false;},r=>{r.checksDropped=1;},r=>{delete r.checks;},r=>{r.secret='not allowed';},r=>{r.selection[0].admission.nonce='not allowed';},r=>{r.checks=Array.from({length:1221},()=>r.checks[0]);},r=>{r.selection.push(structuredClone(r.selection[0]));}]){const f=withViewChecks();change(f.nativeShots[0].inputEvent.viewAdmissionChecks);assert.equal(joinShotBoundaryEvidence(f).available,false);}
+ for(const value of [null,undefined,[]]){const f=fixture();f.nativeShots[0].inputEvent.viewAdmissionChecks=value;assert.equal(joinShotBoundaryEvidence(f).reason,'native_view_checks_schema_or_capture_incomplete');}
+});
+test('selection binds the packed arrival-normalized request, receipt, interval, context and actual tuple',()=>{
+ for(const change of [r=>{r.selection[0].requestedViewTick=16;},r=>{r.selection[0].seq=7;},r=>{r.selection[0].life=2;},r=>{r.selection[0].generation=4;},r=>{r.selection[0].currentTick=19;},r=>{r.selection[0].checkedFromMs=11;},r=>{r.selection[0].admission.receiptTick=18;},r=>{r.selection[0].admission.oldest=7;},r=>{r.selection[0].admission.reason='after_received_history';},r=>{r.selection[0].admission.acceptedViewTick=18;},r=>{r.selection[0].admission.deadlineAt++;}]){const f=withViewChecks();change(f.nativeShots[0].inputEvent.viewAdmissionChecks);assert.equal(joinShotBoundaryEvidence(f).available,false);}
+});
+test('final checks bind both source-fire and packed-base original leases, never renewed or neutralized',()=>{
+ for(const change of [r=>{r.checks[0].sourceSeq=7;},r=>{r.checks[0].requestId=0;},r=>{r.checks[1].sourceSeq=8;},r=>{r.checks[1].pulseFields=[];},r=>{r.checks[1].life=2;},r=>{r.checks[1].generation=4;},r=>{r.checks[1].issuedAt++;r.checks[1].deadlineAt++;},r=>{r.checks.pop();},r=>{r.checks[2].base=false;},r=>{r.checks[0].checkedThroughMs=21;},r=>{r.checks[2].ok=false;r.checks[2].reason='old_owner';},r=>{r.neutralizedSlots=[0];}]){const f=withViewChecks();change(f.nativeShots[0].inputEvent.viewAdmissionChecks);assert.equal(joinShotBoundaryEvidence(f).available,false);}
+});
+test('checks retain real repeated ticket calls but ambiguous ACK candidates and late brackets fail closed',()=>{
+ const f=withViewChecks(),r=f.nativeShots[0].inputEvent.viewAdmissionChecks,duplicate=structuredClone(r.checks[0]);duplicate.checkedFromMs=19.7;duplicate.checkedThroughMs=19.75;r.checks.splice(2,0,duplicate);assert.equal(joinShotBoundaryEvidence(f).available,true,'base and pulse can share one ticket and cause repeated checks');
+ const ambiguous=withViewChecks(),checks=ambiguous.nativeShots[0].inputEvent.viewAdmissionChecks.checks;checks.push({...structuredClone(checks.at(-1)),checkedFromMs:19.9,checkedThroughMs:19.95});assert.equal(joinShotBoundaryEvidence(ambiguous).available,false);
+ const late=withViewChecks(),native=late.nativeShots[0].inputEvent;native.monotonicMs=500;native.viewAdmissionChecks.checks.at(-1).checkedFromMs=410.9;native.viewAdmissionChecks.checks.at(-1).checkedThroughMs=411;assert.equal(joinNativeViewAdmissionChecks({native,slot:0,packed:native.inputs[0],baseAdmission:late.admissions[1].data.admission,sourceAdmission:late.admissions[0].data.admission,sourceSeq:7,life:1}).reason,'native_view_checks_final_base_freshness_missing_or_mismatched');
+});
+test('neutral target records explicitly say post-record not_checked while exact ACK-candidate checks remain mandatory',()=>{
+ const f=fixture(),native=f.targetEvidence.nativeInputs[0].data,admission=f.targetEvidence.admissions[0].data.admission;attachViewChecks(native,{slot:5,admission,life:2,neutral:true});const result=joinNativeViewAdmissionChecks({native,slot:5,packed:native.inputs[5],baseAdmission:admission,life:2,requirePostRecord:false});assert.equal(result.available,true);assert.equal(result.finalFreshness.postRecord.status,'not_checked');assert.equal(result.finalFreshness.baseAckCandidate.stage,'ack_candidate');native.viewAdmissionChecks.checks=[];assert.equal(joinNativeViewAdmissionChecks({native,slot:5,packed:native.inputs[5],baseAdmission:admission,life:2,requirePostRecord:false}).available,false);
+});
+
 test('an absent atomic ref stays unavailable despite plausible earlier frame timestamps',()=>{
  const f=fixture();delete f.localInputs[0].data.lastCompletedPresentationRef;assert.equal(atomic(f).reason,'atomic_presentation_reference_missing');assert.equal(joinShotBoundaryEvidence(f).available,false);
 });
@@ -118,9 +157,9 @@ test('a rendered transition cannot cover a settled native historical target, and
  const hidden=fixture();hidden.presentations[0].data.frame.players.pop();const result=joinShotBoundaryEvidence(hidden);assert.equal(result.available,true);assert.deepEqual(result.presentation.completedAuthorizedFrame.frame.players.map(value=>value.slot),[0]);
 });
 
-async function integrationFixture(t,{atomicRef=true,linePadding=false,causal=false}={}){
+async function integrationFixture(t,{atomicRef=true,linePadding=false,causal=false,viewChecks=false}={}){
  const base=await fs.mkdtemp(path.join(os.tmpdir(),'shot-boundary-test-'));await fs.chmod(base,0o700);t.after(()=>fs.rm(base,{recursive:true,force:true}));const run=path.join(base,'run'),root=path.join(run,'botstrike-network-lab-Test123');await fs.mkdir(root,{recursive:true,mode:0o700});const write=async(name,value,{json=true}={})=>{await fs.mkdir(path.dirname(path.join(root,name)),{recursive:true,mode:0o700});const body=json?JSON.stringify(value,null,2)+'\n':value;await fs.writeFile(path.join(root,name),body,{mode:0o600});return sha(body);};
- const f=fixture(),roomId='1'.repeat(24);f.roomId=roomId;f.action.toTick=21;if(causal)f.action.boundaryRequirement=f.requirement;const replaceRoom=value=>{if(!value||typeof value!=='object')return;for(const key of Object.keys(value)){if(key==='room'&&value[key]==='room')value[key]=roomId;else replaceRoom(value[key]);}};replaceRoom(f);if(!atomicRef)delete f.localInputs[0].data.lastCompletedPresentationRef;
+ const f=viewChecks?withViewChecks():fixture(),roomId='1'.repeat(24);f.roomId=roomId;f.action.toTick=21;if(causal)f.action.boundaryRequirement=f.requirement;if(viewChecks&&causal)for(const row of f.targetEvidence.nativeInputs){const admission=f.targetEvidence.admissions.find(value=>value.data.seq===row.data.inputs[5][0]).data.admission;attachViewChecks(row.data,{slot:5,admission,life:2,neutral:!(row.data.inputs[5][5]&8)});row.data.inputs[0]=[77,0,0,0,0,256,null,null,0,0,0];const ownAck=row.data.viewAdmissionChecks.checks.at(-1);row.data.viewAdmissionChecks.checks.push({...structuredClone(ownAck),slot:0,sourceSeq:77,checkedFromMs:row.data.monotonicMs-.1,checkedThroughMs:row.data.monotonicMs-.05});}const replaceRoom=value=>{if(!value||typeof value!=='object')return;for(const key of Object.keys(value)){if(key==='room'&&value[key]==='room')value[key]=roomId;else replaceRoom(value[key]);}};replaceRoom(f);if(!atomicRef)delete f.localInputs[0].data.lastCompletedPresentationRef;
  const runId='11111111-1111-1111-1111-111111111111';await write('.network-lab-owner',runId,{json:false});await write('evidence/cleanup.json',{runId,failures:[]});
  const runtime=[];if(linePadding)runtime.push({type:'diagnostic',padding:'x'.repeat(1024*1024)});for(let tick=1;tick<=21;tick++){
   if(tick===21)runtime.push(...f.admissions.map(value=>value.data));const targetNative=causal?f.targetEvidence.nativeInputs.find(value=>value.data.tick===tick)?.data:null;if(targetNative)runtime.push(f.targetEvidence.admissions.find(value=>value.data.seq===targetNative.inputs[5][0]).data);const input=tick===21?f.nativeShots[0].inputEvent:targetNative??{type:'native_input',room:roomId,tick,monotonicMs:tick,inputs:[[0,0,0,0,0,256,null,null,0,0,0]],pulseTickets:[]};const targetFrame=causal?f.targetEvidence.nativeFrames.find(value=>value.state.tick===tick)?.state:null;const state=tick===21?f.nativeShots[0].state:targetFrame?{...targetFrame,events:[]}:{tick,players:[{slot:0,life:1,last_seq:0}],events:[]};runtime.push(input,{type:'native_frame',room:roomId,rawLine:JSON.stringify({type:'frame',state})});if(targetNative)runtime.push(f.targetEvidence.privateAcks.find(value=>value.data.tick===tick).data);
@@ -140,6 +179,9 @@ test('synthetic closed-archive file integration validates before joining and wri
 });
 test('closed-archive causal integration reads both target applications outside the shot action interval',async t=>{
  const f=await integrationFixture(t,{causal:true}),result=await createShotBoundaryReport({matrixFile:f.matrixFile,caseId:'synthetic',outputDirectory:f.out});assert.equal(result.exitCode,0);const report=JSON.parse(await fs.readFile(result.reportFile,'utf8')),proof=report.shots[0].targetApplications;assert.equal(proof.baseline.application.tick,14);assert.equal(proof.crouch.application.tick,15);assert.equal(proof.minimumNativeTick,15);assert.equal(report.shots[0].action.fromTick,20);assert.equal(proof.baseline.publicAck.tick,14);assert.equal(proof.crouch.native.stance,.2);
+});
+test('closed-archive new optional observations survive file joins for shot and causal target applications',async t=>{
+ const f=await integrationFixture(t,{causal:true,viewChecks:true}),result=await createShotBoundaryReport({matrixFile:f.matrixFile,caseId:'synthetic',outputDirectory:f.out});assert.equal(result.exitCode,0);const report=JSON.parse(await fs.readFile(result.reportFile,'utf8')),shot=report.shots[0];assert.equal(shot.native.selectionAdmissionRecorded,true);assert.equal(shot.native.selectionAdmission.source.line>0,true);assert.equal(shot.targetApplications.baseline.native.selectionAdmissionRecorded,true);assert.equal(shot.targetApplications.baseline.native.finalFreshness.postRecord.status,'not_checked');assert.equal(shot.targetApplications.crouch.native.finalFreshness.postRecord.status,'checked');assert.equal(shot.native.atWriteReadmissionRecordAvailable,false);
 });
 test('a valid old closed capture without an atomic ref produces unavailable2, never a timestamp retrofit',async t=>{
  const f=await integrationFixture(t,{atomicRef:false}),result=await createShotBoundaryReport({matrixFile:f.matrixFile,caseId:'synthetic',outputDirectory:f.out});assert.equal(result.exitCode,2);assert.equal(result.unavailableShots,1);const report=JSON.parse(await fs.readFile(result.reportFile,'utf8'));assert.equal(report.shots[0].reason,'atomic_presentation_reference_missing');
