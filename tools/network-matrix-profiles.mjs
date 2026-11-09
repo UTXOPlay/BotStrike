@@ -26,6 +26,7 @@ export function networkMatrixCases({seed=20261108}={}){
  add('arsenal-life-multiple',{kind:'arsenal',scenario:'arc-ion-rail-death-new-life-multiple',availability:'must_execute_under_profile'});
  add('tactical-recovery-no-ai',{kind:'tactical',roles:['T0','T1'],scenario:'ten-node-tactical-outage-claim-life-buy-leave-capacity',availability:'fault_then_bounded_recovery',mandatory:true});
  add('stance-boundary-low-high',{kind:'stance-boundary',scenario:'target-stance-transition-original-render-native-ray-role-swap',highLatencyActor:'B',requestedRttMs:{A:0,B:180},profiles:{A:profile(),B:profile({delayMs:90,seed:seed+180},{delayMs:90,seed:seed+181}),C:profile()}});
+ const peekSeed=seed+cases.length*4;add('peek-boundary-low-high',{kind:'peek-boundary',scenario:'target-cover-peek-original-render-native-ray-role-swap',highLatencyActor:'B',requestedRttMs:{A:0,B:180},profiles:{A:profile({seed:peekSeed},{seed:peekSeed+1}),B:profile({delayMs:90,seed:peekSeed+2},{delayMs:90,seed:peekSeed+3}),C:profile()}});
  assert.equal(new Set(cases.map(c=>c.id)).size,cases.length);return cases.map(row=>Object.freeze(row));
 }
 export function selectMatrixCases(catalog,ids){

@@ -178,3 +178,18 @@ test('a new room with the same map and life cannot inherit the old steering plan
  await assert.rejects(moveBrowser(actor,[[100,240]]),/pose or swept path is unavailable or unsafe/);
  assert.equal(actor.commands.filter(row=>row.direction==='down'&&['KeyW','KeyA','KeyS','KeyD'].includes(row.code)).length,1);assert.deepEqual([...actor.heldKeys],[]);
 });
+
+
+test('optional actuation guard blocks the next keydown after abort during a pending first modifier',async()=>{
+ const actor=navigationActor([]),key=actor.key;let abort=false,started,release;
+ const first=new Promise(resolve=>started=resolve),pending=new Promise(resolve=>release=resolve);
+ actor.key=async function(code,direction){await key.call(this,code,direction);if(code==='ShiftLeft'&&direction==='down'){started();await pending;}};
+ const task=moveBrowser(actor,[[5,0]],{actuationGuard(){if(abort)throw Error('Owned movement aborted');}});task.catch(()=>{});await first;abort=true;release();await assert.rejects(task,/Owned movement aborted/);
+ assert.deepEqual(actor.commands.filter(x=>x.direction==='down').map(x=>x.code),['ShiftLeft']);assert.ok(actor.commands.some(x=>x.code==='ShiftLeft'&&x.direction==='up'));assert.deepEqual([...actor.heldKeys],[]);
+});
+test('optional pinned-context guard allows cleanup but prevents later keys after life changes mid-operation',async()=>{
+ const actor=navigationActor([]),key=actor.key;let life=1;
+ actor.key=async function(code,direction){await key.call(this,code,direction);if(code==='ShiftLeft'&&direction==='down'){await Promise.resolve();life=2;}};
+ await assert.rejects(moveBrowser(actor,[[5,0]],{actuationGuard(){assert.equal(life,1,'Pinned target life changed');}}),/Pinned target life changed/);
+ assert.deepEqual(actor.commands.filter(x=>x.direction==='down').map(x=>x.code),['ShiftLeft']);assert.ok(actor.commands.some(x=>x.code==='ShiftLeft'&&x.direction==='up'));assert.deepEqual([...actor.heldKeys],[]);
+});

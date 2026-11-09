@@ -90,3 +90,52 @@ Pure direction/visible-aim helpers are covered by
 `node --test tests/network-fairness-scenarios.test.mjs`; those geometry checks
 are not Native or network evidence. A complete baseline receipt is required
 before adding symmetric/asymmetric impairment trials.
+
+## Appended moving-peek cohort
+
+`peek-boundary-low-high` appends a 33rd matrix definition. The original 32
+definitions and common combat core retain their identities. A has no configured
+added delay; B has 90 ms in each direction. These settings are not measured
+browser latency or a supported competitive envelope. This is a host-only
+candidate: its application image and its later scenario/proof source revision
+must be recorded separately, with no development source mount.
+
+After the common core, each shooter role gets one covered ARC shot and one
+moving-peek ARC shot. A shoots from `[-100,600]` while B moves from `[120,240]`
+to `[-100,240]`; the reverse role uses B at `[-100,240]` and A moving from
+`[120,600]` to `[-100,600]`. Cover 2 is the existing map box, not new geometry.
+Only normal keyboard/mouse input moves or aims either actor.
+
+The covered baseline requires a new exact same-life neutral application and
+an authorized completed shooter frame with the target optically absent. The
+move needs a new exact applied input and its original page/wire context.
+Negative world X is checked from movement intent plus public Native velocity;
+it is not confused with a local strafe axis. The driver consumes new completed
+presentation rows in order, keeps the literal first optical appearance, and
+selects only the latest adjacent visible leftward position pair. Remote
+presentation velocity is not part of the capture contract. Missing the single
+250 ms first-appearance window fails qualification; that number is a driver
+selection bound, not a latency SLO. The original fire still needs its own
+completed-frame reference no older than 100 ms.
+
+Offline validation must join the baseline/move applications, original fire,
+pre-recording view selection, final lease checks, accepted rewind, cover and
+Native ray/RNG/damage. The historical target must be grounded, standing and
+moving in the required direction. Its current pose may already have stopped
+under asymmetric delay; the two poses stay distinct. The covered shot must
+independently select cover 2. A missing or failed boundary shot cannot be
+replaced by a settled visible shot or an earlier aim marker.
+
+Every newly added route is owned until its promise settles. Its optional
+actuation guard pins the cached public room/slot/life and connection epochs,
+checks immediately before keydown and after awaited key operations, and stops
+new actuation after cancellation or a known context change. Cleanup may release
+keys and is awaited before closing actors. The existing common-core routes keep
+their default policy. The 2-unit waypoint tolerance, 5-second progress limit,
+30-second waypoint limit, 60 ms navigation pulse cap, 300-second case limit and
+capture budgets are unchanged.
+
+Pure fixtures establish these controller/proof contracts only. Actual immutable
+application, kernel shaping, browser/Native capture, replay and cleanup evidence
+are separate required results. A selected passing case does not complete the
+33-case catalog, Human A/B, physical-device or WAN acceptance.

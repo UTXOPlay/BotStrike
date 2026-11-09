@@ -126,3 +126,29 @@ test('private ACK requires an existing immediately previous player in the same l
  const crossLife=structuredClone(valid);crossLife[1].state.players[0].life=2;
  for(const rows of [crossLife,valid.filter((_,index)=>index!==1)]){const result=analyzeRuntimeRows(rows,{roomId:'boundary',requiredInputAcks:[{slot:0,seq:7,tick:2,life:1}]});assert.ok(result.failures.some(row=>row.code==='invalid_authoritative_input_ack'));assert.equal(result.inputAckCount,0);assert.equal(result.requiredInputAckProofs[0].verified,false);}
 });
+
+
+function nativePeekFixture({forwardWest=false}={}){
+ const room='native-peek',ref=(seq,tick)=>({slot:5,seq,tick,life:7,socketGeneration:1,ownerGeneration:1,proofGeneration:1,roomGeneration:1});
+ const requirement={kind:'target-peek-transition',version:1,targetSlot:5,targetLife:7,targetBaselineApplication:ref(10,2),targetMoveApplication:ref(11,4),minimumNativeTick:4,coverShotLabel:'peek-cover-a',geometry:{coveredGoal:[120,240],peekGoal:[-100,240]}};
+ const covered={kind:'shot',actor:'A',slot:0,label:'peek-cover-a',weapon:0,expectedShots:1,seq:7,ackSeq:7,life:1,fromTick:3,toTick:3},action={kind:'shot',actor:'A',slot:0,label:'peek-boundary-a',weapon:0,expectedShots:1,seq:10,ackSeq:10,life:1,fromTick:6,toTick:6,boundaryRequirement:requirement},rows=[{type:'room_started',room,config:{bots:Array(10).fill(false)}}];
+ for(let tick=1;tick<=6;tick++){
+  const inputs=Array.from({length:10},()=>[0,0,0,0,0,256,null,null,0,0,0]),targetSeq=tick>=4?11:tick>=2?10:0,shooterSeq=tick>=6?10:tick>=3?7:0,moving=tick>=4;
+  inputs[0]=[shooterSeq,0,0,0,0,256+([3,6].includes(tick)?1:0),null,null,0,0,tick===6?5:Math.max(0,tick-1)];inputs[5]=[targetSeq,moving&&!forwardWest?-1:0,moving&&forwardWest?1:0,moving&&forwardWest?Math.PI/2:0,0,256,null,null,0,0,Math.max(0,tick-1)];
+  const newInputs=[];if(tick===2||tick===4)newInputs.push({slot:5,seq:targetSeq,fire:false,crouch:false,x:inputs[5][1],y:inputs[5][2],yaw:inputs[5][3],pitch:0});if(tick===3||tick===6)newInputs.push({slot:0,seq:shooterSeq,fire:true,crouch:false,x:0,y:0,yaw:0,pitch:0});
+  for(const value of newInputs)rows.push({type:'input_arrival',room,slot:value.slot,seq:value.seq,accepted:true,at:1000+tick,monotonicMs:100+tick,input:value,admission:{generation:3,issuedAt:100,deadlineAt:500,requested:Math.max(0,tick-1),acceptedViewTick:Math.max(0,tick-1)}});
+  rows.push({type:'native_input',room,tick,at:1000+tick,monotonicMs:200+tick,inputs,pulseTickets:[3,6].includes(tick)?[{slot:0,field:'fire',sourceSeq:shooterSeq,issuedAt:100,deadlineAt:500,generation:3,life:1}]:[]});
+  const players=Array.from({length:6},(_,slot)=>({slot,last_seq:slot===0?shooterSeq:slot===5?targetSeq:0,life:slot===5?7:1,alive:true,crouch:false,stance:0,position:slot===5?[tick>=4?123-tick:120,0,240]:[-100,0,600],velocity:slot===5&&tick>=4&&tick<6?[-60,0,0]:[0,0,0]}));
+  rows.push({type:'native_frame',room,at:1000+tick,state:{tick,players,events:[3,6].includes(tick)?[{kind:'shot',actor:0,value:0}]:[]}});
+  for(const value of newInputs)rows.push({type:'input_ack',room,slot:value.slot,seq:value.seq,tick,life:value.slot===5?7:1,neutral:value.slot===5&&tick===2,generation:3});
+ }
+ return{rows,room,covered,action};
+}
+
+test('Native peek checkpoint requires fresh target movement after a covered shot and permits stopped current pose',async()=>{
+ const f=nativePeekFixture(),options={roomId:f.room,actions:[f.covered,f.action]},result=analyzeRuntimeRows(f.rows,options),proof=result.actionResults[1].boundaryTargetTransition;
+ assert.equal(proof.verified,true);assert.equal(proof.baselineVerified,true);assert.equal(proof.newMoveVerified,true);assert.equal(proof.coveredShotNativeEventBeforeMoveVerified,true);assert.equal(proof.historicalMoving,true);assert.equal(proof.currentMoving,false);assert.equal(proof.currentMotionRequired,false);
+ const forward=nativePeekFixture({forwardWest:true});assert.equal(analyzeRuntimeRows(forward.rows,{roomId:forward.room,actions:[forward.covered,forward.action]}).actionResults[1].boundaryTargetTransition.verified,true);
+ for(const change of [g=>{g.rows.find(row=>row.type==='native_frame'&&row.state.tick===5).state.players[5].velocity[0]=0;},g=>{g.action.boundaryRequirement.targetMoveApplication.tick=6;},g=>{g.rows.find(row=>row.type==='native_input'&&row.tick===4).inputs[5][1]=1;},g=>{g.rows.find(row=>row.type==='native_frame'&&row.state.tick===5).state.players[5].life=8;},g=>{g.covered.label='unrelated-cover';}]){const bad=nativePeekFixture();change(bad);assert.equal(analyzeRuntimeRows(bad.rows,{roomId:bad.room,actions:[bad.covered,bad.action]}).actionResults[1].boundaryTargetTransition.verified,false);}
+ const directory=await fs.mkdtemp(path.join(os.tmpdir(),'native-peek-projection-'));try{const file=path.join(directory,'runtime.jsonl');await fs.writeFile(file,f.rows.map(row=>JSON.stringify(row.type==='native_frame'?{...row,rawLine:JSON.stringify({type:'frame',state:row.state}),state:{...row.state,players:row.state.players.map(p=>({...p,position:[999,99,999],velocity:[999,0,0]}))}}:row)).join('\n')+'\n');assert.equal((await analyzeRuntimeFile(file,options)).actionResults[1].boundaryTargetTransition.verified,true,'File projection retains original Native position/velocity rather than misleading JS projections');}finally{await fs.rm(directory,{recursive:true,force:true});}
+});

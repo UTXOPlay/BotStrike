@@ -35,10 +35,11 @@ export async function verifyControlledTape(tape,{fromTick,toTick}={}){
  assert.equal(checked,toTick-fromTick+1,'The selected Native tape interval must be complete');assert.deepEqual(missing,[],'Every bots-capable seat must have real packed takeover bit 256 throughout the baseline interval');
  return {fromTick,toTick,checkedNativeFrames:checked,headerBotsCapable:[...config.bots],allBotsCapableSeatsTakenOver:true,meaning:'Control proof for this recorded interval; not a global bots=false configuration or whole-match no-AI claim'};
 }
-async function setKeys(actor,current,desired,beforeDown=()=>{}){const wanted=new Set(desired);for(const key of current)if(!wanted.has(key)){await actor.key(key,'up');current.delete(key);}for(const key of wanted)if(!current.has(key)){beforeDown();current.add(key);await actor.key(key,'down');}}
+async function setKeys(actor,current,desired,beforeDown=()=>{},afterOperation=null){const wanted=new Set(desired);for(const key of current)if(!wanted.has(key)){await actor.key(key,'up');current.delete(key);afterOperation?.();}for(const key of wanted)if(!current.has(key)){beforeDown();current.add(key);await actor.key(key,'down');afterOperation?.();}}
 async function release(actor,current){await setKeys(actor,current,[]);}
 
-export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tolerance=2,mark=()=>{}}={}){
+export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tolerance=2,mark=()=>{},actuationGuard=null}={}){
+ const guarded=()=>{if(actuationGuard!==null){if(typeof actuationGuard!=='function')throw Error('Actuation guard must be a function');const result=actuationGuard();if(result&&typeof result.then==='function')throw Error('Actuation guard must be synchronous');}};
  const originalModifiers=['ShiftLeft','KeyF'].filter(key=>actor.heldKeys?.has(key)),held=new Set(originalModifiers),arrivals=[];let failure;
  const stamp=()=>({wallAt:Date.now(),monotonicMs:performance.now(),index:actor.index});
  const stoppedInput=(row,walk,crouch)=>row.input.x===0&&row.input.y===0&&row.input.walk===walk&&row.input.crouch===crouch;
@@ -47,9 +48,9 @@ export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tole
  try{
   for(const goal of waypoints){
    if(!Array.isArray(goal)||goal.length!==2||!goal.every(Number.isFinite))throw Error('Use static map [x,z] waypoints.');
-   await assertActive();const aligned=await aimOrientation(actor,{yaw:0,pitch:0});await mark('route-heading-aligned',{actor:actor.id,goal,...aligned});
+   guarded();await assertActive();guarded();const aligned=await aimOrientation(actor,{yaw:0,pitch:0},{actuationGuard});guarded();await mark('route-heading-aligned',{actor:actor.id,goal,...aligned});
    const started=performance.now();let lastDistance=Infinity,progressAt=started,arrived=false,fineHoldMs=0,pulseNumber=0,pair=null,steeringMap=null;
-   const remaining=()=>{const now=performance.now(),ms=Math.min(started+timeoutPerWaypoint,progressAt+5000)-now;if(ms<=0)throw Error('Navigation steering deadline exceeded: '+JSON.stringify({actor:actor.id,goal,waypointElapsedMs:now-started,noProgressElapsedMs:now-progressAt}));return ms;};
+   const remaining=()=>{guarded();const now=performance.now(),ms=Math.min(started+timeoutPerWaypoint,progressAt+5000)-now;if(ms<=0)throw Error('Navigation steering deadline exceeded: '+JSON.stringify({actor:actor.id,goal,waypointElapsedMs:now-started,noProgressElapsedMs:now-progressAt}));return ms;};
    // Settle each in-flight operation before checking again. Racing an abandoned
    // mouse mutation could otherwise continue after cleanup. No late call earns
    // another command, a new clock, or credit for lateral motion.
@@ -110,12 +111,12 @@ export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tole
     if(steered)remaining();
     const down=stamp(),sendWait=actor.watchInputSent(row=>row.input.x===expected.x&&row.input.y===expected.y&&row.input.walk===walk&&row.input.crouch===crouch&&(!steered||Math.abs(wrap(row.input.yaw-steered.choice.yaw))<=.002&&Math.abs(row.input.pitch)<=.002),{afterIndex:down.index,timeout:steered?Math.min(2000,remaining()):2000});sendWait.promise.catch(()=>{});let sent,keyup,pulseFailure;
     try{
-     await setKeys(actor,held,desired,steered?remaining:undefined);if(steered)remaining();sent=await sendWait.promise;if(steered)remaining();
+     await setKeys(actor,held,desired,actuationGuard?()=>{guarded();if(steered)remaining();}:steered?remaining:undefined,actuationGuard?guarded:null);if(steered)remaining();sent=await sendWait.promise;if(steered)remaining();
      const hold=pulse-(performance.now()-sent.nodeAtMs);if(hold>0)await pause(steered?Math.min(hold,remaining()):hold);if(steered)remaining();
     }catch(error){pulseFailure=error;throw error;}
     finally{
      sendWait.cancel();keyup=stamp();
-     try{await setKeys(actor,held,modifiers);}catch(error){if(!pulseFailure)throw error;pulseFailure.navigationPulseReleaseError=error.message;}
+     try{await setKeys(actor,held,actuationGuard&&pulseFailure?modifiers.filter(key=>held.has(key)):modifiers);}catch(error){if(!pulseFailure)throw error;pulseFailure.navigationPulseReleaseError=error.message;}
     }
     // Write potentially asynchronous markers only after releasing movement.
     const sentMarker=()=>mark('route-pulse-sent',{actor:actor.id,goal,pulseNumber,downAnchor:down,observedSend:{index:sent.index,seq:sent.input.seq,wallAt:sent.nodeUnixMs,monotonicMs:sent.nodeAtMs},extraHoldMs:pulse,meaning:'Real WebSocket framesent observation; not wire arrival or Native application'}),keyupMarker=()=>mark('route-pulse-keyup',{actor:actor.id,goal,pulseNumber,keyupAnchor:keyup});
@@ -139,18 +140,19 @@ export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tole
   return arrivals;
  }catch(error){failure=error;throw error;}
  finally{
-  try{const restore=stamp();await setKeys(actor,held,originalModifiers);const restored=await confirmStop(restore.index,originalModifiers.includes('ShiftLeft'),originalModifiers.includes('KeyF'));await mark('route-modifiers-restored',{actor:actor.id,restoreAnchor:restore,modifiers:originalModifiers,seq:restored.sent.input.seq,tick:restored.room.state.tick,lastSeq:own(restored.room).last_seq});}
+  try{const restore=stamp(),restoredModifiers=actuationGuard&&failure?[]:originalModifiers;await setKeys(actor,held,restoredModifiers);const restored=await confirmStop(restore.index,restoredModifiers.includes('ShiftLeft'),restoredModifiers.includes('KeyF'));await mark('route-modifiers-restored',{actor:actor.id,restoreAnchor:restore,modifiers:restoredModifiers,seq:restored.sent.input.seq,tick:restored.room.state.tick,lastSeq:own(restored.room).last_seq});}
   catch(error){if(!failure)throw error;failure.navigationCleanupError=error.message;try{await mark('route-modifiers-unconfirmed',{actor:actor.id,error:error.message});}catch{}}
  }
 }
 
-export async function aimOrientation(actor,{yaw=0,pitch=0}={}, {tolerance=.002,maxSteps=20}={}){
+export async function aimOrientation(actor,{yaw=0,pitch=0}={}, {tolerance=.002,maxSteps=20,actuationGuard=null}={}){
+ const guard=()=>{if(actuationGuard!==null){const result=actuationGuard();if(result&&typeof result.then==='function')throw Error('Actuation guard must be synchronous');}};
  if(!Number.isFinite(yaw)||!Number.isFinite(pitch)||Math.abs(pitch)>1.5)throw Error('Use bounded camera orientation angles.');
  const afterIndex=actor.lastInput?.index??0;let last;
  for(let step=0;step<maxSteps;step++){
-  await actor.drain();const frame=actor.lastPresentation;if(!frame)throw Error('No actual rendered camera to align.');const dyaw=wrap(yaw-frame.camera.yaw),dpitch=pitch-frame.camera.pitch;last={dyaw,dpitch,frameIndex:frame.index};
-  if(Math.hypot(dyaw,dpitch)<=tolerance){const sent=await actor.waitInput(row=>Math.abs(wrap(row.input.yaw-yaw))<=tolerance&&Math.abs(row.input.pitch-pitch)<=tolerance,{afterIndex});const accepted=await actor.waitRoom(room=>own(room)?.last_seq>=sent.input.seq&&Math.abs(wrap(own(room).yaw-yaw))<=tolerance&&Math.abs(own(room).pitch-pitch)<=tolerance);return {yaw,pitch,observedYaw:own(accepted).yaw,observedPitch:own(accepted).pitch,seq:sent.input.seq,nativeTick:accepted.state.tick,frameIndex:frame.index};}
-  await actor.aim(Math.max(-240,Math.min(240,-dyaw/.0025)),Math.max(-120,Math.min(120,-dpitch/.0025)));await actor.waitPresentation(()=>true,{afterIndex:frame.index});
+  guard();await actor.drain();guard();const frame=actor.lastPresentation;if(!frame)throw Error('No actual rendered camera to align.');const dyaw=wrap(yaw-frame.camera.yaw),dpitch=pitch-frame.camera.pitch;last={dyaw,dpitch,frameIndex:frame.index};
+  if(Math.hypot(dyaw,dpitch)<=tolerance){const sent=await actor.waitInput(row=>Math.abs(wrap(row.input.yaw-yaw))<=tolerance&&Math.abs(row.input.pitch-pitch)<=tolerance,{afterIndex});guard();const accepted=await actor.waitRoom(room=>own(room)?.last_seq>=sent.input.seq&&Math.abs(wrap(own(room).yaw-yaw))<=tolerance&&Math.abs(own(room).pitch-pitch)<=tolerance);guard();return {yaw,pitch,observedYaw:own(accepted).yaw,observedPitch:own(accepted).pitch,seq:sent.input.seq,nativeTick:accepted.state.tick,frameIndex:frame.index};}
+  guard();await actor.aim(Math.max(-240,Math.min(240,-dyaw/.0025)),Math.max(-120,Math.min(120,-dpitch/.0025)));guard();await actor.waitPresentation(()=>true,{afterIndex:frame.index});guard();
  }
  throw Error('Real mouse heading alignment did not converge: '+JSON.stringify(last));
 }
