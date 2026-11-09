@@ -611,3 +611,62 @@ copied. Old captures retain their original availability and cannot gain these
 observations retrospectively. The original #30 source-lineage audit describes
 the earlier checkpoint; this candidate changes `server.mjs` and needs its own
 regression and source/image binding. It has not yet been packaged or deployed.
+
+
+## Immutable admission-observer candidate and failed startup checkpoint — 2026-11-09
+
+The signed and pushed `f9461e5` application source is now packaged as an immutable
+local candidate, superseding the earlier “not yet packaged” status above. Its
+exact tree is `3f2be99b61c146f1455806ed5b41f3e26d6a3cca`; the image passed
+634 unit and 24 host checks, with 985 copied source files, 105 protected files and
+all ten retained Native pairs verified. All 69 web files are byte-identical to
+the deployed `d430215` checkpoint. Those equal bytes do not transfer browser or
+server acceptance to the new observer. This candidate has not been deployed to
+production. Its Native model/profile remain unchanged relative to the verified
+V5 base, and no old save is reinterpreted.
+
+The later `14dc3a1` host driver is a separate cohort: 1,094 frozen files, 26 bound
+driver sources and 101 passing related pure checks. A separately verified network
+tool image preserves the candidate's application artifacts. The
+[checkpoint record](acceptance/network-quality-view-admission-20261109.json)
+keeps the application, host and tool identities and evidence hashes distinct.
+The catalog appends one peek case without changing the earlier 32 cases.
+
+Its single actual attempt failed in setup while waiting 60,000 ms for B's resume
+action. The last completed checkpoint was ten controlled seats ready. No scenario
+action, completed logical presentation or Native shot was reached. The precise
+resume latch state was not captured, so the cause remains unknown; the evidence
+does not establish a gameplay or shader defect. All owned runtime resources were
+removed. The original failed case, archives and manifests remain unchanged,
+including the missing late replay summary and the offline shot reporter's
+`CASE_IDENTITY_MISMATCH`. The catalog remains failed with 32 pending cases.
+
+A new, separate private offline audit verified all 12 sealed archives and derived
+the unique room identity from the original room-start row and tape path. The
+source-built inspector and exact retained application matched all 4,026 tape
+states and the full trace. Only 4,025 completed Native frames were captured and
+matched; the final input at tick 4,026 is an unconfirmed tail. Its write and
+Native application status are unknown: it could have been written or executed
+after the last captured frame. It is excluded from observed gameplay evidence;
+the retained helper's “unsent” wording does not prove that status. There are zero
+shot witnesses and no peek coverage. This derivative audit does not add fields
+to or relabel the original failed matrix case.
+
+The capture contains 40,102 selection observations and 48,063 freshness checks.
+Independent joins verified original arrivals, generations, absolute 400 ms leases,
+intervals, final packed views and 20,937 exact private applied ACKs. One selected
+slot expired during the post-record append/check sequence and was correctly
+neutralized. These counters are not all applied Native controls or selected
+shots. Selection still precedes recording; freshness checks do not establish a
+second view admission at physical `stdin.write`.
+
+The first derivative audit's harness findings are retained separately. Its
+follow-up joins ACK diagnostics to their exact Native frames in a second pass,
+since ACK diagnostics are emitted first, and checks the neutralized final tuple
+against the recorded expiration rather than its earlier selected view. The
+corrected semantic audit has no remaining errors and does not rerun Native.
+
+The next step is a bounded startup-only probe that records normalized DOM and
+startup/input context for the missing resume latch. It is not a matrix rerun or
+automatic resume, and this checkpoint claims no successful probe. No issue is
+closed and none of the remaining human, WAN, device or fairness gates is waived.
