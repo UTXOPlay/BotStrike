@@ -33,7 +33,7 @@ export async function verifyControlledTape(tape,{fromTick,toTick}={}){
  assert.equal(checked,toTick-fromTick+1,'The selected Native tape interval must be complete');assert.deepEqual(missing,[],'Every bots-capable seat must have real packed takeover bit 256 throughout the baseline interval');
  return {fromTick,toTick,checkedNativeFrames:checked,headerBotsCapable:[...config.bots],allBotsCapableSeatsTakenOver:true,meaning:'Control proof for this recorded interval; not a global bots=false configuration or whole-match no-AI claim'};
 }
-async function setKeys(actor,current,desired){const wanted=new Set(desired);for(const key of current)if(!wanted.has(key))await actor.key(key,'up');for(const key of wanted)if(!current.has(key))await actor.key(key,'down');current.clear();for(const key of wanted)current.add(key);}
+async function setKeys(actor,current,desired){const wanted=new Set(desired);for(const key of current)if(!wanted.has(key)){await actor.key(key,'up');current.delete(key);}for(const key of wanted)if(!current.has(key)){current.add(key);await actor.key(key,'down');}}
 async function release(actor,current){await setKeys(actor,current,[]);}
 
 export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tolerance=2,mark=()=>{}}={}){
@@ -65,9 +65,15 @@ export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tole
     await mark('route-pulse-start',{actor:actor.id,goal,pulseNumber:++pulseNumber,requestAnchor:stamp(),beforePublic:{tick:room.state.tick,position:[...player.position],distance},expected,extraHoldMs:pulse});
     // Take the anchor after the marker: marker work must not allow an old
     // neutral or an input from before this actual keydown to satisfy the wait.
-    const down=stamp();await setKeys(actor,held,desired);
-    const sent=await actor.waitInput(row=>row.input.x===expected.x&&row.input.y===expected.y&&row.input.walk===walk&&row.input.crouch===crouch,{afterIndex:down.index,timeout:2000});
-    await pause(Math.max(0,pulse-(performance.now()-sent.nodeAtMs)));const keyup=stamp();await setKeys(actor,held,modifiers);
+    const down=stamp(),sendWait=actor.watchInputSent(row=>row.input.x===expected.x&&row.input.y===expected.y&&row.input.walk===walk&&row.input.crouch===crouch,{afterIndex:down.index,timeout:2000});sendWait.promise.catch(()=>{});let sent,keyup,pulseFailure;
+    try{
+     await setKeys(actor,held,desired);sent=await sendWait.promise;
+     const remaining=pulse-(performance.now()-sent.nodeAtMs);if(remaining>0)await pause(remaining);
+    }catch(error){pulseFailure=error;throw error;}
+    finally{
+     sendWait.cancel();keyup=stamp();
+     try{await setKeys(actor,held,modifiers);}catch(error){if(!pulseFailure)throw error;pulseFailure.navigationPulseReleaseError=error.message;}
+    }
     // Write potentially asynchronous markers only after releasing movement.
     await mark('route-pulse-sent',{actor:actor.id,goal,pulseNumber,downAnchor:down,observedSend:{index:sent.index,seq:sent.input.seq,wallAt:sent.nodeUnixMs,monotonicMs:sent.nodeAtMs},extraHoldMs:pulse,meaning:'Real WebSocket framesent observation; not wire arrival or Native application'});
     await mark('route-pulse-keyup',{actor:actor.id,goal,pulseNumber,keyupAnchor:keyup});

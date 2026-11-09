@@ -25,6 +25,7 @@ function navigationActor(stoppedPositions,{modifiers=[],paused=false}={}){
   async key(code,direction){this.record('driver_input',{code,direction});this.commands.push({code,direction});const moved=keys.has('KeyW')||keys.has('KeyA')||keys.has('KeyS')||keys.has('KeyD');if(direction==='down')keys.add(code);else keys.delete(code);if(moved&&direction==='up'&&['KeyW','KeyA','KeyS','KeyD'].includes(code))pendingStop=true;},
   emit(){const input={seq:++seq,x:Number(keys.has('KeyD'))-Number(keys.has('KeyA')),y:Number(keys.has('KeyW'))-Number(keys.has('KeyS')),walk:keys.has('ShiftLeft'),crouch:keys.has('KeyF'),yaw:0,pitch:0};this.lastInput=this.record('input',{input});player.last_seq=input.seq;player.crouch=input.crouch;player.stance=input.crouch?1:0;state.state.tick++;if(!input.x&&!input.y&&pendingStop){pendingStop=false;const position=positions.shift();if(position)player.position=[position[0],0,position[1]];}return this.lastInput;},
   async waitInput(predicate,{afterIndex=0}={}){if(paused)throw Error('No new controls while paused');const existing=history.find(row=>row.kind==='input'&&row.index>afterIndex&&predicate(row));if(existing)return existing;await new Promise(resolve=>setTimeout(resolve,15));const row=this.emit();assert.ok(row.index>afterIndex);assert.ok(predicate(row),'Contract fixture must request the current normal keyboard state');return row;},
+  watchInputSent(predicate,{afterIndex=0}={}){let timer;const promise=new Promise((resolve,reject)=>{timer=setTimeout(()=>{try{const row=this.emit();assert.ok(row.index>afterIndex);assert.ok(predicate(row));resolve(row);}catch(error){reject(error);}},15);});return{promise,cancel(){clearTimeout(timer);}};},
   async waitRoom(predicate){assert.ok(predicate(structuredClone(state)),'Must wait for the public stopped acknowledgement');return structuredClone(state);},
   async room(){return structuredClone(state);},async drain(){},async sample(){return{window:{playing:!paused,visibility:'visible',hasFocus:true},status:paused?'Restoring controls. Online match continues.':''};}
  };actor.emit();return actor;
@@ -48,4 +49,31 @@ test('navigation exposes a real paused-control failure and separately reports un
  const actor=navigationActor([],{paused:true}),marks=[];
  await assert.rejects(moveBrowser(actor,[[5,0]],{mark:(label,data)=>marks.push({label,...data})}),error=>{assert.match(error.message,/real browser controls are paused/);assert.match(error.navigationCleanupError,/No new controls while paused/);return true;});
  assert.equal(marks.at(-1).label,'route-modifiers-unconfirmed');assert.ok(!marks.some(row=>row.label==='route-waypoint-arrived'));
+});
+
+test('navigation releases a sent pulse before unrelated observation reads can hold it open',{timeout:1500},async()=>{
+ const actor=navigationActor([[5,0]]),wait=actor.waitInput;let readsWhileMoving=0;
+ actor.waitInput=async function(...args){if([...this.heldKeys].some(key=>['KeyW','KeyA','KeyS','KeyD'].includes(key))){readsWhileMoving++;await new Promise(()=>{});}return wait.apply(this,args);};
+ const arrivals=await moveBrowser(actor,[[5,0]],{timeoutPerWaypoint:1000});
+ assert.equal(arrivals[0].position[0],5);assert.equal(readsWhileMoving,0);
+ assert.ok(actor.commands.some(row=>row.code==='KeyD'&&row.direction==='up'));
+});
+
+test('a missing sent pulse fails and releases held keys before any success marker',async()=>{
+ const actor=navigationActor([]),marks=[];let cancelled=false;
+ actor.watchInputSent=()=>({promise:new Promise((_,reject)=>setTimeout(()=>reject(Error('No matching actual send')),20)),cancel(){cancelled=true;}});
+ await assert.rejects(moveBrowser(actor,[[5,0]],{mark:(label,data)=>marks.push({label,...data})}),/No matching actual send/);
+ assert.equal(cancelled,true);assert.deepEqual([...actor.heldKeys],[]);
+ assert.ok(actor.commands.some(row=>row.code==='KeyD'&&row.direction==='up'));
+ assert.ok(!marks.some(row=>row.label==='route-pulse-sent'||row.label==='route-waypoint-arrived'));
+});
+
+test('a delivered keydown that rejects still requests keyup and retains the original failure',async()=>{
+ const actor=navigationActor([]),key=actor.key,watch=actor.watchInputSent,marks=[];let cancelled=false;
+ actor.key=async function(code,direction){await key.call(this,code,direction);if(code==='KeyD'&&direction==='down')throw Error('Delivered keydown failure');};
+ actor.watchInputSent=function(...args){const value=watch.apply(this,args);return{promise:value.promise,cancel(){cancelled=true;value.cancel();}};};
+ await assert.rejects(moveBrowser(actor,[[5,0]],{mark:label=>marks.push(label)}),/Delivered keydown failure/);
+ assert.equal(cancelled,true);assert.deepEqual([...actor.heldKeys],[]);
+ assert.ok(actor.commands.some(row=>row.code==='KeyD'&&row.direction==='up'));
+ assert.ok(!marks.includes('route-pulse-sent')&&!marks.includes('route-waypoint-arrived'));
 });

@@ -401,3 +401,47 @@ keeps the exact identities and scope separate from D4's earlier targeted runs.
 The original D2 heartbeat failure occurred before the requested outage; it and
 the historical 12-pass/19-fail matrix remain unchanged. Other failed conditions,
 human A/B, WAN, physical-device, capacity and prerequisite gates remain open.
+
+## D4 host follow-up: release navigation before observer reads
+
+The navigation driver now arms a bounded actual-framesent watcher before
+keydown, requests keyup before observer drains or markers, and remembers an
+attempted keydown for cleanup if the input call rejects after delivery. Existing
+`waitInput` behavior, normal keyboard controls, the 2-unit distance tolerance,
+30-second waypoint and 5-second progress limits remain unchanged. Sixty related
+pure checks passed, including 14 actor and nine navigation checks; these are
+host-only results, separate from the immutable application's baked checks.
+
+Original offline evidence distinguishes two route failures. The upstream-short
+case failed before shaping: genuine controlled impulses repeatedly overshot a
+nearby waypoint. The 180 ms case failed later, after shaping during cover/peek
+return; actual held and neutral inputs sometimes arrived together before a
+Native tick, producing zero movement. All reviewed stopped poses in both segments
+had genuine same-context controller application. Removing the observer dependency
+does not establish that TCP coalescing is fixed. A separate 50 ms/3% loss shot
+failure really rejected the fire and release inputs as expired; later neutral
+ACKs cannot count that shot as applied. Its precise transport cause stays unknown.
+
+One new immutable-D4 upstream-short case passed. Its initial waypoint stopped
+1.9966 units from the goal under the original tolerance. It then executed the
+requested one-second upstream kernel outage, with 13 drops at the fault-active
+sample and actual 128 Kbit/s recovery shaping. Current-local-epoch neutral proof
+preceded one explicit software Resume and a fresh positive input ACK. That
+neutral proof took 6,389 ms after restoration; the 60-second fixture limit is not
+a competitive latency promise. All 4,373 captured frames matched source and
+retained replay, with no tail or capture drops. No expired or obsolete held
+control frames were found; fault gaps still do not establish globally AI-free play.
+
+The selected case passed while its full catalog remains incomplete with 30
+pending cases and direct Node exit 1. The supervisor exited 0. All 12 original
+archives verified; the six containers, owned network and 20 tracked Chrome
+processes were gone, and the 20 bound driver sources stayed unchanged. The
+[redacted checkpoint](acceptance/network-quality-D4-navigation.json) records
+this host revision separately from the earlier heartbeat revision; partial
+catalogs are not combined. The historical 12-pass/19-fail matrix remains unchanged.
+
+Remaining engineering work includes exact original-send to completed-presentation
+correlation and real browser shots during stance, peek and other pose boundaries.
+Existing callback-entry timestamps and earlier aim markers are insufficient for
+that exact correlation. Human A/B, WAN, physical-device, capacity and prerequisite
+gates also remain open. This follow-up does not authorize merge or deployment.

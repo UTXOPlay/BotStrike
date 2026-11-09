@@ -63,12 +63,34 @@ export class ActorTrace{
 export class NetworkBrowserActor{
  constructor(id,browser,context,page,trace,{timeout=60000,drainMs=100,touch=false,launchProfile={},requireHardware=false,localRecoveryFence=false}={}){
   this.id=id;this.browser=browser;this.context=context;this.page=page;this.trace=trace;this.timeout=timeout;this.drainMs=drainMs;this.touchEnabled=touch;this.index=0;this.socketGeneration=0;this.roomGeneration=0;this.nextRoomGeneration=0;this.roomGenerations=new Map();this.currentRoom=null;this.control={active:false,nextSeq:null};this.recent=new Map();this.errors=[];this.capture=null;this.drainTimer=null;this.drainInFlight=null;this.captureDropped=0;this.closed=false;this.closing=false;this.heldKeys=new Set();this.heldMouse=new Set();this.mouseAt={x:0,y:0};this.gamepadHandle=null;this.cpuRate=1;this.departed=new Set();
-  this.localFenceEnabled=localRecoveryFence===true;this.localFence=new NetworkLocalFenceObservation({record:(kind,data)=>this.record(kind,data)});
+  this.inputSentWatchers=new Set();this.localFenceEnabled=localRecoveryFence===true;this.localFence=new NetworkLocalFenceObservation({record:(kind,data)=>this.record(kind,data)});
   page.setDefaultTimeout(timeout);page.on('pageerror',error=>{const message=safeText(error.message);this.errors.push(message);if(this.errors.length>32)this.errors.shift();this.record('page_error',{message});});
   this.launchProfile=launchProfile;this.requireHardware=requireHardware;this.browserVersion=null;this.graphics=null;this.ownerGeneration=0;this.proofGeneration=1;this.proofRoom=null;this.proofLife=null;
   page.on('websocket',socket=>this.watchSocket(socket));
  }
- record(kind,data){if(this.trace.closed)return null;const row={index:++this.index,kind,nodeAtMs:performance.now(),nodeUnixMs:Date.now(),data};let recent=this.recent.get(kind);if(!recent){recent=[];this.recent.set(kind,recent);}recent.push(row);if(recent.length>512)recent.shift();this.trace.append(row);return this.unwrap(row);}
+ record(kind,data){if(this.trace.closed){this.cancelInputSentWatchers('Actor trace is closed');return null;}const row={index:++this.index,kind,nodeAtMs:performance.now(),nodeUnixMs:Date.now(),data};let recent=this.recent.get(kind);if(!recent){recent=[];this.recent.set(kind,recent);}recent.push(row);if(recent.length>512)recent.shift();let appended;try{appended=this.trace.append(row);}catch(error){this.cancelInputSentWatchers('Actor trace write failed');throw error;}const observed=this.unwrap(row);if(appended===false)this.cancelInputSentWatchers('Actor trace did not retain the input observation');else this.dispatchInputSentWatchers(kind,observed);return observed;}
+ inputSentContext(){const room=this.currentRoom,life=room?.state?.players?.[room.slot]?.life;if(this.closed||this.closing||this.trace.closed||this.control.active!==true||typeof room?.id!=='string'||!Number.isSafeInteger(life)||life<1)return null;const generations=[this.socketGeneration,this.ownerGeneration,this.proofGeneration,this.roomGeneration];return generations.every(value=>Number.isSafeInteger(value)&&value>0)?[...generations,room.id,room.slot,life]:null;}
+ cancelInputSentWatchers(reason='Input-sent watch cancelled'){for(const watcher of [...(this.inputSentWatchers||[])])watcher.finish(Error(reason));}
+ dispatchInputSentWatchers(kind,row){
+  if(!this.inputSentWatchers?.size)return;const context=this.inputSentContext();
+  for(const watcher of [...this.inputSentWatchers]){
+   if(!context||context.some((value,index)=>value!==watcher.context[index])){watcher.finish(Error('Input-sent context changed or actor is closed'));continue;}
+   if(kind!=='input'||row.index<=watcher.afterIndex||!['socketGeneration','ownerGeneration','proofGeneration','roomGeneration'].every((key,index)=>row[key]===watcher.context[index])||row.life!==watcher.context[6]||!Number.isSafeInteger(row.input?.seq)||row.input.seq<1||row.input.seq>0xffffffff)continue;
+   try{const match=watcher.predicate(clone(row));if(match&&typeof match.then==='function'){Promise.resolve(match).catch(()=>{});throw Error('Input-sent predicate must be synchronous');}if(typeof match!=='boolean')throw Error('Input-sent predicate must return a boolean');if(match){const current=this.inputSentContext();if(!current||current.some((value,index)=>value!==watcher.context[index]))throw Error('Input-sent context changed during predicate');watcher.finish(null,row);}}catch(error){watcher.finish(Error('Input-sent predicate failed: '+safeText(error.message)));}
+  }
+ }
+ // Arm before keydown. Actual framesent recording settles this promise without
+ // waiting for a renderer/DOM drain, so observation cannot extend a short hold.
+ watchInputSent(predicate,{afterIndex=this.index,timeout=this.timeout}={}){
+  if(typeof predicate!=='function'||!Number.isSafeInteger(afterIndex)||afterIndex<0||afterIndex>this.index||!finite(timeout)||timeout<=0||timeout>300000)throw Error('Use a synchronous input predicate, existing index and bounded timeout');
+  const context=this.inputSentContext();let resolve,reject,timer,settled=false;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});promise.catch(()=>{});
+  const watcher={predicate,afterIndex:Math.max(afterIndex,this.index),context,finish:(error,row)=>{if(settled)return;settled=true;clearTimeout(timer);this.inputSentWatchers.delete(watcher);if(error)reject(error);else resolve(clone(row));}};
+  const cancel=()=>watcher.finish(Error('Input-sent watch cancelled'));
+  if(!context)watcher.finish(Error('Input-sent actor is closed or has no current controller context'));
+  else if(this.inputSentWatchers.size>=64)watcher.finish(Error('Input-sent watch capacity reached'));
+  else{this.inputSentWatchers.add(watcher);timer=setTimeout(()=>watcher.finish(Error('Input-sent watch timed out after '+timeout+' ms')),timeout);}
+  return{promise,cancel};
+ }
  unwrap(row){return row?{index:row.index,nodeAtMs:row.nodeAtMs,nodeUnixMs:row.nodeUnixMs,...clone(row.data)}:null;}
  events(kind,{afterIndex=0,limit=512}={}){return (this.recent.get(kind)||[]).filter(row=>row.index>afterIndex).slice(-Math.min(512,limit)).map(row=>this.unwrap(row));}
  get lastPresentation(){return this.unwrap(this.recent.get('presentation')?.at(-1));}
@@ -78,7 +100,7 @@ export class NetworkBrowserActor{
  trackRoom(room){
   if(room&&this.departed.has(room.id))return;
   if(room&&this.currentRoom?.id===room.id&&(room.state?.tick??0)<(this.currentRoom.state?.tick??0))return;
-  this.roomGeneration=this.generationFor(room);this.currentRoom=room;
+  this.roomGeneration=this.generationFor(room);this.currentRoom=room;this.dispatchInputSentWatchers();
  }
  watchSocket(socket){
   const url=new URL(socket.url());if(url.origin!==NETWORK_GAME_ORIGIN.replace(/^http/,'ws')||url.pathname!=='/games/botstrike/api/socket')return;
@@ -190,7 +212,7 @@ export class NetworkBrowserActor{
  async neutral(){for(const code of this.heldKeys)await this.page.keyboard.up(code);this.heldKeys.clear();for(const button of this.heldMouse)await this.page.mouse.up({button});this.heldMouse.clear();if(this.touchEnabled)await this.touch('touchCancel',[]);if(this.gamepadHandle)await this.gamepad({});}
  async flush(){await this.drain();return this.trace.flush({id:this.id,humanParticipants:0,captureDropped:this.captureDropped,errors:this.errors,browserVersion:this.browserVersion,graphics:this.graphics,launchProfile:this.launchProfile,limitations:['automated browser actors','no physical-input or real-internet acceptance','CDP receive/drain times are not browser packet arrivals']});}
  async close({leave=true}={}){
-  if(this.closed)return;this.closing=true;let cleanupError=null;try{await this.neutral();if(leave&&this.currentRoom){await this.action('menu');if(await this.page.locator('#leave').isEnabled())await this.action('leave');else cleanupError='Observer was not allowed to leave; ownership was not stolen.';}}catch(error){cleanupError=safeText(error.message);}
+  if(this.closed)return;this.closing=true;this.cancelInputSentWatchers('Input-sent actor is closing');let cleanupError=null;try{await this.neutral();if(leave&&this.currentRoom){await this.action('menu');if(await this.page.locator('#leave').isEnabled())await this.action('leave');else cleanupError='Observer was not allowed to leave; ownership was not stolen.';}}catch(error){cleanupError=safeText(error.message);}
   clearInterval(this.drainTimer);try{await this.drain();await this.capture?.evaluate(capture=>capture.stop());await this.gamepadHandle?.evaluate(handle=>handle.restore());}catch(error){cleanupError??=safeText(error.message);}this.record('cleanup',{left:!this.currentRoom,error:cleanupError});this.closed=true;try{await this.browser.close();}finally{this.trace.close({id:this.id,humanParticipants:0,captureDropped:this.captureDropped,errors:this.errors,cleanupError,browserVersion:this.browserVersion,graphics:this.graphics,launchProfile:this.launchProfile});}
  }
 }

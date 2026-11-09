@@ -130,6 +130,15 @@ check. Source binding includes the observer and recovery helper; old C/D2 report
 remain historical and cannot be resumed under this changed binding. This is a
 host-observer correction, with no application, wire or Native-rule change.
 
+Navigation now arms a bounded framesent-only watcher before keydown. Matching an
+actually recorded send allows keyup before subsequent renderer/DOM drains and
+markers; a zero-extra-hold pulse adds no timer wait. Attempted keydowns are kept
+for cleanup even when the input call rejects after delivery. This removes an
+observer dependency from the hold interval. It does not make framesent an applied
+input proof, prevent TCP coalescing or relax the 2-unit waypoint tolerance,
+30-second waypoint timeout or 5-second progress limit. See the separately bound
+[D4 navigation follow-up](acceptance/network-quality-D4-navigation.json).
+
 The Tactical case creates a normal private demolition lobby, selects unique
 heroes within each team, joins ten authenticated Node controllers and readies
 all ten. It hard-asserts the actual Native header has ten `bots=false` values.

@@ -42,3 +42,67 @@ test('browser ACK observations retain context epochs and invalidate historical p
  handlers.get('close')();assert.equal(actor.control.active,false);assert.ok(actor.proofGeneration>recoveryEpoch);trace.close();const text=readFileSync(trace.file,'utf8');assert.equal(text.includes('SECRET_OWNER'),false);assert.equal(text.includes('SECRET_NONCE'),false);
  assert.equal(publicInputAck({...ack,token:'SECRET_EXTRA'}),null);assert.equal(publicInputAck({...ack,version:2}),null);
 });
+
+function sentActor(){
+ const rows=[],trace={closed:false,append(row){rows.push(row);return true;},close(){this.closed=true;}},page={setDefaultTimeout(){},on(){},keyboard:{}},actor=new NetworkBrowserActor('Sent', {async close(){}},null,page,trace);
+ const socket=()=>{const handlers=new Map();return{url:()=>NETWORK_GAME_ORIGIN.replace(/^http/,'ws')+'/games/botstrike/api/socket',on:(name,fn)=>handlers.set(name,fn),receive:value=>handlers.get('framereceived')({payload:JSON.stringify(value)}),send:input=>handlers.get('framesent')({payload:JSON.stringify({type:'input',room:actor.currentRoom.id,delivery:{version:2},input})}),close:()=>handlers.get('close')()};};
+ const room={id:'sent-room',slot:0,status:'running',state:{tick:10,players:[{slot:0,life:1,last_seq:1,position:[0,0,0],velocity:[0,0,0]}]}};
+ const wire=socket();actor.watchSocket(wire);wire.receive({type:'control',active:true,token:'owner',inputProtocol:{version:2,maxAgeMs:400}});wire.receive({type:'state',room});
+ return{actor,wire,socket,room,page,rows};
+}
+const sentInput=(seq,x=1)=>({seq,x,y:0,walk:true,crouch:true});
+
+test('sent-input watch arms synchronously and releases independently of an unresolved renderer drain',async()=>{
+ const {actor,wire,page,rows}=sentActor();let finishDrain,drainCalls=0;
+ actor.drain=()=>{drainCalls++;return new Promise(resolve=>{finishDrain=resolve;});};const unrelated=actor.drain();let drainDone=false;unrelated.then(()=>{drainDone=true;});
+ page.keyboard.down=async()=>wire.send(sentInput(2));page.keyboard.up=async()=>wire.send(sentInput(3,0));
+ const watch=actor.watchInputSent(row=>row.input.x===1,{timeout:1000});
+ await actor.key('KeyD','down');const sent=await watch.promise;await actor.key('KeyD','up');
+ assert.equal(sent.input.seq,2);assert.equal(drainDone,false,'An unrelated CDP drain must not extend a real keyboard hold');assert.equal(drainCalls,1,'The sent-input watch must not perform a drain');assert.equal(actor.inputSentWatchers.size,0);assert.ok(rows.some(row=>row.kind==='input'&&row.index===sent.index),'Success follows actual retained framesent recording');watch.cancel();finishDrain();await unrelated;
+});
+
+test('sent-input watch ignores historical and wrong-context observations until a new matching send',async()=>{
+ const {actor,wire}=sentActor();wire.send(sentInput(2));const old=actor.lastInput,{index,nodeAtMs,nodeUnixMs,...body}=old;
+ const watch=actor.watchInputSent(row=>row.input.x===1,{afterIndex:0,timeout:1000});let settled=false;watch.promise.then(()=>{settled=true;});
+ actor.dispatchInputSentWatchers('input',old);
+ for(const key of ['socketGeneration','ownerGeneration','proofGeneration','roomGeneration'])actor.record('input',{...body,[key]:old[key]+1,input:sentInput(3)});
+ actor.record('input',{...body,life:2,input:sentInput(4)});await Promise.resolve();assert.equal(settled,false);assert.equal(actor.inputSentWatchers.size,1);
+ wire.send(sentInput(5));assert.equal((await watch.promise).input.seq,5);assert.equal(actor.inputSentWatchers.size,0);
+});
+
+test('an old socket send cannot settle a current-socket input watch',async()=>{
+ const {actor,wire,socket,room}=sentActor(),next=socket();actor.watchSocket(next);next.receive({type:'control',active:true,token:'new-owner',inputProtocol:{version:2,maxAgeMs:400}});next.receive({type:'state',room});
+ const watch=actor.watchInputSent(()=>true,{timeout:1000});wire.send(sentInput(2));await Promise.resolve();assert.equal(actor.inputSentWatchers.size,1);next.send(sentInput(3));assert.equal((await watch.promise).input.seq,3);
+});
+
+test('sent-input watches fail closed and detach on every observed controller-context change',async()=>{
+ const changes=[
+  f=>f.actor.watchSocket(f.socket()),
+  f=>f.wire.receive({type:'control',active:true,token:'other-owner',inputProtocol:{version:2,maxAgeMs:400}}),
+  f=>f.wire.receive({type:'input_resync',code:'stale_delivery'}),
+  f=>f.actor.trackRoom({...f.room,id:'another-room'}),
+  f=>f.wire.receive({type:'state',room:{...f.room,state:{...f.room.state,players:[{...f.room.state.players[0],life:2}]}}}),
+  f=>f.wire.receive({type:'control',active:false}),
+  f=>f.wire.close()
+ ];
+ for(const change of changes){const fixture=sentActor(),watch=fixture.actor.watchInputSent(()=>true,{timeout:1000});change(fixture);assert.equal(fixture.actor.inputSentWatchers.size,0);await assert.rejects(watch.promise,/context changed|closed/);}
+});
+
+test('predicate exceptions, asynchronous predicates and predicate context mutations cannot become a sent-input success',async()=>{
+ for(const make of [()=>()=>{throw Error('broken predicate');},()=>async()=>{throw Error('asynchronous predicate');},actor=>()=>{actor.proofGeneration++;return true;}]){
+  const {actor,wire}=sentActor(),predicate=make(actor);
+  const watch=actor.watchInputSent(predicate,{timeout:1000});wire.send(sentInput(2));await assert.rejects(watch.promise,/predicate failed/);assert.equal(actor.inputSentWatchers.size,0);
+ }
+});
+
+test('timeout, cancellation and actor close detach sent-input watches without early unhandled rejections',async()=>{
+ const {actor}=sentActor(),cancelled=actor.watchInputSent(()=>true,{timeout:1000});cancelled.cancel();cancelled.cancel();await new Promise(resolve=>setImmediate(resolve));await assert.rejects(cancelled.promise,/cancelled/);assert.equal(actor.inputSentWatchers.size,0);
+ const timed=actor.watchInputSent(()=>true,{timeout:5});await new Promise(resolve=>setTimeout(resolve,15));await assert.rejects(timed.promise,/timed out/);assert.equal(actor.inputSentWatchers.size,0);
+ const closing=actor.watchInputSent(()=>true,{timeout:1000});await actor.close({leave:false});await assert.rejects(closing.promise,/closing/);assert.equal(actor.inputSentWatchers.size,0);const closed=actor.watchInputSent(()=>true);await assert.rejects(closed.promise,/closed/);assert.equal(actor.inputSentWatchers.size,0);
+});
+
+test('sent-input watcher capacity and rejected trace writes remain bounded failures',async()=>{
+ const {actor,wire}=sentActor(),watches=Array.from({length:64},()=>actor.watchInputSent(()=>true,{timeout:1000}));await assert.rejects(actor.watchInputSent(()=>true,{timeout:1000}).promise,/capacity/);assert.equal(actor.inputSentWatchers.size,64);for(const watch of watches)watch.cancel();await Promise.all(watches.map(watch=>assert.rejects(watch.promise,/cancelled/)));assert.equal(actor.inputSentWatchers.size,0);
+ const watch=actor.watchInputSent(()=>true,{timeout:1000});actor.trace.append=()=>false;wire.send(sentInput(2));await assert.rejects(watch.promise,/did not retain/);assert.equal(actor.inputSentWatchers.size,0);
+ assert.throws(()=>actor.watchInputSent(()=>true,{timeout:300001}),/bounded/);assert.throws(()=>actor.watchInputSent(null),/predicate/);assert.throws(()=>actor.watchInputSent(()=>true,{afterIndex:actor.index+1}),/existing index/);
+});
