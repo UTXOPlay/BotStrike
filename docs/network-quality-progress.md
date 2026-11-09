@@ -487,3 +487,98 @@ delivery lifetimes and common-core prerequisites have not been relaxed. Other
 pose boundaries and failed network conditions remain open alongside Human A/B,
 WAN, physical-device, capacity and prerequisite gates. No merge, deployment or
 issue acceptance follows from these host-only results.
+
+## D4 host follow-up: bounded fine-navigation search
+
+Independent raw-frame review confirmed the failed route's actual stopped poses,
+camera heading and controller takeover. The driver repeatedly restarted its
+short-hold search at zero after overshooting. Zero-displacement search now doubles
+from 4 ms up to the existing 60 ms cap; an overshoot halves the previous requested
+hold. Useful progress may still shorten it below 4 ms. These are control heuristics,
+not guaranteed actuation durations or a fixed Native step size. Three new synthetic
+navigation contracts cover overshoot/reversal, stalled motion at the cap and
+variable useful steps; 104 related checks passed on this source revision.
+
+One separately frozen real case still **failed before stance**, during B's
+cover retreat under the same configured added delay. The faster search produced
+motion, but repeated actual 7.910156-unit steps crossed the goal in opposite
+directions while their stopped endpoints remained outside the unchanged 2-unit
+arrival tolerance. Other observed steps
+were smaller; there is no claim of an intrinsic minimum step. All 4,217 captured
+frames matched source and retained replay, with no tail or drops. The original
+23 source copies, 12 verified raw archives and failure remain preserved; six
+owned containers, the network and 20 Chrome processes were removed. The new
+catalog remains failed with 31 pending cases and no causal-v2 boundary shot.
+See the [fine-search failed checkpoint](acceptance/network-quality-D4-causal-stance-v2-fastsearch.json).
+
+This exposes a remaining one-dimensional approach problem. A subsequent local
+two-leg steering candidate must use normal mouse/keyboard input, public-map
+clearance and actual stopped positions, preserve the original goal and time
+limits, and obtain new evidence. Predicted endpoints cannot establish arrival.
+
+## D4 host follow-up: local steering and proxy socket policy
+
+The next driver adds a bounded local two-leg maneuver after a qualifying close
+overshoot. It uses the selected public map, real mouse input and a single cardinal
+key. Planned paths use Native's 18-unit obstacle expansion and 20-unit world inset;
+observed stops must remain in a fixed 20-unit goal envelope. Each closure starts
+from the actual stopped pose. Room, slot, life and heading checks fail closed.
+All work shares the original waypoint/progress clocks; an in-flight mouse call
+settles before cleanup, and a late return cannot authorize another command.
+
+That separately frozen revision passed 116 related checks but its real case
+still failed before stance. Three plans produced 11 steering pulses; A arrived,
+while B exceeded the unchanged progress limit at 5,001.7 ms. All 4,590 frames
+replayed exactly with no tail or drops. Independent review checked 171 actual
+Native state points and adjacent chords inside the goal envelope; it did not
+reconstruct continuous motion within ticks. The [steering failed checkpoint](acceptance/network-quality-D4-causal-stance-v2-steering.json)
+preserves this result separately from the later transport change.
+
+The extra TCP forwarding proxy had retained Node's implicit Nagle policy on
+bare sockets. Node documents that new TCP connections enable Nagle and that
+`setNoDelay(true)` disables it. The proxy now calls it on every tracked socket
+before forwarding. Kernel shaping, TCP retransmission, destination checks and
+resource limits are unchanged. See [Node TCP documentation](https://nodejs.org/docs/latest-v22.x/api/net.html#socketsetnodelaynodelay).
+
+A private ping-only comparison used two frozen source copies differing by that
+one API call, the same D4 application and actual proxy Node v22.23.4. Each row
+below has 72 application ping/pong RTT samples, in three 24-message trains sent
+about 20 ms apart, under 90+90 ms configured added delay.
+
+| Path | Implicit policy median / P95 | Explicit NODELAY median / P95 |
+| --- | --- | --- |
+| HTTP Upgrade | 280.28 / 357.72 ms | 181.02 / 181.49 ms |
+| Raw TCP | 295.64 / 359.04 ms | 181.71 / 182.12 ms |
+
+Unshaped controls stayed near 1 ms. Both cohorts created no room or Native match
+and cleaned their owned resources. Extra/duplicate application pongs were not
+logged, some ID payload lengths differed, and the comparison was sequential.
+These are Node client round trips, not browser/render, applied-input or physical
+latency, and do not retrospectively identify the cause of every old failure.
+The [proxy comparison checkpoint](acceptance/network-quality-D4-proxy-nodelay.json)
+keeps those limits and exact source/process identities.
+
+With only that proxy source changed from the failed steering revision, one new
+complete stance-v2 case passed. Both roles fired after newly applied target
+standing/crouch inputs; all five selected shots have exact original-send to
+completed-logical-frame and Native ray references in the offline report.
+Rendered interpolated stance and selected Native historical stance differ;
+association and causal ordering do not mean pose equality. Requested/rendered,
+arrival-admitted and final packed/rewind ticks stay separate, and at-write
+admission intervals remain unrecorded.
+
+All 5,437 frames matched source and retained replay, with no tail or capture drops.
+No two-leg plan was needed in this successful run. Its 25 driver sources stayed
+unchanged; owned containers, network and Chrome processes were removed. The
+catalog remains incomplete with 31 pending cases and direct Node exit 1;
+the supervisor and offline reporter exited 0. Case-time 118 checks and later
+120 checks remain separate: the latter retain both original proxy compatibility
+tests and the new independent NODELAY contracts. See the [new-policy stance checkpoint](acceptance/network-quality-D4-causal-stance-v2-nodelay.json).
+
+All earlier cases retain their original transport policy and source binding.
+Partial catalogs are not pooled, and the historical D2 matrix remains 12 passed /
+19 failed. Peek/jump/reversal/death/multiple-target shots, at-write admission,
+supported-condition and Human A/B/WAN/device gates remain open for #12/#26.
+The separate [#30 operations audit](acceptance/operations-reliability-issue30.json)
+establishes its six implementation criteria with delivery still pending; those
+operations criteria do not depend on #12 or human fairness acceptance.

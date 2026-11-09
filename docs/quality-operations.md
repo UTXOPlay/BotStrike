@@ -3,6 +3,20 @@
 See [service objectives and operator response](quality-service-objectives.md)
 for integrity gates, alert actions and the limits of the current baselines.
 
+The [issue #30 criterion audit](acceptance/operations-reliability-issue30.json)
+maps all six implementation criteria to their original receipts. The 15 service
+files and 19 operations dependencies are byte-identical across D2, D4 and this
+revision; the normal-host exercise's 34-file closure also remains unchanged.
+The audit preserves D2's initial static failure, its final attempt2 success,
+D4's separate build checks and later external 17/23-check tools. It does not
+relabel the D2 operations run as a new D4 run.
+
+All six implementation criteria have evidence. Delivery still requires review
+and landing of the applicable code, documentation and receipts before recording
+issue completion. The current shared draft stack is a packaging dependency;
+#12, human A/B, WAN and certified production capacity are not #30 prerequisites.
+Future service changes require a fresh source comparison and targeted checks.
+
 ## Candidate image construction
 
 `deploy/Dockerfile.network-quality` overlays the service/UI on the retained

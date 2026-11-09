@@ -13,6 +13,9 @@ function allowed(value){try{const u=new URL(value.startsWith('/')?'http://'+auth
 function track(socket,client=false){
  if(sockets.has(socket))return true;
  if(sockets.size>=maxSockets||client&&clients.size>=maxClients){stats.rejected++;socket.destroy();return false;}
+ // The extra forwarding hop must not add Nagle buffering to small control
+ // writes. Kernel netem and TCP loss/retransmission still apply normally.
+ socket.setNoDelay(true);
  sockets.add(socket);if(client)clients.add(socket);stats.active=sockets.size;stats.clients=clients.size;
  socket.on('error',()=>{});socket.once('close',()=>{sockets.delete(socket);clients.delete(socket);stats.closed++;stats.active=sockets.size;stats.clients=clients.size;});return true;
 }

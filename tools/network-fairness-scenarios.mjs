@@ -6,9 +6,11 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createReadStream} from 'node:fs';
 import {createInterface} from 'node:readline';
+import {createHash} from 'node:crypto';
 import {createNetworkLab} from './network-lab.mjs';
 import {createBrowserActors} from './network-browser-actors.mjs';
 import {openNetworkNodeActor,waitNetworkCondition} from './network-node-actors.mjs';
+import {cardinalSteering,navigationPathClear,planTwoLegSteering} from './network-navigation-steering.mjs';
 const repo=fileURLToPath(new URL('../',import.meta.url)),pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const wrap=value=>Math.atan2(Math.sin(value),Math.cos(value));
 const moveKeys=['KeyW','KeyA','KeyS','KeyD','ShiftLeft'];
@@ -33,7 +35,7 @@ export async function verifyControlledTape(tape,{fromTick,toTick}={}){
  assert.equal(checked,toTick-fromTick+1,'The selected Native tape interval must be complete');assert.deepEqual(missing,[],'Every bots-capable seat must have real packed takeover bit 256 throughout the baseline interval');
  return {fromTick,toTick,checkedNativeFrames:checked,headerBotsCapable:[...config.bots],allBotsCapableSeatsTakenOver:true,meaning:'Control proof for this recorded interval; not a global bots=false configuration or whole-match no-AI claim'};
 }
-async function setKeys(actor,current,desired){const wanted=new Set(desired);for(const key of current)if(!wanted.has(key)){await actor.key(key,'up');current.delete(key);}for(const key of wanted)if(!current.has(key)){current.add(key);await actor.key(key,'down');}}
+async function setKeys(actor,current,desired,beforeDown=()=>{}){const wanted=new Set(desired);for(const key of current)if(!wanted.has(key)){await actor.key(key,'up');current.delete(key);}for(const key of wanted)if(!current.has(key)){beforeDown();current.add(key);await actor.key(key,'down');}}
 async function release(actor,current){await setKeys(actor,current,[]);}
 
 export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tolerance=2,mark=()=>{}}={}){
@@ -41,46 +43,96 @@ export async function moveBrowser(actor,waypoints,{timeoutPerWaypoint=30000,tole
  const stamp=()=>({wallAt:Date.now(),monotonicMs:performance.now(),index:actor.index});
  const stoppedInput=(row,walk,crouch)=>row.input.x===0&&row.input.y===0&&row.input.walk===walk&&row.input.crouch===crouch;
  async function assertActive(){const observed=await actor.sample();if(!observed.window.playing||observed.window.visibility!=='visible'||!observed.window.hasFocus)throw Error(actor.id+' real browser controls are paused: '+JSON.stringify({window:observed.window,status:observed.status}));}
- async function confirmStop(anchor,walk,crouch){const sent=await actor.waitInput(row=>stoppedInput(row,walk,crouch),{afterIndex:anchor,timeout:2000});const room=await actor.waitRoom(value=>own(value)?.last_seq>=sent.input.seq&&speed(own(value))<8&&own(value).crouch===crouch,{timeout:2000});return {sent,room};}
+ async function confirmStop(anchor,walk,crouch,bound=async operation=>operation(2000)){const sent=await bound(timeout=>actor.waitInput(row=>stoppedInput(row,walk,crouch),{afterIndex:anchor,timeout:Math.min(2000,timeout)}));const room=await bound(timeout=>actor.waitRoom(value=>own(value)?.last_seq>=sent.input.seq&&speed(own(value))<8&&own(value).crouch===crouch,{timeout:Math.min(2000,timeout)}));return {sent,room};}
  try{
   for(const goal of waypoints){
    if(!Array.isArray(goal)||goal.length!==2||!goal.every(Number.isFinite))throw Error('Use static map [x,z] waypoints.');
    await assertActive();const aligned=await aimOrientation(actor,{yaw:0,pitch:0});await mark('route-heading-aligned',{actor:actor.id,goal,...aligned});
-   const started=performance.now();let lastDistance=Infinity,progressAt=started,arrived=false,fineHoldMs=0,pulseNumber=0;
+   const started=performance.now();let lastDistance=Infinity,progressAt=started,arrived=false,fineHoldMs=0,pulseNumber=0,pair=null,steeringMap=null;
+   const remaining=()=>{const now=performance.now(),ms=Math.min(started+timeoutPerWaypoint,progressAt+5000)-now;if(ms<=0)throw Error('Navigation steering deadline exceeded: '+JSON.stringify({actor:actor.id,goal,waypointElapsedMs:now-started,noProgressElapsedMs:now-progressAt}));return ms;};
+   // Settle each in-flight operation before checking again. Racing an abandoned
+   // mouse mutation could otherwise continue after cleanup. No late call earns
+   // another command, a new clock, or credit for lateral motion.
+   const bounded=async operation=>{const ms=remaining();const value=await operation(ms);remaining();return value;};
+   async function mapFor(value){
+    const index=value.config?.map;if(!Number.isSafeInteger(index)||index<0)throw Error('Navigation steering needs the selected public map index');
+    if(!Number.isSafeInteger(own(value)?.life)||own(value).life<=0)throw Error('Navigation steering needs a valid current life');
+    if(typeof value.id!=='string'||!value.id||!Number.isSafeInteger(value.slot)||value.slot<0||value.slot>9)throw Error('Navigation steering needs a valid current room and slot');
+    const body=await bounded(()=>fs.readFile(path.join(repo,'botstrike/spec.json'))),spec=JSON.parse(body);if(!spec.maps?.[index])throw Error('Navigation steering public map is unavailable');
+    return{index,map:spec.maps[index],specSha256:createHash('sha256').update(body).digest('hex'),life:own(value).life,roomId:value.id,slot:value.slot};
+   }
+   const steeringContextMatches=value=>{const p=own(value);return p?.alive&&p.life===steeringMap.life&&value.id===steeringMap.roomId&&value.slot===steeringMap.slot&&value.config?.map===steeringMap.index;};
+   async function alignSteering(target){
+    if([...held].some(key=>['KeyW','KeyA','KeyS','KeyD'].includes(key)))throw Error('Navigation steering requires neutral movement while turning');
+    const afterIndex=actor.lastInput?.index??0;
+    for(let step=0;step<20;step++){
+     await bounded(()=>actor.drain());const frame=actor.lastPresentation;if(!Number.isFinite(frame?.camera?.yaw)||!Number.isFinite(frame?.camera?.pitch))throw Error('Navigation steering needs the real rendered camera');
+     const observed=await bounded(()=>actor.room()),p=own(observed),from=[p?.position?.[0],p?.position?.[2]];
+     if(!steeringContextMatches(observed)||!navigationPathClear(steeringMap.map,[from,target,goal],goal,{groundY:p.position[1]}))throw Error('Navigation steering pose or swept path is unavailable or unsafe');
+     const choice=cardinalSteering(from,target,frame.camera.yaw);if(!choice)throw Error('Navigation steering has no nonzero normal-control direction');
+     const dyaw=wrap(choice.yaw-frame.camera.yaw),dpitch=-frame.camera.pitch;
+     if(Math.hypot(dyaw,dpitch)<=.002){
+      const sent=await bounded(timeout=>actor.waitInput(row=>row.input.x===0&&row.input.y===0&&Math.abs(wrap(row.input.yaw-choice.yaw))<=.002&&Math.abs(row.input.pitch)<=.002,{afterIndex,timeout}));
+      const current=await bounded(timeout=>actor.waitRoom(value=>own(value)?.last_seq>=sent.input.seq&&speed(own(value))<8&&Math.abs(wrap(own(value).yaw-choice.yaw))<=.002,{timeout})),player=own(current),position=[player.position[0],player.position[2]];
+      if(!steeringContextMatches(current)||!navigationPathClear(steeringMap.map,[position,target,goal],goal,{groundY:player.position[1]}))throw Error('Navigation steering refreshed pose or swept path is unsafe');
+      return{room:current,player,choice,target:[...target],frameIndex:frame.index,remainingMs:remaining()};
+     }
+     await bounded(()=>actor.aim(Math.max(-240,Math.min(240,-dyaw/.0025)),Math.max(-120,Math.min(120,-dpitch/.0025))));
+     await bounded(timeout=>actor.waitPresentation(()=>true,{afterIndex:frame.index,timeout}));
+    }
+    throw Error('Navigation steering real camera did not converge');
+   }
    await mark('route-waypoint-start',{actor:actor.id,goal});
    while(performance.now()-started<timeoutPerWaypoint){
-    await assertActive();
-    const room=await actor.room(),player=own(room);if(!player?.alive)throw Error(actor.id+' died or has no own public pose while navigating');
-    const dx=goal[0]-player.position[0],dz=goal[1]-player.position[2],distance=Math.hypot(dx,dz);
+    if(steeringMap)await bounded(()=>assertActive());else await assertActive();
+    let room=steeringMap?await bounded(()=>actor.room()):await actor.room(),player=own(room);if(!player?.alive)throw Error(actor.id+' died or has no own public pose while navigating');
+    if(steeringMap&&!steeringContextMatches(room))throw Error('Navigation steering room, slot, map or life changed');
+    let dx=goal[0]-player.position[0],dz=goal[1]-player.position[2],distance=Math.hypot(dx,dz),steered=null;
     if(distance<=tolerance&&speed(player)<8){arrived=true;arrivals.push({goal,position:[...player.position],tick:room.state.tick,lastSeq:player.last_seq});break;}
     if(distance<lastDistance-.2){lastDistance=distance;progressAt=performance.now();}if(performance.now()-progressAt>5000)throw Error('Route made no progress: '+JSON.stringify({actor:actor.id,goal,position:player.position,distance}));
     // A WebSocket framesent observation is not a TCP arrival or a Native step.
     // Short intents may arrive together, or remain held longer on the server.
     // Adapt from the public stopped pose, rather than assuming timer duration
     // equals authoritative movement. No private capture drives these controls.
+    if(steeringMap){
+     steered=await alignSteering(pair?.phase==='detour'?pair.via:goal);room=steered.room;player=steered.player;dx=goal[0]-player.position[0];dz=goal[1]-player.position[2];distance=Math.hypot(dx,dz);
+     if(distance<=tolerance&&speed(player)<8){arrived=true;arrivals.push({goal,position:[...player.position],tick:room.state.tick,lastSeq:player.last_seq});break;}
+     await bounded(()=>mark('route-steering-aligned',{actor:actor.id,goal,phase:pair?.phase||'radial',target:steered.target,key:steered.choice.key,yaw:steered.choice.yaw,frameIndex:steered.frameIndex,remainingMs:steered.remainingMs}));
+    }
     const axis=Math.abs(dx)>Math.abs(dz)?[Math.sign(dx),0]:[0,Math.sign(dz)],walk=distance<150,crouch=distance<30;
-    const modifiers=[...(walk?['ShiftLeft']:[]),...(crouch?['KeyF']:[])],desired=[...modifiers,...movementKeys(player.yaw,axis[0],axis[1])];
+    const modifiers=[...(walk?['ShiftLeft']:[]),...(crouch?['KeyF']:[])],desired=[...modifiers,...(steered?[steered.choice.key]:movementKeys(player.yaw,axis[0],axis[1]))];
     const expected={x:Number(desired.includes('KeyD'))-Number(desired.includes('KeyA')),y:Number(desired.includes('KeyW'))-Number(desired.includes('KeyS')),walk,crouch};
-    const pulse=distance>180?260:distance>60?90:distance>15?40:fineHoldMs;
-    await mark('route-pulse-start',{actor:actor.id,goal,pulseNumber:++pulseNumber,requestAnchor:stamp(),beforePublic:{tick:room.state.tick,position:[...player.position],distance},expected,extraHoldMs:pulse});
+    const pulse=pair?pair.hold:distance>180?260:distance>60?90:distance>15?40:fineHoldMs;
+    const pulseStart={actor:actor.id,goal,pulseNumber:++pulseNumber,requestAnchor:stamp(),beforePublic:{tick:room.state.tick,position:[...player.position],distance},expected,extraHoldMs:pulse,...(steered?{steering:{phase:pair?.phase||'radial',target:steered.target,key:steered.choice.key,yaw:steered.choice.yaw}}:{})};
+    if(steered)await bounded(()=>mark('route-pulse-start',pulseStart));else await mark('route-pulse-start',pulseStart);
     // Take the anchor after the marker: marker work must not allow an old
     // neutral or an input from before this actual keydown to satisfy the wait.
-    const down=stamp(),sendWait=actor.watchInputSent(row=>row.input.x===expected.x&&row.input.y===expected.y&&row.input.walk===walk&&row.input.crouch===crouch,{afterIndex:down.index,timeout:2000});sendWait.promise.catch(()=>{});let sent,keyup,pulseFailure;
+    if(steered)remaining();
+    const down=stamp(),sendWait=actor.watchInputSent(row=>row.input.x===expected.x&&row.input.y===expected.y&&row.input.walk===walk&&row.input.crouch===crouch&&(!steered||Math.abs(wrap(row.input.yaw-steered.choice.yaw))<=.002&&Math.abs(row.input.pitch)<=.002),{afterIndex:down.index,timeout:steered?Math.min(2000,remaining()):2000});sendWait.promise.catch(()=>{});let sent,keyup,pulseFailure;
     try{
-     await setKeys(actor,held,desired);sent=await sendWait.promise;
-     const remaining=pulse-(performance.now()-sent.nodeAtMs);if(remaining>0)await pause(remaining);
+     await setKeys(actor,held,desired,steered?remaining:undefined);if(steered)remaining();sent=await sendWait.promise;if(steered)remaining();
+     const hold=pulse-(performance.now()-sent.nodeAtMs);if(hold>0)await pause(steered?Math.min(hold,remaining()):hold);if(steered)remaining();
     }catch(error){pulseFailure=error;throw error;}
     finally{
      sendWait.cancel();keyup=stamp();
      try{await setKeys(actor,held,modifiers);}catch(error){if(!pulseFailure)throw error;pulseFailure.navigationPulseReleaseError=error.message;}
     }
     // Write potentially asynchronous markers only after releasing movement.
-    await mark('route-pulse-sent',{actor:actor.id,goal,pulseNumber,downAnchor:down,observedSend:{index:sent.index,seq:sent.input.seq,wallAt:sent.nodeUnixMs,monotonicMs:sent.nodeAtMs},extraHoldMs:pulse,meaning:'Real WebSocket framesent observation; not wire arrival or Native application'});
-    await mark('route-pulse-keyup',{actor:actor.id,goal,pulseNumber,keyupAnchor:keyup});
-    const stopped=await confirmStop(keyup.index,walk,crouch),after=own(stopped.room),moved=[after.position[0]-player.position[0],after.position[2]-player.position[2]],displacement=Math.hypot(...moved),afterDistance=Math.hypot(goal[0]-after.position[0],goal[1]-after.position[2]);
+    const sentMarker=()=>mark('route-pulse-sent',{actor:actor.id,goal,pulseNumber,downAnchor:down,observedSend:{index:sent.index,seq:sent.input.seq,wallAt:sent.nodeUnixMs,monotonicMs:sent.nodeAtMs},extraHoldMs:pulse,meaning:'Real WebSocket framesent observation; not wire arrival or Native application'}),keyupMarker=()=>mark('route-pulse-keyup',{actor:actor.id,goal,pulseNumber,keyupAnchor:keyup});
+    if(steered){await bounded(sentMarker);await bounded(keyupMarker);}else{await sentMarker();await keyupMarker();}
+    const stopped=await confirmStop(keyup.index,walk,crouch,steered?bounded:undefined),after=own(stopped.room),moved=[after.position[0]-player.position[0],after.position[2]-player.position[2]],displacement=Math.hypot(...moved),afterDistance=Math.hypot(goal[0]-after.position[0],goal[1]-after.position[2]);
+    if(steered){remaining();if(!steeringContextMatches(stopped.room)||!navigationPathClear(steeringMap.map,[[player.position[0],player.position[2]],[after.position[0],after.position[2]],goal],goal,{groundY:after.position[1]}))throw Error('Navigation steering actual stopped motion left its safe20-unit goal envelope or path');}
     const overshot=(goal[0]-after.position[0])*axis[0]+(goal[1]-after.position[2])*axis[1]<0;
-    if(distance<=15){if(displacement<.05)fineHoldMs=Math.min(60,fineHoldMs+4);else if(overshot||afterDistance>=distance)fineHoldMs=0;else fineHoldMs=Math.max(0,Math.min(fineHoldMs,Math.floor(pulse*Math.max(0,afterDistance-tolerance)/displacement)));}
-    await mark('route-pulse-stopped',{actor:actor.id,goal,pulseNumber,neutral:{index:stopped.sent.index,seq:stopped.sent.input.seq,wallAt:stopped.sent.nodeUnixMs},publicAck:{tick:stopped.room.state.tick,lastSeq:after.last_seq,position:[...after.position],speed:speed(after),distance:afterDistance},publicDisplacement:displacement,overshot,nextFineHoldMs:fineHoldMs});await pause(35);
+    let fineAdjustmentReason=null;
+    // Four milliseconds seeds the bounded search; it is no actuation floor or Native-step guarantee.
+    // Productive observed-progress scaling may still choose a shorter hold.
+    if(distance<=15){if(displacement<.05){fineHoldMs=Math.min(60,Math.max(4,pulse*2));fineAdjustmentReason='zero_displacement_double';}else if(overshot||afterDistance>=distance){fineHoldMs=Math.min(60,Math.max(4,Math.floor(pulse/2)));fineAdjustmentReason='overshoot_halve';}else{fineHoldMs=Math.max(0,Math.min(fineHoldMs,Math.floor(pulse*Math.max(0,afterDistance-tolerance)/displacement)));fineAdjustmentReason='observed_progress_scale';}}
+    if(pair){if(pair.phase==='detour'&&displacement>=.05){pair.phase='closure';pair.hold=pulse;}else if(pair.phase==='detour')pair.hold=fineHoldMs;else pair=null;}
+    else if(distance<=15&&overshot&&distance>tolerance&&afterDistance>tolerance&&displacement>2*tolerance&&displacement<=15){
+     const selected=steeringMap||await mapFor(stopped.room),plan=planTwoLegSteering({from:[after.position[0],after.position[2]],goal,step:displacement,map:selected.map,yaw:after.yaw,groundY:after.position[1],tolerance});
+     if(plan){steeringMap=selected;pair={phase:'detour',via:plan.via,hold:Math.min(60,pulse)};await bounded(()=>mark('route-steering-planned',{actor:actor.id,goal,from:[after.position[0],after.position[2]],via:plan.via,observedStep:displacement,requestedHoldMs:pair.hold,side:plan.side,envelope:plan.envelope,mapIndex:selected.index,specSha256:selected.specSha256,remainingMs:remaining(),meaning:'Two-leg geometry from a previous observed displacement; future pulse lengths remain unproven'}));}
+    }
+    await mark('route-pulse-stopped',{actor:actor.id,goal,pulseNumber,neutral:{index:stopped.sent.index,seq:stopped.sent.input.seq,wallAt:stopped.sent.nodeUnixMs},publicAck:{tick:stopped.room.state.tick,lastSeq:after.last_seq,position:[...after.position],speed:speed(after),distance:afterDistance},publicDisplacement:displacement,overshot,nextFineHoldMs:fineHoldMs,fineAdjustmentReason});await pause(35);
    }
    if(!arrived)throw Error(actor.id+' waypoint timeout: '+JSON.stringify({goal,position:own(await actor.room())?.position}));await mark('route-waypoint-arrived',{actor:actor.id,...arrivals.at(-1)});
   }

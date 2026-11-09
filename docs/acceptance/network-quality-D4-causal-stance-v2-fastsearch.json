@@ -1,0 +1,168 @@
+{
+  "application": {
+    "imageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "toolImageId": "sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209"
+  },
+  "candidate": "D4",
+  "capture": {
+    "archiveCompressedBytes": 5326178,
+    "archiveOriginalBytes": 153736389,
+    "archives": 12,
+    "atomicObserverEvidenceAvailable": {
+      "A": true,
+      "B": true
+    },
+    "browserDropped": {
+      "A": 0,
+      "B": 0
+    },
+    "dropped": 0,
+    "measuredBrowserRenderWindowsAvailable": false
+  },
+  "causalContract": {
+    "baselineWindowMs": 2000,
+    "liveBoundaryShotsReached": 0,
+    "liveV2Acceptance": false,
+    "maximumPresentationAgeMs": 100,
+    "originalTargetSendAndPageBarrierRequired": true,
+    "presentationPackedAndRewindAtOrAfterNewCrouchRequired": true,
+    "requiresNewStandingBaselineAndCrouchAck": true,
+    "singleTrainObservationWindowMs": 1000,
+    "toggleCount": 8,
+    "toggleIntervalMs": 80,
+    "version": 2
+  },
+  "cleanup": {
+    "newContainersRemaining": 0,
+    "newNetworksRemaining": 0,
+    "ownedChromeProcessesRemaining": 0,
+    "runtimeCleanupFailures": 0,
+    "sourceUnchanged": true
+  },
+  "currentHostChecks": {
+    "exitCode": 0,
+    "imageBaked": false,
+    "pureReceiptSha256": "58cda568609be43262ab2179139c728b39b0e10c8cfafebc7faca223eb5d1de0",
+    "pureTapSha256": "846c9b2a6361b1bdbefef74f938e18ede51373d713a886b77371aaba6db6e419",
+    "relatedPureFailed": 0,
+    "relatedPurePassed": 104,
+    "frozenRuntimeSourceFiles": 23,
+    "runtimeSourcesUnchangedDuringCase": true,
+    "relatedPureBoundFiles": 19,
+    "relatedPureSourcesUnchanged": true
+  },
+  "evidenceSha256": {
+    "after": "8c450854757f465ce7aac657a7b5817036d47c44494ee11f5bfbeba29dda0ee3",
+    "archives": "b330575212d44fad9c5cb873372f819b7f669f63bdbd86a3c6a100fb5df7cc95",
+    "before": "2b96e75f611609842ef2f11f5a580e4727254935c65f6e747c4bf3dd2dbbdb3e",
+    "case": "88535eddf76501bc514641b80b0baef9d0b30abc67d2ed3723d741c783613f3d",
+    "chromeCleanup": "301e978ea7151bae42ce65d67583362ed09019cc9332d8cc15cf054d448546ea",
+    "dockerEvents": "f6bc16be1ec90e859b2d711984f24dd2912d1c0f8d9af42abda46b402e47103d",
+    "evidenceManifest": "0c2e6a5959aa45fc53c68254a4a9dba0b1970625b9acefef241d2cba536cda69",
+    "frozenHostSources": "962bb3a2375a0b575bcc6e4d7b0fd059ec01646d24e6d4d05f4b0e6910f5de0e",
+    "matrix": "9e0aca10ca58f650c1f39204315255091aa79124da51441341987ff4ddc4ffea",
+    "pureReceipt": "58cda568609be43262ab2179139c728b39b0e10c8cfafebc7faca223eb5d1de0",
+    "pureTap": "846c9b2a6361b1bdbefef74f938e18ede51373d713a886b77371aaba6db6e419",
+    "replayReport": "d6899da7be05d17048aebbd9fc37c09d40778deab3162e8ed3ad99a3ff420086",
+    "runtimeAgreement": "cbe47b2c06a1d3ba8ae2282d6fa0ee28e7dcdb794a0f9904e1e21393159ac911",
+    "runtimeCleanup": "a89231bec1035321dd0335d78363edfd426dbcdfc1439c4b5bd44aaa424e550f",
+    "supervisorCompletion": "0c0a8e99c74ebb7f9e4955be2e6509ab2115709098af1b1fc15644ccac028282"
+  },
+  "hostSourceSha256": {
+    "botstrike/examples/network_audit.rs": "6dd07b6ba1023c06d174c68111be789447247588ede5f5a1cae1290e5275ffc9",
+    "games/botstrike/client/input-delivery.mjs": "e307dbd6646c4ac32227ea19809491344b819766bb785fe8168587e5184c0bca",
+    "tools/damage-contract-source.mjs": "3b0b2d861d44ffd1b33bd526d5c50806edc40db4a35f5b8b04849ea9db70c203",
+    "tools/local-recovery-fence.mjs": "e8bb293ed42346cae9040a0fb8eea1da68619fa803ead0b04ba55f16bbc23048",
+    "tools/network-browser-actors.mjs": "bda8f1c1974ccac259eb8cd9921c216473ae7233fcc28a49c273f04d9a97a03d",
+    "tools/network-fairness-scenarios.mjs": "fe1b39510131ac7a7d2dedab43dd1a1f5bd01670c7c4f3cbefe46865fb32b1ae",
+    "tools/network-lab-provenance.mjs": "ad95303734e12d8fe2eb3f973b7d67b60c0eb4b9d005e6e58714139616b3f231",
+    "tools/network-lab.mjs": "c3420a55613a2f98796c24aa8f29fd58f0f08ef8f41ca3e79ae5e9b39a910968",
+    "tools/network-local-fence.mjs": "5c26936e6f875748447cdb7994952035fc3d0e845f037ff3fe2b4b68a4ebdbd9",
+    "tools/network-matrix-analysis.mjs": "25fc974e553981cc5ef8b371ad13db8a77dbc925dbe6b4aa4142a98bd5de0ee6",
+    "tools/network-matrix-artifacts.mjs": "2d2b21ce8afbe955a4ac6824be1f81ae427a39a169ec34b412e4f72f1d80ca2a",
+    "tools/network-matrix-profiles.mjs": "16defea0aca2c1a29c111708be5155f39290906c171feac1565a93482596a0e6",
+    "tools/network-matrix-recovery.mjs": "2259b5b6227cf069a39b7759572aeec5d3b8dae5b126441725b23d8faffc372b",
+    "tools/network-matrix-replay.mjs": "e21d4bfb9079e9e88b11f9c9d27264e9ab2c0ef2b2457f9721fbc93f43683b9e",
+    "tools/network-node-actors.mjs": "440555d95746ca497d5102a2b42f9fae7797bcab72cd1f3fbe06e1eea955657a",
+    "tools/network-proxy.mjs": "73e12aa1cc45d2bf3c68f333275a048c6088413a10361c91bec2a203eb74d153",
+    "tools/network-shot-boundary-proof.mjs": "12f15795f341534a4f55b9d1809d6af95ea93c0f6e01e6f8d4ea0edd19e47b5e",
+    "tools/network-shot-boundary-report.mjs": "1e6aab7db140644056963ac6ee07fae7c0c6504c0dad82e01b2089e3d4b6c88f",
+    "tools/network-stance-boundary.mjs": "d9e081a77a57fbb773bab920f6dafc2c1f19029f07cbce7d3e01b1a526327d00",
+    "tools/network-trace-archive.mjs": "722cb2a9f7eb27ddd6dc7b866aa2f7190664984ea90db8450f87dbb137cbe489",
+    "tools/run-network-audit.mjs": "c85fab206cad9d46df333611526d80378f77499bb1b8da52ff6c4ec14895b86d",
+    "tools/run-network-matrix.mjs": "e80ba69c89cd3374e408f86a094f11c4ed8c41a72fedddf48ea7ab3f15c62707",
+    "tools/start-network-runtime.mjs": "844d03d70ed9f025f0cfb3a84d9b31fb3bff389afa136fc1d125845bdd8aea16"
+  },
+  "kind": "network-causal-stance-v2-fastsearch-failed-checkpoint",
+  "limitations": [
+    "This case failed in navigation before the stance helper; it establishes zero newly induced stance-shot coverage.",
+    "Both measured browser render windows were missing. Zero capture drops and observer availability do not fill that gap.",
+    "The first v1 partial cohort, earlier failed v2 case and this failed fastsearch case remain separate; no matrix counts are combined.",
+    "Configured 180ms added round-trip delay is not measured application RTT or an exclusive transport causal benchmark.",
+    "The 104 pure checks bind only this frozen host source. Later two-dimensional controller changes require separate source binding and focused checks.",
+    "No navigation tolerance, deadline, delivery lifetime or common-core prerequisite was relaxed.",
+    "Logical callback completion and exact off-chain replay do not establish physical display/input, human fairness, WAN acceptance or CKB settlement.",
+    "Other pose boundaries, failed network conditions and #4/#12/#26 acceptance remain open."
+  ],
+  "matrixCase": {
+    "catalogCount": 32,
+    "configurationIsMeasuredAppRtt": false,
+    "configuredAddedRoundTripDelayMs": {
+      "A": 0,
+      "B": 180
+    },
+    "directNodeExit": 1,
+    "failurePhase": "common combat navigation before stance helper",
+    "id": "stance-boundary-low-high",
+    "pendingCases": 31,
+    "primaryFailure": "Route made no progress",
+    "reportedDistanceUnits": 4.339305869785137,
+    "secondaryFailures": [
+      "browser_measured_render_window_missing",
+      "browser_measured_render_window_missing"
+    ],
+    "toolVerdict": "failed",
+    "wholeCatalogStatus": "failed"
+  },
+  "navigationContract": {
+    "distanceTolerance": 2,
+    "limitsRelaxed": false,
+    "maximumFineHoldMs": 60,
+    "noProgressLimitMs": 5000,
+    "normalKeyboardAndMouse": true,
+    "waypointLimitMs": 30000
+  },
+  "replay": {
+    "capturedRuntimePrefixMatched": true,
+    "comparedRuntimeTicks": 4217,
+    "fullTapeTraceMatched": true,
+    "selectedToTick": 3221,
+    "sourceNativeReplayMatched": true,
+    "tapeTicks": 4217,
+    "unconfirmedTapeTailTicks": 0
+  },
+  "schemaVersion": 1,
+  "scope": {
+    "applicationRebuilt": false,
+    "automated": true,
+    "deployed": false,
+    "hostOnly": true,
+    "humanParticipants": 0,
+    "issueAcceptance": false,
+    "merged": false,
+    "nativeRulesChanged": false,
+    "networkAcceptance": false,
+    "newTrainCausalAcceptance": false
+  },
+  "separatePriorEvidenceSha256": {
+    "firstAtomicPartialPublicCheckpoint": "72f6ac3432f7edfe8ef18d12cbce66bf6c2e80ae570427326996bb63e5e51693",
+    "independentFastsearchNavigationAudit": "c128fefb14500d75d80958e7290edcfed3819760b86c879f284eaaf90ffac81f",
+    "priorCausalV2Audit": "f7ecd0fadb0a0fc00361f383ed60b8800ba9c4f1c2207be9872d1f094e8452af",
+    "priorCausalV2PublicCheckpoint": "696b28822074dcfc05645de00e09e2a5307495e5c0fa026f94082370d93985e8",
+    "priorCausalV2TakeoverSupplement": "299b10b807c51a4201ce0cd4d12ce987152fbd83a8c2a44fbb9c29173160eb8e"
+  },
+  "status": "failed_before_stance_boundary"
+}

@@ -16,17 +16,19 @@ test('aim geometry is derived only from a visible presented target and the actua
 
 // These are control-contract fixtures, not a network or Native simulator. The
 // public stopped positions deliberately include lost motion and an overshoot.
-function navigationActor(stoppedPositions,{modifiers=[],paused=false}={}){
- const history=[],keys=new Set(modifiers),positions=[...stoppedPositions];let pendingStop=false,seq=0;
- const player={slot:0,alive:true,position:[0,0,0],velocity:[0,0,0],yaw:0,pitch:0,crouch:keys.has('KeyF'),stance:keys.has('KeyF')?1:0,last_seq:0};
- const state={slot:0,state:{tick:0,players:[player]}};
+function navigationActor(stoppedPositions,{modifiers=[],paused=false,stoppedPosition,startPosition=[0,0],life=1}={}){
+ const history=[],keys=new Set(modifiers),positions=[...stoppedPositions];let pendingStop=false,seq=0,lastMovement=null;
+ const player={slot:0,life,alive:true,position:[startPosition[0],0,startPosition[1]],velocity:[0,0,0],yaw:0,pitch:0,crouch:keys.has('KeyF'),stance:keys.has('KeyF')?1:0,last_seq:0};
+ const state={id:'ContractRoom',slot:0,config:{map:0},state:{tick:0,players:[player]}};
  const actor={id:'Contract',index:0,heldKeys:keys,lastPresentation:{index:0,camera:{yaw:0,pitch:0}},commands:[],history,
   record(kind,data){const row={index:++this.index,nodeAtMs:performance.now(),nodeUnixMs:Date.now(),...data};history.push({kind,...row});return row;},
   async key(code,direction){this.record('driver_input',{code,direction});this.commands.push({code,direction});const moved=keys.has('KeyW')||keys.has('KeyA')||keys.has('KeyS')||keys.has('KeyD');if(direction==='down')keys.add(code);else keys.delete(code);if(moved&&direction==='up'&&['KeyW','KeyA','KeyS','KeyD'].includes(code))pendingStop=true;},
-  emit(){const input={seq:++seq,x:Number(keys.has('KeyD'))-Number(keys.has('KeyA')),y:Number(keys.has('KeyW'))-Number(keys.has('KeyS')),walk:keys.has('ShiftLeft'),crouch:keys.has('KeyF'),yaw:0,pitch:0};this.lastInput=this.record('input',{input});player.last_seq=input.seq;player.crouch=input.crouch;player.stance=input.crouch?1:0;state.state.tick++;if(!input.x&&!input.y&&pendingStop){pendingStop=false;const position=positions.shift();if(position)player.position=[position[0],0,position[1]];}return this.lastInput;},
+  emit(){const input={seq:++seq,x:Number(keys.has('KeyD'))-Number(keys.has('KeyA')),y:Number(keys.has('KeyW'))-Number(keys.has('KeyS')),walk:keys.has('ShiftLeft'),crouch:keys.has('KeyF'),yaw:this.lastPresentation.camera.yaw,pitch:this.lastPresentation.camera.pitch};this.lastInput=this.record('input',{input});player.last_seq=input.seq;player.yaw=input.yaw;player.pitch=input.pitch;player.crouch=input.crouch;player.stance=input.crouch?1:0;state.state.tick++;if(input.x||input.y)lastMovement={x:input.x,y:input.y,yaw:input.yaw,world:[-Math.sin(input.yaw)*input.y+Math.cos(input.yaw)*input.x,-Math.cos(input.yaw)*input.y-Math.sin(input.yaw)*input.x]};if(!input.x&&!input.y&&pendingStop){pendingStop=false;const position=stoppedPosition?stoppedPosition({position:[player.position[0],player.position[2]],movement:lastMovement}):positions.shift();if(position)player.position=[position[0],0,position[1]];}return this.lastInput;},
   async waitInput(predicate,{afterIndex=0}={}){if(paused)throw Error('No new controls while paused');const existing=history.find(row=>row.kind==='input'&&row.index>afterIndex&&predicate(row));if(existing)return existing;await new Promise(resolve=>setTimeout(resolve,15));const row=this.emit();assert.ok(row.index>afterIndex);assert.ok(predicate(row),'Contract fixture must request the current normal keyboard state');return row;},
   watchInputSent(predicate,{afterIndex=0}={}){let timer;const promise=new Promise((resolve,reject)=>{timer=setTimeout(()=>{try{const row=this.emit();assert.ok(row.index>afterIndex);assert.ok(predicate(row));resolve(row);}catch(error){reject(error);}},15);});return{promise,cancel(){clearTimeout(timer);}};},
   async waitRoom(predicate){assert.ok(predicate(structuredClone(state)),'Must wait for the public stopped acknowledgement');return structuredClone(state);},
+  async aim(dx,dy){this.commands.push({device:'aim',dx,dy});this.lastPresentation.camera.yaw-=Math.round(dx)*.0025;this.lastPresentation.camera.pitch-=Math.round(dy)*.0025;},
+  async waitPresentation(predicate,{afterIndex=0}={}){this.lastPresentation={index:++this.index,camera:{...this.lastPresentation.camera}};assert.ok(this.index>afterIndex);assert.ok(predicate(this.lastPresentation));return this.lastPresentation;},
   async room(){return structuredClone(state);},async drain(){},async sample(){return{window:{playing:!paused,visibility:'visible',hasFocus:true},status:paused?'Restoring controls. Online match continues.':''};}
  };actor.emit();return actor;
 }
@@ -76,4 +78,103 @@ test('a delivered keydown that rejects still requests keyup and retains the orig
  assert.equal(cancelled,true);assert.deepEqual([...actor.heldKeys],[]);
  assert.ok(actor.commands.some(row=>row.code==='KeyD'&&row.direction==='up'));
  assert.ok(!marks.includes('route-pulse-sent')&&!marks.includes('route-waypoint-arrived'));
+});
+
+test('bounded fine search retains a shorter pulse after overshoot instead of repeating a cold linear search',{timeout:3000},async()=>{
+ let requestedHold=0,pulses=0,applied=0;const marks=[];
+ const actor=navigationActor([],{stoppedPosition({position,movement}){
+  if(++pulses>9)throw Error('Synthetic actuation budget exceeded');
+  if(requestedHold<20)return position;
+  const step=++applied===1?11.28:7.91;
+  return[position[0]+movement.x*step,position[1]-movement.y*step];
+ }});
+ const arrivals=await moveBrowser(actor,[[5,0]],{mark:(label,data)=>{marks.push({label,...structuredClone(data)});if(label==='route-pulse-start')requestedHold=data.extraHoldMs;}});
+ assert.deepEqual(marks.filter(x=>x.label==='route-pulse-start').map(x=>x.extraHoldMs),[0,4,8,16,32,16,32]);
+ assert.equal(pulses,7);assert.equal(applied,2);assert.ok(Math.abs(arrivals[0].position[0]-5)<=2);
+ assert.deepEqual(marks.filter(x=>x.label==='route-pulse-stopped').map(x=>x.fineAdjustmentReason),['zero_displacement_double','zero_displacement_double','zero_displacement_double','zero_displacement_double','overshoot_halve','zero_displacement_double','overshoot_halve']);
+ assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('fine search reaches the unchanged60ms cap and reports stalled motion without inventing arrival',{timeout:3000},async()=>{
+ let requestedHold=0,pulses=0;const starts=[],marks=[];
+ const actor=navigationActor([],{stoppedPosition({position}){assert.ok(requestedHold<=60);if(++pulses>8)throw Error('Synthetic stalled-motion budget exceeded');return position;}});
+ await assert.rejects(moveBrowser(actor,[[5,0]],{mark:(label,data)=>{marks.push(label);if(label==='route-pulse-start'){requestedHold=data.extraHoldMs;starts.push(requestedHold);}}}),/Synthetic stalled-motion budget exceeded/);
+ assert.deepEqual(starts,[0,4,8,16,32,60,60,60,60]);assert.ok(!marks.includes('route-waypoint-arrived'));assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('useful variable displacements can still shrink below the search seed without a persistent actuation floor',{timeout:3000},async()=>{
+ let requestedHold=0,applied=0;const starts=[];
+ const actor=navigationActor([],{stoppedPosition({position,movement}){
+  if(requestedHold===0||requestedHold===4)return position;
+  const steps=[4,3,.5,.75],step=steps[applied++];assert.ok(step!==undefined,'Bounded synthetic variable-motion catalog');
+  return[position[0]+movement.x*step,position[1]-movement.y*step];
+ }});
+ const arrivals=await moveBrowser(actor,[[10,0]],{mark:(label,data)=>{if(label==='route-pulse-start'){requestedHold=data.extraHoldMs;starts.push(requestedHold);}}});
+ assert.deepEqual(starts,[0,4,8,8,2,2]);assert.ok(Math.abs(arrivals[0].position[0]-10)<=2);assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('normal mouse plus cardinal inputs escape the observed axis trap using actual stopped poses',{timeout:3000},async()=>{
+ const length=7.91015625,marks=[];let pulses=0;
+ const actor=navigationActor([],{startPosition:[95.77664375,241],stoppedPosition({position,movement}){
+  assert.ok(++pulses<=4,'Bounded two-leg counterexample');assert.equal(Math.hypot(movement.x,movement.y),1);
+  return position.map((value,i)=>value+movement.world[i]*length);
+ }});
+ const watch=actor.watchInputSent;let rejectedOldHeadings=0;
+ actor.watchInputSent=function(predicate,options){return watch.call(this,row=>{if(this.commands.some(command=>command.device==='aim')){assert.equal(predicate({...row,input:{...row.input,yaw:row.input.yaw+.1}}),false);assert.equal(predicate({...row,input:{...row.input,pitch:.1}}),false);rejectedOldHeadings++;}return predicate(row);},options);};
+ const arrivals=await moveBrowser(actor,[[100,240]],{mark:(label,data)=>marks.push({label,...structuredClone(data)})});
+ assert.equal(pulses,3);assert.ok(Math.hypot(arrivals[0].position[0]-100,arrivals[0].position[2]-240)<=2);
+ const plans=marks.filter(row=>row.label==='route-steering-planned');assert.equal(plans.length,1);assert.equal(plans[0].observedStep,length);assert.equal(plans[0].envelope,20);assert.match(plans[0].specSha256,/^[a-f0-9]{64}$/);
+ const starts=marks.filter(row=>row.label==='route-pulse-start'),stops=marks.filter(row=>row.label==='route-pulse-stopped');
+ assert.deepEqual(starts.map(row=>row.steering?.phase),[undefined,'detour','closure']);assert.equal(starts[2].extraHoldMs,starts[1].extraHoldMs);
+ assert.deepEqual(starts[2].beforePublic.position,stops[1].publicAck.position,'Closure starts at the real stopped position');
+ assert.ok(stops[1].publicAck.distance>stops[0].publicAck.distance,'The first leg earns no radial progress');
+ assert.equal(rejectedOldHeadings,2);assert.ok(actor.commands.some(row=>row.device==='aim'));assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('variable real step lengths never turn a predicted triangle endpoint into arrival',{timeout:3000},async()=>{
+ const lengths=[7.91015625,11.28,1],marks=[];let pulses=0;
+ const actor=navigationActor([],{startPosition:[95.77664375,241],stoppedPosition({position,movement}){
+  const length=lengths[pulses++];if(length===undefined)throw Error('Variable-motion script complete');return position.map((value,i)=>value+movement.world[i]*length);
+ }});
+ await assert.rejects(moveBrowser(actor,[[100,240]],{mark:(label,data)=>marks.push({label,...structuredClone(data)})}),/Variable-motion script complete/);
+ const stops=marks.filter(row=>row.label==='route-pulse-stopped');assert.equal(stops.length,3);assert.ok(stops[2].publicAck.distance>2);
+ assert.ok(!marks.some(row=>row.label==='route-waypoint-arrived'));assert.deepEqual([...actor.heldKeys],[]);
+ const starts=marks.filter(row=>row.label==='route-pulse-start');assert.deepEqual(starts[2].beforePublic.position,stops[1].publicAck.position);assert.equal(starts[3].steering.phase,'radial');
+});
+
+test('an actual steered displacement outside the fixed20-unit envelope fails with released keys',{timeout:3000},async()=>{
+ const lengths=[7.91015625,25],marks=[];
+ const actor=navigationActor([],{startPosition:[95.77664375,241],stoppedPosition({position,movement}){const length=lengths.shift();assert.ok(length!==undefined);return position.map((value,i)=>value+movement.world[i]*length);}});
+ await assert.rejects(moveBrowser(actor,[[100,240]],{mark:label=>marks.push(label)}),/actual stopped motion left its safe20-unit/);
+ assert.ok(!marks.includes('route-waypoint-arrived'));assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('a late in-flight mouse operation settles before cleanup and grants no later navigation input',{timeout:2000},async()=>{
+ let pulses=0,aimSettled=false;const marks=[];
+ const actor=navigationActor([],{startPosition:[95.77664375,241],stoppedPosition({position,movement}){pulses++;return position.map((value,i)=>value+movement.world[i]*7.91015625);}}),aim=actor.aim;
+ actor.aim=async function(...args){await new Promise(resolve=>setTimeout(resolve,180));await aim.apply(this,args);aimSettled=true;};
+ await assert.rejects(moveBrowser(actor,[[100,240]],{timeoutPerWaypoint:180,mark:label=>marks.push(label)}),/Navigation steering deadline exceeded/);
+ assert.equal(aimSettled,true);assert.equal(pulses,1);assert.equal(actor.commands.filter(row=>row.device==='aim').length,1);
+ assert.equal(actor.commands.filter(row=>row.direction==='down'&&['KeyW','KeyA','KeyS','KeyD'].includes(row.code)).length,1);
+ assert.ok(!marks.includes('route-waypoint-arrived'));assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('unknown life cannot authorize geometric steering after a real overshoot',async()=>{
+ const actor=navigationActor([],{life:null,startPosition:[95.77664375,241],stoppedPosition({position,movement}){return position.map((value,i)=>value+movement.world[i]*7.91015625);}});
+ await assert.rejects(moveBrowser(actor,[[100,240]]),/needs a valid current life/);
+ assert.ok(!actor.commands.some(row=>row.device==='aim'));assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('a changed life during turning prevents the next movement keydown',async()=>{
+ const actor=navigationActor([],{startPosition:[95.77664375,241],stoppedPosition({position,movement}){return position.map((value,i)=>value+movement.world[i]*7.91015625);}}),room=actor.room;
+ actor.room=async function(){const value=await room.call(this);if(this.commands.some(row=>row.device==='aim'))value.state.players[0].life=2;return value;};
+ await assert.rejects(moveBrowser(actor,[[100,240]]),/pose or swept path is unavailable or unsafe/);
+ assert.equal(actor.commands.filter(row=>row.direction==='down'&&['KeyW','KeyA','KeyS','KeyD'].includes(row.code)).length,1);assert.deepEqual([...actor.heldKeys],[]);
+});
+
+test('a new room with the same map and life cannot inherit the old steering plan',async()=>{
+ const actor=navigationActor([],{startPosition:[95.77664375,241],stoppedPosition({position,movement}){return position.map((value,i)=>value+movement.world[i]*7.91015625);}}),room=actor.room;
+ actor.room=async function(){const value=await room.call(this);if(this.commands.some(row=>row.device==='aim'))value.id='DifferentRoom';return value;};
+ await assert.rejects(moveBrowser(actor,[[100,240]]),/pose or swept path is unavailable or unsafe/);
+ assert.equal(actor.commands.filter(row=>row.direction==='down'&&['KeyW','KeyA','KeyS','KeyD'].includes(row.code)).length,1);assert.deepEqual([...actor.heldKeys],[]);
 });

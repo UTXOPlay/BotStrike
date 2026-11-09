@@ -1,0 +1,200 @@
+{
+  "application": {
+    "imageId": "sha256:b4cf84ff1c6f3286346a932021359fc030f6f854ee5a280bad3d49b8a53290fd",
+    "nativeModelSha256": "4cb119b7638d14fb08cafad9905e9d8bc808d04b233e8d0c4599e6cd79e4ed49",
+    "portableProfileSha256": "c5a72be9466ddd4efa23aa6574541714c8112510ba7f2d7008dd0849f8a9925d",
+    "sourceTree": "cb9ab9bc02352763aed9b3302b9a071fa4be3420",
+    "toolImageId": "sha256:9d4b13f8f7fabf4329becca00a7bc4616a8cc13bd7a843c131c0b7bd84ed6209"
+  },
+  "candidate": "D4",
+  "capture": {
+    "archiveCompressedBytes": 5906995,
+    "archiveOriginalBytes": 168231275,
+    "archives": 12,
+    "atomicObserverEvidenceAvailable": {
+      "A": true,
+      "B": true
+    },
+    "browserDropped": {
+      "A": 0,
+      "B": 0
+    },
+    "dropped": 0,
+    "measuredBrowserRenderWindowsAvailable": false
+  },
+  "causalContract": {
+    "baselineWindowMs": 2000,
+    "liveBoundaryShotsReached": 0,
+    "liveV2Acceptance": false,
+    "maximumPresentationAgeMs": 100,
+    "originalTargetSendAndPageBarrierRequired": true,
+    "presentationPackedAndRewindAtOrAfterNewCrouchRequired": true,
+    "requiresNewStandingBaselineAndCrouchAck": true,
+    "singleTrainObservationWindowMs": 1000,
+    "toggleCount": 8,
+    "toggleIntervalMs": 80,
+    "version": 2
+  },
+  "cleanup": {
+    "newContainersRemaining": 0,
+    "newNetworksRemaining": 0,
+    "ownedChromeProcessesRemaining": 0,
+    "runtimeCleanupFailures": 0,
+    "sourceUnchanged": true
+  },
+  "currentHostChecks": {
+    "exitCode": 0,
+    "imageBaked": false,
+    "pureReceiptSha256": "e655e83723d82139b0b20c7ed758e9e77408614a6a0c7a287924c2d0e9e027d1",
+    "pureTapSha256": "d3b0ac119edffa0034d72b19b7f705892e6d69d0b93ad349fa2c15aaf1136dd3",
+    "relatedPureFailed": 0,
+    "relatedPurePassed": 116,
+    "sourceFiles": 25,
+    "sourceUnchangedDuringRun": true
+  },
+  "evidenceSha256": {
+    "after": "970f8ee9e4b25548029055cdba76452c2c5365a5ccfaa3e036a7a5af08308f3a",
+    "archives": "91bdaec3990928868e070e4f5a6f7cefc88579a4bc68bdbe3d3ebb493c4c1d32",
+    "before": "e8c5780d0e477ea115f7a0108189b22444ad0c809f64238eb98f4a92a62a34fa",
+    "case": "c4e291816f39459ea1f92000b4668969021095550646fd76572ce5a59e1cc4f2",
+    "chromeCleanup": "ccb952570b767c2300dcda8ccd86c9c12b6166c5c500e7b559ed200bde3b7595",
+    "dockerEvents": "49802b4d824d0ccb5df1c4c2e6db67f06ed975df826d4c2d3ab764ff829531c8",
+    "evidenceManifest": "97c0df6646da8de191e01a321fe558cc678e21db4458c58b434ac11baa841f1e",
+    "frozenHostSources": "822f4d2918ea942df93b3f03f2aa9dbeeeedc70393f2a36e9f70b3b1f6e676b6",
+    "matrix": "2227ca703bfb820c136bbbda6925df45ca8bc0a8e62204af7444feb9261ce7db",
+    "pureReceipt": "e655e83723d82139b0b20c7ed758e9e77408614a6a0c7a287924c2d0e9e027d1",
+    "pureTap": "d3b0ac119edffa0034d72b19b7f705892e6d69d0b93ad349fa2c15aaf1136dd3",
+    "replayReport": "7a99d513134e24df64b8f9bf8d848eead99ab03586439e4bd5c6ea36546d1ae7",
+    "runtimeAgreement": "08a9ca324d5d4350088cfd653ceff56ef01841282bfc2d945e6766cbbdb20261",
+    "runtimeCleanup": "9b9a1c9cf9363cc06c80d4fb0af19937a93900e02bcd36f820b3558dd07becbd",
+    "supervisorCompletion": "d8bd2d54c9f17a5cbfc9a866c24bfe248f8479bb38e4c5ee78bcb975be91a025"
+  },
+  "hostSourceSha256": {
+    "botstrike/examples/network_audit.rs": "6dd07b6ba1023c06d174c68111be789447247588ede5f5a1cae1290e5275ffc9",
+    "botstrike/spec.json": "38a9cba9e3d84e326b2d609ff1cca8cfdf2dbe5f3574c5efe2140e6faa9edcc6",
+    "games/botstrike/client/input-delivery.mjs": "e307dbd6646c4ac32227ea19809491344b819766bb785fe8168587e5184c0bca",
+    "tools/damage-contract-source.mjs": "3b0b2d861d44ffd1b33bd526d5c50806edc40db4a35f5b8b04849ea9db70c203",
+    "tools/local-recovery-fence.mjs": "e8bb293ed42346cae9040a0fb8eea1da68619fa803ead0b04ba55f16bbc23048",
+    "tools/network-browser-actors.mjs": "bda8f1c1974ccac259eb8cd9921c216473ae7233fcc28a49c273f04d9a97a03d",
+    "tools/network-fairness-scenarios.mjs": "6f5d411d6d7f405423e44ed7f5539eb8a5bc20ffbbda5a9a6010ec7af55fa23a",
+    "tools/network-lab-provenance.mjs": "ad95303734e12d8fe2eb3f973b7d67b60c0eb4b9d005e6e58714139616b3f231",
+    "tools/network-lab.mjs": "c3420a55613a2f98796c24aa8f29fd58f0f08ef8f41ca3e79ae5e9b39a910968",
+    "tools/network-local-fence.mjs": "5c26936e6f875748447cdb7994952035fc3d0e845f037ff3fe2b4b68a4ebdbd9",
+    "tools/network-matrix-analysis.mjs": "25fc974e553981cc5ef8b371ad13db8a77dbc925dbe6b4aa4142a98bd5de0ee6",
+    "tools/network-matrix-artifacts.mjs": "2d2b21ce8afbe955a4ac6824be1f81ae427a39a169ec34b412e4f72f1d80ca2a",
+    "tools/network-matrix-profiles.mjs": "16defea0aca2c1a29c111708be5155f39290906c171feac1565a93482596a0e6",
+    "tools/network-matrix-recovery.mjs": "2259b5b6227cf069a39b7759572aeec5d3b8dae5b126441725b23d8faffc372b",
+    "tools/network-matrix-replay.mjs": "e21d4bfb9079e9e88b11f9c9d27264e9ab2c0ef2b2457f9721fbc93f43683b9e",
+    "tools/network-navigation-steering.mjs": "fbc9f5dd6b7290dc245711d6918fe09aa01879af562e54128d5c3b2d4c6d89f1",
+    "tools/network-node-actors.mjs": "440555d95746ca497d5102a2b42f9fae7797bcab72cd1f3fbe06e1eea955657a",
+    "tools/network-proxy.mjs": "73e12aa1cc45d2bf3c68f333275a048c6088413a10361c91bec2a203eb74d153",
+    "tools/network-shot-boundary-proof.mjs": "12f15795f341534a4f55b9d1809d6af95ea93c0f6e01e6f8d4ea0edd19e47b5e",
+    "tools/network-shot-boundary-report.mjs": "1e6aab7db140644056963ac6ee07fae7c0c6504c0dad82e01b2089e3d4b6c88f",
+    "tools/network-stance-boundary.mjs": "d9e081a77a57fbb773bab920f6dafc2c1f19029f07cbce7d3e01b1a526327d00",
+    "tools/network-trace-archive.mjs": "722cb2a9f7eb27ddd6dc7b866aa2f7190664984ea90db8450f87dbb137cbe489",
+    "tools/run-network-audit.mjs": "c85fab206cad9d46df333611526d80378f77499bb1b8da52ff6c4ec14895b86d",
+    "tools/run-network-matrix.mjs": "4d2e3351b3e750b8594a5089ecb2422f1cfbb43f5c758e750604f56bac68d3f5",
+    "tools/start-network-runtime.mjs": "844d03d70ed9f025f0cfb3a84d9b31fb3bff389afa136fc1d125845bdd8aea16"
+  },
+  "kind": "network-causal-stance-v2-steering-failed-checkpoint",
+  "limitations": [
+    "This case failed in navigation before the stance helper; it establishes zero newly induced stance-shot coverage.",
+    "Both measured browser render windows were missing. Zero capture drops and observer availability do not fill that gap.",
+    "The first v1 partial cohort, first failed causal-v2 case, second failed fastsearch-v2 case and this third failed steering-v2 case remain separate; no matrix counts are combined.",
+    "Configured 180ms added round-trip delay is not measured application RTT or an exclusive transport causal benchmark.",
+    "The 116 pure checks bind only this frozen host source. Later proxy changes require separate source binding and focused checks.",
+    "No navigation tolerance, deadline, delivery lifetime or common-core prerequisite was relaxed.",
+    "Logical callback completion and exact off-chain replay do not establish physical display/input, human fairness, WAN acceptance or CKB settlement.",
+    "Other pose boundaries, failed network conditions and #4/#12/#26 acceptance remain open.",
+    "Intermediate captured Native post-state positions and adjacent chords are checked; full pre-constraint intra-tick swept collision motion is not reconstructed.",
+    "The later proxy fix and separate ping/Nagle experiment are outside this failed cohort.",
+    "Passing within the arrival radius while still moving is not a neutral stopped arrival or a passed waypoint."
+  ],
+  "matrixCase": {
+    "catalogCount": 32,
+    "configurationIsMeasuredAppRtt": false,
+    "configuredAddedRoundTripDelayMs": {
+      "A": 0,
+      "B": 180
+    },
+    "directNodeExit": 1,
+    "failurePhase": "common combat navigation before stance helper",
+    "id": "stance-boundary-low-high",
+    "noProgressElapsedMs": 5001.707769000001,
+    "pendingCases": 31,
+    "primaryFailure": "Navigation steering deadline exceeded",
+    "secondaryFailures": [
+      "browser_measured_render_window_missing",
+      "browser_measured_render_window_missing"
+    ],
+    "toolVerdict": "failed",
+    "waypointElapsedMs": 11358.590228000001,
+    "wholeCatalogStatus": "failed"
+  },
+  "navigationContract": {
+    "distanceTolerance": 2,
+    "limitsRelaxed": false,
+    "localGoalEnvelopeUnits": 20,
+    "maximumFineHoldMs": 60,
+    "noProgressLimitMs": 5000,
+    "normalKeyboardAndMouse": true,
+    "waypointLimitMs": 30000
+  },
+  "replay": {
+    "capturedRuntimePrefixMatched": true,
+    "comparedRuntimeTicks": 4590,
+    "fullTapeTraceMatched": true,
+    "selectedToTick": 3789,
+    "sourceNativeReplayMatched": true,
+    "tapeTicks": 4590,
+    "unconfirmedTapeTailTicks": 0
+  },
+  "schemaVersion": 1,
+  "scope": {
+    "applicationRebuilt": false,
+    "automated": true,
+    "deployed": false,
+    "hostOnly": true,
+    "humanParticipants": 0,
+    "issueAcceptance": false,
+    "laterProxyFixIncluded": false,
+    "merged": false,
+    "nativeRulesChanged": false,
+    "networkAcceptance": false,
+    "newTrainCausalAcceptance": false,
+    "separatePingNagleExperimentIncluded": false
+  },
+  "separatePriorEvidenceSha256": {
+    "firstAtomicPartialPublicCheckpoint": "72f6ac3432f7edfe8ef18d12cbce66bf6c2e80ae570427326996bb63e5e51693",
+    "firstFailedCausalV2Case": "b42e5a6a1cc8d08b8e352a1c015a7656542398013dfb8267952aeb60f1f21545",
+    "firstPartialV1Case": "2fba86130ffce458743ad7eebccc8e527211466e84935c4e11a004b01588fa8f",
+    "independentFastsearchNavigationAudit": "c128fefb14500d75d80958e7290edcfed3819760b86c879f284eaaf90ffac81f",
+    "priorCausalV2Audit": "f7ecd0fadb0a0fc00361f383ed60b8800ba9c4f1c2207be9872d1f094e8452af",
+    "priorCausalV2PublicCheckpoint": "696b28822074dcfc05645de00e09e2a5307495e5c0fa026f94082370d93985e8",
+    "priorCausalV2TakeoverSupplement": "299b10b807c51a4201ce0cd4d12ce987152fbd83a8c2a44fbb9c29173160eb8e",
+    "secondFailedFastsearchPublicationAudit": "afca347da13dfab9f7f9ef390d61424fe4b522a512e30e0a3ea29b82492363f4",
+    "secondFailedFastsearchV2Case": "88535eddf76501bc514641b80b0baef9d0b30abc67d2ed3723d741c783613f3d"
+  },
+  "status": "failed_before_stance_boundary",
+  "steeringObservation": {
+    "adjacentPostStateChordIntersectionCount": 0,
+    "allRecordedPointsWithin20": true,
+    "capturedPostStatePointsWithPerLegBoundaries": 171,
+    "expandedBoxBoundaryContactPointCount": 0,
+    "expandedBoxInteriorPointCount": 0,
+    "fullIntraTickNativeCollisionReconstruction": false,
+    "maximumRecordedGoalDistance": 11.271696023805967,
+    "maximumVelocityDisplacementResidual": 5.127842594987442e-14,
+    "missingTakeoverTicks": 0,
+    "movingPulsesPassingWithin2ButStoppingOutside2": 2,
+    "packedSeqStateMismatchTicks": 0,
+    "physicalSweptPathProved": false,
+    "plans": 3,
+    "plansEndingInDeadlineFailure": 1,
+    "plansSuperseded": 1,
+    "steeredPulses": 11,
+    "uniqueActorNativeTickPoints": 171,
+    "waypointPlansArrived": 1,
+    "worldLimitViolationCount": 0
+  }
+}
